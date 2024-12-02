@@ -1,0 +1,7 @@
+package com.sparta.popupstore.domain.popupstore.repository;
+
+import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
+}
