@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.user.controller;
 
+import com.sparta.popupstore.domain.user.dto.response.CouponResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.USerSignupResponseDto;
@@ -48,4 +49,12 @@ public class UserController {
     public ResponseEntity<UserMypageResponseDto> getUserMypage(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserMypage(userId));
     }
+
+    @Operation(summary = "유저 내 쿠폰보기", description = "마이페이지에 본인이 가지고 있는 쿠폰 목록 확인")
+    @GetMapping("/coupons/{userId}")
+    public ResponseEntity<CouponResponseDto> getUserMyCoupons(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getUserMyCoupons(userId));
+    }
+
+
 }
