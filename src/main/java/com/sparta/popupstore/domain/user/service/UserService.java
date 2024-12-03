@@ -20,8 +20,8 @@ public class UserService {
             throw new RuntimeException("Email address already in use");
         }
 
-        String encodePassword = passwordEncoder.encode(requestDto.getPassword());
-        User user = requestDto.toEntity(encodePassword);
+        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+        User user = requestDto.toEntity(encodedPassword);
         return new USerSignupResponseDto(userRepository.save(user));
     }
 }
