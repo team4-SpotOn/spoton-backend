@@ -2,7 +2,7 @@ package com.sparta.popupstore.domain.user.controller;
 
 import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
-import com.sparta.popupstore.domain.user.dto.response.USerSignupResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
 import com.sparta.popupstore.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,11 +31,11 @@ public class UserController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/signup")
-    public ResponseEntity<USerSignupResponseDto> signup(
+    public ResponseEntity<UserSignupResponseDto> signup(
             @RequestBody @Valid UserSignupRequestDto requestDto,
             HttpServletResponse response
     ) {
-        USerSignupResponseDto responseDto = userService.signup(requestDto);
+        UserSignupResponseDto responseDto = userService.signup(requestDto);
         jwtUtil.addJwtToCookie(responseDto.getEmail(), response);
 
         return ResponseEntity
