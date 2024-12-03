@@ -1,6 +1,7 @@
 package com.sparta.popupstore.domain.promotionalevent.controller;
 
-import com.sparta.popupstore.domain.promotionalevent.dto.request.PromotionalEventSaveRequestDto;
+import com.sparta.popupstore.domain.promotionalevent.dto.request.PromotionalEventCreateRequestDto;
+import com.sparta.popupstore.domain.promotionalevent.dto.response.PromotionalEventCreateResponseDto;
 import com.sparta.popupstore.domain.promotionalevent.service.PromotionalEventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,11 +33,10 @@ public class PromotionalEventController {
                     description = "팝업 스토어 고유번호 / 만약 전체를 대상으로 진행하는 이벤트 일 시 팝업스토어 고유번호는 생략")
     })
     @PostMapping
-    public ResponseEntity<Void> createEvent(
-            @Valid @RequestBody PromotionalEventSaveRequestDto promotionalEventSaveRequestDto,
-            @RequestParam(required = false, name = "popupStoreId", defaultValue = "-1") Long popupStoreId
+    public ResponseEntity<PromotionalEventCreateResponseDto> createEvent(
+            @Valid @RequestBody PromotionalEventCreateRequestDto promotionalEventCreateRequestDto,
+            @RequestParam(required = false, name = "popupStoreId") Long popupStoreId
             ){
-        promotionalEventService.createEvent(promotionalEventSaveRequestDto, popupStoreId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(promotionalEventService.createEvent(promotionalEventCreateRequestDto, popupStoreId));
     }
 }

@@ -6,12 +6,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class PromotionalEventSaveRequestDto {
+public class PromotionalEventCreateRequestDto {
     @NotBlank(message = "제목을 입력해주세요")
     private String title;
     @NotBlank(message = "이벤트 설명을 입력해주셔야 합니다.")

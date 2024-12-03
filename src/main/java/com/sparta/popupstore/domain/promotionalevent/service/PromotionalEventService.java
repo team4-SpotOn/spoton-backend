@@ -1,7 +1,8 @@
 package com.sparta.popupstore.domain.promotionalevent.service;
 
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
-import com.sparta.popupstore.domain.promotionalevent.dto.request.PromotionalEventSaveRequestDto;
+import com.sparta.popupstore.domain.promotionalevent.dto.request.PromotionalEventCreateRequestDto;
+import com.sparta.popupstore.domain.promotionalevent.dto.response.PromotionalEventCreateResponseDto;
 import com.sparta.popupstore.domain.promotionalevent.entity.PromotionalEvent;
 import com.sparta.popupstore.domain.promotionalevent.repository.PromotionalEventRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,14 @@ public class PromotionalEventService {
     private final PromotionalEventRepository promotionalEventRepository;
     private final PopupStoreRepository popupStoreRepository;
 
-    public void createEvent(
-            PromotionalEventSaveRequestDto promotionalEventSaveRequestDto,
+    public PromotionalEventCreateResponseDto createEvent(
+            PromotionalEventCreateRequestDto promotionalEventCreateRequestDto,
             Long popupStoreId
     ) {
-        PromotionalEvent promotionalEvent = promotionalEventSaveRequestDto.toEvent();
-        promotionalEvent.addPopupStoreId(popupStoreId);
-        promotionalEventRepository.save(promotionalEvent);
+        PromotionalEvent promotionalEvent = promotionalEventCreateRequestDto.toEvent();
+        if(popupStoreId != null) {
+            popupStoreRepository.findById(popupStoreId).ifPresent(promotionalEvent::addPopupStore);
+        }
+        return new PromotionalEventCreateResponseDto(promotionalEventRepository.save(promotionalEvent));
     }
 }

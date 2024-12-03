@@ -20,11 +20,9 @@ public class PromotionalEvent extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "popupstore_id")
-//    private PopupStore popupStore;
-
-    private Long popupStoreId;
+    @ManyToOne
+    @JoinColumn(name = "popupstore_id")
+    private PopupStore popupStore;
 
     @Column(nullable = false)
     private String title;
@@ -41,9 +39,9 @@ public class PromotionalEvent extends BaseEntity {
     private LocalDateTime endTime;
 
     @Builder
-    public PromotionalEvent(Long id, Long popupStoreId, String title, String description, int discountPercentage, int couponGetCount, int totalCount, LocalDateTime startTime, LocalDateTime endTime) {
+    public PromotionalEvent(Long id, PopupStore popupStore, String title, String description, int discountPercentage, int couponGetCount, int totalCount, LocalDateTime startTime, LocalDateTime endTime) {
         this.id = id;
-        this.popupStoreId = popupStoreId;
+        this.popupStore = popupStore;
         this.title = title;
         this.description = description;
         this.discountPercentage = discountPercentage;
@@ -53,7 +51,7 @@ public class PromotionalEvent extends BaseEntity {
         this.endTime = endTime;
     }
 
-    public void addPopupStoreId(Long popupStoreId){
-        this.popupStoreId = popupStoreId;
+    public void addPopupStore(PopupStore popupStore){
+        this.popupStore = popupStore;
     }
 }
