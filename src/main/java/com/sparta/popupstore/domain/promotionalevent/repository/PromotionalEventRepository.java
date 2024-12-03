@@ -6,8 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.nio.channels.FileChannel;
-
 public interface PromotionalEventRepository extends JpaRepository<PromotionalEvent, Long> {
     @Query(value = "select p from PromotionalEvent p left join fetch p.popupStore")
     Page<PromotionalEvent> findAllPromotionalEvents(Pageable pageable);
