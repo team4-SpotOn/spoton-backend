@@ -8,11 +8,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Where(clause = "deleted_at IS NULL") // deleted_at Null 값만 조회해온다.
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "events")
 public class PromotionalEvent extends BaseEntity {
@@ -20,20 +22,14 @@ public class PromotionalEvent extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "popupstore_id")
     private PopupStore popupStore;
-
-    @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
     private String description;
-    @Column(nullable = false)
     private int discountPercentage;
-    @Column(nullable = false)
     @ColumnDefault("0")
     private int couponGetCount;
-    @Column(nullable = false)
     private int totalCount;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
