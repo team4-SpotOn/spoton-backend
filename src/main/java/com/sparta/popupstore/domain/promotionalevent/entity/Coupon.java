@@ -1,4 +1,4 @@
-package com.sparta.popupstore.domain.event.entity;
+package com.sparta.popupstore.domain.promotionalevent.entity;
 
 import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -26,7 +26,7 @@ public class Coupon {
 
     @ManyToOne
     @JoinColumn(name = "event_id")
-    private Event event;
+    private PromotionalEvent promotionalEvent;
 
     @CreatedDate
     @Column(updatable = false)
