@@ -3,7 +3,6 @@ package com.sparta.popupstore.domain.review.controller;
 import com.sparta.popupstore.Login.LoginUser;
 import com.sparta.popupstore.domain.review.dto.request.ReviewSaveRequestDto;
 import com.sparta.popupstore.domain.review.dto.response.ReviewSaveResponseDto;
-import com.sparta.popupstore.domain.review.entity.Review;
 import com.sparta.popupstore.domain.review.service.ReviewService;
 import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.validation.Valid;
