@@ -5,6 +5,7 @@ import com.sparta.popupstore.domain.user.dto.response.USerSignupResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
 import com.sparta.popupstore.domain.user.service.UserService;
 import com.sparta.popupstore.jwt.JwtUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
