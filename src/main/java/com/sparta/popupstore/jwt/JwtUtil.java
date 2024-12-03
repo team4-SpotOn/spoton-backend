@@ -1,14 +1,16 @@
 package com.sparta.popupstore.jwt;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -49,5 +51,41 @@ public class JwtUtil {
         Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token);
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+    public Claims getUserInfoFromRequest(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if(cookies == null) {
+            throw new RuntimeException("cookie is null");
+        }
+
+        String token = null;
+        for(Cookie cookie : cookies) {
+            if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
+                token = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                break;
+            }
+        }
+        if(!StringUtils.hasText(token) || !token.startsWith(BEARER_PREFIX)) {
+            throw new RuntimeException("invalid token");
+        }
+        token = token.substring(7);
+        validateToken(token);
+
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
+
+    public void validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+        } catch (SecurityException | MalformedJwtException e) {
+            throw new SecurityException("invalid token");
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("expired token");
+        } catch (UnsupportedJwtException e) {
+            throw new UnsupportedJwtException("unsupported token");
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("invalid token");
+        }
     }
 }
