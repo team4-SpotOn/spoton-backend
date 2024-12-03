@@ -9,10 +9,5 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
-
     Optional<User> findByEmail(String email);
-
-    // 마이 쿠폰 구하기
-    @Query(value = "SELECT id FROM coupons WHERE user_id = :userId", nativeQuery = true)
-    List<Object[]> findByUserCoupons(Long userId);
 }
