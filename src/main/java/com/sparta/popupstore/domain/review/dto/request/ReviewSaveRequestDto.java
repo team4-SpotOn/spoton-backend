@@ -9,15 +9,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReviewSaveRequestDto {
-  private String star;
+  private int star;
   private String content;
 
-  public Review toReviewSaveRequestDto(User user,int star, String contents, Long id) {
+  // Review 엔티티로 변환하는 메서드
+  public Review toReviewSaveRequestDto(User user, Long id) {
     return Review.builder()
         .user(user)
-        .star(star)
         .popupStore(PopupStore.builder().id(id).build())
-        .contents(contents)
+        .star(star)
+        .contents(content)
         .build();
   }
 }
