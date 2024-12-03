@@ -12,7 +12,6 @@ public class ReviewSaveRequestDto {
   private int star;
   private String content;
 
-  // Review 엔티티로 변환하는 메서드
   public Review toReviewSaveRequestDto(User user, Long id) {
     return Review.builder()
         .user(user)

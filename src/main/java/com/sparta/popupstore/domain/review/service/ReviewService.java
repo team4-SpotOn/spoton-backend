@@ -17,7 +17,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final PopupStoreRepository popupStoreRepository;
 
-    public ReviewSaveResponseDto createReview(User user,Long id ,ReviewSaveRequestDto requestDto) {
+    public ReviewSaveResponseDto createReview(User user,Long id , ReviewSaveRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(id).orElseThrow();
         Review review = requestDto.toReviewSaveRequestDto(user, id);
         reviewRepository.save(review);
