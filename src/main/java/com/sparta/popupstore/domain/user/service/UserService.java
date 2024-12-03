@@ -3,6 +3,8 @@ package com.sparta.popupstore.domain.user.service;
 import com.sparta.popupstore.config.PasswordEncoder;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
+import com.sparta.popupstore.domain.user.dto.response.CouponResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
 
 import com.sparta.popupstore.domain.user.entity.User;
