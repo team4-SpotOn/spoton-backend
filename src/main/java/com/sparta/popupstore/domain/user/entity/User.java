@@ -17,15 +17,15 @@ public class User extends BaseEntity {
     private Long id;
     private String email;
     private String password;
-    private String nickname;
+    private String name;
     private UserRole userRole;
 
     @Builder
-    public User(Long id, String email, String password, String nickname, UserRole userRole) {
+    public User(Long id, String email, String password, String name, UserRole userRole) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.name = name;
         this.userRole = userRole;
     }
 }
