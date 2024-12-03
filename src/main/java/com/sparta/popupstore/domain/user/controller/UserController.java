@@ -1,8 +1,10 @@
 package com.sparta.popupstore.domain.user.controller;
 
+import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
+import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,6 +43,19 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(responseDto);
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<Void> signin(
+            @RequestBody UserSigninRequestDto requestDto,
+            HttpServletResponse response
+    ) {
+        User user = userService.signin(requestDto);
+        jwtUtil.addJwtToCookie(user.getEmail(), response);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @Operation(summary = "유저 마이페이지", description = "고객이 로그인 호 확인하는 마이페이지")

@@ -1,6 +1,7 @@
 package com.sparta.popupstore.domain.user.service;
 
 import com.sparta.popupstore.config.PasswordEncoder;
+import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
 import com.sparta.popupstore.domain.user.entity.User;
@@ -25,6 +26,16 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
         User user = requestDto.toEntity(encodedPassword);
         return new UserSignupResponseDto(userRepository.save(user));
+    }
+
+    public User signin(UserSigninRequestDto requestDto) {
+        User user = userRepository.findByEmail(requestDto.getEmail())
+                .orElseThrow(() -> new RuntimeException("Email address not found"));
+        if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Incorrect password");
+        }
+
+        return user;
     }
 
 
