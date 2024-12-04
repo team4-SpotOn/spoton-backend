@@ -1,4 +1,4 @@
-package com.sparta.popupstore.domain.promotionevent.service;
+package com.sparta.popupstore.domain.promotionevent.dto.response;
 
 import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
 import lombok.Getter;

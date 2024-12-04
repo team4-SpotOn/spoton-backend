@@ -7,7 +7,7 @@ import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCr
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindAllResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
-import com.sparta.popupstore.domain.promotionevent.service.CouponCreateResponseDto;
+import com.sparta.popupstore.domain.promotionevent.dto.response.CouponCreateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +32,7 @@ public class PromotionEventController {
     @Parameter(name = "description", description = "이벤트 설명")
     @Parameter(name = "discountPercentage", description = "할인 율")
     @Parameter(name = "totalCount", description = "총 쿠폰의 갯수")
+    @Parameter(name = "couponExpirationPeriod", description = "쿠폰 만료 기간")
     @Parameter(name = "startTime", description = "시작일")
     @Parameter(name = "endTime", description = "종료일")
     @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호 / 만약 전체를 대상으로 진행하는 이벤트 일 시 팝업스토어 고유번호는 생략")
@@ -68,6 +69,7 @@ public class PromotionEventController {
     @Parameter(name = "description", description = "이벤트 설명")
     @Parameter(name = "discountPercentage", description = "할인 율")
     @Parameter(name = "totalCount", description = "총 쿠폰의 갯수")
+    @Parameter(name = "couponExpirationPeriod", description = "쿠폰 만료 기간")
     @Parameter(name = "startTime", description = "시작일")
     @Parameter(name = "endTime", description = "종료일")
     @PatchMapping("/admin/promotionEvents/{promotionEventId}")
