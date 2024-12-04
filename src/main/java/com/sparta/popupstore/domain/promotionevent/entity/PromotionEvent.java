@@ -29,6 +29,7 @@ public class PromotionEvent extends BaseEntity {
     @ColumnDefault("0")
     private int couponGetCount;
     private int totalCount;
+    private int couponExpirationPeriod;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
@@ -41,6 +42,7 @@ public class PromotionEvent extends BaseEntity {
             int discountPercentage,
             int couponGetCount,
             int totalCount,
+            int couponExpirationPeriod,
             LocalDateTime startDateTime,
             LocalDateTime endDateTime
     ) {
@@ -51,6 +53,7 @@ public class PromotionEvent extends BaseEntity {
         this.discountPercentage = discountPercentage;
         this.couponGetCount = couponGetCount;
         this.totalCount = totalCount;
+        this.couponExpirationPeriod = couponExpirationPeriod;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }
@@ -64,6 +67,7 @@ public class PromotionEvent extends BaseEntity {
             String description,
             int discountPercentage,
             int totalCount,
+            int couponExpirationPeriod,
             LocalDateTime startDateTime,
             LocalDateTime endDateTime
     ) {
@@ -71,6 +75,7 @@ public class PromotionEvent extends BaseEntity {
         this.description = description;
         this.discountPercentage = discountPercentage;
         this.totalCount = totalCount;
+        this.couponExpirationPeriod = couponExpirationPeriod;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }

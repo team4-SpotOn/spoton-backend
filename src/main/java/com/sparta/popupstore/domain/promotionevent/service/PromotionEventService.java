@@ -3,10 +3,7 @@ package com.sparta.popupstore.domain.promotionevent.service;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCreateResponseDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindAllResponseDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
+import com.sparta.popupstore.domain.promotionevent.dto.response.*;
 import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
@@ -57,6 +54,7 @@ public class PromotionEventService {
                 promotionEventUpdateRequestDto.getDescription(),
                 promotionEventUpdateRequestDto.getDiscountPercentage(),
                 promotionEventUpdateRequestDto.getTotalCount(),
+                promotionEventUpdateRequestDto.getCouponExpirationPeriod(),
                 promotionEventUpdateRequestDto.getStartDateTime(),
                 promotionEventUpdateRequestDto.getEndDateTime()
         );

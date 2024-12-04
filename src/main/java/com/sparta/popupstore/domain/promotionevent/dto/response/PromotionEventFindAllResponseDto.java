@@ -20,6 +20,8 @@ public class PromotionEventFindAllResponseDto {
     private final int discountPercentage;
     @Schema(description = "총 쿠폰 갯수")
     private final int totalCount;
+    @Schema(description = "쿠폰 만료 기간")
+    private final int couponExpirationPeriod;
     @Schema(description = "프로모션 이벤트 시작일")
     private final LocalDateTime startDateTime;
     @Schema(description = "프로모션 이벤트 종료일")
@@ -32,6 +34,7 @@ public class PromotionEventFindAllResponseDto {
         this.promotionEventFindAllPopupStoreResponseDto = promotionEvent.getPopupStore() != null ? new PromotionEventFindAllPopupStoreResponseDto(promotionEvent.getPopupStore()) : null;
         this.discountPercentage = promotionEvent.getDiscountPercentage();
         this.totalCount = promotionEvent.getTotalCount();
+        this.couponExpirationPeriod = promotionEvent.getCouponExpirationPeriod();
         this.startDateTime = promotionEvent.getStartDateTime();
         this.endDateTime = promotionEvent.getEndDateTime();
     }
