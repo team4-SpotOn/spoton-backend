@@ -28,6 +28,9 @@ public class Coupon {
     @JoinColumn(name = "event_id")
     private PromotionalEvent promotionalEvent;
 
+    @Column
+    private String serial_number;
+
     @CreatedDate
     @Column(updatable = false)
     protected LocalDateTime createdAt;

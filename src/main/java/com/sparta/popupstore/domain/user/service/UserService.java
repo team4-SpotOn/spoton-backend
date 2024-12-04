@@ -5,7 +5,6 @@ import com.sparta.popupstore.domain.promotionalevent.entity.Coupon;
 import com.sparta.popupstore.domain.promotionalevent.repository.CouponRepository;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
-import com.sparta.popupstore.domain.user.dto.response.CouponResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
 
@@ -56,15 +55,12 @@ public class UserService {
 
 
     // 유저 마이쿠폰 보기
-    public CouponResponseDto getUserMyCoupons(Long userId){
+    public List<UserMyCouponsResponseDto> getUserMyCoupons(Long userId){
         User user = userRepository.findById(userId).orElseThrow(() ->
             new IllegalArgumentException("해당 고객은 존재하지 않습니다.")
         );
 
         List<Coupon> couponData = couponRepository.findByUserId(userId);
-
-        List<UserMyCouponsResponseDto> coupons = couponData.stream().map(UserMyCouponsResponseDto::new ).collect(Collectors.toList());
-        return new CouponResponseDto(coupons);
-
+        return couponData.stream().map(UserMyCouponsResponseDto::new ).collect(Collectors.toList());
     }
 }
