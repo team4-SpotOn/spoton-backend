@@ -39,7 +39,6 @@ public class CompanyService {
 
     // 회사 마이페이지
     public CompanyMyPageResponseDto getCompanyMyPage(Company company){
-        System.out.println(company.getId());
         return new CompanyMyPageResponseDto(company);
     }
 
