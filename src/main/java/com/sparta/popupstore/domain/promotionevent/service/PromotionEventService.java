@@ -7,8 +7,10 @@ import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCr
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindAllResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
+import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
+import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ public class PromotionEventService {
 
     private final PromotionEventRepository promotionEventRepository;
     private final PopupStoreRepository popupStoreRepository;
+    private final CouponService couponService;
 
     public PromotionEventCreateResponseDto createEvent(
             PromotionEventCreateRequestDto promotionEventCreateRequestDto,
@@ -39,9 +42,16 @@ public class PromotionEventService {
         return promotionEventRepository.findAllPromotionalEvents(pageable).map(PromotionEventFindAllResponseDto::new);
     }
 
+    public PromotionEventFindOneResponseDto findOnePromotionEvent(Long promotionEventId) {
+        return new PromotionEventFindOneResponseDto(this.getPromotionEvent(promotionEventId));
+    }
+
     @Transactional
-    public PromotionEventUpdateResponseDto updatePromotionEvent(PromotionEventUpdateRequestDto promotionEventUpdateRequestDto, Long promotionEventId) {
-        PromotionEvent promotionEvent = promotionEventRepository.findByPromotionEventId(promotionEventId).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 이벤트입니다."));
+    public PromotionEventUpdateResponseDto updatePromotionEvent(
+            PromotionEventUpdateRequestDto promotionEventUpdateRequestDto
+            , Long promotionEventId
+    ) {
+        PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
         promotionEvent.updatePromotionEvent(
                 promotionEventUpdateRequestDto.getTitle(),
                 promotionEventUpdateRequestDto.getDescription(),
@@ -55,14 +65,25 @@ public class PromotionEventService {
 
     @Transactional
     public void deletePromotionEvent(Long promotionEventId) {
-        promotionEventRepository.findByPromotionEventId(promotionEventId).orElseThrow(()-> new IllegalArgumentException("존재하지 않거나 이미 삭제된 이벤트입니다."));
+        this.getPromotionEvent(promotionEventId);
         promotionEventRepository.deletePromotionEvent(promotionEventId);
     }
 
-    public PromotionEventFindOneResponseDto findOnePromotionEvent(Long promotionEventId) {
-        return new PromotionEventFindOneResponseDto(
-                promotionEventRepository.findByPromotionEventId(promotionEventId)
-                        .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 이벤트입니다."))
-        );
+    @Transactional
+    public CouponCreateResponseDto couponApplyAndIssuance(Long promotionEventId, User user) {
+        PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
+        if(promotionEvent.getCouponGetCount() == promotionEvent.getTotalCount()){
+            throw new IllegalArgumentException("쿠폰이 모두 소진되었습니다.");
+        }
+        Coupon coupon = couponService.createCoupon(promotionEvent, user);
+        promotionEvent.couponGetCountUp();
+        return new CouponCreateResponseDto(coupon);
+    }
+
+    private PromotionEvent getPromotionEvent(Long promotionEventId) {
+        return promotionEventRepository.findByPromotionEventId(promotionEventId)
+                .orElseThrow(
+                        ()-> new IllegalArgumentException("존재하지 않거나 종료된 이벤트입니다.")
+                );
     }
 }

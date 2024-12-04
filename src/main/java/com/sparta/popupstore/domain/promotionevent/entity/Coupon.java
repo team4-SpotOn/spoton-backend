@@ -3,6 +3,7 @@ package com.sparta.popupstore.domain.promotionevent.entity;
 import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -20,16 +21,16 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private PromotionEvent promotionEvent;
 
     @Column
-    private String serial_number;
+    private String serialNumber;
 
     @CreatedDate
     @Column(updatable = false)
@@ -37,4 +38,12 @@ public class Coupon {
 
     @Column
     private LocalDateTime deletedAt;
+
+    @Builder
+    public Coupon(User user, PromotionEvent promotionEvent, String serialNumber, Long couponId) {
+        this.id = couponId;
+        this.user = user;
+        this.promotionEvent = promotionEvent;
+        this.serialNumber = serialNumber;
+    }
 }
