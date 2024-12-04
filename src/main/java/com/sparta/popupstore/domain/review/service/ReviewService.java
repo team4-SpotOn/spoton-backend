@@ -9,7 +9,6 @@ import com.sparta.popupstore.domain.review.repository.ReviewRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import java.nio.file.AccessDeniedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
