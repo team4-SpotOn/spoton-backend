@@ -24,9 +24,6 @@ public class PopupStoreService {
 
     @Transactional
     public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto, MultipartFile imageFile) throws IOException {
-        if (company == null) {
-            throw new RuntimeException("Unauthorized access - company not found");
-        }
         String imagePath = saveImageFile(imageFile);
 
         return new PopupStoreCreateResponseDto(popupStoreRepository.save(requestDto.toEntity(company, imagePath)));
