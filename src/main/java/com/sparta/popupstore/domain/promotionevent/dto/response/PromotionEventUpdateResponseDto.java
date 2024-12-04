@@ -18,20 +18,17 @@ public class PromotionEventUpdateResponseDto {
     private final int discountPercentage;
     @Schema(description = "수정된 총 쿠폰 갯수")
     private final int totalCount;
-    @Schema(description = "수정된 대상 팝업스토어")
-    private final Long popupStoreId;
     @Schema(description = "수정된 프로모션 이벤트 시작일")
     private final LocalDateTime startDateTime;
     @Schema(description = "수정된 프로모션 이벤트 종료일")
     private final LocalDateTime endDateTime;
 
-    public PromotionEventUpdateResponseDto(PromotionEvent promotionEvent, Long popupStoreId) {
+    public PromotionEventUpdateResponseDto(PromotionEvent promotionEvent) {
         this.id = promotionEvent.getId();
         this.title = promotionEvent.getTitle();
         this.description = promotionEvent.getDescription();
         this.discountPercentage = promotionEvent.getDiscountPercentage();
         this.totalCount = promotionEvent.getTotalCount();
-        this.popupStoreId = popupStoreId;
         this.startDateTime = promotionEvent.getStartDateTime();
         this.endDateTime = promotionEvent.getEndDateTime();
     }

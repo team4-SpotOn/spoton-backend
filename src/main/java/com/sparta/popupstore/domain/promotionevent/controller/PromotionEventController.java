@@ -61,14 +61,12 @@ public class PromotionEventController {
     @Parameter(name = "startTime", description = "시작일")
     @Parameter(name = "endTime", description = "종료일")
     @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호 / 만일 팝업스토어를 잘못 입력해서 수정이 필요할 시에 @RequestParam 으로 요청")
-    @Parameter(name = "promotionEventId", description = "@PathVariable 로 받는다. 수정 요청한 대상 이벤트 고유번호")
     @PatchMapping("/admin/promotionEvents/{promotionEventId}")
     public ResponseEntity<PromotionEventUpdateResponseDto> updateEvent(
             @AuthUser User user,
             @Valid @RequestBody PromotionEventUpdateRequestDto promotionEventUpdateRequestDto,
-            @PathVariable(name = "promotionEventId") Long promotionEventId,
-            @RequestParam(required = false, name = "popupStoreId") Long popupStoreId
+            @PathVariable(name = "promotionEventId") Long promotionEventId
     ){
-        return ResponseEntity.ok(promotionEventService.updatePromotionEvent(promotionEventUpdateRequestDto, promotionEventId, popupStoreId));
+        return ResponseEntity.ok(promotionEventService.updatePromotionEvent(promotionEventUpdateRequestDto, promotionEventId));
     }
 }

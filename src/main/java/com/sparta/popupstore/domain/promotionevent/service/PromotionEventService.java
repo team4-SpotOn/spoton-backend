@@ -15,8 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 public class PromotionEventService {
@@ -28,9 +26,10 @@ public class PromotionEventService {
             PromotionEventCreateRequestDto promotionEventCreateRequestDto,
             Long popupStoreId
     ) {
-        this.validDateTime(promotionEventCreateRequestDto.getStartDateTime(), promotionEventCreateRequestDto.getEndDateTime());
         PromotionEvent promotionEvent = promotionEventCreateRequestDto.toEvent();
-        this.addOrUpdatePopupStore(popupStoreId, promotionEvent);
+        if(popupStoreId != null) {
+            popupStoreRepository.findById(popupStoreId).ifPresent(promotionEvent::addPopupStore);
+        }
         return new PromotionEventCreateResponseDto(promotionEventRepository.save(promotionEvent));
     }
 
@@ -40,8 +39,7 @@ public class PromotionEventService {
     }
 
     @Transactional
-    public PromotionEventUpdateResponseDto updatePromotionEvent(PromotionEventUpdateRequestDto promotionEventUpdateRequestDto, Long promotionEventId, Long popupStoreId) {
-        this.validDateTime(promotionEventUpdateRequestDto.getStartDateTime(), promotionEventUpdateRequestDto.getEndDateTime());
+    public PromotionEventUpdateResponseDto updatePromotionEvent(PromotionEventUpdateRequestDto promotionEventUpdateRequestDto, Long promotionEventId) {
         PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이벤트입니다."));
         promotionEvent.updatePromotionEvent(
                 promotionEventUpdateRequestDto.getTitle(),
@@ -51,19 +49,6 @@ public class PromotionEventService {
                 promotionEventUpdateRequestDto.getStartDateTime(),
                 promotionEventUpdateRequestDto.getEndDateTime()
         );
-        this.addOrUpdatePopupStore(popupStoreId, promotionEvent);
-        return new PromotionEventUpdateResponseDto(promotionEvent, popupStoreId);
-    }
-
-    private void validDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if(startDateTime.isAfter(endDateTime)) {
-            throw new IllegalArgumentException("시작일은 종료일보다 늦을 수 없습니다.");
-        }
-    }
-
-    private void addOrUpdatePopupStore(Long popupStoreId, PromotionEvent promotionEvent) {
-        if(popupStoreId != null) {
-            popupStoreRepository.findById(popupStoreId).ifPresent(promotionEvent::addPopupStore);
-        }
+        return new PromotionEventUpdateResponseDto(promotionEvent);
     }
 }
