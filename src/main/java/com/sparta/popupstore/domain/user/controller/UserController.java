@@ -3,9 +3,11 @@ package com.sparta.popupstore.domain.user.controller;
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
+import com.sparta.popupstore.domain.user.dto.request.UserUpdateRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMyPageResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserUpdateResponseDto;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.service.UserService;
 import com.sparta.popupstore.jwt.JwtUtil;
@@ -89,4 +91,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserMyCoupons(user));
     }
 
+    @Operation(summary = "유저 정보 수정", description = "유저 본인의 정보 수정")
+    @PatchMapping
+    public ResponseEntity<UserUpdateResponseDto> updateUser(
+            @AuthUser User user,
+            @RequestBody UserUpdateRequestDto requestDto
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.updateUser(user, requestDto));
+    }
 }

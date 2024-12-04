@@ -30,4 +30,8 @@ public class User extends BaseEntity {
         this.address = address;
         this.userRole = userRole;
     }
+
+    public void update(String address) {
+        this.address = address;
+    }
 }
