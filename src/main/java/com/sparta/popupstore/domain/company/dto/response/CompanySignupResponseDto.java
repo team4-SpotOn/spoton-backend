@@ -7,7 +7,6 @@ import lombok.Getter;
 public class CompanySignupResponseDto {
     private final Long id;
     private final String email;
-    private final String password;
     private final String ceoName;
     private final String name;
     private final String address;
@@ -18,7 +17,6 @@ public class CompanySignupResponseDto {
     public CompanySignupResponseDto(Company company) {
         this.id = company.getId();
         this.email = company.getEmail();
-        this.password = company.getPassword();
         this.ceoName = company.getCeoName();
         this.name = company.getName();
         this.address = company.getAddress();
