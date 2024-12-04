@@ -1,6 +1,6 @@
 package com.sparta.popupstore.domain.user.dto.response;
 
-import com.sparta.popupstore.domain.promotionalevent.entity.Coupon;
+import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
 import lombok.Getter;
 
 @Getter

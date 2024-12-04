@@ -63,8 +63,8 @@ public class UserController {
 
     @Operation(summary = "유저 마이페이지", description = "고객이 로그인 호 확인하는 마이페이지")
     @GetMapping("/mypage")
-    public ResponseEntity<UserMypageResponseDto> getUserMypage(@AuthUser User user) {
-        return ResponseEntity.ok(userService.getUserMypage(user.getId()));
+    public ResponseEntity<UserMypageResponseDto> getUserMyPage(@AuthUser User user) {
+        return ResponseEntity.ok(userService.getUserMyPage(user.getId()));
     }
 
     @Operation(summary = "유저 내 쿠폰보기", description = "마이페이지에 본인이 가지고 있는 쿠폰 목록 확인")
