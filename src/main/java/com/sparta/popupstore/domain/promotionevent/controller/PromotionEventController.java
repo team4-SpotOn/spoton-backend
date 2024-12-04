@@ -2,9 +2,11 @@ package com.sparta.popupstore.domain.promotionevent.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
+import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCreateResponseDto;
-import com.sparta.popupstore.domain.promotionevent.service.PromotionalEventService;
+import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
+import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PromotionEventController {
 
-    private final PromotionalEventService promotionalEventService;
+    private final PromotionEventService promotionEventService;
 
     @Operation(summary = "프로모션 이벤트 추가")
     @Parameter(name = "title", description = "이벤트 제목")
@@ -37,7 +39,7 @@ public class PromotionEventController {
             @Valid @RequestBody PromotionEventCreateRequestDto promotionEventCreateRequestDto,
             @RequestParam(required = false, name = "popupStoreId") Long popupStoreId
             ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(promotionalEventService.createEvent(promotionEventCreateRequestDto, popupStoreId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(promotionEventService.createEvent(promotionEventCreateRequestDto, popupStoreId));
     }
 
     @Operation(summary = "프로모션 이벤트 다건 조회", description = "현재 등록되어 있는 이벤트들을 보여줍니다. pageNum 과 pageSize 는 default 값이 각각 1과 10입니다.")
@@ -48,6 +50,25 @@ public class PromotionEventController {
             @RequestParam(name = "page",required = false, defaultValue = "1") int page,
             @RequestParam(name = "size",required = false, defaultValue = "10") int size
     ){
-        return ResponseEntity.ok(promotionalEventService.findAllPromotionalEvents(page, size));
+        return ResponseEntity.ok(promotionEventService.findAllPromotionalEvents(page, size));
+    }
+
+    @Operation(summary = "프로모션 이벤트 수정")
+    @Parameter(name = "title", description = "이벤트 제목")
+    @Parameter(name = "description", description = "이벤트 설명")
+    @Parameter(name = "discountPercentage", description = "할인 율")
+    @Parameter(name = "totalCount", description = "총 쿠폰의 갯수")
+    @Parameter(name = "startTime", description = "시작일")
+    @Parameter(name = "endTime", description = "종료일")
+    @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호 / 만일 팝업스토어를 잘못 입력해서 수정이 필요할 시에 @RequestParam 으로 요청")
+    @Parameter(name = "promotionEventId", description = "@PathVariable 로 받는다. 수정 요청한 대상 이벤트 고유번호")
+    @PatchMapping("/admin/promotionEvents/{promotionEventId}")
+    public ResponseEntity<PromotionEventUpdateResponseDto> updateEvent(
+            @AuthUser User user,
+            @Valid @RequestBody PromotionEventUpdateRequestDto promotionEventUpdateRequestDto,
+            @PathVariable(name = "promotionEventId") Long promotionEventId,
+            @RequestParam(required = false, name = "popupStoreId") Long popupStoreId
+    ){
+        return ResponseEntity.ok(promotionEventService.updatePromotionEvent(promotionEventUpdateRequestDto, promotionEventId, popupStoreId));
     }
 }

@@ -29,7 +29,7 @@ public class PromotionEventCreateResponseDto {
         this.description = promotionEvent.getDescription();
         this.discountPercentage = promotionEvent.getDiscountPercentage();
         this.totalCount = promotionEvent.getTotalCount();
-        this.startTime = promotionEvent.getStartTime();
-        this.endTime = promotionEvent.getEndTime();
+        this.startTime = promotionEvent.getStartDateTime();
+        this.endTime = promotionEvent.getEndDateTime();
     }
 }
