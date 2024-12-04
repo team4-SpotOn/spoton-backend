@@ -35,6 +35,11 @@ public class CompanyService {
         return new CompanySignupResponseDto(companyRepository.save(company));
     }
 
+    public Company getCompanyByEmail(String email) {
+        return companyRepository.findByEmail(email)
+                .orElse(null);
+    }
+
     public Company signin(CompanySigninRequestDto requestDto) {
         Company company = companyRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new RuntimeException("Email address not found"));
