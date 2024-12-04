@@ -11,6 +11,7 @@ public class UserSignupResponseDto {
     private final String email;
     private final String password;
     private final String name;
+    private final String address;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
@@ -19,6 +20,7 @@ public class UserSignupResponseDto {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.name = user.getName();
+        this.address = user.getAddress();
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
     }
