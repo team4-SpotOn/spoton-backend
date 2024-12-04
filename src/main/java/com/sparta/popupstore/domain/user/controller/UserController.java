@@ -1,11 +1,14 @@
 package com.sparta.popupstore.domain.user.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
+import com.sparta.popupstore.domain.user.dto.request.UserDeleteRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
+import com.sparta.popupstore.domain.user.dto.request.UserUpdateRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
-import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserMyPageResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserUpdateResponseDto;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.service.UserService;
 import com.sparta.popupstore.jwt.JwtUtil;
@@ -79,7 +82,7 @@ public class UserController {
 
     @Operation(summary = "유저 마이페이지", description = "고객이 로그인 호 확인하는 마이페이지")
     @GetMapping("/mypage")
-    public ResponseEntity<UserMypageResponseDto> getUserMyPage(@AuthUser User user) {
+    public ResponseEntity<UserMyPageResponseDto> getUserMyPage(@AuthUser User user) {
         return ResponseEntity.ok(userService.getUserMyPage(user));
     }
 
@@ -89,4 +92,26 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserMyCoupons(user));
     }
 
+    @Operation(summary = "유저 정보 수정", description = "유저 본인의 정보 수정")
+    @PatchMapping
+    public ResponseEntity<UserUpdateResponseDto> updateUser(
+            @AuthUser User user,
+            @RequestBody UserUpdateRequestDto requestDto
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.updateUser(user, requestDto));
+    }
+
+    @Operation(summary = "유저 회원 탈퇴", description = "유저 회원 탈퇴")
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUser(
+            @AuthUser User user,
+            @RequestBody UserDeleteRequestDto requestDto
+    ) {
+        userService.deleteUser(user, requestDto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }

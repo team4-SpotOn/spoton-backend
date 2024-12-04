@@ -18,12 +18,15 @@ public class UserSignupRequestDto {
     private String password;
     @NotBlank(message = "이름을 입력해 주세요.")
     private String name;
+    @NotBlank(message = "주소를 입력해 주세요.")
+    private String address;
 
     public User toEntity(String encodedPassword) {
         return User.builder()
                 .email(this.email)
                 .password(encodedPassword)
                 .name(this.name)
+                .address(this.address)
                 .build();
     }
 }

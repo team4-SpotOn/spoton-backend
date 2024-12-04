@@ -6,10 +6,11 @@ import lombok.Getter;
 
 @Getter
 public class UserMyCouponsResponseDto {
-    private Long id;
-    private String serial_number;
+    private final Long id;
+    private final String serialNumber;
+
     public UserMyCouponsResponseDto(Coupon coupon) {
         this.id = coupon.getId();
-        this.serial_number = coupon.getSerial_number();
+        this.serialNumber = coupon.getSerial_number();
     }
 }
