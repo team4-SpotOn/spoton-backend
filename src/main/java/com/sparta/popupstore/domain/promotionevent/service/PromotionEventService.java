@@ -52,7 +52,7 @@ public class PromotionEventService {
                 promotionEventUpdateRequestDto.getEndDateTime()
         );
         this.addOrUpdatePopupStore(popupStoreId, promotionEvent);
-        return new PromotionEventUpdateResponseDto(promotionEvent);
+        return new PromotionEventUpdateResponseDto(promotionEvent, popupStoreId);
     }
 
     private void validDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
