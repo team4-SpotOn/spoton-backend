@@ -4,6 +4,7 @@ import com.sparta.popupstore.domain.common.annotation.AuthCompany;
 import com.sparta.popupstore.domain.company.dto.request.CompanySigninRequestDto;
 import com.sparta.popupstore.domain.company.dto.request.CompanySignupRequestDto;
 import com.sparta.popupstore.domain.company.dto.response.CompanyMyPageResponseDto;
+import com.sparta.popupstore.domain.company.dto.response.CompanyMyPopupStoreResponseDto;
 import com.sparta.popupstore.domain.company.dto.response.CompanySignupResponseDto;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.company.service.CompanyService;
@@ -11,6 +12,7 @@ import com.sparta.popupstore.jwt.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,5 +60,17 @@ public class CompanyController {
     public ResponseEntity<CompanyMyPageResponseDto> getCompanyMyPage(@AuthCompany Company company) {
         return ResponseEntity.ok(companyService.getCompanyMyPage(company));
     }
+
+    @Operation(summary = "회사 자사 팝업스토어 조회", description = "회사가 본인이 등록한 팝업스토어 목록 조회")
+    @GetMapping("/popupstores")
+    public ResponseEntity<List<CompanyMyPopupStoreResponseDto>> getCompanyMyPopupStore(@AuthCompany Company company){
+        return ResponseEntity.ok(companyService.getCompanyMyPopupStore(company));
+    }
+
+
+
+
+
+
 
 }
