@@ -1,14 +1,22 @@
 package com.sparta.popupstore.domain.review.dto.response;
 
 import com.sparta.popupstore.domain.review.entity.Review;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
 public class ReviewCreateResponseDto {
 
+  @Schema(description = "팝업스토어 고유번호")
   private Long id;
+
+  @Schema(description = "리뷰내용")
   private String contents;
+
+  @Schema(description = "별점")
   private int star;
+
+  @Schema(description = "유저이름")
   private String name;
 
   public ReviewCreateResponseDto(Review review) {
