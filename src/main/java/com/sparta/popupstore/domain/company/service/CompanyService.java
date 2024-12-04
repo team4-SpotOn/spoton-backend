@@ -3,6 +3,7 @@ package com.sparta.popupstore.domain.company.service;
 import com.sparta.popupstore.config.PasswordEncoder;
 import com.sparta.popupstore.domain.company.dto.request.CompanySigninRequestDto;
 import com.sparta.popupstore.domain.company.dto.request.CompanySignupRequestDto;
+import com.sparta.popupstore.domain.company.dto.response.CompanyMyPageResponseDto;
 import com.sparta.popupstore.domain.company.dto.response.CompanySignupResponseDto;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.company.repository.CompanyRepository;
@@ -35,4 +36,10 @@ public class CompanyService {
 
         return company;
     }
+
+    // 회사 마이페이지
+    public CompanyMyPageResponseDto getCompanyMyPage(Company company){
+        return new CompanyMyPageResponseDto(company);
+    }
+
 }
