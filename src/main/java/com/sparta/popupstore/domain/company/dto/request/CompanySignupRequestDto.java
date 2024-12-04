@@ -4,7 +4,7 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import lombok.Getter;
 
 @Getter
-public class CompanySaveRequestDto {
+public class CompanySignupRequestDto {
     private String email;
     private String password;
     private String ceoName;
