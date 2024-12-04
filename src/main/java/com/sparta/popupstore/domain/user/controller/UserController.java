@@ -96,7 +96,7 @@ public class UserController {
     @PatchMapping
     public ResponseEntity<UserUpdateResponseDto> updateUser(
             @AuthUser User user,
-            @RequestBody UserUpdateRequestDto requestDto
+            @RequestBody @Valid UserUpdateRequestDto requestDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)

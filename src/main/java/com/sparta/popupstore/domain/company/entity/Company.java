@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,5 +37,15 @@ public class Company extends BaseEntity {
         this.phone = phone;
         this.website = website;
         this.businessLicense = businessLicense;
+    }
+
+    public void update(String address, String phone, String website) {
+        this.address = address;
+        this.phone = phone;
+        this.website = website;
+    }
+
+    public void delete(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 }
