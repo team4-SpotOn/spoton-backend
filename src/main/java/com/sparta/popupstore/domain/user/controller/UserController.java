@@ -2,29 +2,28 @@ package com.sparta.popupstore.domain.user.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
+import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
-import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import com.sparta.popupstore.jwt.JwtUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.http.HttpStatus;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +34,15 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
+    @Operation(summary = "유저 회원 가입", description = "유저가 회원 가입 하는 API")
+    @Parameter(name = "email", description = "계정 이메일")
+    @Parameter(name = "password", description = "계정 비밀번호")
+    @Parameter(name = "name", description = "본인 이름")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "유저 회원 가입 성공",
+                    content = @Content(schema = @Schema(implementation = UserSignupResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "동일한 이메일을 가진 유저가 존재합니다."),
+    })
     @PostMapping("/signup")
     public ResponseEntity<UserSignupResponseDto> signup(
             @RequestBody @Valid UserSignupRequestDto requestDto,
@@ -48,6 +56,14 @@ public class UserController {
                 .body(responseDto);
     }
 
+    @Operation(summary = "유저 로그인", description = "유저가 로그인 하는 API")
+    @Parameter(name = "email", description = "계정 이메일")
+    @Parameter(name = "password", description = "계정 비밀번호")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "유저 로그인 성공"),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 이메일"),
+            @ApiResponse(responseCode = "401", description = "비밀번호가 틀렸습니다.")
+    })
     @PostMapping("/signin")
     public ResponseEntity<Void> signin(
             @RequestBody UserSigninRequestDto requestDto,
