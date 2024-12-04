@@ -3,7 +3,9 @@ package com.sparta.popupstore.domain.popupstore.controller;
 import com.sparta.popupstore.domain.common.annotation.AuthCompany;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
+import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +29,18 @@ public class PopupStoreController {
             @RequestPart("imageFile") MultipartFile imageFile
     ) throws IOException {
         return ResponseEntity.ok(popupStoreService.createPopupStore(company, requestDto, imageFile));
+    }
+
+
+    @PatchMapping("/{popupId}")
+    public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
+            @PathVariable Long popupId,
+            @AuthCompany Company company,
+            @RequestPart("requestDto") @Valid PopupStoreUpdateRequestDto requestDto,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+    ) {
+        PopupStoreUpdateResponseDto responseDto = null;
+        responseDto = popupStoreService.updatePopupStore(popupId, company, requestDto, imageFile);
+        return ResponseEntity.ok(responseDto);
     }
 }
