@@ -11,11 +11,10 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.company.repository.CompanyRepository;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
-import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
-import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,11 +32,6 @@ public class CompanyService {
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
         Company company = requestDto.toEntity(encodedPassword);
         return new CompanySignupResponseDto(companyRepository.save(company));
-    }
-
-    public Company getCompanyByEmail(String email) {
-        return companyRepository.findByEmail(email)
-                .orElse(null);
     }
 
     public Company signin(CompanySigninRequestDto requestDto) {
