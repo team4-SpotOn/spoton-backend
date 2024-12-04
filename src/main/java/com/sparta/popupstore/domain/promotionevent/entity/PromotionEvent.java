@@ -31,8 +31,8 @@ public class PromotionEvent extends BaseEntity {
     @ColumnDefault("0")
     private int couponGetCount;
     private int totalCount;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
 
     @Builder
     public PromotionEvent(
@@ -43,8 +43,8 @@ public class PromotionEvent extends BaseEntity {
             int discountPercentage,
             int couponGetCount,
             int totalCount,
-            LocalDateTime startTime,
-            LocalDateTime endTime
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime
     ) {
         this.id = id;
         this.popupStore = popupStore;
@@ -53,11 +53,27 @@ public class PromotionEvent extends BaseEntity {
         this.discountPercentage = discountPercentage;
         this.couponGetCount = couponGetCount;
         this.totalCount = totalCount;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
     }
 
     public void addPopupStore(PopupStore popupStore){
         this.popupStore = popupStore;
+    }
+
+    public void updatePromotionEvent(
+            String title,
+            String description,
+            int discountPercentage,
+            int totalCount,
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime
+    ) {
+        this.title = title;
+        this.description = description;
+        this.discountPercentage = discountPercentage;
+        this.totalCount = totalCount;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
     }
 }
