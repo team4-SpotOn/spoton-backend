@@ -3,6 +3,7 @@ package com.sparta.popupstore.domain.user.service;
 import com.sparta.popupstore.config.PasswordEncoder;
 import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
 import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
+import com.sparta.popupstore.domain.user.dto.request.UserDeleteRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserUpdateRequestDto;
@@ -13,6 +14,8 @@ import com.sparta.popupstore.domain.user.dto.response.UserUpdateResponseDto;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.dto.response.UserMyPageResponseDto;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -62,5 +65,15 @@ public class UserService {
     public UserUpdateResponseDto updateUser(User user, UserUpdateRequestDto requestDto) {
         user.update(requestDto.getAddress());
         return new UserUpdateResponseDto(userRepository.saveAndFlush(user));
+    }
+
+    @Transactional
+    public void deleteUser(User user, UserDeleteRequestDto requestDto) {
+        if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Password does not match");
+        }
+
+        user.delete(LocalDateTime.now());
+        userRepository.save(user);
     }
 }

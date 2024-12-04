@@ -1,6 +1,7 @@
 package com.sparta.popupstore.domain.user.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
+import com.sparta.popupstore.domain.user.dto.request.UserDeleteRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserUpdateRequestDto;
@@ -100,5 +101,17 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.updateUser(user, requestDto));
+    }
+
+    @Operation(summary = "유저 회원 탈퇴", description = "유저 회원 탈퇴")
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUser(
+            @AuthUser User user,
+            @RequestBody UserDeleteRequestDto requestDto
+    ) {
+        userService.deleteUser(user, requestDto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }
