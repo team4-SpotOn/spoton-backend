@@ -67,7 +67,6 @@ public class UserService {
         return new UserUpdateResponseDto(userRepository.saveAndFlush(user));
     }
 
-    @Transactional
     public void deleteUser(User user, UserDeleteRequestDto requestDto) {
         if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new RuntimeException("Password does not match");
