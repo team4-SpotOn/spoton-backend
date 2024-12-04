@@ -8,6 +8,9 @@ import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +22,9 @@ public class PopupStoreController {
     @PostMapping
     public ResponseEntity<PopupStoreCreateResponseDto> createPopupStore(
             @AuthCompany Company company,
-            @RequestBody PopupStoreCreateRequestDto requestDto) {
-        return ResponseEntity.ok(popupStoreService.createPopupStore(company, requestDto));
+            @RequestBody PopupStoreCreateRequestDto requestDto,
+            @RequestParam("imageFile") MultipartFile imageFile
+    ) throws IOException {
+        return ResponseEntity.ok(popupStoreService.createPopupStore(company, requestDto, imageFile));
     }
 }
