@@ -9,10 +9,10 @@ import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
 
 import com.sparta.popupstore.domain.user.entity.User;
-import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserMyPageResponseDto;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,10 +44,9 @@ public class UserService {
         return user;
     }
 
-
     // 유저 마이페이지
-    public UserMypageResponseDto getUserMyPage(User user){
-        return new UserMypageResponseDto(user);
+    public UserMyPageResponseDto getUserMyPage(User user){
+        return new UserMyPageResponseDto(user);
     }
 
     // 유저 마이쿠폰 보기

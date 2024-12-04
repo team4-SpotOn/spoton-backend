@@ -4,7 +4,7 @@ import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
-import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserMyPageResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.service.UserService;
@@ -79,7 +79,7 @@ public class UserController {
 
     @Operation(summary = "유저 마이페이지", description = "고객이 로그인 호 확인하는 마이페이지")
     @GetMapping("/mypage")
-    public ResponseEntity<UserMypageResponseDto> getUserMyPage(@AuthUser User user) {
+    public ResponseEntity<UserMyPageResponseDto> getUserMyPage(@AuthUser User user) {
         return ResponseEntity.ok(userService.getUserMyPage(user));
     }
 
