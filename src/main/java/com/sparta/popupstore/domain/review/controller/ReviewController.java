@@ -1,7 +1,7 @@
 package com.sparta.popupstore.domain.review.controller;
 
-import com.sparta.popupstore.domain.review.dto.request.ReviewSaveRequestDto;
-import com.sparta.popupstore.domain.review.dto.response.ReviewSaveResponseDto;
+import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
+import com.sparta.popupstore.domain.review.dto.response.ReviewCreateResponseDto;
 import com.sparta.popupstore.domain.review.service.ReviewService;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
@@ -21,7 +21,7 @@ public class ReviewController {
     private final UserRepository userRepository;
 
     @PostMapping("/reviews/popupstores/{id}")
-    public ResponseEntity<ReviewSaveResponseDto> createReview(@PathVariable Long id, @RequestBody ReviewSaveRequestDto requestDto) {
+    public ResponseEntity<ReviewCreateResponseDto> createReview(@PathVariable Long id, @RequestBody ReviewCreateRequestDto requestDto) {
         User user = userRepository.findById(1L).orElseThrow();
         return ResponseEntity
             .status(HttpStatus.CREATED)

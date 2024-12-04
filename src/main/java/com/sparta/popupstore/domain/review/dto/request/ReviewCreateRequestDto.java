@@ -8,16 +8,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ReviewSaveRequestDto {
+public class ReviewCreateRequestDto {
   private int star;
   private String content;
 
-  public Review toReviewSaveRequestDto(User user, Long id) {
+  public Review toEntity(User user, PopupStore popupStore) {
     return Review.builder()
         .user(user)
-        .popupStore(PopupStore.builder().id(id).build())
-        .star(star)
-        .contents(content)
+        .popupStore(popupStore)
+        .star(this.star)
+        .contents(this.content)
         .build();
   }
 }
