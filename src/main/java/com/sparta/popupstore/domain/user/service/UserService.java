@@ -47,19 +47,12 @@ public class UserService {
 
     // 유저 마이페이지
     public UserMypageResponseDto getUserMyPage(User user){
-        User users = userRepository.findById(user.getId()).orElseThrow(() ->
-            new IllegalArgumentException("해당 고객은 존재하지 않습니다.")
-        );
-        return new UserMypageResponseDto(users);
+        return new UserMypageResponseDto(user);
     }
 
     // 유저 마이쿠폰 보기
     public List<UserMyCouponsResponseDto> getUserMyCoupons(User user){
-        User users = userRepository.findById(user.getId()).orElseThrow(() ->
-            new IllegalArgumentException("해당 고객은 존재하지 않습니다.")
-        );
-
         List<Coupon> couponData = couponRepository.findByUserId(user.getId());
-        return couponData.stream().map(UserMyCouponsResponseDto::new ).collect(Collectors.toList());
+        return couponData.stream().map(UserMyCouponsResponseDto::new ).toList();
     }
 }
