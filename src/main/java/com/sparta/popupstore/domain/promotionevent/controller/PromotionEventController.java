@@ -60,7 +60,6 @@ public class PromotionEventController {
     @Parameter(name = "totalCount", description = "총 쿠폰의 갯수")
     @Parameter(name = "startTime", description = "시작일")
     @Parameter(name = "endTime", description = "종료일")
-    @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호 / 만일 팝업스토어를 잘못 입력해서 수정이 필요할 시에 @RequestParam 으로 요청")
     @PatchMapping("/admin/promotionEvents/{promotionEventId}")
     public ResponseEntity<PromotionEventUpdateResponseDto> updateEvent(
             @AuthUser User user,
@@ -68,5 +67,15 @@ public class PromotionEventController {
             @PathVariable(name = "promotionEventId") Long promotionEventId
     ){
         return ResponseEntity.ok(promotionEventService.updatePromotionEvent(promotionEventUpdateRequestDto, promotionEventId));
+    }
+
+    @Operation(summary = "프로모션 이벤트 삭제")
+    @DeleteMapping("/admin/promotionEvents/{promotionEventId}")
+    public ResponseEntity<Void> deleteEvent(
+            @AuthUser User user,
+            @PathVariable(name = "promotionEventId") Long promotionEventId
+    ){
+        promotionEventService.deletePromotionEvent(promotionEventId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -40,7 +40,7 @@ public class PromotionEventService {
 
     @Transactional
     public PromotionEventUpdateResponseDto updatePromotionEvent(PromotionEventUpdateRequestDto promotionEventUpdateRequestDto, Long promotionEventId) {
-        PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이벤트입니다."));
+        PromotionEvent promotionEvent = promotionEventRepository.findByPromotionEventId(promotionEventId);
         promotionEvent.updatePromotionEvent(
                 promotionEventUpdateRequestDto.getTitle(),
                 promotionEventUpdateRequestDto.getDescription(),
@@ -50,5 +50,11 @@ public class PromotionEventService {
                 promotionEventUpdateRequestDto.getEndDateTime()
         );
         return new PromotionEventUpdateResponseDto(promotionEvent);
+    }
+
+    @Transactional
+    public void deletePromotionEvent(Long promotionEventId) {
+        promotionEventRepository.findByPromotionEventId(promotionEventId);
+        promotionEventRepository.deletePromotionEvent(promotionEventId);
     }
 }
