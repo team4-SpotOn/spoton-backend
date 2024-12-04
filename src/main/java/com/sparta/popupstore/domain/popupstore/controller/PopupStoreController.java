@@ -1,5 +1,7 @@
 package com.sparta.popupstore.domain.popupstore.controller;
 
+import com.sparta.popupstore.domain.common.annotation.AuthCompany;
+import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
@@ -16,8 +18,8 @@ public class PopupStoreController {
 
     @PostMapping
     public ResponseEntity<PopupStoreCreateResponseDto> createPopupStore(
-            @RequestParam String email,
+            @AuthCompany Company company,
             @RequestBody PopupStoreCreateRequestDto requestDto) {
-        return ResponseEntity.ok(popupStoreService.createPopupStore(email, requestDto));
+        return ResponseEntity.ok(popupStoreService.createPopupStore(company, requestDto));
     }
 }
