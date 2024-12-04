@@ -76,7 +76,7 @@ public class PromotionEventService {
             throw new IllegalArgumentException("쿠폰이 모두 소진되었습니다.");
         }
         Coupon coupon = couponService.createCoupon(promotionEvent, user);
-        promotionEventRepository.couponGetCountUp(promotionEventId);
+        promotionEvent.couponGetCountUp();
         return new CouponCreateResponseDto(coupon);
     }
 

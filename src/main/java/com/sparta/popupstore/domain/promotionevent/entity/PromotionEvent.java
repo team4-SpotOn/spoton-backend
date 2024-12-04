@@ -74,4 +74,8 @@ public class PromotionEvent extends BaseEntity {
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }
+
+    public void couponGetCountUp() {
+        this.couponGetCount++;
+    }
 }

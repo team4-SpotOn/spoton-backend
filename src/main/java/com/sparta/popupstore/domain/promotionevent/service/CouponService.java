@@ -16,7 +16,7 @@ public class CouponService {
     private final CouponRepository couponRepository;
 
     public Coupon createCoupon(PromotionEvent promotionEvent, User user) {
-        if (couponRepository.existsByUserIdAndPromotionEventId(promotionEvent.getId(), user.getId())) {
+        if (couponRepository.existsByPromotionEventIdAndUserId(promotionEvent.getId(), user.getId())) {
             throw new IllegalArgumentException("이미 발급 받으신 쿠폰입니다.");
         }
         String uuid = UUID.randomUUID().toString();

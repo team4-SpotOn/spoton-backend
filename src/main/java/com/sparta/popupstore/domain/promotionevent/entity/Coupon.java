@@ -40,7 +40,8 @@ public class Coupon {
     private LocalDateTime deletedAt;
 
     @Builder
-    public Coupon(User user, PromotionEvent promotionEvent, String serialNumber) {
+    public Coupon(User user, PromotionEvent promotionEvent, String serialNumber, Long couponId) {
+        this.id = couponId;
         this.user = user;
         this.promotionEvent = promotionEvent;
         this.serialNumber = serialNumber;

@@ -21,7 +21,8 @@ public interface PromotionEventRepository extends JpaRepository<PromotionEvent, 
     @Query("select p from PromotionEvent p where p.id = :promotionEventId and p.deletedAt is null")
     Optional<PromotionEvent> findByPromotionEventId(@Param("promotionEventId") Long promotionEventId);
 
-    @Modifying
-    @Query("update PromotionEvent p set p.couponGetCount = p.couponGetCount + 1 where p.id = :promotionEventId")
-    void couponGetCountUp(@Param("promotionEventId") Long promotionEventId);
+//    추후에 스케쥴러에서 쓰일 수도 있을 것 같아서 일단 주석으로 냅두겠습니당
+//    @Modifying
+//    @Query("update PromotionEvent p set p.couponGetCount = p.couponGetCount + 1 where p.id = :promotionEventId")
+//    void couponGetCountUp(@Param("promotionEventId") Long promotionEventId);
 }
