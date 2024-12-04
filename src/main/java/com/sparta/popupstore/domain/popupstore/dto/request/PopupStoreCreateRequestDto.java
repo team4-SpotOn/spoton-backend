@@ -13,7 +13,6 @@ import java.time.LocalTime;
 public class PopupStoreCreateRequestDto {
     private String name;
     private String content;
-    private String imageUrl;
     private int price;
     private String address;
     private LocalDate startDate;
@@ -21,12 +20,12 @@ public class PopupStoreCreateRequestDto {
     private LocalTime startTime;
     private LocalTime endTime;
 
-    public PopupStore toEntity(Company company) {
+    public PopupStore toEntity(Company company, String imageUrl) {
         return PopupStore.builder()
                 .company(company)
                 .name(this.name)
                 .contents(this.content)
-                .image(this.imageUrl)
+                .image(imageUrl)
                 .price(this.price)
                 .address(this.address)
                 .startDate(this.startDate)
