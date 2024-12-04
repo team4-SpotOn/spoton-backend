@@ -1,6 +1,6 @@
-package com.sparta.popupstore.domain.promotionalevent.dto.request;
+package com.sparta.popupstore.domain.promotionevent.dto.request;
 
-import com.sparta.popupstore.domain.promotionalevent.entity.PromotionalEvent;
+import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +10,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class PromotionalEventCreateRequestDto {
+public class PromotionEventCreateRequestDto {
     @NotBlank(message = "제목을 입력해주세요")
     private String title;
     @NotBlank(message = "이벤트 설명을 입력해주셔야 합니다.")
@@ -25,8 +25,8 @@ public class PromotionalEventCreateRequestDto {
     @Future(message = "현재 날짜보다 이후로 설정하셔야합니다.")
     private LocalDateTime endTime;
 
-    public PromotionalEvent toEvent() {
-        return PromotionalEvent.builder()
+    public PromotionEvent toEvent() {
+        return PromotionEvent.builder()
                 .title(this.title)
                 .description(this.description)
                 .discountPercentage(this.discountPercentage)

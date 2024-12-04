@@ -4,10 +4,9 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import lombok.Getter;
 
 @Getter
-public class CompanySaveResponseDto {
+public class CompanySignupResponseDto {
     private final Long id;
     private final String email;
-    private final String password;
     private final String ceoName;
     private final String name;
     private final String address;
@@ -15,10 +14,9 @@ public class CompanySaveResponseDto {
     private final String website;
     private final String businessLicense;
 
-    public CompanySaveResponseDto(Company company) {
+    public CompanySignupResponseDto(Company company) {
         this.id = company.getId();
         this.email = company.getEmail();
-        this.password = company.getPassword();
         this.ceoName = company.getCeoName();
         this.name = company.getName();
         this.address = company.getAddress();

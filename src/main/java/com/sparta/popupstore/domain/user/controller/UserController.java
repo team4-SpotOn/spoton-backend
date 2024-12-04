@@ -1,8 +1,12 @@
 package com.sparta.popupstore.domain.user.controller;
 
+import com.sparta.popupstore.domain.common.annotation.AuthUser;
+import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
+import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
-import com.sparta.popupstore.domain.user.dto.response.USerSignupResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
+import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +14,7 @@ import com.sparta.popupstore.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,11 +36,11 @@ public class UserController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/signup")
-    public ResponseEntity<USerSignupResponseDto> signup(
+    public ResponseEntity<UserSignupResponseDto> signup(
             @RequestBody @Valid UserSignupRequestDto requestDto,
             HttpServletResponse response
     ) {
-        USerSignupResponseDto responseDto = userService.signup(requestDto);
+        UserSignupResponseDto responseDto = userService.signup(requestDto);
         jwtUtil.addJwtToCookie(responseDto.getEmail(), response);
 
         return ResponseEntity
@@ -43,9 +48,29 @@ public class UserController {
                 .body(responseDto);
     }
 
-    @Operation(summary = "유저 마이페이지", description = "고객이 로그인 호 확인하는 마이페이지")
-    @GetMapping("/mypage/{userId}")
-    public ResponseEntity<UserMypageResponseDto> getUserMypage(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.getUserMypage(userId));
+    @PostMapping("/signin")
+    public ResponseEntity<Void> signin(
+            @RequestBody UserSigninRequestDto requestDto,
+            HttpServletResponse response
+    ) {
+        User user = userService.signin(requestDto);
+        jwtUtil.addJwtToCookie(user.getEmail(), response);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
+
+    @Operation(summary = "유저 마이페이지", description = "고객이 로그인 호 확인하는 마이페이지")
+    @GetMapping("/mypage")
+    public ResponseEntity<UserMypageResponseDto> getUserMyPage(@AuthUser User user) {
+        return ResponseEntity.ok(userService.getUserMyPage(user));
+    }
+
+    @Operation(summary = "유저 내 쿠폰보기", description = "마이페이지에 본인이 가지고 있는 쿠폰 목록 확인")
+    @GetMapping("/coupons")
+    public ResponseEntity<List<UserMyCouponsResponseDto>> getUserMyCoupons(@AuthUser User user) {
+        return ResponseEntity.ok(userService.getUserMyCoupons(user));
+    }
+
 }
