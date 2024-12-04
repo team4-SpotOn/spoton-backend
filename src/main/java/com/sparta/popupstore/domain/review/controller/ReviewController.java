@@ -11,20 +11,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/reviews/popupstores")
 @RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
     private final UserRepository userRepository;
 
-    @PostMapping("/reviews/popupstores/{id}")
-    public ResponseEntity<ReviewCreateResponseDto> createReview(@PathVariable Long id, @RequestBody ReviewCreateRequestDto requestDto) {
+    @PostMapping("/{popupstoresid}")
+    public ResponseEntity<ReviewCreateResponseDto> createReview(@PathVariable Long popupstoresid, @RequestBody ReviewCreateRequestDto requestDto) {
         User user = userRepository.findById(1L).orElseThrow();
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(reviewService.createReview(user,id, requestDto));
+            .body(reviewService.createReview(user,popupstoresid, requestDto));
     }
 }

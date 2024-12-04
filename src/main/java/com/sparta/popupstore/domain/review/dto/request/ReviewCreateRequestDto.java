@@ -10,14 +10,14 @@ import lombok.Setter;
 @Setter
 public class ReviewCreateRequestDto {
   private int star;
-  private String content;
+  private String contents;
 
   public Review toEntity(User user, PopupStore popupStore) {
     return Review.builder()
         .user(user)
         .popupStore(popupStore)
         .star(this.star)
-        .contents(this.content)
+        .contents(this.contents)
         .build();
   }
 }
