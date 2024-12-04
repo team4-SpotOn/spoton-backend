@@ -24,9 +24,4 @@ public class ReviewCreateRequestDto {
         .contents(this.contents)
         .build();
   }
-
-  public void update(ReviewCreateRequestDto requestDto) {
-    star = requestDto.getStar();
-    contents = requestDto.getContents();
-  }
 }

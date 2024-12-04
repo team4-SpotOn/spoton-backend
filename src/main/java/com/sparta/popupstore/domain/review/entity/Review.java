@@ -2,6 +2,7 @@ package com.sparta.popupstore.domain.review.entity;
 
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
 import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -34,6 +35,10 @@ public class Review extends BaseEntity {
         this.id = id;
         this.popupStore = popupStore;
         this.user = user;
+        this.contents = contents;
+        this.star = star;
+    }
+    public void update(String contents, int star) {
         this.contents = contents;
         this.star = star;
     }
