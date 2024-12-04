@@ -1,13 +1,19 @@
 package com.sparta.popupstore.domain.user.service;
 
 import com.sparta.popupstore.config.PasswordEncoder;
+import com.sparta.popupstore.domain.promotionalevent.entity.Coupon;
+import com.sparta.popupstore.domain.promotionalevent.repository.CouponRepository;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
+import com.sparta.popupstore.domain.user.dto.response.CouponResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
+
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
-import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CouponRepository couponRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UserSignupResponseDto signup(UserSignupRequestDto requestDto) {
@@ -45,5 +52,19 @@ public class UserService {
             new IllegalArgumentException("해당 고객은 존재하지 않습니다.")
         );
         return new UserMypageResponseDto(user);
+    }
+
+
+    // 유저 마이쿠폰 보기
+    public CouponResponseDto getUserMyCoupons(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(() ->
+            new IllegalArgumentException("해당 고객은 존재하지 않습니다.")
+        );
+
+        List<Coupon> couponData = couponRepository.findByUserId(userId);
+
+        List<UserMyCouponsResponseDto> coupons = couponData.stream().map(UserMyCouponsResponseDto::new ).collect(Collectors.toList());
+        return new CouponResponseDto(coupons);
+
     }
 }
