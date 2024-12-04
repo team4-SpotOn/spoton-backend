@@ -7,7 +7,7 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import java.util.Optional;
 
 public interface CompanyRepository extends JpaRepository<Company, Long> {
-    boolean existsByEmail(String email);
-
     Optional<Company> findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }

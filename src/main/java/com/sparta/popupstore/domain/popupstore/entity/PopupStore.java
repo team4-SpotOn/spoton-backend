@@ -23,7 +23,6 @@ public class PopupStore extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
-
     private String name;
     private String contents;
     private String image;
@@ -34,8 +33,9 @@ public class PopupStore extends BaseEntity {
     private LocalTime startTime;
     private LocalTime endTime;
 
+
     @Builder
-    public PopupStore(Long id, Company company, String name,  String contents, String image, int price, String address, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+    public PopupStore(Long id, Company company, String name, String contents, String image, int price, String address, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         this.id = id;
         this.company = company;
         this.name = name;
