@@ -4,6 +4,7 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
@@ -99,5 +100,12 @@ public class PopupStoreService {
 
     private boolean isEditable(PopupStore popupStore) {
         return popupStore.getStartDate().isAfter(LocalDate.now());
+    }
+
+    // 팝업스토어 단건조회
+    public PopupStoreFindOneResponseDto getPopupStoreFindOne(Long popupId){
+        PopupStore popupStore = popupStoreRepository.findById(popupId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팝업스토어 입니다."));
+        return new PopupStoreFindOneResponseDto(popupStore);
     }
 }
