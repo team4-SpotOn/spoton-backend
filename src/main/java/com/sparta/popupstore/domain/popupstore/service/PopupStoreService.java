@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
-    private final String uploadDir = "uploads";
+    private final String UPLOAD_URL = "uploads";
 
 
     @Transactional
@@ -36,8 +36,8 @@ public class PopupStoreService {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        Path path = Paths.get(uploadDir, fileName);
+
+        Path path = Paths.get(UPLOAD_URL, System.currentTimeMillis() + "_" + file.getOriginalFilename());
         Files.createDirectories(path.getParent());
         Files.write(path, file.getBytes());
         return path.toString();
