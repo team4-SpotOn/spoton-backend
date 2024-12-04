@@ -18,14 +18,16 @@ public class User extends BaseEntity {
     private String email;
     private String password;
     private String name;
+    private String address;
     private UserRole userRole = UserRole.USER;
 
     @Builder
-    public User(Long id, String email, String password, String name, UserRole userRole) {
+    public User(Long id, String email, String password, String name, String address, UserRole userRole) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
+        this.address = address;
         this.userRole = userRole;
     }
 }
