@@ -53,7 +53,7 @@ public class JwtUtil {
         response.addCookie(cookie);
     }
 
-    public Claims getUserInfoFromRequest(HttpServletRequest request) {
+    public Claims getInfoFromRequest(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if(cookies == null) {
             throw new RuntimeException("cookie is null");

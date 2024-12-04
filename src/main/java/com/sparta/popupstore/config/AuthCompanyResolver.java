@@ -1,9 +1,8 @@
 package com.sparta.popupstore.config;
 
-import com.sparta.popupstore.domain.common.annotation.AuthUser;
-import com.sparta.popupstore.domain.user.entity.User;
-import com.sparta.popupstore.domain.user.entity.UserRole;
-import com.sparta.popupstore.domain.user.repository.UserRepository;
+import com.sparta.popupstore.domain.common.annotation.AuthCompany;
+import com.sparta.popupstore.domain.company.entity.Company;
+import com.sparta.popupstore.domain.company.repository.CompanyRepository;
 import com.sparta.popupstore.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,15 +17,15 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 @RequiredArgsConstructor
-public class AuthUserResolver implements HandlerMethodArgumentResolver {
+public class AuthCompanyResolver implements HandlerMethodArgumentResolver {
 
-    private final UserRepository userRepository;
+    private final CompanyRepository companyRepository;
     private final JwtUtil jwtUtil;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(AuthUser.class)
-                && parameter.getParameterType().equals(User.class);
+        return parameter.hasParameterAnnotation(AuthCompany.class)
+                && parameter.getParameterType().equals(Company.class);
     }
 
     @Override
@@ -41,13 +40,8 @@ public class AuthUserResolver implements HandlerMethodArgumentResolver {
             throw new IllegalArgumentException("No request found");
         }
 
-        Claims userInfo = jwtUtil.getInfoFromRequest(request);
-        User user = userRepository.findByEmail(userInfo.getSubject())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if(request.getRequestURI().startsWith("/admin/promotionEvents") && !UserRole.ADMIN.equals(user.getUserRole())){
-            throw new IllegalArgumentException("User doesn't have admin role");
-        }
-        return user;
+        Claims companyInfo = jwtUtil.getInfoFromRequest(request);
+        return companyRepository.findByEmail(companyInfo.getSubject())
+                .orElseThrow(() -> new IllegalArgumentException("Company not found"));
     }
 }

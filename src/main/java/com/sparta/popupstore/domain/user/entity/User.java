@@ -18,7 +18,7 @@ public class User extends BaseEntity {
     private String email;
     private String password;
     private String name;
-    private UserRole userRole;
+    private UserRole userRole = UserRole.USER;
 
     @Builder
     public User(Long id, String email, String password, String name, UserRole userRole) {
