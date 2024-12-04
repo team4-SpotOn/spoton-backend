@@ -1,11 +1,14 @@
 package com.sparta.popupstore.domain.company.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthCompany;
+import com.sparta.popupstore.domain.company.dto.request.CompanyDeleteRequestDto;
 import com.sparta.popupstore.domain.company.dto.request.CompanySigninRequestDto;
 import com.sparta.popupstore.domain.company.dto.request.CompanySignupRequestDto;
+import com.sparta.popupstore.domain.company.dto.request.CompanyUpdateRequestDto;
 import com.sparta.popupstore.domain.company.dto.response.CompanyMyPageResponseDto;
 import com.sparta.popupstore.domain.company.dto.response.CompanyMyPopupStoreResponseDto;
 import com.sparta.popupstore.domain.company.dto.response.CompanySignupResponseDto;
+import com.sparta.popupstore.domain.company.dto.response.CompanyUpdateResponseDto;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.company.service.CompanyService;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
@@ -18,11 +21,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -92,6 +96,28 @@ public class CompanyController {
     }
 
 
+    @Operation(summary = "회사 정보 수정", description = "회사 정보 수정")
+    @PatchMapping
+    public ResponseEntity<CompanyUpdateResponseDto> updateCompany(
+            @AuthCompany Company company,
+            @RequestBody @Valid CompanyUpdateRequestDto requestDto
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(companyService.updateCompany(company, requestDto));
+    }
+
+    @Operation(summary = "회사 회원 탈퇴", description = "회사 회원 탈퇴")
+    @DeleteMapping
+    public ResponseEntity<Void> deleteCompany(
+            @AuthCompany Company company,
+            @RequestBody CompanyDeleteRequestDto requestDto
+    ) {
+        companyService.deleteCompany(company, requestDto);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 
 
 

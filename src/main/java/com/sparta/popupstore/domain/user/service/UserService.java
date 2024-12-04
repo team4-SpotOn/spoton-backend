@@ -8,19 +8,16 @@ import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserUpdateRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserMyPageResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
-
 import com.sparta.popupstore.domain.user.dto.response.UserUpdateResponseDto;
 import com.sparta.popupstore.domain.user.entity.User;
-import com.sparta.popupstore.domain.user.dto.response.UserMyPageResponseDto;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -61,10 +58,9 @@ public class UserService {
         return couponData.stream().map(UserMyCouponsResponseDto::new ).toList();
     }
 
-    @Transactional
     public UserUpdateResponseDto updateUser(User user, UserUpdateRequestDto requestDto) {
         user.update(requestDto.getAddress());
-        return new UserUpdateResponseDto(userRepository.saveAndFlush(user));
+        return new UserUpdateResponseDto(userRepository.save(user));
     }
 
     public void deleteUser(User user, UserDeleteRequestDto requestDto) {
