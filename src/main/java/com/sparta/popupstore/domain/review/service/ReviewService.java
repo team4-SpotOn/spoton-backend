@@ -17,10 +17,9 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final PopupStoreRepository popupStoreRepository;
 
-    public ReviewCreateResponseDto createReview(User user,Long id , ReviewCreateRequestDto requestDto) {
-        PopupStore popupStore = popupStoreRepository.findById(id).orElseThrow();
-        Review review = requestDto.toEntity(user, popupStore);
-        reviewRepository.save(review);
+    public ReviewCreateResponseDto deleteReview(User user, Long reviewId){
+        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        reviewRepository.delete(review);
         return new ReviewCreateResponseDto(review);
     }
 }
