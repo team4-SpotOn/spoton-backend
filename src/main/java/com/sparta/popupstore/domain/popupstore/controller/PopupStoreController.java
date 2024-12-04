@@ -23,8 +23,8 @@ public class PopupStoreController {
     @PostMapping
     public ResponseEntity<PopupStoreCreateResponseDto> createPopupStore(
             @AuthCompany Company company,
-            @Valid @RequestBody PopupStoreCreateRequestDto requestDto,
-            @RequestParam("imageFile") MultipartFile imageFile
+            @RequestPart("requestDto") @Valid PopupStoreCreateRequestDto requestDto,
+            @RequestPart("imageFile") MultipartFile imageFile
     ) throws IOException {
         return ResponseEntity.ok(popupStoreService.createPopupStore(company, requestDto, imageFile));
     }
