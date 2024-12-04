@@ -29,10 +29,10 @@ public class CompanySignupRequestDto {
     @NotBlank(message = "사업자 등록 번호를 입력해 주세요.")
     private String businessLicense;
 
-    public Company toEntity() {
+    public Company toEntity(String encodedPassword) {
         return Company.builder()
                 .email(this.email)
-                .password(this.password)
+                .password(encodedPassword)
                 .ceoName(this.ceoName)
                 .name(this.name)
                 .address(this.address)
