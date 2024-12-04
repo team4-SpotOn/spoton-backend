@@ -19,9 +19,9 @@ public class PromotionEventCreateResponseDto {
     @Schema(description = "총 쿠폰 갯수")
     private final int totalCount;
     @Schema(description = "프로모션 이벤트 시작일")
-    private final LocalDateTime startTime;
+    private final LocalDateTime startDateTime;
     @Schema(description = "프로모션 이벤트 종료일")
-    private final LocalDateTime endTime;
+    private final LocalDateTime endDateTime;
 
     public PromotionEventCreateResponseDto(PromotionEvent promotionEvent) {
         this.id = promotionEvent.getId();
@@ -29,7 +29,7 @@ public class PromotionEventCreateResponseDto {
         this.description = promotionEvent.getDescription();
         this.discountPercentage = promotionEvent.getDiscountPercentage();
         this.totalCount = promotionEvent.getTotalCount();
-        this.startTime = promotionEvent.getStartDateTime();
-        this.endTime = promotionEvent.getEndDateTime();
+        this.startDateTime = promotionEvent.getStartDateTime();
+        this.endDateTime = promotionEvent.getEndDateTime();
     }
 }
