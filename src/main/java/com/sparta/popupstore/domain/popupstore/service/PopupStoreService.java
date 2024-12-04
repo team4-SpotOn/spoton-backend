@@ -3,24 +3,43 @@ package com.sparta.popupstore.domain.popupstore.service;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @RequiredArgsConstructor
 public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
+    private final String uploadDir = "uploads";
 
 
     @Transactional
-    public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto) {
+    public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto, MultipartFile imageFile) throws IOException {
         if (company == null) {
             throw new RuntimeException("Unauthorized access - company not found");
         }
-        return new PopupStoreCreateResponseDto(popupStoreRepository.save(requestDto.toEntity(company)));
+        String imagePath = saveImageFile(imageFile);
+
+        return new PopupStoreCreateResponseDto(popupStoreRepository.save(requestDto.toEntity(company, imagePath)));
+    }
+
+    private String saveImageFile(MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty");
+        }
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        Path path = Paths.get(uploadDir, fileName);
+        Files.createDirectories(path.getParent());
+        Files.write(path, file.getBytes());
+        return path.toString();
     }
 }
