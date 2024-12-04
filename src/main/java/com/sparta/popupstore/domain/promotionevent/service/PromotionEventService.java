@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class PromotionEventService {
@@ -49,6 +51,9 @@ public class PromotionEventService {
             , Long promotionEventId
     ) {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
+        if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("이미 시작한 이벤트는 수정할 수 없습니다.");
+        }
         promotionEvent.updatePromotionEvent(
                 promotionEventUpdateRequestDto.getTitle(),
                 promotionEventUpdateRequestDto.getDescription(),

@@ -27,7 +27,7 @@ public class StartAndDateTimeCheckValidation implements ConstraintValidator<Star
         boolean valid = true;
         LocalDateTime fieldStartTimeDate = this.getFieldValue(o, startDateTime);
         LocalDateTime fieldEndDateTime = this.getFieldValue(o, endDateTime);
-        if(fieldStartTimeDate.isAfter(fieldEndDateTime)) {
+        if(fieldStartTimeDate.isAfter(fieldEndDateTime) || fieldStartTimeDate.isBefore(LocalDateTime.now().plusDays(1))) {
             constraintValidatorContext.disableDefaultConstraintViolation();
             constraintValidatorContext.buildConstraintViolationWithTemplate(message)
                     .addPropertyNode(startDateTime)
