@@ -44,8 +44,8 @@ public class AuthUserResolver implements HandlerMethodArgumentResolver {
         User user = userRepository.findByEmail(userInfo.getSubject())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if(request.getRequestURI().startsWith("/promotionalEvents/admin") && !UserRole.ADMIN.equals(user.getUserRole())){
-            throw new IllegalArgumentException("User has admin role");
+        if(request.getRequestURI().startsWith("/admin/promotionEvents") && !UserRole.ADMIN.equals(user.getUserRole())){
+            throw new IllegalArgumentException("User doesn't have admin role");
         }
         return user;
     }

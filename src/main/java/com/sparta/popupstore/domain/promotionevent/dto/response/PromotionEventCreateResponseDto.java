@@ -1,13 +1,13 @@
-package com.sparta.popupstore.domain.promotionalevent.dto.response;
+package com.sparta.popupstore.domain.promotionevent.dto.response;
 
-import com.sparta.popupstore.domain.promotionalevent.entity.PromotionalEvent;
+import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class PromotionalEventCreateResponseDto {
+public class PromotionEventCreateResponseDto {
     @Schema(description = "프로모션 이벤트 고유 번호")
     private final Long id;
     @Schema(description = "프로모션 이벤트 제목")
@@ -23,13 +23,13 @@ public class PromotionalEventCreateResponseDto {
     @Schema(description = "프로모션 이벤트 종료일")
     private final LocalDateTime endTime;
 
-    public PromotionalEventCreateResponseDto(PromotionalEvent  promotionalEvent) {
-        this.id = promotionalEvent.getId();
-        this.title = promotionalEvent.getTitle();
-        this.description = promotionalEvent.getDescription();
-        this.discountPercentage = promotionalEvent.getDiscountPercentage();
-        this.totalCount = promotionalEvent.getTotalCount();
-        this.startTime = promotionalEvent.getStartTime();
-        this.endTime = promotionalEvent.getEndTime();
+    public PromotionEventCreateResponseDto(PromotionEvent promotionEvent) {
+        this.id = promotionEvent.getId();
+        this.title = promotionEvent.getTitle();
+        this.description = promotionEvent.getDescription();
+        this.discountPercentage = promotionEvent.getDiscountPercentage();
+        this.totalCount = promotionEvent.getTotalCount();
+        this.startTime = promotionEvent.getStartTime();
+        this.endTime = promotionEvent.getEndTime();
     }
 }
