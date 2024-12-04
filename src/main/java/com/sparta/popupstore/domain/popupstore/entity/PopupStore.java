@@ -3,6 +3,8 @@ package com.sparta.popupstore.domain.popupstore.entity;
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
 import com.sparta.popupstore.domain.company.entity.Company;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,17 +24,20 @@ public class PopupStore extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
+    @NotNull(message = "Company cannot be null")
     private Company company;
 
     private String name;
     private String contents;
     private String image;
+    @Min(value = 0, message = "Price must be positive")
     private int price;
     private String address; // 위도와 경도로 주소 저장.
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;
     private LocalTime endTime;
+
 
     @Builder
     public PopupStore(Long id, Company company, String name,  String contents, String image, int price, String address, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
