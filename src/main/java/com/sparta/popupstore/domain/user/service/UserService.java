@@ -1,11 +1,10 @@
 package com.sparta.popupstore.domain.user.service;
 
 import com.sparta.popupstore.config.PasswordEncoder;
-import com.sparta.popupstore.domain.promotionalevent.entity.Coupon;
-import com.sparta.popupstore.domain.promotionalevent.repository.CouponRepository;
+import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
+import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
-import com.sparta.popupstore.domain.user.dto.response.CouponResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
 
@@ -47,24 +46,13 @@ public class UserService {
 
 
     // 유저 마이페이지
-    public UserMypageResponseDto getUserMypage(Long userId){
-        User user = userRepository.findById(userId).orElseThrow(() ->
-            new IllegalArgumentException("해당 고객은 존재하지 않습니다.")
-        );
+    public UserMypageResponseDto getUserMyPage(User user){
         return new UserMypageResponseDto(user);
     }
 
-
     // 유저 마이쿠폰 보기
-    public CouponResponseDto getUserMyCoupons(Long userId){
-        User user = userRepository.findById(userId).orElseThrow(() ->
-            new IllegalArgumentException("해당 고객은 존재하지 않습니다.")
-        );
-
-        List<Coupon> couponData = couponRepository.findByUserId(userId);
-
-        List<UserMyCouponsResponseDto> coupons = couponData.stream().map(UserMyCouponsResponseDto::new ).collect(Collectors.toList());
-        return new CouponResponseDto(coupons);
-
+    public List<UserMyCouponsResponseDto> getUserMyCoupons(User user){
+        List<Coupon> couponData = couponRepository.findByUserId(user.getId());
+        return couponData.stream().map(UserMyCouponsResponseDto::new ).toList();
     }
 }

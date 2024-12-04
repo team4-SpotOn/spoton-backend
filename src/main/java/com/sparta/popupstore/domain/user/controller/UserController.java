@@ -1,7 +1,8 @@
 package com.sparta.popupstore.domain.user.controller;
 
+import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
-import com.sparta.popupstore.domain.user.dto.response.CouponResponseDto;
+import com.sparta.popupstore.domain.user.dto.response.UserMyCouponsResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserMypageResponseDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
@@ -13,6 +14,7 @@ import com.sparta.popupstore.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,15 +62,15 @@ public class UserController {
     }
 
     @Operation(summary = "유저 마이페이지", description = "고객이 로그인 호 확인하는 마이페이지")
-    @GetMapping("/mypage/{userId}")
-    public ResponseEntity<UserMypageResponseDto> getUserMypage(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.getUserMypage(userId));
+    @GetMapping("/mypage")
+    public ResponseEntity<UserMypageResponseDto> getUserMyPage(@AuthUser User user) {
+        return ResponseEntity.ok(userService.getUserMyPage(user));
     }
 
     @Operation(summary = "유저 내 쿠폰보기", description = "마이페이지에 본인이 가지고 있는 쿠폰 목록 확인")
-    @GetMapping("/coupons/{userId}")
-    public ResponseEntity<CouponResponseDto> getUserMyCoupons(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.getUserMyCoupons(userId));
+    @GetMapping("/coupons")
+    public ResponseEntity<List<UserMyCouponsResponseDto>> getUserMyCoupons(@AuthUser User user) {
+        return ResponseEntity.ok(userService.getUserMyCoupons(user));
     }
 
 }
