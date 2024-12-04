@@ -7,6 +7,7 @@ import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCr
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindAllResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
+import com.sparta.popupstore.domain.promotionevent.service.CouponCreateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,6 +55,14 @@ public class PromotionEventController {
         return ResponseEntity.ok(promotionEventService.findAllPromotionalEvents(page, size));
     }
 
+    @Operation(summary = "프로모션 이벤트 단건 조회")
+    @GetMapping("/promotionEvents/{promotionEventId}")
+    public ResponseEntity<PromotionEventFindOneResponseDto> findOnePromotionalEvent(
+            @PathVariable(name = "promotionEventId") Long promotionEventId
+    ){
+        return ResponseEntity.ok(promotionEventService.findOnePromotionEvent(promotionEventId));
+    }
+
     @Operation(summary = "프로모션 이벤트 수정")
     @Parameter(name = "title", description = "이벤트 제목")
     @Parameter(name = "description", description = "이벤트 설명")
@@ -80,11 +89,12 @@ public class PromotionEventController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @Operation(summary = "프로모션 이벤트 단건 조회")
-    @GetMapping("/promotionEvents/{promotionEventId}")
-    public ResponseEntity<PromotionEventFindOneResponseDto> findOnePromotionalEvent(
-            @PathVariable(name = "promotionEventId") Long promotionEventId
+    @Operation(summary = "프로모션 이벤트 쿠폰 신청 및 발급")
+    @PostMapping("/promotionEvents/{promotionEventId}/coupons")
+    public ResponseEntity<CouponCreateResponseDto> couponApplyAndIssuance(
+            @PathVariable(name = "promotionEventId") Long promotionEventId,
+            @AuthUser User user
     ){
-        return ResponseEntity.ok(promotionEventService.findOnePromotionEvent(promotionEventId));
+        return ResponseEntity.ok(promotionEventService.couponApplyAndIssuance(promotionEventId, user));
     }
 }

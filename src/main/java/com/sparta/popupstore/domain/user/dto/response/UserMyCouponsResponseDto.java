@@ -8,9 +8,8 @@ import lombok.Getter;
 public class UserMyCouponsResponseDto {
     private final Long id;
     private final String serialNumber;
-
     public UserMyCouponsResponseDto(Coupon coupon) {
         this.id = coupon.getId();
-        this.serialNumber = coupon.getSerial_number();
+        this.serialNumber = coupon.getSerialNumber();
     }
 }
