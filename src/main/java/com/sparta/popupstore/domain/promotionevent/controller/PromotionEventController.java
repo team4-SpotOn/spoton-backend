@@ -3,8 +3,9 @@ package com.sparta.popupstore.domain.promotionevent.controller;
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCreateResponseDto;
+import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindAllResponseDto;
+import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.domain.user.entity.User;
@@ -46,7 +47,7 @@ public class PromotionEventController {
     @Parameter(name = "pageNum", description = "현재 페이지 번호")
     @Parameter(name = "pageSize", description = "한 페이지에서 볼 이벤트 갯수")
     @GetMapping("/promotionEvents")
-    public ResponseEntity<Page<PromotionEventFindResponseDto>> findAllPromotionalEvents(
+    public ResponseEntity<Page<PromotionEventFindAllResponseDto>> findAllPromotionalEvents(
             @RequestParam(name = "page",required = false, defaultValue = "1") int page,
             @RequestParam(name = "size",required = false, defaultValue = "10") int size
     ){
@@ -77,5 +78,13 @@ public class PromotionEventController {
     ){
         promotionEventService.deletePromotionEvent(promotionEventId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Operation(summary = "프로모션 이벤트 단건 조회")
+    @GetMapping("/promotionEvents/{promotionEventId}")
+    public ResponseEntity<PromotionEventFindOneResponseDto> findOnePromotionalEvent(
+            @PathVariable(name = "promotionEventId") Long promotionEventId
+    ){
+        return ResponseEntity.ok(promotionEventService.findOnePromotionEvent(promotionEventId));
     }
 }

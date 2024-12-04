@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class PromotionEventFindResponseDto {
+public class PromotionEventFindAllResponseDto {
     @Schema(description = "프로모션 이벤트 고유 번호")
     private final Long id;
     @Schema(description = "프로모션 이벤트 제목")
@@ -15,7 +15,7 @@ public class PromotionEventFindResponseDto {
     @Schema(description = "프로모션 이벤트 설명")
     private final String description;
     @Schema(description = "팝업스토어 객체")
-    private final PromotionEventFindPopupStoreResponseDto promotionEventFindPopupStoreResponseDto;
+    private final PromotionEventFindAllPopupStoreResponseDto promotionEventFindAllPopupStoreResponseDto;
     @Schema(description = "할인 율")
     private final int discountPercentage;
     @Schema(description = "총 쿠폰 갯수")
@@ -25,11 +25,11 @@ public class PromotionEventFindResponseDto {
     @Schema(description = "프로모션 이벤트 종료일")
     private final LocalDateTime endDateTime;
 
-    public PromotionEventFindResponseDto(PromotionEvent promotionEvent) {
+    public PromotionEventFindAllResponseDto(PromotionEvent promotionEvent) {
         this.id = promotionEvent.getId();
         this.title = promotionEvent.getTitle();
         this.description = promotionEvent.getDescription();
-        this.promotionEventFindPopupStoreResponseDto = new PromotionEventFindPopupStoreResponseDto(promotionEvent.getPopupStore());
+        this.promotionEventFindAllPopupStoreResponseDto = promotionEvent.getPopupStore() != null ? new PromotionEventFindAllPopupStoreResponseDto(promotionEvent.getPopupStore()) : null;
         this.discountPercentage = promotionEvent.getDiscountPercentage();
         this.totalCount = promotionEvent.getTotalCount();
         this.startDateTime = promotionEvent.getStartDateTime();
