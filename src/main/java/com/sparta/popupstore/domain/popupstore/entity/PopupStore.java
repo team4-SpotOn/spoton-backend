@@ -3,16 +3,14 @@ package com.sparta.popupstore.domain.popupstore.entity;
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
 import com.sparta.popupstore.domain.company.entity.Company;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "popupstores")
 public class PopupStore extends BaseEntity {
