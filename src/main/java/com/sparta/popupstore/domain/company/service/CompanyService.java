@@ -1,6 +1,7 @@
 package com.sparta.popupstore.domain.company.service;
 
 import com.sparta.popupstore.config.PasswordEncoder;
+import com.sparta.popupstore.domain.company.dto.request.CompanySigninRequestDto;
 import com.sparta.popupstore.domain.company.dto.request.CompanySignupRequestDto;
 import com.sparta.popupstore.domain.company.dto.response.CompanySignupResponseDto;
 import com.sparta.popupstore.domain.company.entity.Company;
@@ -23,5 +24,15 @@ public class CompanyService {
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
         Company company = requestDto.toEntity(encodedPassword);
         return new CompanySignupResponseDto(companyRepository.save(company));
+    }
+
+    public Company signin(CompanySigninRequestDto requestDto) {
+        Company company = companyRepository.findByEmail(requestDto.getEmail())
+                .orElseThrow(() -> new RuntimeException("Email address not found"));
+        if(!passwordEncoder.matches(requestDto.getPassword(), company.getPassword())) {
+            throw new RuntimeException("Incorrect password");
+        }
+
+        return company;
     }
 }
