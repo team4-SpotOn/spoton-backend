@@ -24,18 +24,26 @@ public class PopupStore extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
-    @NotNull(message = "Company cannot be null")
+    @NotNull(message = "회사를 입력해주세요.")
     private Company company;
 
+    @NotNull(message = "팝업스토어 이름을 입력해주세요.")
     private String name;
+    @NotNull(message = "팝업스토어 내용을 입력해주세요.")
     private String contents;
+    @NotNull(message = "팝업스토어 이미지를 추가해주세요.")
     private String image;
-    @Min(value = 0, message = "Price must be positive")
+    @Min(value = 0, message = "가격은 0이상이어야만 합니다.")
     private int price;
+    @NotNull(message = "팝업스토어 주소 입력해주세요.")
     private String address; // 위도와 경도로 주소 저장.
+    @NotNull(message = "팝업스토어 시작일 입력해주세요.")
     private LocalDate startDate;
+    @NotNull(message = "팝업스토어 종료일 입력해주세요.")
     private LocalDate endDate;
+    @NotNull(message = "팝업스토어 개장시간 입력해주세요.")
     private LocalTime startTime;
+    @NotNull(message = "팝업스토어 폐장시간 입력해주세요.")
     private LocalTime endTime;
 
 
