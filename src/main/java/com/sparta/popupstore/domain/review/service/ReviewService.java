@@ -47,7 +47,7 @@ public class ReviewService {
     public void deleteReview(User user, Long reviewId){
         Review review = reviewRepository.findById(reviewId)
             .orElseThrow(() -> new EntityNotFoundException("이미 삭제된 리뷰입니다."));
-        if (!review.getUser().equals(user)) {
+        if (!review.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("댓글을 삭제할수 없습니다.");
         }
         reviewRepository.delete(review);

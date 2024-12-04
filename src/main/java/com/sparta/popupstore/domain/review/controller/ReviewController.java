@@ -4,7 +4,7 @@ import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
 import com.sparta.popupstore.domain.review.dto.request.ReviewUpdateRequestDto;
 import com.sparta.popupstore.domain.review.dto.response.ReviewCreateResponseDto;
-import com.sparta.popupstore.domain.review.entity.Review;
+import com.sparta.popupstore.domain.review.dto.response.ReviewUpdateResponseDto;
 import com.sparta.popupstore.domain.review.service.ReviewService;
 import com.sparta.popupstore.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -25,17 +25,16 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/{popupStoresId}")
-    public ResponseEntity<ReviewCreateResponseDto> createReview(@AuthUser User user ,@PathVariable Long popupStoresId, @RequestBody ReviewCreateRequestDto requestDto) {
+    @PostMapping("/{popupStoreId}")
+    public ResponseEntity<ReviewCreateResponseDto> createReview(@AuthUser User user ,@PathVariable Long popupStoreId, @RequestBody ReviewCreateRequestDto requestDto) {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(reviewService.createReview(user,popupStoresId, requestDto));
+            .body(reviewService.createReview(user,popupStoreId, requestDto));
     }
 
     @PatchMapping("/{reviewId}")
-    public ResponseEntity<Review> updateReview(@AuthUser User user ,@PathVariable Long reviewId, @RequestBody ReviewUpdateRequestDto updateRequestDto) {
-        reviewService.updateReview(user, reviewId, updateRequestDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ReviewUpdateResponseDto> updateReview(@AuthUser User user ,@PathVariable Long reviewId, @RequestBody ReviewUpdateRequestDto updateRequestDto) {
+        return ResponseEntity.ok(reviewService.updateReview(user, reviewId, updateRequestDto));
     }
 
     @DeleteMapping("/{reviewId}")
@@ -44,5 +43,4 @@ public class ReviewController {
         reviewService.deleteReview(user, reviewId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

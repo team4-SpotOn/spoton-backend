@@ -2,7 +2,6 @@ package com.sparta.popupstore.domain.review.entity;
 
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
-import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
 import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
