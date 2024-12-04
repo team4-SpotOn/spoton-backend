@@ -40,7 +40,7 @@ public class PromotionEventService {
 
     @Transactional
     public PromotionEventUpdateResponseDto updatePromotionEvent(PromotionEventUpdateRequestDto promotionEventUpdateRequestDto, Long promotionEventId) {
-        PromotionEvent promotionEvent = promotionEventRepository.findByPromotionEventId(promotionEventId);
+        PromotionEvent promotionEvent = promotionEventRepository.findByPromotionEventId(promotionEventId).orElseThrow(()-> new IllegalArgumentException("존재하지 않거나 이미 삭제된 이벤트입니다."));
         promotionEvent.updatePromotionEvent(
                 promotionEventUpdateRequestDto.getTitle(),
                 promotionEventUpdateRequestDto.getDescription(),
@@ -54,7 +54,7 @@ public class PromotionEventService {
 
     @Transactional
     public void deletePromotionEvent(Long promotionEventId) {
-        promotionEventRepository.findByPromotionEventId(promotionEventId);
+        promotionEventRepository.findByPromotionEventId(promotionEventId).orElseThrow(()-> new IllegalArgumentException("존재하지 않거나 이미 삭제된 이벤트입니다."));
         promotionEventRepository.deletePromotionEvent(promotionEventId);
     }
 }

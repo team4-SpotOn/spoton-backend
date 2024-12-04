@@ -11,11 +11,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface PromotionEventRepository extends JpaRepository<PromotionEvent, Long> {
-    default PromotionEvent findByPromotionEventId(Long promotionEventId) {
-        return findOnePromotionEvent(promotionEventId)
-                .orElseThrow(()-> new IllegalArgumentException("존재하지 않거나 이미 삭제된 이벤트입니다."));
-    }
-
     @Query("select p from PromotionEvent p left join fetch p.popupStore where p.deletedAt is null")
     Page<PromotionEvent> findAllPromotionalEvents(Pageable pageable);
 
@@ -24,5 +19,5 @@ public interface PromotionEventRepository extends JpaRepository<PromotionEvent, 
     void deletePromotionEvent(@Param("promotionEventId") Long promotionEventId);
 
     @Query("select p from PromotionEvent p where p.id = :promotionEventId and p.deletedAt is null")
-    Optional<PromotionEvent> findOnePromotionEvent(@Param("promotionEventId") Long promotionEventId);
+    Optional<PromotionEvent> findByPromotionEventId(@Param("promotionEventId") Long promotionEventId);
 }
