@@ -2,6 +2,7 @@ package com.sparta.popupstore.config;
 
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.user.entity.User;
+import com.sparta.popupstore.domain.user.entity.UserRole;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
 import com.sparta.popupstore.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -36,11 +37,16 @@ public class AuthUserResolver implements HandlerMethodArgumentResolver {
     ) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         if(request == null) {
-            throw new RuntimeException("No request found");
+            throw new IllegalArgumentException("No request found");
         }
 
         Claims userInfo = jwtUtil.getUserInfoFromRequest(request);
-        return userRepository.findByEmail(userInfo.getSubject())
+        User user = userRepository.findByEmail(userInfo.getSubject())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if(request.getRequestURI().startsWith("/admin/promotionEvents") && !UserRole.ADMIN.equals(user.getUserRole())){
+            throw new IllegalArgumentException("User doesn't have admin role");
+        }
+        return user;
     }
 }
