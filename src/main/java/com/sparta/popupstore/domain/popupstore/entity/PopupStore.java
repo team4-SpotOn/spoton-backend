@@ -2,6 +2,7 @@ package com.sparta.popupstore.domain.popupstore.entity;
 
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
 import com.sparta.popupstore.domain.company.entity.Company;
+import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,6 @@ import java.time.LocalTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "popupstores")
 public class PopupStore extends BaseEntity {
@@ -45,5 +45,17 @@ public class PopupStore extends BaseEntity {
         this.endDate = endDate;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public void update(PopupStoreUpdateRequestDto requestDto, String imagePath) {
+        this.name = requestDto.getName() != null ? requestDto.getName() : this.name;
+        this.contents = requestDto.getContent() != null ? requestDto.getContent() : this.contents;
+        this.image = imagePath != null ? imagePath : requestDto.getImagePath();
+        this.price = requestDto.getPrice() != null ? Integer.parseInt(requestDto.getPrice()) : this.price;
+        this.address = requestDto.getAddress() != null ? requestDto.getAddress() : this.address;
+        this.startDate = requestDto.getStartDate() != null ? requestDto.getStartDate() : this.startDate;
+        this.endDate = requestDto.getEndDate() != null ? requestDto.getEndDate() : this.endDate;
+        this.startTime = requestDto.getStartTime() != null ? LocalTime.from(requestDto.getStartTime()) : this.startTime;
+        this.endTime = requestDto.getEndTime() != null ? LocalTime.from(requestDto.getEndTime()) : this.endTime;
     }
 }
