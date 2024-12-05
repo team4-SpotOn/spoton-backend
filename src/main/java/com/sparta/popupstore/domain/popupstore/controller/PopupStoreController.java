@@ -35,28 +35,24 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "관리자 - 팝업 스토어 수정")
-    @PatchMapping("/admin/{popupId}")
+    @PatchMapping("/admin/{popupStoreId}")
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
-            @PathVariable Long popupId,
+            @PathVariable Long popupStoreId,
             @AuthUser User user,
             @RequestPart("requestDto") @Valid PopupStoreUpdateRequestDto requestDto,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
     ) {
-        PopupStoreUpdateResponseDto responseDto = null;
-        responseDto = popupStoreService.updatePopupStore(popupId, user, requestDto, imageFile);
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, user, requestDto, imageFile));
     }
 
     @Operation(summary = "회사 - 팝업 스토어 수정")
-    @PatchMapping("/{popupId}")
+    @PatchMapping("/{popupStoreId}")
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
-            @PathVariable Long popupId,
+            @PathVariable Long popupStoreId,
             @AuthCompany Company company,
             @RequestPart("requestDto") @Valid PopupStoreUpdateRequestDto requestDto,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
     ) {
-        PopupStoreUpdateResponseDto responseDto = null;
-        responseDto = popupStoreService.updatePopupStore(popupId, company, requestDto, imageFile);
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, company, requestDto, imageFile));
     }
 }
