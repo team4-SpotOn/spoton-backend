@@ -122,4 +122,11 @@ public class PopupStoreService {
 
         popupStoreRepository.deleteById(popupStoreId);
     }
+
+    public void deletePopupStore(Long popupStoreId) {
+        popupStoreRepository.findById(popupStoreId)
+                .orElseThrow(() -> new IllegalArgumentException("Popup Store not found"));
+
+        popupStoreRepository.deleteById(popupStoreId);
+    }
 }

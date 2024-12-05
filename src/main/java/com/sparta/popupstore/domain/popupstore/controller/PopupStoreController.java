@@ -9,6 +9,7 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
+import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import com.sparta.popupstore.domain.user.entity.User;
@@ -65,7 +66,7 @@ public class PopupStoreController {
         return ResponseEntity.ok(popupStoreService.getPopupStoreFindOne(popupId));
     }
 
-    @Operation(summary = "팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
+    @Operation(summary = "회사 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
     @Parameter(name = "company", description = "로그인한 회사")
     @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호")
     @DeleteMapping("/{popupStoreId}")
@@ -74,6 +75,20 @@ public class PopupStoreController {
             @PathVariable("popupStoreId") Long popupStoreId
     ) {
         popupStoreService.deletePopupStore(company, popupStoreId);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @Operation(summary = "관리자 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
+    @Parameter(name = "company", description = "로그인한 회사")
+    @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호")
+    @DeleteMapping("/admin/{popupStoreId}")
+    public ResponseEntity<Void> deletePopupStoreAdmin(
+            @AuthUser User user,
+            @PathVariable("popupStoreId") Long popupStoreId
+    ) {
+        popupStoreService.deletePopupStore(popupStoreId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
