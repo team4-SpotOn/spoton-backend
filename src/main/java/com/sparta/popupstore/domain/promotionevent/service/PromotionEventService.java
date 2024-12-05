@@ -68,7 +68,10 @@ public class PromotionEventService {
 
     @Transactional
     public void deletePromotionEvent(Long promotionEventId) {
-        this.getPromotionEvent(promotionEventId);
+        PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
+        if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("이미 시작한 이벤트는 삭제할 수 없습니다.");
+        }
         promotionEventRepository.deletePromotionEvent(promotionEventId);
     }
 
