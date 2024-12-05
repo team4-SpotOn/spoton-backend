@@ -21,7 +21,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final PopupStoreRepository popupStoreRepository;
 
-    public ReviewCreateResponseDto createReview(User user,Long popupStoreId , ReviewCreateRequestDto requestDto) {
+    public ReviewCreateResponseDto createReview(User user,Long popupStoreId, ReviewCreateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
             .orElseThrow(() -> new EntityNotFoundException("해당 팝업스토어가 없습니다."));
         Review review = requestDto.toEntity(user, popupStore);

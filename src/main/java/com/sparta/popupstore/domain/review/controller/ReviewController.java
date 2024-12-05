@@ -48,7 +48,7 @@ public class ReviewController {
     @Parameter(name = "star", description = "수정된 별점")
     @Parameter(name = "name", description = "유저이름")
     @PatchMapping("/{reviewId}")
-    public ResponseEntity<ReviewUpdateResponseDto> updateReview(@AuthUser User user ,@PathVariable Long reviewId, @RequestBody ReviewUpdateRequestDto updateRequestDto) {
+    public ResponseEntity<ReviewUpdateResponseDto> updateReview(@AuthUser User user, @PathVariable Long reviewId, @RequestBody ReviewUpdateRequestDto updateRequestDto) {
         return ResponseEntity.ok(reviewService.updateReview(user, reviewId, updateRequestDto));
     }
 
