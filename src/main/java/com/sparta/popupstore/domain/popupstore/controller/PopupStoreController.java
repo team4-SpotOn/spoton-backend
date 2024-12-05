@@ -79,7 +79,7 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "관리자 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
-    @Parameter(name = "company", description = "로그인한 회사")
+    @Parameter(name = "user", description = "로그인한 관리자")
     @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호")
     @DeleteMapping("/admin/popupstores/{popupStoreId}")
     public ResponseEntity<Void> deletePopupStoreAdmin(
