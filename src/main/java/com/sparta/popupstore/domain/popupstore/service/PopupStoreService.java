@@ -7,6 +7,7 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.entity.UserRole;
@@ -107,5 +108,18 @@ public class PopupStoreService {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팝업스토어 입니다."));
         return new PopupStoreFindOneResponseDto(popupStore);
+    }
+
+    public void deletePopupStore(Company company, Long popupStoreId) {
+        PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
+                .orElseThrow(() -> new IllegalArgumentException("Popup Store not found"));
+        if(!popupStore.getCompany().getId().equals(company.getId())) {
+            throw new IllegalArgumentException("Popup Store is not in this company");
+        }
+        if(popupStore.getStartDate().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("이미 시작된 팝업 스토어는 삭제할 수 없습니다.");
+        }
+
+        popupStoreRepository.deleteById(popupStoreId);
     }
 }
