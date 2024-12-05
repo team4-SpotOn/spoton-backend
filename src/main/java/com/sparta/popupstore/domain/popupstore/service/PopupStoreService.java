@@ -7,6 +7,8 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.domain.user.entity.User;
+import com.sparta.popupstore.domain.user.entity.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,32 @@ public class PopupStoreService {
         return path.toString();
     }
 
+    // 관리자 - 팝업 스토어 수정
+    @Transactional
+    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, User user, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
+        PopupStore popupStore = popupStoreRepository.findById(popupId)
+                .orElseThrow(() -> new RuntimeException("PopupStore not found"));
+
+        if (user.getUserRole() != UserRole.ADMIN) {
+            throw new RuntimeException("Not Admin");
+        }
+
+        requestDto.updatePopupStore(popupStore);
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String imagePath = null;
+            try {
+                imagePath = saveImageFile(imageFile);
+            } catch (IOException e) {
+                throw new RuntimeException("not found image file");
+            }
+            popupStore.setImage(imagePath);
+        }
+
+        return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
+    }
+
+    // 회사 - 팝업 스토어 수정
     @Transactional
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
@@ -54,7 +82,6 @@ public class PopupStoreService {
 
         if (!isEditable(popupStore)) {
             throw new RuntimeException("Cannot edit a popup store that is in progress");
-            // todo : 관리자인 경우 수정 가능하도록 로직 구현해야함
         }
 
         requestDto.updatePopupStore(popupStore);
