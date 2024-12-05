@@ -57,7 +57,7 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
-    @GetMapping("/popupstores/{popupId}")
+    @GetMapping("/{popupId}")
     public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(@PathVariable Long popupId) {
         return ResponseEntity.ok(popupStoreService.getPopupStoreFindOne(popupId));
     }
