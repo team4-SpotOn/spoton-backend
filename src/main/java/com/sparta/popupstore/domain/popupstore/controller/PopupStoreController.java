@@ -20,12 +20,11 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/popupstores")
 public class PopupStoreController {
 
     private final PopupStoreService popupStoreService;
 
-    @PostMapping
+    @PostMapping("/popupstores")
     public ResponseEntity<PopupStoreCreateResponseDto> createPopupStore(
             @AuthCompany Company company,
             @RequestPart("requestDto") @Valid PopupStoreCreateRequestDto requestDto,
@@ -35,7 +34,7 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "관리자 - 팝업 스토어 수정")
-    @PatchMapping("/{popupStoreId}/admin")
+    @PatchMapping("/admin/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
             @PathVariable Long popupStoreId,
             @AuthUser User user,
@@ -46,7 +45,7 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "회사 - 팝업 스토어 수정")
-    @PatchMapping("/{popupStoreId}")
+    @PatchMapping("/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
             @PathVariable Long popupStoreId,
             @AuthCompany Company company,
