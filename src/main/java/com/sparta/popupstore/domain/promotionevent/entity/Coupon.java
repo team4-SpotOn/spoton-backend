@@ -31,7 +31,7 @@ public class Coupon {
 
     private String serialNumber;
 
-    private int couponExpirationPeriod;
+    private LocalDateTime couponExpirationPeriod;
 
     @CreatedDate
     @Column(updatable = false)
@@ -45,6 +45,6 @@ public class Coupon {
         this.user = user;
         this.promotionEvent = promotionEvent;
         this.serialNumber = serialNumber;
-        this.couponExpirationPeriod = promotionEvent.getCouponExpirationPeriod();
+        this.couponExpirationPeriod = LocalDateTime.now().plusDays(promotionEvent.getCouponExpirationPeriod());
     }
 }
