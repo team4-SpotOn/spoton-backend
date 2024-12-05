@@ -1,5 +1,7 @@
 package com.sparta.popupstore.domain.promotionevent.service;
 
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
@@ -52,7 +54,7 @@ public class PromotionEventService {
     ) {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
         if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())){
-            throw new IllegalArgumentException("이미 시작한 이벤트는 수정할 수 없습니다.");
+            throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
         }
         promotionEvent.updatePromotionEvent(
                 promotionEventUpdateRequestDto.getTitle(),
@@ -70,7 +72,7 @@ public class PromotionEventService {
     public void deletePromotionEvent(Long promotionEventId) {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
         if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())){
-            throw new IllegalArgumentException("이미 시작한 이벤트는 삭제할 수 없습니다.");
+            throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
         }
         promotionEventRepository.deletePromotionEvent(promotionEventId);
     }
@@ -79,7 +81,7 @@ public class PromotionEventService {
     public CouponCreateResponseDto couponApplyAndIssuance(Long promotionEventId, User user) {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
         if(promotionEvent.getCouponGetCount() == promotionEvent.getTotalCount()){
-            throw new IllegalArgumentException("쿠폰이 모두 소진되었습니다.");
+            throw new CustomApiException(ErrorCode.COUPON_SOLD_OUT);
         }
         Coupon coupon = couponService.createCoupon(promotionEvent, user);
         promotionEvent.couponGetCountUp();
@@ -89,7 +91,7 @@ public class PromotionEventService {
     private PromotionEvent getPromotionEvent(Long promotionEventId) {
         return promotionEventRepository.findByPromotionEventId(promotionEventId)
                 .orElseThrow(
-                        ()-> new IllegalArgumentException("존재하지 않거나 종료된 이벤트입니다.")
+                        ()-> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT)
                 );
     }
 }
