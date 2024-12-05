@@ -35,7 +35,7 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "관리자 - 팝업 스토어 수정")
-    @PatchMapping("/admin/{popupStoreId}")
+    @PatchMapping("/{popupStoreId}/admin")
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
             @PathVariable Long popupStoreId,
             @AuthUser User user,
