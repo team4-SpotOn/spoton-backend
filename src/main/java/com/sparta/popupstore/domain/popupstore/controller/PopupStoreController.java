@@ -11,8 +11,10 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResp
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,8 +59,36 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
-    @GetMapping("/{popupId}")
+    @GetMapping("/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(@PathVariable Long popupId) {
         return ResponseEntity.ok(popupStoreService.getPopupStoreFindOne(popupId));
+    }
+
+    @Operation(summary = "회사 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
+    @Parameter(name = "company", description = "로그인한 회사")
+    @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호")
+    @DeleteMapping("/popupstores/{popupStoreId}")
+    public ResponseEntity<Void> deletePopupStore(
+            @AuthCompany Company company,
+            @PathVariable("popupStoreId") Long popupStoreId
+    ) {
+        popupStoreService.deletePopupStore(company, popupStoreId);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @Operation(summary = "관리자 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
+    @Parameter(name = "user", description = "로그인한 관리자")
+    @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호")
+    @DeleteMapping("/admin/popupstores/{popupStoreId}")
+    public ResponseEntity<Void> deletePopupStoreAdmin(
+            @AuthUser User user,
+            @PathVariable("popupStoreId") Long popupStoreId
+    ) {
+        popupStoreService.deletePopupStore(popupStoreId);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }

@@ -48,6 +48,10 @@ public class AuthUserResolver implements HandlerMethodArgumentResolver {
         if(request.getRequestURI().startsWith("/admin/promotionEvents") && !UserRole.ADMIN.equals(user.getUserRole())){
             throw new IllegalArgumentException("User doesn't have admin role");
         }
+        if(request.getRequestURI().startsWith("/admin/popupstores") && !UserRole.ADMIN.equals(user.getUserRole())){
+            throw new IllegalArgumentException("User doesn't have admin role");
+        }
+
         return user;
     }
 }

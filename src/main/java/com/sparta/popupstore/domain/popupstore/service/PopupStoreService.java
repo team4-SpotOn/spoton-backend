@@ -108,4 +108,24 @@ public class PopupStoreService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팝업스토어 입니다."));
         return new PopupStoreFindOneResponseDto(popupStore);
     }
+
+    public void deletePopupStore(Company company, Long popupStoreId) {
+        PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
+                .orElseThrow(() -> new IllegalArgumentException("Popup Store not found"));
+        if(!popupStore.getCompany().getId().equals(company.getId())) {
+            throw new IllegalArgumentException("Popup Store is not in this company");
+        }
+        if(popupStore.getStartDate().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("이미 시작된 팝업 스토어는 삭제할 수 없습니다.");
+        }
+
+        popupStoreRepository.deleteById(popupStoreId);
+    }
+
+    public void deletePopupStore(Long popupStoreId) {
+        popupStoreRepository.findById(popupStoreId)
+                .orElseThrow(() -> new IllegalArgumentException("Popup Store not found"));
+
+        popupStoreRepository.deleteById(popupStoreId);
+    }
 }
