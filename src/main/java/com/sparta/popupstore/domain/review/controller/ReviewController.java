@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/reviews/popupstores")
+@RequestMapping("/reviews")
 @RequiredArgsConstructor
 @Tag(name = "Review", description = "리뷰 관련 API")
 public class ReviewController {
@@ -35,7 +35,7 @@ public class ReviewController {
     @Parameter(name = "contents", description = "리뷰내용")
     @Parameter(name = "star", description = "별점")
     @Parameter(name = "name", description = "유저이름")
-    @PostMapping("/{popupStoreId}")
+    @PostMapping("/popupstores/{popupStoreId}")
     public ResponseEntity<ReviewCreateResponseDto> createReview(@AuthUser User user ,@PathVariable Long popupStoreId, @RequestBody ReviewCreateRequestDto requestDto) {
         return ResponseEntity
             .status(HttpStatus.CREATED)
