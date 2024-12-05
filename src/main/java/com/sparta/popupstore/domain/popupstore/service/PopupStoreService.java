@@ -55,17 +55,16 @@ public class PopupStoreService {
             throw new RuntimeException("Not Admin");
         }
 
-        requestDto.updatePopupStore(popupStore);
-
+        String imagePath = null;
         if (imageFile != null && !imageFile.isEmpty()) {
-            String imagePath = null;
             try {
                 imagePath = saveImageFile(imageFile);
             } catch (IOException e) {
                 throw new RuntimeException("not found image file");
             }
-            popupStore.setImage(imagePath);
         }
+
+        popupStore.update(requestDto, imagePath);
 
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
     }
@@ -84,17 +83,16 @@ public class PopupStoreService {
             throw new RuntimeException("Cannot edit a popup store that is in progress");
         }
 
-        requestDto.updatePopupStore(popupStore);
-
+        String imagePath = null;
         if (imageFile != null && !imageFile.isEmpty()) {
-            String imagePath = null;
             try {
                 imagePath = saveImageFile(imageFile);
             } catch (IOException e) {
                 throw new RuntimeException("not found image file");
             }
-            popupStore.setImage(imagePath);
         }
+
+        popupStore.update(requestDto, imagePath);
 
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
     }
