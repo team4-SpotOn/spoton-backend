@@ -29,13 +29,13 @@ public class Coupon {
     @JoinColumn(name = "event_id")
     private PromotionEvent promotionEvent;
 
-    @Column
     private String serialNumber;
+
+    private int couponExpirationPeriod;
 
     @CreatedDate
     @Column(updatable = false)
     protected LocalDateTime createdAt;
-
     @Column
     private LocalDateTime deletedAt;
 
@@ -45,5 +45,6 @@ public class Coupon {
         this.user = user;
         this.promotionEvent = promotionEvent;
         this.serialNumber = serialNumber;
+        this.couponExpirationPeriod = promotionEvent.getCouponExpirationPeriod();
     }
 }
