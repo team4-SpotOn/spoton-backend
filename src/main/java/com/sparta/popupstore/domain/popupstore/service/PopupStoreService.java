@@ -2,8 +2,13 @@ package com.sparta.popupstore.domain.popupstore.service;
 
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
+import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.domain.user.entity.User;
+import com.sparta.popupstore.domain.user.entity.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +31,6 @@ public class PopupStoreService {
     @Transactional
     public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto, MultipartFile imageFile) throws IOException {
         String imagePath = saveImageFile(imageFile);
-
         return new PopupStoreCreateResponseDto(popupStoreRepository.save(requestDto.toEntity(company, imagePath)));
     }
 
@@ -38,5 +43,61 @@ public class PopupStoreService {
         Files.createDirectories(path.getParent());
         Files.write(path, file.getBytes());
         return path.toString();
+    }
+
+    // 관리자 - 팝업 스토어 수정
+    @Transactional
+    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, User user, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
+        PopupStore popupStore = popupStoreRepository.findById(popupId)
+                .orElseThrow(() -> new RuntimeException("PopupStore not found"));
+
+        if (user.getUserRole() != UserRole.ADMIN) {
+            throw new RuntimeException("Not Admin");
+        }
+
+        String imagePath = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                imagePath = saveImageFile(imageFile);
+            } catch (IOException e) {
+                throw new RuntimeException("not found image file");
+            }
+        }
+
+        popupStore.update(requestDto, imagePath);
+
+        return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
+    }
+
+    // 회사 - 팝업 스토어 수정
+    @Transactional
+    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
+        PopupStore popupStore = popupStoreRepository.findById(popupId)
+                .orElseThrow(() -> new RuntimeException("PopupStore not found"));
+
+        if (!popupStore.getCompany().equals(company)) {
+            throw new RuntimeException("Unauthorized access - not the owner of the popup store");
+        }
+
+        if (!isEditable(popupStore)) {
+            throw new RuntimeException("Cannot edit a popup store that is in progress");
+        }
+
+        String imagePath = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                imagePath = saveImageFile(imageFile);
+            } catch (IOException e) {
+                throw new RuntimeException("not found image file");
+            }
+        }
+
+        popupStore.update(requestDto, imagePath);
+
+        return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
+    }
+
+    private boolean isEditable(PopupStore popupStore) {
+        return popupStore.getStartDate().isAfter(LocalDate.now());
     }
 }
