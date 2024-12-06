@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.popupstore.dto.response;
 
+import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
@@ -23,11 +24,9 @@ public class PopupStoreFindOneResponseDto {
     @Schema(description = "팝업스토어 내용")
     private String contents;
 
-    @Schema(description = "팝업스토어 이미지")
-    private String image;
 
     @Schema(description = "팝업스토어 주소")
-    private String address;
+    private Address address;
 
     public PopupStoreFindOneResponseDto(PopupStore popupStore) {
         this.name = popupStore.getName();
@@ -35,7 +34,6 @@ public class PopupStoreFindOneResponseDto {
         this.endDate = popupStore.getEndDate();
         this.price = popupStore.getPrice();
         this.contents = popupStore.getContents();
-        this.image = popupStore.getImage();
         this.address = popupStore.getAddress();
     }
 

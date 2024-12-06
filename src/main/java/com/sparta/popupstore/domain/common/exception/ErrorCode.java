@@ -15,6 +15,7 @@ public enum ErrorCode {
     // event error
     PROMOTION_EVENT_NOT(HttpStatus.FORBIDDEN, "이벤트를 다시 한번 확인해주세요."),
     PROMOTION_EVENT_ALREADY(HttpStatus.BAD_REQUEST, "이미 시작한 이벤트는 수정 및 삭제 할 수 없습니다."),
+    PROMOTION_EVENT_NOT_START_AND_END_TIME(HttpStatus.BAD_REQUEST, "startDateTime 과 endDateTime 이 존재하지 않습니다."),
     // review error
 
     // coupon error

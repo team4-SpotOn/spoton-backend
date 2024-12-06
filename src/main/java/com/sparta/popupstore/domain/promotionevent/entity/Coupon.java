@@ -20,16 +20,12 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long userId;
     private Long promotionEventId;
     private Long popupStoreId;
-
     private String serialNumber;
-
     private LocalDate couponExpirationPeriod;
     private LocalDateTime usedAt;
-
     @CreatedDate
     @Column(updatable = false)
     protected LocalDateTime createdAt;

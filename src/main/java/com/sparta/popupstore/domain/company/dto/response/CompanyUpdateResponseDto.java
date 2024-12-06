@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.company.dto.response;
 
+import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.company.entity.Company;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ public class CompanyUpdateResponseDto {
     private final String email;
     private final String ceoName;
     private final String name;
-    private final String address;
+    private final Address address;
     private final String phone;
     private final String website;
     private final String businessLicense;

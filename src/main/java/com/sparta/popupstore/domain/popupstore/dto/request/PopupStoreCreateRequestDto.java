@@ -35,13 +35,10 @@ public class PopupStoreCreateRequestDto {
                 .company(company)
                 .name(this.name)
                 .contents(this.content)
-                .image(imagePath)
                 .price(this.price)
                 .address(this.address)
                 .startDate(this.startDate)
                 .endDate(this.endDate)
-                .startTime(this.startTime)
-                .endTime(this.endTime)
                 .build();
     }
 }
