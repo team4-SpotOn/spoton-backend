@@ -28,12 +28,11 @@ public class Coupon {
     private String serialNumber;
 
     private LocalDate couponExpirationPeriod;
+    private LocalDateTime usedAt;
 
     @CreatedDate
     @Column(updatable = false)
     protected LocalDateTime createdAt;
-    @Column
-    private LocalDateTime deletedAt;
 
     @Builder
     public Coupon(Long userId, PromotionEvent promotionEvent, String serialNumber, Long couponId) {
