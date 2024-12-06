@@ -29,7 +29,6 @@ public class PopupStore extends BaseEntity {
 
     @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL)
     private List<PopupStoreImage> popupStoreImageList = new ArrayList<>();
-
     private String name;
     private String contents;
     private int price;

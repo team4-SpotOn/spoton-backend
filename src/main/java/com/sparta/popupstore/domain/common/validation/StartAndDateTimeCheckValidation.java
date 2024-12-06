@@ -1,6 +1,8 @@
 package com.sparta.popupstore.domain.common.validation;
 
 import com.sparta.popupstore.domain.common.annotation.StartAndDateTimeCheck;
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +68,6 @@ public class StartAndDateTimeCheckValidation implements ConstraintValidator<Star
         } catch (IllegalAccessException e) {
             log.info("IllegalAccessException "+e.getMessage());
         }
-        throw new IllegalArgumentException("startDateTime 과 endDateTime 이 존재하지 않습니다.");
+        throw new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_START_AND_END_TIME);
     }
 }
