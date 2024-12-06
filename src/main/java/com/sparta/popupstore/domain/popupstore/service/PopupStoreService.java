@@ -65,7 +65,7 @@ public class PopupStoreService {
             }
         }
 
-        popupStore.update(requestDto, imagePath);
+        popupStore.update(requestDto);
 
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
     }
@@ -93,7 +93,7 @@ public class PopupStoreService {
             }
         }
 
-        popupStore.update(requestDto, imagePath);
+        popupStore.update(requestDto);
 
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
     }

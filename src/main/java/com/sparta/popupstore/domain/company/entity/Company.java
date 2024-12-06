@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.company.entity;
 
+import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,7 +22,7 @@ public class Company extends BaseEntity {
     private String password;
     private String ceoName;
     private String name;
-    private String address;
+    private Address address;
     private String phone;
     private String website;
     private String businessLicense;
@@ -33,14 +34,14 @@ public class Company extends BaseEntity {
         this.password = password;
         this.ceoName = ceoName;
         this.name = name;
-        this.address = address;
+        this.address = new Address(address);
         this.phone = phone;
         this.website = website;
         this.businessLicense = businessLicense;
     }
 
     public void update(String address, String phone, String website) {
-        this.address = address;
+        // this.address = address update
         this.phone = phone;
         this.website = website;
     }

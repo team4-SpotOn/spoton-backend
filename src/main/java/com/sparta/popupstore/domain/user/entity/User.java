@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.user.entity;
 
+import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,8 +21,9 @@ public class User extends BaseEntity {
     private String email;
     private String password;
     private String name;
-    private String address;
+    private Address address;
     private UserRole userRole = UserRole.USER;
+    private int point = 0;
 
     @Builder
     public User(Long id, String email, String password, String name, String address, UserRole userRole) {
@@ -29,12 +31,12 @@ public class User extends BaseEntity {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.address = address;
+        this.address = new Address(address);
         this.userRole = userRole;
     }
 
     public void update(String address) {
-        this.address = address;
+        // this.address = address update
     }
 
     public void delete(LocalDateTime deletedAt) {
