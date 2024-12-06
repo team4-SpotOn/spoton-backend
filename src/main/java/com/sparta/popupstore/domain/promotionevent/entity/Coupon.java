@@ -1,6 +1,5 @@
 package com.sparta.popupstore.domain.promotionevent.entity;
 
-import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,17 +21,13 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private PromotionEvent promotionEvent;
+    private Long userId;
+    private Long promotionEventId;
+    private Long popupStoreId;
 
     private String serialNumber;
 
-    private LocalDateTime couponExpirationPeriod;
+    private LocalDate couponExpirationPeriod;
 
     @CreatedDate
     @Column(updatable = false)
@@ -40,11 +36,12 @@ public class Coupon {
     private LocalDateTime deletedAt;
 
     @Builder
-    public Coupon(User user, PromotionEvent promotionEvent, String serialNumber, Long couponId) {
+    public Coupon(Long userId, PromotionEvent promotionEvent, String serialNumber, Long couponId) {
         this.id = couponId;
-        this.user = user;
-        this.promotionEvent = promotionEvent;
+        this.userId = userId;
+        this.promotionEventId = promotionEvent.getId();
+        this.popupStoreId = promotionEvent.getPopupStore() != null ? promotionEvent.getPopupStore().getId() : null;
         this.serialNumber = serialNumber;
-        this.couponExpirationPeriod = LocalDateTime.now().plusDays(promotionEvent.getCouponExpirationPeriod());
+        this.couponExpirationPeriod = LocalDate.now().plusDays(promotionEvent.getCouponExpirationPeriod());
     }
 }
