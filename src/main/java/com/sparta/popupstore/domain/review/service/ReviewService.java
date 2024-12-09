@@ -4,6 +4,7 @@ import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.domain.reservation.repository.ReservationRepository;
 import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
 import com.sparta.popupstore.domain.review.dto.request.ReviewUpdateRequestDto;
 import com.sparta.popupstore.domain.review.dto.response.ReviewCreateResponseDto;
@@ -24,10 +25,18 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final PopupStoreRepository popupStoreRepository;
+    private final ReservationRepository reservationRepository;
 
     public ReviewCreateResponseDto createReview(User user,Long popupStoreId, ReviewCreateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
             .orElseThrow(() -> new CustomApiException(ErrorCode.POPUPSTORE_NOT_FOUND));
+
+        boolean hasVisitedOrReserved = reservationRepository.existsByUserAndPopupStore(user, popupStore);
+
+        if (!hasVisitedOrReserved) {
+            throw new RuntimeException("예약한 팝업스토어가 아닙니다.");
+        }
+
         Review review = requestDto.toEntity(user, popupStore);
         review = reviewRepository.save(review);
         return new ReviewCreateResponseDto(review);

@@ -3,6 +3,7 @@ package com.sparta.popupstore.domain.review.dto.response;
 import com.sparta.popupstore.domain.review.entity.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
@@ -20,7 +21,7 @@ public class ReviewUpdateResponseDto {
   @Schema(description = "유저이름")
   private final String name;
 
-  private final LocalDate updatedAt;
+  private final LocalDateTime updatedAt;
 
   public ReviewUpdateResponseDto(Review review) {
     this.id = review.getId();
