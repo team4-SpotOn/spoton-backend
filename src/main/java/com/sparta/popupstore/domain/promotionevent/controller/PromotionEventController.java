@@ -1,6 +1,7 @@
 package com.sparta.popupstore.domain.promotionevent.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
+import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCreateResponseDto;
@@ -36,9 +37,9 @@ public class PromotionEventController {
     @Parameter(name = "startTime", description = "시작일")
     @Parameter(name = "endTime", description = "종료일")
     @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호 / 만약 전체를 대상으로 진행하는 이벤트 일 시 팝업스토어 고유번호는 생략")
+    @CheckAdmin
     @PostMapping("/admin/promotionEvents")
     public ResponseEntity<PromotionEventCreateResponseDto> createEvent(
-            @AuthUser User user,
             @Valid @RequestBody PromotionEventCreateRequestDto promotionEventCreateRequestDto,
             @RequestParam(required = false, name = "popupStoreId") Long popupStoreId
             ){
@@ -72,9 +73,9 @@ public class PromotionEventController {
     @Parameter(name = "couponExpirationPeriod", description = "쿠폰 만료 기간")
     @Parameter(name = "startTime", description = "시작일")
     @Parameter(name = "endTime", description = "종료일")
+    @CheckAdmin
     @PatchMapping("/admin/promotionEvents/{promotionEventId}")
     public ResponseEntity<PromotionEventUpdateResponseDto> updateEvent(
-            @AuthUser User user,
             @Valid @RequestBody PromotionEventUpdateRequestDto promotionEventUpdateRequestDto,
             @PathVariable(name = "promotionEventId") Long promotionEventId
     ){
@@ -82,9 +83,9 @@ public class PromotionEventController {
     }
 
     @Operation(summary = "프로모션 이벤트 삭제")
+    @CheckAdmin
     @DeleteMapping("/admin/promotionEvents/{promotionEventId}")
     public ResponseEntity<Void> deleteEvent(
-            @AuthUser User user,
             @PathVariable(name = "promotionEventId") Long promotionEventId
     ){
         promotionEventService.deletePromotionEvent(promotionEventId);

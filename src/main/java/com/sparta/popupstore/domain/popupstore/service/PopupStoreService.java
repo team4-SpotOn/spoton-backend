@@ -8,8 +8,6 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneRes
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
-import com.sparta.popupstore.domain.user.entity.User;
-import com.sparta.popupstore.domain.user.entity.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,13 +46,9 @@ public class PopupStoreService {
 
     // 관리자 - 팝업 스토어 수정
     @Transactional
-    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, User user, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
+    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new RuntimeException("PopupStore not found"));
-
-        if (user.getUserRole() != UserRole.ADMIN) {
-            throw new RuntimeException("Not Admin");
-        }
 
         String imagePath = null;
         if (imageFile != null && !imageFile.isEmpty()) {

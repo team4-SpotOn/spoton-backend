@@ -22,6 +22,9 @@ public enum ErrorCode {
     COUPON_SOLD_OUT(HttpStatus.BAD_REQUEST,"쿠폰이 모두 소진되었습니다."),
     COUPON_DUPLICATE_ISSUANCE(HttpStatus.BAD_REQUEST, "이미 발급 받으신 쿠폰입니다."),
 
+    //auth error
+    NEED_LOGIN(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
+    NOT_ADMIN(HttpStatus.FORBIDDEN, "접근할 수 없습니다."),
     ;
     private final HttpStatus status;
     private final String message;

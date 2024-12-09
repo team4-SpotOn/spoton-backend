@@ -22,6 +22,7 @@ public class User extends BaseEntity {
     private String password;
     private String name;
     private Address address;
+    @Enumerated(EnumType.STRING)
     private UserRole userRole = UserRole.USER;
     private int point = 0;
 

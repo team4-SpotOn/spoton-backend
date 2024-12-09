@@ -10,6 +10,7 @@ import com.sparta.popupstore.domain.user.dto.response.UserMyPageResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserSignupResponseDto;
 import com.sparta.popupstore.domain.user.dto.response.UserUpdateResponseDto;
 import com.sparta.popupstore.domain.user.entity.User;
+import com.sparta.popupstore.domain.user.entity.UserRole;
 import com.sparta.popupstore.domain.user.service.UserService;
 import com.sparta.popupstore.jwt.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,7 +53,7 @@ public class UserController {
             HttpServletResponse response
     ) {
         UserSignupResponseDto responseDto = userService.signup(requestDto);
-        jwtUtil.addJwtToCookie(responseDto.getEmail(), response);
+        jwtUtil.addJwtToCookie(responseDto.getEmail(), UserRole.USER, response);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -73,7 +74,7 @@ public class UserController {
             HttpServletResponse response
     ) {
         User user = userService.signin(requestDto);
-        jwtUtil.addJwtToCookie(user.getEmail(), response);
+        jwtUtil.addJwtToCookie(user.getEmail(), user.getUserRole(), response);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

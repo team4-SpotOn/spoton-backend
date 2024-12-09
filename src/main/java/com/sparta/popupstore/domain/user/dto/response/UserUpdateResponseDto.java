@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class UserUpdateResponseDto {
     private final Long id;
     private final String email;
-    private final String password;
     private final String name;
     private final Address address;
     private final LocalDateTime createdAt;
@@ -19,7 +18,6 @@ public class UserUpdateResponseDto {
     public UserUpdateResponseDto(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
-        this.password = user.getPassword();
         this.name = user.getName();
         this.address = user.getAddress();
         this.createdAt = user.getCreatedAt();
