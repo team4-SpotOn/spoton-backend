@@ -56,7 +56,7 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
-    public Page<ReviewFindAllResponseDto> findReview(User user, Long popupStoreId, Pageable pageable) {
+    public Page<ReviewFindAllResponseDto> findReview(Long popupStoreId, Pageable pageable) {
         return reviewRepository.findByPopupStoreId(popupStoreId, pageable)
             .map(ReviewFindAllResponseDto::new);
     }
