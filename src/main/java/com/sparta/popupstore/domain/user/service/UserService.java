@@ -1,6 +1,8 @@
 package com.sparta.popupstore.domain.user.service;
 
 import com.sparta.popupstore.config.PasswordEncoder;
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
 import com.sparta.popupstore.domain.user.dto.request.UserDeleteRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
@@ -28,7 +30,7 @@ public class UserService {
 
     public UserSignupResponseDto signup(UserSignupRequestDto requestDto) {
         if(userRepository.existsByEmail(requestDto.getEmail())) {
-            throw new RuntimeException("Email address already in use");
+            throw new CustomApiException(ErrorCode.ALREADY_EXIST_EMAIL);
         }
 
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
@@ -38,9 +40,9 @@ public class UserService {
 
     public User signin(UserSigninRequestDto requestDto) {
         User user = userRepository.findByEmailAndDeletedAtIsNull(requestDto.getEmail())
-                .orElseThrow(() -> new RuntimeException("Email address not found"));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.INCORRECT_EMAIL_OR_PASSWORD));
         if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Incorrect password");
+            throw new CustomApiException(ErrorCode.INCORRECT_EMAIL_OR_PASSWORD);
         }
 
         return user;
@@ -66,7 +68,7 @@ public class UserService {
 
     public void deleteUser(User user, UserDeleteRequestDto requestDto) {
         if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Password does not match");
+            throw new CustomApiException(ErrorCode.PASSWORD_MISS_MATCH);
         }
 
         user.delete(LocalDateTime.now());

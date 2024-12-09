@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     // user error
-    USER_(HttpStatus.UNAUTHORIZED, "로그인 할 수 없다."),
 
     // company error
 
@@ -25,6 +24,9 @@ public enum ErrorCode {
     //auth error
     NEED_LOGIN(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
     NOT_ADMIN(HttpStatus.FORBIDDEN, "접근할 수 없습니다."),
+    ALREADY_EXIST_EMAIL(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다."),
+    INCORRECT_EMAIL_OR_PASSWORD(HttpStatus.BAD_REQUEST, "이메일 또는 비밀번호가 잘못되었습니다."),
+    PASSWORD_MISS_MATCH(HttpStatus.BAD_REQUEST, "비밀번호를 다시 입력해주세요.")
     ;
     private final HttpStatus status;
     private final String message;
