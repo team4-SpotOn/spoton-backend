@@ -1,7 +1,11 @@
 package com.sparta.popupstore.jwt;
 
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.user.entity.UserRole;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
@@ -63,18 +67,18 @@ public class JwtUtil {
     public Claims getInfoFromRequest(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if(cookies == null) {
-            throw new RuntimeException("cookie is null");
+            throw new CustomApiException(ErrorCode.TOKEN_NOT_FOUND);
         }
 
         String token = null;
         for(Cookie cookie : cookies) {
-            if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
+            if(cookie.getName().equals(AUTHORIZATION_HEADER)) {
                 token = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
                 break;
             }
         }
         if(!StringUtils.hasText(token) || !token.startsWith(BEARER_PREFIX)) {
-            throw new RuntimeException("invalid token");
+            throw new CustomApiException(ErrorCode.TOKEN_NOT_FOUND);
         }
         token = token.substring(7);
         validateToken(token);
@@ -85,14 +89,8 @@ public class JwtUtil {
     public void validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-        } catch (SecurityException | MalformedJwtException e) {
-            throw new SecurityException("invalid token");
-        } catch (ExpiredJwtException e) {
-            throw new RuntimeException("expired token");
-        } catch (UnsupportedJwtException e) {
-            throw new UnsupportedJwtException("unsupported token");
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("invalid token");
+        } catch(Exception e) {
+            throw new CustomApiException(ErrorCode.INVALID_TOKEN_ERROR);
         }
     }
 }

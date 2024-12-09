@@ -26,7 +26,9 @@ public enum ErrorCode {
     NOT_ADMIN(HttpStatus.FORBIDDEN, "접근할 수 없습니다."),
     ALREADY_EXIST_EMAIL(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다."),
     INCORRECT_EMAIL_OR_PASSWORD(HttpStatus.BAD_REQUEST, "이메일 또는 비밀번호가 잘못되었습니다."),
-    PASSWORD_MISS_MATCH(HttpStatus.BAD_REQUEST, "비밀번호를 다시 입력해주세요.")
+    PASSWORD_MISS_MATCH(HttpStatus.BAD_REQUEST, "비밀번호를 다시 입력해주세요."),
+    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "로그인 토큰이 없습니다."),
+    INVALID_TOKEN_ERROR(HttpStatus.UNAUTHORIZED, "잘못된 토큰 정보입니다."),
     ;
     private final HttpStatus status;
     private final String message;
