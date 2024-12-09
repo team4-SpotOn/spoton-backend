@@ -1,5 +1,7 @@
 package com.sparta.popupstore.domain.popupstore.service;
 
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreImageRequestDto;
@@ -40,32 +42,28 @@ public class PopupStoreService {
         return new PopupStoreCreateResponseDto(popupStore);
     }
 
-    private String saveImageFile(MultipartFile file) throws IOException {
+    private String saveImageFile(MultipartFile file) {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
 
-        Path path = Paths.get(UPLOAD_URL, System.currentTimeMillis() + "_" + file.getOriginalFilename());
-        Files.createDirectories(path.getParent());
-        Files.write(path, file.getBytes());
-        return path.toString();
+        try {
+            Path path = Paths.get(UPLOAD_URL, System.currentTimeMillis() + "_" + file.getOriginalFilename());
+            Files.createDirectories(path.getParent());
+            Files.write(path, file.getBytes());
+            return path.toString();
+        } catch (IOException e) {
+            throw new CustomApiException(ErrorCode.IMAGE_SAVE_FAILURE);
+        }
     }
 
     // 관리자 - 팝업 스토어 수정
     @Transactional
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new RuntimeException("PopupStore not found"));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
 
-        String imagePath = null;
-        if (imageFile != null && !imageFile.isEmpty()) {
-            try {
-                imagePath = saveImageFile(imageFile);
-            } catch (IOException e) {
-                throw new RuntimeException("not found image file");
-            }
-        }
-
+        if (imageFile != null) saveImageFile(imageFile);
         popupStore.update(requestDto);
 
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
@@ -75,7 +73,7 @@ public class PopupStoreService {
     @Transactional
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new RuntimeException("PopupStore not found"));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
 
         if (!popupStore.getCompany().equals(company)) {
             throw new RuntimeException("Unauthorized access - not the owner of the popup store");
@@ -85,15 +83,7 @@ public class PopupStoreService {
             throw new RuntimeException("Cannot edit a popup store that is in progress");
         }
 
-        String imagePath = null;
-        if (imageFile != null && !imageFile.isEmpty()) {
-            try {
-                imagePath = saveImageFile(imageFile);
-            } catch (IOException e) {
-                throw new RuntimeException("not found image file");
-            }
-        }
-
+        if (imageFile != null) saveImageFile(imageFile);
         popupStore.update(requestDto);
 
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
@@ -106,18 +96,18 @@ public class PopupStoreService {
     // 팝업스토어 단건조회
     public PopupStoreFindOneResponseDto getPopupStoreFindOne(Long popupId){
         PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팝업스토어 입니다."));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
         return new PopupStoreFindOneResponseDto(popupStore);
     }
 
     public void deletePopupStore(Company company, Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-                .orElseThrow(() -> new IllegalArgumentException("Popup Store not found"));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
         if(!popupStore.getCompany().getId().equals(company.getId())) {
-            throw new IllegalArgumentException("Popup Store is not in this company");
+            throw new CustomApiException(ErrorCode.POP_UP_STORE_NOT_BY_THIS_COMPANY);
         }
         if(popupStore.getStartDate().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("이미 시작된 팝업 스토어는 삭제할 수 없습니다.");
+            throw new CustomApiException(ErrorCode.POP_UP_STORE_ALREADY_START);
         }
 
         popupStoreRepository.deleteById(popupStoreId);
@@ -125,7 +115,7 @@ public class PopupStoreService {
 
     public void deletePopupStore(Long popupStoreId) {
         popupStoreRepository.findById(popupStoreId)
-                .orElseThrow(() -> new IllegalArgumentException("Popup Store not found"));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
 
         popupStoreRepository.deleteById(popupStoreId);
     }
