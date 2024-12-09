@@ -16,12 +16,15 @@ public class ReviewCreateRequestDto {
   @NotBlank(message = "내용을 입력하세요")
   private String contents;
 
+  private String imageUrl;
+
   public Review toEntity(User user, PopupStore popupStore) {
     return Review.builder()
         .user(user)
         .popupStore(popupStore)
         .star(this.star)
         .contents(this.contents)
+        .imageUrl(this.imageUrl)
         .build();
   }
 }
