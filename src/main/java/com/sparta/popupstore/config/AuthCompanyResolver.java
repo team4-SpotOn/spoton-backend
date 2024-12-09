@@ -1,11 +1,14 @@
 package com.sparta.popupstore.config;
 
 import com.sparta.popupstore.domain.common.annotation.AuthCompany;
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.company.repository.CompanyRepository;
 import com.sparta.popupstore.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -29,18 +32,18 @@ public class AuthCompanyResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(
-            MethodParameter parameter,
+            @NonNull MethodParameter parameter,
             ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
     ) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         if(request == null) {
-            throw new IllegalArgumentException("No request found");
+            throw new CustomApiException(ErrorCode.NEED_LOGIN);
         }
 
         Claims companyInfo = jwtUtil.getInfoFromRequest(request);
-        return companyRepository.findByEmail(companyInfo.getSubject())
-                .orElseThrow(() -> new IllegalArgumentException("Company not found"));
+        return companyRepository.findByEmailAndDeletedAtIsNull(companyInfo.getSubject())
+                .orElseThrow(() -> new CustomApiException(ErrorCode.NEED_LOGIN));
     }
 }
