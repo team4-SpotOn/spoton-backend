@@ -22,8 +22,12 @@ public interface PromotionEventRepository extends JpaRepository<PromotionEvent, 
     Optional<PromotionEvent> findByPromotionEventId(@Param("promotionEventId") Long promotionEventId);
 
     @Modifying
-    @Query(value = "delete PromotionEvent p where timestampdiff(month , p.deletedAt, now()) >= 6", nativeQuery = true)
+    @Query(value = "delete from events e where timestampdiff(month , e.deleted_at, now()) >= 6", nativeQuery = true)
     void deletePromotionEventByDeletedAtAfterSixMonths();
+
+    @Modifying
+    @Query("update PromotionEvent p set p.deletedAt = now() where p.endDateTime <= now() and p.deletedAt is null")
+    void softDeletePromotionEventByTerminated();
 
 //    추후에 스케쥴러에서 쓰일 수도 있을 것 같아서 일단 주석으로 냅두겠습니당
 //    @Modifying

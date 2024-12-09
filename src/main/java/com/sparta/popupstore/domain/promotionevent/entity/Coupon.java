@@ -25,18 +25,20 @@ public class Coupon {
     private Long popupStoreId;
     private String serialNumber;
     private LocalDate couponExpirationPeriod;
-    private LocalDateTime usedAt;
+    @Enumerated(EnumType.STRING)
+    private CouponStatus couponStatus;
     @CreatedDate
     @Column(updatable = false)
     protected LocalDateTime createdAt;
 
     @Builder
-    public Coupon(Long userId, PromotionEvent promotionEvent, String serialNumber, Long couponId) {
+    public Coupon(Long userId, PromotionEvent promotionEvent, String serialNumber, Long couponId, CouponStatus couponStatus) {
         this.id = couponId;
         this.userId = userId;
         this.promotionEventId = promotionEvent.getId();
         this.popupStoreId = promotionEvent.getPopupStore() != null ? promotionEvent.getPopupStore().getId() : null;
         this.serialNumber = serialNumber;
+        this.couponStatus = couponStatus;
         this.couponExpirationPeriod = LocalDate.now().plusDays(promotionEvent.getCouponExpirationPeriod());
     }
 }

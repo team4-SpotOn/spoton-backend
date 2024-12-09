@@ -3,6 +3,7 @@ package com.sparta.popupstore.domain.promotionevent.service;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
+import com.sparta.popupstore.domain.promotionevent.entity.CouponStatus;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
 import com.sparta.popupstore.domain.user.entity.User;
@@ -26,6 +27,7 @@ public class CouponService {
                 .userId(user.getId())
                 .promotionEvent(promotionEvent)
                 .serialNumber(uuid)
+                .couponStatus(CouponStatus.ISSUED)
                 .build();
         return couponRepository.save(coupon);
     }
