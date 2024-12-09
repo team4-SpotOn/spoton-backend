@@ -68,8 +68,7 @@ public class CompanyController {
     @Parameter(name = "password", description = "계정 비밀번호")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "회사 로그인 성공"),
-            @ApiResponse(responseCode = "400", description = "존재하지 않는 이메일"),
-            @ApiResponse(responseCode = "401", description = "비밀번호가 틀렸습니다.")
+            @ApiResponse(responseCode = "401", description = "이메일 또는 비밀번호가 틀렸습니다."),
     })
     @PostMapping("/signin")
     public ResponseEntity<Void> signin(
@@ -86,13 +85,17 @@ public class CompanyController {
     @Operation(summary = "회사 마이페이지", description = "회사가 로그인 후 확인하는 마이페이지")
     @GetMapping("/mypage")
     public ResponseEntity<CompanyMyPageResponseDto> getCompanyMyPage(@AuthCompany Company company) {
-        return ResponseEntity.ok(companyService.getCompanyMyPage(company));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(companyService.getCompanyMyPage(company));
     }
 
     @Operation(summary = "회사 자사 팝업스토어 조회", description = "회사가 본인이 등록한 팝업스토어 목록 조회")
     @GetMapping("/popupstores")
-    public ResponseEntity<List<CompanyMyPopupStoreResponseDto>> getCompanyMyPopupStore(@AuthCompany Company company){
-        return ResponseEntity.ok(companyService.getCompanyMyPopupStore(company));
+    public ResponseEntity<List<CompanyMyPopupStoreResponseDto>> getCompanyMyPopupStore(@AuthCompany Company company) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(companyService.getCompanyMyPopupStore(company));
     }
 
 
@@ -118,9 +121,6 @@ public class CompanyController {
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
-
-
-
 
 
 }

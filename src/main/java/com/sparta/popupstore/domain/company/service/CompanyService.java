@@ -12,7 +12,6 @@ import com.sparta.popupstore.domain.company.dto.response.CompanySignupResponseDt
 import com.sparta.popupstore.domain.company.dto.response.CompanyUpdateResponseDto;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.company.repository.CompanyRepository;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,7 @@ public class CompanyService {
     }
 
     public Company signin(CompanySigninRequestDto requestDto) {
-        Company company = companyRepository.findByEmail(requestDto.getEmail())
+        Company company = companyRepository.findByEmailAndDeletedAtIsNull(requestDto.getEmail())
                 .orElseThrow(() -> new RuntimeException("Email address not found"));
         if(!passwordEncoder.matches(requestDto.getPassword(), company.getPassword())) {
             throw new RuntimeException("Incorrect password");
@@ -49,14 +48,15 @@ public class CompanyService {
     }
 
     // 회사 마이페이지
-    public CompanyMyPageResponseDto getCompanyMyPage(Company company){
+    public CompanyMyPageResponseDto getCompanyMyPage(Company company) {
         return new CompanyMyPageResponseDto(company);
     }
 
     // 회사 자사 팝업스토어 조회
     public List<CompanyMyPopupStoreResponseDto> getCompanyMyPopupStore(@AuthCompany Company company) {
-        List<PopupStore> popupStores = popupStoreRepository.findByCompanyId(company.getId());
-        return popupStores.stream().map(CompanyMyPopupStoreResponseDto::new ).toList();
+        return popupStoreRepository.findByCompanyId(company.getId()).stream()
+                .map(CompanyMyPopupStoreResponseDto::new)
+                .toList();
     }
 
     public CompanyUpdateResponseDto updateCompany(Company company, CompanyUpdateRequestDto requestDto) {

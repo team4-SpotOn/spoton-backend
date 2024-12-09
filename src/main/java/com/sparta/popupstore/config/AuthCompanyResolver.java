@@ -6,6 +6,7 @@ import com.sparta.popupstore.domain.company.repository.CompanyRepository;
 import com.sparta.popupstore.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,7 @@ public class AuthCompanyResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(
-            MethodParameter parameter,
+            @NonNull MethodParameter parameter,
             ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
@@ -40,7 +41,7 @@ public class AuthCompanyResolver implements HandlerMethodArgumentResolver {
         }
 
         Claims companyInfo = jwtUtil.getInfoFromRequest(request);
-        return companyRepository.findByEmail(companyInfo.getSubject())
+        return companyRepository.findByEmailAndDeletedAtIsNull(companyInfo.getSubject())
                 .orElseThrow(() -> new IllegalArgumentException("Company not found"));
     }
 }
