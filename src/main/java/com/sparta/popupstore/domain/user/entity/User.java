@@ -23,17 +23,18 @@ public class User extends BaseEntity {
     private String name;
     private Address address;
     @Enumerated(EnumType.STRING)
-    private UserRole userRole = UserRole.USER;
-    private int point = 0;
+    private UserRole userRole;
+    private int point;
 
     @Builder
-    public User(Long id, String email, String password, String name, String address, UserRole userRole) {
+    public User(Long id, String email, String password, String name, String address, UserRole userRole, int point) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.address = new Address(address);
         this.userRole = userRole;
+        this.point = point;
     }
 
     public void update(String address) {

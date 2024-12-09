@@ -1,6 +1,8 @@
 package com.sparta.popupstore.config;
 
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
 import com.sparta.popupstore.jwt.JwtUtil;
@@ -37,11 +39,11 @@ public class AuthUserResolver implements HandlerMethodArgumentResolver {
     ) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         if(request == null) {
-            throw new IllegalArgumentException("No request found");
+            throw new CustomApiException(ErrorCode.NEED_LOGIN);
         }
 
         Claims userInfo = jwtUtil.getInfoFromRequest(request);
-        return userRepository.findByEmail(userInfo.getSubject())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findByEmailAndDeletedAtIsNull(userInfo.getSubject())
+                .orElseThrow(() -> new CustomApiException(ErrorCode.NEED_LOGIN));
     }
 }

@@ -29,6 +29,7 @@ public class UserSignupRequestDto {
                 .name(this.name)
                 .address(this.address)
                 .userRole(UserRole.USER)
+                .point(0)
                 .build();
     }
 }

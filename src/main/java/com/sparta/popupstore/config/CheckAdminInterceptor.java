@@ -16,7 +16,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 @RequiredArgsConstructor
-public class CheckRoleInterceptor implements HandlerInterceptor {
+public class CheckAdminInterceptor implements HandlerInterceptor {
 
     private final JwtUtil jwtUtil;
 

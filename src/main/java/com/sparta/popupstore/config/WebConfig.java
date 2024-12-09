@@ -14,7 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final AuthUserResolver authUserResolver;
     private final AuthCompanyResolver authCompanyResolver;
-    private final CheckRoleInterceptor checkRoleInterceptor;
+    private final CheckAdminInterceptor checkAdminInterceptor;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -24,6 +24,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(checkRoleInterceptor);
+        registry.addInterceptor(checkAdminInterceptor);
     }
 }
