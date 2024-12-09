@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class ReviewCreateResponseDto {
 
-  @Schema(description = "팝업스토어 고유번호")
+  @Schema(description = "리뷰 고유번호")
   private Long id;
 
   @Schema(description = "리뷰내용")
