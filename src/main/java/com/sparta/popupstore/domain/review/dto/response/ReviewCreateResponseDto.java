@@ -2,7 +2,6 @@ package com.sparta.popupstore.domain.review.dto.response;
 
 import com.sparta.popupstore.domain.review.entity.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Getter;
 
