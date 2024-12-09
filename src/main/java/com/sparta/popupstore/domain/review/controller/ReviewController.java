@@ -67,6 +67,11 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @Operation(summary = "리뷰조회")
+    @Parameter(name = "id", description = "팝업스토어 고유번호")
+    @Parameter(name = "contents", description = "수정된 리뷰내용")
+    @Parameter(name = "star", description = "수정된 별점")
+    @Parameter(name = "name", description = "유저이름")
     @GetMapping("/popupstores/{popupStoreId}")
     public Page<ReviewFindAllResponseDto> findReviews(@AuthUser User user, @PathVariable Long popupStoreId,
         @PageableDefault(size = 10, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
