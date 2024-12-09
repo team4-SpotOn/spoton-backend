@@ -35,7 +35,7 @@ public class ReviewController {
     @Parameter(name = "star", description = "별점")
     @Parameter(name = "name", description = "유저이름")
     @PostMapping("/popupstores/{popupStoreId}")
-    public ResponseEntity<ReviewCreateResponseDto> createReview(@AuthUser User user ,@PathVariable(name ="popupStoreId") Long popupStoreId, @RequestBody ReviewCreateRequestDto requestDto) {
+    public ResponseEntity<ReviewCreateResponseDto> createReview(@AuthUser User user ,@PathVariable Long popupStoreId, @RequestBody ReviewCreateRequestDto requestDto) {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(reviewService.createReview(user,popupStoreId, requestDto));
