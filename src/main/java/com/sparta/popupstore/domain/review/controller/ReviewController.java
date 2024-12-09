@@ -41,7 +41,7 @@ public class ReviewController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(reviewService.createReview(user, popupStoreId, requestDto));
+                .body(reviewService.createReview(user, popupStoreId,requestDto));
     }
 
     @Operation(summary = "리뷰수정")
