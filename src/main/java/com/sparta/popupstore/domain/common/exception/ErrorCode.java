@@ -10,6 +10,9 @@ public enum ErrorCode {
     // company error
 
     // popupStore error
+    IMAGE_SAVE_FAILURE(HttpStatus.NOT_FOUND, "이미지 저장에 실패했습니다."),
+    POP_UP_STORE_NOT_BY_THIS_COMPANY(HttpStatus.FORBIDDEN, "팝업스토어가 이 회사에서 만들어지지 않았습니다."),
+    POP_UP_STORE_ALREADY_START(HttpStatus.FORBIDDEN, "진행 전인 팝업스토어만 수정 가능합니다."),
     POPUPSTORE_NOT_FOUND(HttpStatus.BAD_REQUEST,"해당 팝업스토어가 없습니다."),
     POPUPSTORE_NOT_RESERVATION(HttpStatus.INTERNAL_SERVER_ERROR,"예약한 팝업스토어가 아닙니다."),
     // event error
