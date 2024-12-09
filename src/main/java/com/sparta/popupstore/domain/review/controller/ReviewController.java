@@ -4,16 +4,23 @@ import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
 import com.sparta.popupstore.domain.review.dto.request.ReviewUpdateRequestDto;
 import com.sparta.popupstore.domain.review.dto.response.ReviewCreateResponseDto;
+import com.sparta.popupstore.domain.review.dto.response.ReviewFindAllResponseDto;
 import com.sparta.popupstore.domain.review.dto.response.ReviewUpdateResponseDto;
 import com.sparta.popupstore.domain.review.service.ReviewService;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,5 +65,11 @@ public class ReviewController {
         @PathVariable Long reviewId) {
         reviewService.deleteReview(user, reviewId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/popupstores/{popupStoreId}")
+    public Page<ReviewFindAllResponseDto> findReviews(@AuthUser User user, @PathVariable Long popupStoreId,
+        @PageableDefault(size = 10, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return reviewService.findReview(user, popupStoreId, pageable);
     }
 }

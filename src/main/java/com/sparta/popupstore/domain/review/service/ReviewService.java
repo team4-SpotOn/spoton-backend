@@ -5,6 +5,7 @@ import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
 import com.sparta.popupstore.domain.review.dto.request.ReviewUpdateRequestDto;
 import com.sparta.popupstore.domain.review.dto.response.ReviewCreateResponseDto;
+import com.sparta.popupstore.domain.review.dto.response.ReviewFindAllResponseDto;
 import com.sparta.popupstore.domain.review.dto.response.ReviewUpdateResponseDto;
 import com.sparta.popupstore.domain.review.entity.Review;
 import com.sparta.popupstore.domain.review.repository.ReviewRepository;
@@ -12,6 +13,8 @@ import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,5 +54,10 @@ public class ReviewService {
             throw new RuntimeException("댓글을 삭제할수 없습니다.");
         }
         reviewRepository.delete(review);
+    }
+
+    public Page<ReviewFindAllResponseDto> findReview(User user, Long popupStoreId, Pageable pageable) {
+        return reviewRepository.findByPopupStoreId(popupStoreId, pageable)
+            .map(ReviewFindAllResponseDto::new);
     }
 }
