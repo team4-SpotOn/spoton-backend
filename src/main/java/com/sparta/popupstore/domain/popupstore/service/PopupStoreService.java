@@ -76,11 +76,11 @@ public class PopupStoreService {
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
 
         if (!popupStore.getCompany().equals(company)) {
-            throw new RuntimeException("Unauthorized access - not the owner of the popup store");
+            throw new CustomApiException(ErrorCode.POP_UP_STORE_NOT_BY_THIS_COMPANY);
         }
 
         if (!isEditable(popupStore)) {
-            throw new RuntimeException("Cannot edit a popup store that is in progress");
+            throw new CustomApiException(ErrorCode.POP_UP_STORE_ALREADY_START);
         }
 
         if (imageFile != null) saveImageFile(imageFile);
