@@ -66,7 +66,7 @@ public class ReviewController {
     @Parameter(name = "name", description = "유저이름")
     @GetMapping("/popupstores/{popupStoreId}")
     public Page<ReviewFindAllResponseDto> findReviews(@PathVariable Long popupStoreId,
-        @PageableDefault(size = 10, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        @PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return reviewService.findReview(popupStoreId, pageable);
     }
 }
