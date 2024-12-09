@@ -133,7 +133,7 @@ public class PopupStoreService {
 
     public void deletePopupStore(Company company, Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
         if(!popupStore.getCompany().getId().equals(company.getId())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
         }
