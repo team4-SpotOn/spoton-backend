@@ -19,10 +19,14 @@ public class ReviewCreateResponseDto {
   @Schema(description = "유저이름")
   private String name;
 
+  @Schema(description = "imageUrl")
+  private String imageUrl;
+
   public ReviewCreateResponseDto(Review review) {
     this.id = review.getId();
     this.star = review.getStar();
     this.contents = review.getContents();
     this.name =review.getUser().getName();
+    this.imageUrl = review.getImageUrl();
   }
 }
