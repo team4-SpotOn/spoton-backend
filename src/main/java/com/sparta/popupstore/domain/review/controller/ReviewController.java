@@ -38,7 +38,7 @@ public class ReviewController {
 
 
     @Operation(summary = "리뷰생성")
-    @Parameter(name = "id", description = "팝업스토어 고유번호")
+    @Parameter(name = "popupStoreId", description = "팝업스토어 고유번호")
     @Parameter(name = "contents", description = "리뷰내용")
     @Parameter(name = "star", description = "별점")
     @Parameter(name = "name", description = "유저이름")
@@ -50,7 +50,7 @@ public class ReviewController {
     }
 
     @Operation(summary = "리뷰생성")
-    @Parameter(name = "id", description = "팝업스토어 고유번호")
+    @Parameter(name = "popupStoreId", description = "팝업스토어 고유번호")
     @Parameter(name = "contents", description = "수정된 리뷰내용")
     @Parameter(name = "star", description = "수정된 별점")
     @Parameter(name = "name", description = "유저이름")
@@ -68,7 +68,7 @@ public class ReviewController {
     }
 
     @Operation(summary = "리뷰조회")
-    @Parameter(name = "id", description = "팝업스토어 고유번호")
+    @Parameter(name = "popupStoreId", description = "팝업스토어 고유번호")
     @Parameter(name = "contents", description = "수정된 리뷰내용")
     @Parameter(name = "star", description = "수정된 별점")
     @Parameter(name = "name", description = "유저이름")
