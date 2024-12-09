@@ -1,6 +1,8 @@
 package com.sparta.popupstore.config;
 
 import com.sparta.popupstore.domain.common.annotation.AuthCompany;
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.company.repository.CompanyRepository;
 import com.sparta.popupstore.jwt.JwtUtil;
@@ -37,11 +39,11 @@ public class AuthCompanyResolver implements HandlerMethodArgumentResolver {
     ) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         if(request == null) {
-            throw new IllegalArgumentException("No request found");
+            throw new CustomApiException(ErrorCode.NEED_LOGIN);
         }
 
         Claims companyInfo = jwtUtil.getInfoFromRequest(request);
         return companyRepository.findByEmailAndDeletedAtIsNull(companyInfo.getSubject())
-                .orElseThrow(() -> new IllegalArgumentException("Company not found"));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.NEED_LOGIN));
     }
 }
