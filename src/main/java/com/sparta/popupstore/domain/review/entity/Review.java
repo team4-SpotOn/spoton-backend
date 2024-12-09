@@ -4,6 +4,7 @@ import com.sparta.popupstore.domain.common.entity.BaseEntity;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,13 +31,19 @@ public class Review extends BaseEntity {
     private int star;
     private String imageUrl;
 
+    private LocalDate createdAt;
+
+    private LocalDate updatedAt;
+
     @Builder
-    public Review(Long id, PopupStore popupStore, User user, String contents, int star, String imageUrl) {
+    public Review(Long id, PopupStore popupStore, User user, String contents, int star, String imageUrl, LocalDate createdAt, LocalDate updatedAt) {
         this.id = id;
         this.popupStore = popupStore;
         this.user = user;
         this.contents = contents;
         this.star = star;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.imageUrl = imageUrl;
     }
 

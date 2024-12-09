@@ -2,22 +2,25 @@ package com.sparta.popupstore.domain.review.dto.response;
 
 import com.sparta.popupstore.domain.review.entity.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
 import lombok.Getter;
 
 @Getter
 public class ReviewCreateResponseDto {
 
   @Schema(description = "리뷰 고유번호")
-  private Long id;
+  private final Long id;
 
   @Schema(description = "리뷰내용")
-  private String contents;
+  private final String contents;
 
   @Schema(description = "별점")
-  private int star;
+  private final int star;
 
   @Schema(description = "유저이름")
-  private String name;
+  private final String name;
+
+  private final LocalDate createdAt;
 
   @Schema(description = "imageUrl")
   private String imageUrl;
@@ -27,6 +30,7 @@ public class ReviewCreateResponseDto {
     this.star = review.getStar();
     this.contents = review.getContents();
     this.name =review.getUser().getName();
+    this.createdAt = review.getCreatedAt();
     this.imageUrl = review.getImageUrl();
   }
 }
