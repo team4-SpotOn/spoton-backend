@@ -32,7 +32,8 @@ public enum ErrorCode {
 
     //image
     NOT_CORRECT_FORMAT(HttpStatus.BAD_REQUEST, "올바른 파일 형식이 아닙니다."), 
-    PRE_SIGNED_URL_FAIL(HttpStatus.UNAUTHORIZED, "preSingedUrl 생성 실패");
+    PRE_SIGNED_URL_FAIL(HttpStatus.UNAUTHORIZED, "preSingedUrl 생성 실패"),
+    ;
     private final HttpStatus status;
     private final String message;
 
