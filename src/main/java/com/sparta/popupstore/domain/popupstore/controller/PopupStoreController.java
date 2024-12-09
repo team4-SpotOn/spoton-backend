@@ -1,7 +1,7 @@
 package com.sparta.popupstore.domain.popupstore.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthCompany;
-import com.sparta.popupstore.domain.common.annotation.AuthUser;
+import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
@@ -9,7 +9,6 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
-import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
@@ -37,14 +36,14 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "관리자 - 팝업 스토어 수정")
+    @CheckAdmin
     @PatchMapping("/admin/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
             @PathVariable Long popupStoreId,
-            @AuthUser User user,
             @RequestPart("requestDto") @Valid PopupStoreUpdateRequestDto requestDto,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
     ) {
-        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, user, requestDto, imageFile));
+        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, requestDto, imageFile));
     }
 
     @Operation(summary = "회사 - 팝업 스토어 수정")
@@ -60,8 +59,8 @@ public class PopupStoreController {
 
     @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
     @GetMapping("/popupstores/{popupStoreId}")
-    public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(@PathVariable Long popupId) {
-        return ResponseEntity.ok(popupStoreService.getPopupStoreFindOne(popupId));
+    public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(@PathVariable Long popupStoreId) {
+        return ResponseEntity.ok(popupStoreService.getPopupStoreFindOne(popupStoreId));
     }
 
     @Operation(summary = "회사 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
@@ -81,9 +80,9 @@ public class PopupStoreController {
     @Operation(summary = "관리자 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
     @Parameter(name = "user", description = "로그인한 관리자")
     @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호")
+    @CheckAdmin
     @DeleteMapping("/admin/popupstores/{popupStoreId}")
     public ResponseEntity<Void> deletePopupStoreAdmin(
-            @AuthUser User user,
             @PathVariable("popupStoreId") Long popupStoreId
     ) {
         popupStoreService.deletePopupStore(popupStoreId);
