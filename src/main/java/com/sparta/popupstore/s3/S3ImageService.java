@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.net.URL;
 import java.util.Date;
 import java.util.UUID;
 
@@ -23,19 +22,20 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3ImageService {
     private final AmazonS3 amazonS3;
+    private static final int SIGN_LIFE_TIME = 1000 * 60 * 2;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     @Value("${cloud.aws.url}")
-    private String url;
+    private String baseUrl;
 
     public S3UrlResponseDto getPreSignedUrl(String prefix, String fileName){
         this.validFileName(fileName);
-        fileName = this.createPath(prefix, fileName);
-        String preSignedUrl = generateResignedUrlRequest(fileName);
+        String createFileName = String.format("%s/%s", prefix, this.createUuid() + fileName);
+        String preSignedUrl = generateResignedUrlRequest(createFileName);
         return S3UrlResponseDto.builder()
                 .preSignedUrl(preSignedUrl)
-                .imageUrl(url+fileName)
+                .imageUrl(baseUrl +createFileName)
                 .build();
     }
 
@@ -47,13 +47,11 @@ public class S3ImageService {
                     Headers.S3_CANNED_ACL,
                     CannedAccessControlList.PublicRead.toString()
             );
-            URL signedUrl = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
-            return  signedUrl.toString();
+            return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
     }
 
     private void validFileName(String fileName) {
-        int index = fileName.lastIndexOf(".");
-        if(!fileName.substring(index).equals(".jpg") && !fileName.substring(index).equals(".png")){
+        if(!fileName.endsWith(".jpg") && !fileName.endsWith(".png")){
             throw new CustomApiException(ErrorCode.NOT_CORRECT_FORMAT);
         }
     }
@@ -61,17 +59,12 @@ public class S3ImageService {
     private Date getPreSignedUrlExpiration() {
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 2;
+        expTimeMillis += SIGN_LIFE_TIME;
         expiration.setTime(expTimeMillis);
         return expiration;
     }
 
     private String createUuid(){
         return UUID.randomUUID().toString();
-    }
-
-    private String createPath(String prefix, String fileName){
-        String uuid = this.createUuid();
-        return String.format("%s/%s", prefix, uuid + fileName);
     }
 }
