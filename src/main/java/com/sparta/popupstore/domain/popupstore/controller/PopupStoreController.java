@@ -11,6 +11,7 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneRes
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import com.sparta.popupstore.domain.user.entity.User;
+import com.sparta.popupstore.web.WebUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.Cookie;
@@ -18,13 +19,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.WebUtils;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +34,7 @@ public class PopupStoreController {
     public ResponseEntity<PopupStoreCreateResponseDto> createPopupStore(
             @AuthCompany Company company,
             @RequestBody @Valid PopupStoreCreateRequestDto requestDto
-    ){
+    ) {
         return ResponseEntity.ok(popupStoreService.createPopupStore(company, requestDto));
     }
 
@@ -65,7 +63,7 @@ public class PopupStoreController {
     @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
     @GetMapping("/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(@PathVariable Long popupStoreId) {
-        return ResponseEntity.ok(popupStoreService.getPopupStoreFindOne(popupStoreId));
+        return ResponseEntity.ok(popupStoreService.getPopupStoreOne(popupStoreId));
     }
 
     @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
@@ -78,18 +76,13 @@ public class PopupStoreController {
     ) {
         String cookieName = "viewedPopup_" + popupStoreId;
 
-        Cookie cookie = WebUtils.getCookie(request, cookieName);
+        Cookie cookie = WebUtil.getCookie(request, cookieName);
         if (cookie == null) {
+            // 조회수 증가
             popupStoreService.viewPopupStore(popupStoreId);
-
-            ResponseCookie responseCookie = ResponseCookie.from(cookieName, "true")
-                    .path("/")
-                    .maxAge(60 * 60 * 24)
-                    .build();
-
-            response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+            WebUtil.addCookie(response, cookieName, "true");
         }
-        return ResponseEntity.ok(popupStoreService.getPopupStoreFindOne(popupStoreId));
+        return ResponseEntity.ok(popupStoreService.getPopupStoreOne(popupStoreId));
     }
 
     @Operation(summary = "회사 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
