@@ -37,6 +37,8 @@ public enum ErrorCode {
     //image
     NOT_CORRECT_FORMAT(HttpStatus.BAD_REQUEST, "올바른 파일 형식이 아닙니다."), 
     PRE_SIGNED_URL_FAIL(HttpStatus.UNAUTHORIZED, "preSingedUrl 생성 실패"),
+    FAIL_DELETE_IMAGE_FILE(HttpStatus.UNAUTHORIZED, "이미지 파일 삭제에 실패했습니다."),
+    NOT_CORRECT_URL_FORMAT(HttpStatus.BAD_REQUEST, "올바른 파일 이름이 아닙니다."),
     ;
     private final HttpStatus status;
     private final String message;
