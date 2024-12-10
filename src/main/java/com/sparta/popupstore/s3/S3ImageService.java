@@ -4,6 +4,7 @@ package com.sparta.popupstore.s3;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
@@ -25,7 +26,6 @@ import java.util.UUID;
 public class S3ImageService {
     private final AmazonS3 amazonS3;
     private static final int SIGN_LIFE_TIME = 1000 * 60 * 2;
-
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     @Value("${cloud.aws.url}")
@@ -48,6 +48,19 @@ public class S3ImageService {
                         this.getPreSignedUrl(prefix, image.getFileName())
                 )
                 .toList();
+    }
+
+    public void deleteImage(ImageRequestDto imageRequestDto) {
+        if(!imageRequestDto.getFileName().contains(baseUrl)){
+            throw new CustomApiException(ErrorCode.NOT_CORRECT_URL_FORMAT);
+        }
+        String fileName = imageRequestDto.getFileName().substring(baseUrl.length());
+        try{
+            amazonS3.deleteObject(bucket, fileName);
+        }
+        catch (AmazonS3Exception e){
+            throw new CustomApiException(ErrorCode.FAIL_DELETE_IMAGE_FILE);
+        }
     }
 
     private String generateResignedUrlRequest(String fileName) {
@@ -78,5 +91,4 @@ public class S3ImageService {
     private String createUuid(){
         return UUID.randomUUID().toString();
     }
-
 }
