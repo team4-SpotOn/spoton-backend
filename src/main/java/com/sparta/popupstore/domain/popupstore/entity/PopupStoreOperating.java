@@ -2,6 +2,7 @@ package com.sparta.popupstore.domain.popupstore.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,12 @@ public class PopupStoreOperating {
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
+
+    @Builder
+    PopupStoreOperating(PopupStore popupStore, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
+        this.popupStore = popupStore;
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }
