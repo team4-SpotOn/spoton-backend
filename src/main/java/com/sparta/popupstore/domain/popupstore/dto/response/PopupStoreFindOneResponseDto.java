@@ -24,7 +24,6 @@ public class PopupStoreFindOneResponseDto {
     @Schema(description = "팝업스토어 내용")
     private String contents;
 
-
     @Schema(description = "팝업스토어 주소")
     private Address address;
 
