@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface SocialUserRepository extends JpaRepository<SocialUser, Long> {
 
-    Optional<SocialUser> findByProviderAndProviderId(OAuth2Provider provider, String providerId);
+    Optional<SocialUser> findByProviderAndProviderId(OAuth2Provider provider, Long providerId);
 }

@@ -9,6 +9,6 @@ import lombok.Getter;
 public class OAuth2UserInfo {
 
     private OAuth2Provider provider;
-    private String providerId;
+    private Long providerId;
     private String email;
 }

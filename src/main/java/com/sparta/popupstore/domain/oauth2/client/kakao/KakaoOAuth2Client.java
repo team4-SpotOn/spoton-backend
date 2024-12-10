@@ -29,8 +29,9 @@ public class KakaoOAuth2Client {
 
     private final RestClient restClient;
 
-    public String generateLoginPageUrl() {
+    public String generateSigninPageUrl() {
         return AUTH_SERVER_URL
+                + "/oauth/authorize"
                 + "?client_id=" + clientId
                 + "&redirect_uri=" + redirectUrl
                 + "&response_type=" + "code";
