@@ -32,7 +32,7 @@ public class PopupStore extends BaseEntity {
     private String name;
     private String contents;
     private int price;
-    private int view;
+    private int view = 0;
     @Embedded
     private Address address;
     private LocalDate startDate;
