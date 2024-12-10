@@ -25,11 +25,15 @@ public class ReviewCreateResponseDto {
   @Schema(description = "imageUrl")
   private String imageUrl;
 
+  @Schema(description = "생성일")
+  private LocalDateTime createAt;
+
   public ReviewCreateResponseDto(Review review) {
     this.id = review.getId();
     this.star = review.getStar();
     this.contents = review.getContents();
     this.name =review.getUser().getName();
+    this.createAt = review.getCreatedAt();
     this.createdAt = review.getCreatedAt();
     this.imageUrl = review.getImageUrl();
   }

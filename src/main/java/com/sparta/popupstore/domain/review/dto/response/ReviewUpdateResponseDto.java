@@ -20,6 +20,7 @@ public class ReviewUpdateResponseDto {
   @Schema(description = "유저이름")
   private final String name;
 
+  @Schema(description = "수정일")
   private final LocalDateTime updatedAt;
 
   public ReviewUpdateResponseDto(Review review) {
