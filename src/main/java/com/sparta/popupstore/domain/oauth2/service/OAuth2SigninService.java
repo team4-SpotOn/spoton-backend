@@ -14,8 +14,8 @@ public class OAuth2SigninService {
     private final KakaoOAuth2Client kakaoOAuth2Client;
     private final SocialUserService socialUserService;
 
-    public String generateLoginPageUrl(OAuth2Provider provider) {
-        return kakaoOAuth2Client.generateLoginPageUrl();
+    public String generateSigninPageUrl(OAuth2Provider provider) {
+        return kakaoOAuth2Client.generateSigninPageUrl();
     }
 
     public SocialUser signin(OAuth2Provider provider, String authorizationCode) {

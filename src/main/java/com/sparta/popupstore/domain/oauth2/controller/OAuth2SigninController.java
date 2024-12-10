@@ -23,12 +23,12 @@ public class OAuth2SigninController {
     private final JwtUtil jwtUtil;
 
     // 1. 로그인 페이지로
-    @GetMapping("/oauth2/login/{provider}")
-    public void redirectLoginPage(
+    @GetMapping("/oauth2/signin/{provider}")
+    public void redirectSigninPage(
             @PathVariable OAuth2Provider provider,
             HttpServletResponse response
     ) throws IOException {
-        String loginPageUrl = oAuth2LoginService.generateLoginPageUrl(provider);
+        String loginPageUrl = oAuth2LoginService.generateSigninPageUrl(provider);
         response.sendRedirect(loginPageUrl);
     }
 
