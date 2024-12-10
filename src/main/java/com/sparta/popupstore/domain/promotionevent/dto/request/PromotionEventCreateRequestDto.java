@@ -26,6 +26,7 @@ public class PromotionEventCreateRequestDto {
     private LocalDateTime startDateTime;
     @NotNull(message = "이벤트 종료일은 공백일 수 없습니다.")
     private LocalDateTime endDateTime;
+    private String imageUrl;
 
     public PromotionEvent toEvent() {
         return PromotionEvent.builder()
@@ -36,6 +37,7 @@ public class PromotionEventCreateRequestDto {
                 .couponExpirationPeriod(this.couponExpirationPeriod)
                 .startDateTime(this.startDateTime)
                 .endDateTime(this.endDateTime)
+                .imageUrl(this.imageUrl)
                 .build();
     }
 }

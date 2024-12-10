@@ -51,7 +51,7 @@ public class S3ImageService {
     }
 
     private void validFileName(String fileName) {
-        if(!fileName.endsWith(".jpg") && !fileName.endsWith(".png")){
+        if(!fileName.endsWith(".jpg") && !fileName.endsWith(".png") && !fileName.endsWith(".jpeg")) {
             throw new CustomApiException(ErrorCode.NOT_CORRECT_FORMAT);
         }
     }
