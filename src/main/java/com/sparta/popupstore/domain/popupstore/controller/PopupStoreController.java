@@ -62,19 +62,13 @@ public class PopupStoreController {
 
     @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
     @GetMapping("/popupstores/{popupStoreId}")
-    public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(@PathVariable Long popupStoreId) {
-        return ResponseEntity.ok(popupStoreService.getPopupStoreOne(popupStoreId));
-    }
-
-    @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
-    @GetMapping("/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(
             @PathVariable Long popupStoreId,
             @AuthUser User user,
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        return ResponseEntity.ok(popupStoreService.getPopupStoreOne(popupStoreId, request, response));
+        return user != null ? ResponseEntity.ok(popupStoreService.getPopupStoreOne(popupStoreId, request, response)) : ResponseEntity.ok(popupStoreService.getPopupStoreOne(popupStoreId));
     }
 
     @Operation(summary = "회사 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
