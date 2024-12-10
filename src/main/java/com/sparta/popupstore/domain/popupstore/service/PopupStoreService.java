@@ -11,6 +11,7 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneRes
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -97,6 +98,14 @@ public class PopupStoreService {
     public PopupStoreFindOneResponseDto getPopupStoreFindOne(Long popupId){
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
+        return new PopupStoreFindOneResponseDto(popupStore);
+    }
+
+    // 팝업스토어 단건조회
+    public PopupStoreFindOneResponseDto getPopupStoreFindOne(Long popupId, User user){
+        PopupStore popupStore = popupStoreRepository.findById(popupId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
+        popupStore.viewPopupStore();
         return new PopupStoreFindOneResponseDto(popupStore);
     }
 
