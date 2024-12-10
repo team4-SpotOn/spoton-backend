@@ -32,6 +32,7 @@ public class PopupStore extends BaseEntity {
     private String name;
     private String contents;
     private int price;
+    private int view = 0;
     @Embedded
     private Address address;
     private LocalDate startDate;
@@ -65,5 +66,9 @@ public class PopupStore extends BaseEntity {
         //this.address = address update
         this.startDate = requestDto.getStartDate() != null ? requestDto.getStartDate() : this.startDate;
         this.endDate = requestDto.getEndDate() != null ? requestDto.getEndDate() : this.endDate;
+    }
+
+    public void viewPopupStore() {
+        this.view += 1;
     }
 }
