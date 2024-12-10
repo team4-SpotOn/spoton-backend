@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Getter
@@ -29,9 +30,9 @@ public class PopupStoreCreateRequestDto {
     @NotNull(message = "팝업스토어 종료일을 입력해주세요.")
     private LocalDate endDate;
     @NotNull(message = "팝업스토어 개장시간을 입력해주세요.")
-    private LocalTime startTime;
+    private HashMap<String, LocalTime> startTimes;
     @NotNull(message = "팝업스토어 폐장시간을 입력해주세요.")
-    private LocalTime endTime;
+    private HashMap<String, LocalTime> endTimes;
     @Valid
     @NotEmpty(message = "하나 이상의 이미지를 넣어주세요")
     private List<PopupStoreImageRequestDto> images;
