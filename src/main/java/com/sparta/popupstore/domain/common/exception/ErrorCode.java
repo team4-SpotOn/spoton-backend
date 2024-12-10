@@ -11,6 +11,7 @@ public enum ErrorCode {
 
     // popupStore error
     POPUPSTORE_NOT_FOUND(HttpStatus.BAD_REQUEST,"해당 팝업스토어가 없습니다."),
+    POPUPSTORE_NOT_RESERVATION(HttpStatus.INTERNAL_SERVER_ERROR,"예약한 팝업스토어가 아닙니다."),
     // event error
     PROMOTION_EVENT_NOT(HttpStatus.FORBIDDEN, "이벤트를 다시 한번 확인해주세요."),
     PROMOTION_EVENT_ALREADY(HttpStatus.BAD_REQUEST, "이미 시작한 이벤트는 수정 및 삭제 할 수 없습니다."),

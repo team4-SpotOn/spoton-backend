@@ -34,7 +34,7 @@ public class ReviewService {
         boolean hasVisitedOrReserved = reservationRepository.existsByUserAndPopupStore(user, popupStore);
 
         if (!hasVisitedOrReserved) {
-            throw new RuntimeException("예약한 팝업스토어가 아닙니다.");
+            throw new CustomApiException(ErrorCode.POPUPSTORE_NOT_RESERVATION);
         }
 
         Review review = requestDto.toEntity(user, popupStore);
@@ -61,7 +61,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId)
             .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
         if (!review.getUser().getId().equals(user.getId())) {
-            throw new CustomApiException(ErrorCode.REVIEW_DOT_DELETE);
+            throw new CustomApiException(ErrorCode.REVIEW_DONT_DELETE);
         }
         reviewRepository.delete(review);
     }
