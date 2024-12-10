@@ -20,7 +20,7 @@ public enum ErrorCode {
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND,"수정할 리뷰가 없습니다."),
     REVIEW_NOT_UPDATE(HttpStatus.FORBIDDEN,"작성자만 수정할 수 있습니다."),
     REVIEW_ALREADY_DELETED(HttpStatus.NOT_FOUND,"이미 삭제된 리뷰입니다."),
-    REVIEW_DONT_DELETE(HttpStatus.BAD_REQUEST,"삭제권한이 없습니다."),
+    REVIEW_CANT_DELETE(HttpStatus.BAD_REQUEST,"삭제권한이 없습니다."),
     // coupon error
     COUPON_SOLD_OUT(HttpStatus.BAD_REQUEST,"쿠폰이 모두 소진되었습니다."),
     COUPON_DUPLICATE_ISSUANCE(HttpStatus.BAD_REQUEST, "이미 발급 받으신 쿠폰입니다."),

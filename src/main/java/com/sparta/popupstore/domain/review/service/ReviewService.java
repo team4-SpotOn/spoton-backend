@@ -61,7 +61,7 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId)
             .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
         if (!review.getUser().getId().equals(user.getId())) {
-            throw new CustomApiException(ErrorCode.REVIEW_DONT_DELETE);
+            throw new CustomApiException(ErrorCode.REVIEW_CANT_DELETE);
         }
         reviewRepository.delete(review);
     }

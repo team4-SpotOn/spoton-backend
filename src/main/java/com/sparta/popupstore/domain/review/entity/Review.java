@@ -31,19 +31,13 @@ public class Review extends BaseEntity {
     private int star;
     private String imageUrl;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     @Builder
-    public Review(Long id, PopupStore popupStore, User user, String contents, int star, String imageUrl, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Review(Long id, PopupStore popupStore, User user, String contents, int star, String imageUrl) {
         this.id = id;
         this.popupStore = popupStore;
         this.user = user;
         this.contents = contents;
         this.star = star;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.imageUrl = imageUrl;
     }
 
