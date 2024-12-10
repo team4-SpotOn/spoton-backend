@@ -13,6 +13,8 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
+import com.sparta.popupstore.domain.popupstore.repository.PopupStoreOperatingRepository;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.s3.service.S3ImageService;
@@ -21,10 +23,29 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.List;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,6 +54,7 @@ public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
     private final KakaoAddressService kakaoAddressService;
+    private final PopupStoreOperatingRepository popupStoreOperatingRepository;
     private final String UPLOAD_URL = "uploads";
     private final S3ImageService s3ImageService;
 
@@ -54,23 +76,24 @@ public class PopupStoreService {
         Address address = new Address(requestDto.getAddress(), latitude, longitude);
         popupStore.updateAddress(address);
 
-        return new PopupStoreCreateResponseDto(popupStore);
-    }
+        List<PopupStoreOperating> popupStoreOperatingList = new ArrayList<>();
+        for (String day : requestDto.getStartTimes().keySet()) {
+            DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
+            LocalTime startTime = requestDto.getStartTimes().get(day);
+            LocalTime endTime = requestDto.getEndTimes().get(day);
 
-//    private String saveImageFile(MultipartFile file) {
-//        if (file.isEmpty()) {
-//            throw new IllegalArgumentException("File is empty");
-//        }
-//
-//        try {
-//            Path path = Paths.get(UPLOAD_URL, System.currentTimeMillis() + "_" + file.getOriginalFilename());
-//            Files.createDirectories(path.getParent());
-//            Files.write(path, file.getBytes());
-//            return path.toString();
-//        } catch (IOException e) {
-//            throw new CustomApiException(ErrorCode.IMAGE_SAVE_FAILURE);
-//        }
-//    }
+            PopupStoreOperating operating = PopupStoreOperating.builder()
+                    .popupStore(popupStore)
+                    .dayOfWeek(dayOfWeek)
+                    .startTime(startTime)
+                    .endTime(endTime)
+                    .build();
+            popupStoreOperatingList.add(operating);
+            popupStoreOperatingRepository.save(operating);
+        }
+
+        return new PopupStoreCreateResponseDto(popupStore, popupStoreOperatingList);
+    }
 
     // 관리자 - 팝업 스토어 수정
     @Transactional
