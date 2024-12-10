@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class KakaoUserPropertiesResponse {
+public class KakaoAccountResponse {
 
-    private String nickname;
+    private String email;
 }

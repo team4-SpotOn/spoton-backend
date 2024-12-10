@@ -59,10 +59,15 @@ public class KakaoOAuth2Client {
     }
 
     public OAuth2UserInfo getUserInfo(String accessToken) {
+        var body = new LinkedMultiValueMap<String, String>();
+        body.add("property_keys", "[\"kakao_account.email\"]");
+
         return Optional.ofNullable(
-                restClient.get()
+                restClient.post()
                         .uri(RESOURCE_SERVER_BASE_URL + "/v2/user/me")
                         .header("Authorization", "Bearer " + accessToken)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .body(body)
                         .retrieve()
                         .onStatus(HttpStatusCode::isError, (req, resp) -> {
                             throw new CustomApiException(ErrorCode.SOCIAL_USERINFO_FAULT);
