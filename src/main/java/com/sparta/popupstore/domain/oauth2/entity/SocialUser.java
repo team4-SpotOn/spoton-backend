@@ -20,11 +20,11 @@ public class SocialUser extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OAuth2Provider provider;
 
-    private Long providerId;
+    private String providerId;
     private String email;
 
     @Builder
-    public SocialUser(Long id, OAuth2Provider provider, Long providerId, String email) {
+    public SocialUser(Long id, OAuth2Provider provider, String providerId, String email) {
         this.id = id;
         this.provider = provider;
         this.providerId = providerId;
