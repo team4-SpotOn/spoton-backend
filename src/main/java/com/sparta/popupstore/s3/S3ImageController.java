@@ -16,11 +16,20 @@ public class S3ImageController {
     private final S3ImageService imageService;
 
     @GetMapping("/reviews/image/preassigned")
-    public ResponseEntity<S3UrlResponseDto> getPreSignedUrl(
+    public ResponseEntity<S3UrlResponseDto> getReviewImagePreSignedUrl(
             @RequestBody ReviewImageRequestDto reviewImageRequestDto
     ){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(imageService.getPreSignedUrl("review", reviewImageRequestDto.getFileName()));
+    }
+
+    @GetMapping("/promotion-events/image/preassigned")
+    public ResponseEntity<S3UrlResponseDto> getPromotionEventImagePreSignedUrl(
+            @RequestBody ReviewImageRequestDto reviewImageRequestDto
+    ){
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(imageService.getPreSignedUrl("promotionevent", reviewImageRequestDto.getFileName()));
     }
 }

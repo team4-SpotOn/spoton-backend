@@ -32,6 +32,7 @@ public class PromotionEvent extends BaseEntity {
     private int couponExpirationPeriod;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
+    private String imageUrl;
 
     @Builder
     public PromotionEvent(
@@ -44,7 +45,8 @@ public class PromotionEvent extends BaseEntity {
             int totalCount,
             int couponExpirationPeriod,
             LocalDateTime startDateTime,
-            LocalDateTime endDateTime
+            LocalDateTime endDateTime,
+            String imageUrl
     ) {
         this.id = id;
         this.popupStore = popupStore;
@@ -56,6 +58,7 @@ public class PromotionEvent extends BaseEntity {
         this.couponExpirationPeriod = couponExpirationPeriod;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
+        this.imageUrl = imageUrl;
     }
 
     public void addPopupStore(PopupStore popupStore){
