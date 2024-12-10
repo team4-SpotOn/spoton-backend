@@ -11,6 +11,10 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneRes
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.web.WebUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -100,11 +104,19 @@ public class PopupStoreService {
         return new PopupStoreFindOneResponseDto(popupStore);
     }
 
-    // 팝업스토어 조회수 증가
-    public void viewPopupStore(Long popupId){
+    // 팝업스토어 유저 단건조회
+    public PopupStoreFindOneResponseDto getPopupStoreOne(Long popupId, HttpServletRequest request, HttpServletResponse response){
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-        popupStore.viewPopupStore();
+
+        String cookieName = "viewedPopup_" + popupId;
+
+        Cookie cookie = WebUtil.getCookie(request, cookieName);
+        if (cookie == null) {
+            popupStore.viewPopupStore();
+            WebUtil.addCookie(response, cookieName);
+        }
+        return new PopupStoreFindOneResponseDto(popupStore);
     }
 
     public void deletePopupStore(Company company, Long popupStoreId) {

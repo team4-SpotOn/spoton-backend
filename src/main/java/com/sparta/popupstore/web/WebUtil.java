@@ -12,8 +12,8 @@ public class WebUtil {
     private static final int VIEW_TOKEN_LIFETIME = 60 * 60 * 24;
 
     // 쿠키를 생성 및 응답에 추가
-    public static void addCookie(HttpServletResponse response, String name, String value) {
-        ResponseCookie cookie = ResponseCookie.from(name, value)
+    public static void addCookie(HttpServletResponse response, String name) {
+        ResponseCookie cookie = ResponseCookie.from(name)
                 .path("/")
                 .maxAge(VIEW_TOKEN_LIFETIME)
                 .httpOnly(true)  // HTTP 전용으로 설정
