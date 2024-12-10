@@ -34,7 +34,7 @@ public class OAuth2SigninController {
 
     // 2. callback, code 받아서 token 받아오는 method
     @GetMapping("/oauth2/callback/{provider}")
-    public ResponseEntity<Void> callback(
+    public ResponseEntity<String> callback(
             @PathVariable OAuth2Provider provider,
             @RequestParam(name = "code") String authorizationCode,
             HttpServletResponse response
@@ -43,6 +43,6 @@ public class OAuth2SigninController {
         jwtUtil.addJwtToCookie(socialUser.getEmail(), response);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .build();
+                .body(socialUser.getEmail());
     }
 }
