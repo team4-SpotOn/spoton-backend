@@ -1,6 +1,5 @@
 package com.sparta.popupstore.domain.popupstore.dto.request;
 
-
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import jakarta.validation.Valid;
