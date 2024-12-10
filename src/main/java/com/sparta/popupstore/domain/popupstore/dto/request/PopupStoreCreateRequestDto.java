@@ -1,14 +1,18 @@
 package com.sparta.popupstore.domain.popupstore.dto.request;
 
+
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,8 +33,11 @@ public class PopupStoreCreateRequestDto {
     private LocalTime startTime;
     @NotNull(message = "팝업스토어 폐장시간을 입력해주세요.")
     private LocalTime endTime;
+    @Valid
+    @NotEmpty(message = "하나 이상의 이미지를 넣어주세요")
+    private List<PopupStoreImageRequestDto> images;
 
-    public PopupStore toEntity(Company company, String imagePath) {
+    public PopupStore toEntity(Company company) {
         return PopupStore.builder()
                 .company(company)
                 .name(this.name)

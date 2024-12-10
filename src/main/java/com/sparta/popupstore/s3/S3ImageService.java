@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
+import com.sparta.popupstore.s3.dto.request.ImageRequestDto;
 import com.sparta.popupstore.s3.dto.response.S3UrlResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -37,6 +39,15 @@ public class S3ImageService {
                 .preSignedUrl(preSignedUrl)
                 .imageUrl(baseUrl +createFileName)
                 .build();
+    }
+
+    public List<S3UrlResponseDto> getPreSignedUrls(String prefix, List<ImageRequestDto> imageRequestDtoList) {
+        return imageRequestDtoList
+                .stream()
+                .map(image ->
+                        this.getPreSignedUrl(prefix, image.getFileName())
+                )
+                .toList();
     }
 
     private String generateResignedUrlRequest(String fileName) {
@@ -67,4 +78,5 @@ public class S3ImageService {
     private String createUuid(){
         return UUID.randomUUID().toString();
     }
+
 }

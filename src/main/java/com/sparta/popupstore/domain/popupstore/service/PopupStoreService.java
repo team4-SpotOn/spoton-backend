@@ -2,6 +2,7 @@ package com.sparta.popupstore.domain.popupstore.service;
 
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
+import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreImageRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
@@ -28,9 +29,15 @@ public class PopupStoreService {
 
 
     @Transactional
-    public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto, MultipartFile imageFile) throws IOException {
-        String imagePath = saveImageFile(imageFile);
-        return new PopupStoreCreateResponseDto(popupStoreRepository.save(requestDto.toEntity(company, imagePath)));
+    public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto){
+        PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company));
+        popupStore.addImageList(
+                requestDto.getImages()
+                        .stream()
+                        .map(PopupStoreImageRequestDto::toEntity)
+                        .toList()
+        );
+        return new PopupStoreCreateResponseDto(popupStore);
     }
 
     private String saveImageFile(MultipartFile file) throws IOException {

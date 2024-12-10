@@ -37,7 +37,6 @@ public class PopupStore extends BaseEntity {
     private LocalDate startDate;
     private LocalDate endDate;
 
-
     @Builder
     public PopupStore(Long id, Company company, String name, String contents, int price, String address, LocalDate startDate, LocalDate endDate) {
         this.id = id;
@@ -48,6 +47,15 @@ public class PopupStore extends BaseEntity {
         this.address = new Address(address);
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public void addImageList(List<PopupStoreImage> imageList) {
+        this.popupStoreImageList = imageList.stream().map(
+                image ->{
+                    image.addPopupStore(this);
+                    return image;
+                }
+        ).toList();
     }
 
     public void update(PopupStoreUpdateRequestDto requestDto) {
