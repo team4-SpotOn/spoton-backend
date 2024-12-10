@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class KakaoUserPropertiesResponseDto {
+public class KakaoUserPropertiesResponse {
 
     private String email;
 }

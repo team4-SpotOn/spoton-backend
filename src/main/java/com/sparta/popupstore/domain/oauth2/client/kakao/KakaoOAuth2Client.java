@@ -3,7 +3,7 @@ package com.sparta.popupstore.domain.oauth2.client.kakao;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
-import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoTokenResponseDto;
+import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoTokenResponse;
 import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoUserInfoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class KakaoOAuth2Client {
 
-    private final static String AUTH_SERVER_URL = "https://kauth.kakao.com";
+    private final static String AUTH_SERVER_BASE_URL = "https://kauth.kakao.com";
     private final static String RESOURCE_SERVER_BASE_URL = "https://kapi.kakao.com";
 
     @Value("${oauth2.kakao.client_id}")
@@ -30,7 +30,7 @@ public class KakaoOAuth2Client {
     private final RestClient restClient;
 
     public String generateSigninPageUrl() {
-        return AUTH_SERVER_URL
+        return AUTH_SERVER_BASE_URL
                 + "/oauth/authorize"
                 + "?client_id=" + clientId
                 + "&redirect_uri=" + redirectUrl
@@ -41,21 +41,20 @@ public class KakaoOAuth2Client {
         var body = new LinkedMultiValueMap<String, String>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", clientId);
-        body.add("redirect_uri", redirectUrl);
         body.add("code", authorizationCode);
 
         return Optional.ofNullable(
                         restClient.post()
-                                .uri(AUTH_SERVER_URL + "/oauth/token")
+                                .uri(AUTH_SERVER_BASE_URL + "/oauth/token")
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                                 .body(body)
                                 .retrieve()
                                 .onStatus(HttpStatusCode::isError, (req, resp) -> {
                                     throw new CustomApiException(ErrorCode.SOCIAL_TOKEN_FAULT);
                                 })
-                                .body(KakaoTokenResponseDto.class)
+                                .body(KakaoTokenResponse.class)
                 )
-                .map(KakaoTokenResponseDto::accessToken)
+                .map(KakaoTokenResponse::accessToken)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_TOKEN_FAULT));
     }
 
