@@ -18,8 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @RestController
 @RequiredArgsConstructor
 public class PopupStoreController {
@@ -29,10 +27,9 @@ public class PopupStoreController {
     @PostMapping("/popupstores")
     public ResponseEntity<PopupStoreCreateResponseDto> createPopupStore(
             @AuthCompany Company company,
-            @RequestPart("requestDto") @Valid PopupStoreCreateRequestDto requestDto,
-            @RequestPart("imageFile") MultipartFile imageFile
-    ) throws IOException {
-        return ResponseEntity.ok(popupStoreService.createPopupStore(company, requestDto, imageFile));
+            @RequestBody @Valid PopupStoreCreateRequestDto requestDto
+    ){
+        return ResponseEntity.ok(popupStoreService.createPopupStore(company, requestDto));
     }
 
     @Operation(summary = "관리자 - 팝업 스토어 수정")
