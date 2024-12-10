@@ -101,12 +101,11 @@ public class PopupStoreService {
         return new PopupStoreFindOneResponseDto(popupStore);
     }
 
-    // 팝업스토어 단건조회
-    public PopupStoreFindOneResponseDto getPopupStoreFindOne(Long popupId, User user){
+    // 팝업스토어 조회수 증가
+    public void viewPopupStore(Long popupId){
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
         popupStore.viewPopupStore();
-        return new PopupStoreFindOneResponseDto(popupStore);
     }
 
     public void deletePopupStore(Company company, Long popupStoreId) {
