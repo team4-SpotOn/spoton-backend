@@ -6,9 +6,9 @@ import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
 import com.sparta.popupstore.domain.oauth2.type.OAuth2Provider;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class KakaoUserInfoResponseDto extends OAuth2UserInfo {
+public class KakaoUserInfoResponse extends OAuth2UserInfo {
 
-    public KakaoUserInfoResponseDto(Long providerId, KakaoUserPropertiesResponse userProperties) {
-        super(OAuth2Provider.KAKAO, providerId.toString(), userProperties.getEmail());
+    public KakaoUserInfoResponse(Long id, KakaoUserPropertiesResponse properties) {
+        super(OAuth2Provider.KAKAO, id.toString(), properties.getEmail());
     }
 }

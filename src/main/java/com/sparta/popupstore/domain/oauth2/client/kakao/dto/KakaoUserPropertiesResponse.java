@@ -15,4 +15,5 @@ import lombok.Setter;
 public class KakaoUserPropertiesResponse {
 
     private String email;
+    private String nickname;
 }

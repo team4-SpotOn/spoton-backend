@@ -4,7 +4,7 @@ import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
 import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoTokenResponse;
-import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoUserInfoResponseDto;
+import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoUserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
@@ -67,7 +67,7 @@ public class KakaoOAuth2Client {
                         .onStatus(HttpStatusCode::isError, (req, resp) -> {
                             throw new CustomApiException(ErrorCode.SOCIAL_USERINFO_FAULT);
                         })
-                        .body(KakaoUserInfoResponseDto.class)
+                        .body(KakaoUserInfoResponse.class)
         ).orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_USERINFO_FAULT));
     }
 
