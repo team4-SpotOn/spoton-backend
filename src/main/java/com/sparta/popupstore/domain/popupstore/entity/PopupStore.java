@@ -69,6 +69,6 @@ public class PopupStore extends BaseEntity {
     }
 
     public void viewPopupStore() {
-        this.view ++;
+        this.view += 1;
     }
 }

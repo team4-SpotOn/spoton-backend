@@ -98,13 +98,6 @@ public class PopupStoreService {
     }
 
     // 팝업스토어 단건조회
-    public PopupStoreFindOneResponseDto getPopupStoreOne(Long popupId){
-        PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-        return new PopupStoreFindOneResponseDto(popupStore);
-    }
-
-    // 팝업스토어 유저 단건조회
     public PopupStoreFindOneResponseDto getPopupStoreOne(Long popupId, HttpServletRequest request, HttpServletResponse response){
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
@@ -114,6 +107,7 @@ public class PopupStoreService {
         Cookie cookie = WebUtil.getCookie(request, cookieName);
         if (cookie == null) {
             popupStore.viewPopupStore();
+            popupStoreRepository.save(popupStore);
             WebUtil.addCookie(response, cookieName);
         }
         return new PopupStoreFindOneResponseDto(popupStore);

@@ -18,6 +18,9 @@ public class PopupStoreFindOneResponseDto {
     @Schema(description = "팝업스토어 종료일")
     private LocalDate endDate;
 
+    @Schema(description = "팝업스토어 조회수")
+    private int view;
+
     @Schema(description = "팝업스토어 입장료")
     private int price;
 
@@ -31,6 +34,7 @@ public class PopupStoreFindOneResponseDto {
         this.name = popupStore.getName();
         this.startDate = popupStore.getStartDate();
         this.endDate = popupStore.getEndDate();
+        this.view = popupStore.getView();
         this.price = popupStore.getPrice();
         this.contents = popupStore.getContents();
         this.address = popupStore.getAddress();
