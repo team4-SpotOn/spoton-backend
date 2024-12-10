@@ -17,36 +17,24 @@ import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreOperatingRepository;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
-import com.sparta.popupstore.s3.service.S3ImageService;
 import com.sparta.popupstore.web.WebUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
-
-import java.time.DayOfWeek;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +48,7 @@ public class PopupStoreService {
 
 
     @Transactional
-    public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto){
+    public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company));
         popupStore.addImageList(
                 requestDto.getImages()
@@ -119,6 +107,23 @@ public class PopupStoreService {
         if (!isEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
+
+        List<PopupStoreOperating> popupStoreOperatingList = new ArrayList<>();
+        for (String day : requestDto.getStartTimes().keySet()) {
+            DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
+            LocalTime startTime = requestDto.getStartTimes().get(day);
+            LocalTime endTime = requestDto.getEndTimes().get(day);
+
+            PopupStoreOperating operating = PopupStoreOperating.builder()
+                    .popupStore(popupStore)
+                    .dayOfWeek(dayOfWeek)
+                    .startTime(startTime)
+                    .endTime(endTime)
+                    .build();
+            popupStoreOperatingList.add(operating);
+            popupStoreOperatingRepository.save(operating);
+        }
+
         this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
 
@@ -156,7 +161,7 @@ public class PopupStoreService {
 
     public void deletePopupStore(Company company, Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
         if(!popupStore.getCompany().getId().equals(company.getId())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
         }
