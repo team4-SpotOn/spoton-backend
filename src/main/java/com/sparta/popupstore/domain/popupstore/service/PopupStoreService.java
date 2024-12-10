@@ -61,7 +61,7 @@ public class PopupStoreService {
     @Transactional
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUPSTORE_NOT_FOUND));
 
         if (imageFile != null) saveImageFile(imageFile);
         popupStore.update(requestDto);
@@ -73,7 +73,7 @@ public class PopupStoreService {
     @Transactional
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUPSTORE_NOT_FOUND));
 
         if (!popupStore.getCompany().equals(company)) {
             throw new CustomApiException(ErrorCode.POP_UP_STORE_NOT_BY_THIS_COMPANY);
@@ -96,20 +96,20 @@ public class PopupStoreService {
     // 팝업스토어 단건조회
     public PopupStoreFindOneResponseDto getPopupStoreFindOne(Long popupId){
         PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUPSTORE_NOT_FOUND));
         return new PopupStoreFindOneResponseDto(popupStore);
     }
 
     // 팝업스토어 조회수 증가
     public void viewPopupStore(Long popupId){
         PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUPSTORE_NOT_FOUND));
         popupStore.viewPopupStore();
     }
 
     public void deletePopupStore(Company company, Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUPSTORE_NOT_FOUND));
         if(!popupStore.getCompany().getId().equals(company.getId())) {
             throw new CustomApiException(ErrorCode.POP_UP_STORE_NOT_BY_THIS_COMPANY);
         }
@@ -122,7 +122,7 @@ public class PopupStoreService {
 
     public void deletePopupStore(Long popupStoreId) {
         popupStoreRepository.findById(popupStoreId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POP_UP_STORE_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUPSTORE_NOT_FOUND));
 
         popupStoreRepository.deleteById(popupStoreId);
     }
