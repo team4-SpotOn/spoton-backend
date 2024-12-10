@@ -31,7 +31,12 @@ public class PopupStoreService {
     @Transactional
     public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto){
         PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company));
-        popupStore.addImageList(requestDto.getImages().stream().map(PopupStoreImageRequestDto::toEntity).toList());
+        popupStore.addImageList(
+                requestDto.getImages()
+                        .stream()
+                        .map(PopupStoreImageRequestDto::toEntity)
+                        .toList()
+        );
         return new PopupStoreCreateResponseDto(popupStore);
     }
 

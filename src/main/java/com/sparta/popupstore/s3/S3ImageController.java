@@ -38,10 +38,10 @@ public class S3ImageController {
 
     @GetMapping("/popup-stores/image/preassigned")
     public ResponseEntity<List<S3UrlResponseDto>> getPopupStoreImagePreSignedUrl(
-            @RequestBody @NotEmpty(message = "이미지를 하나이상 올려주세요") List<ImageRequestDto> imageRequestDto
+            @RequestBody @NotEmpty(message = "이미지를 하나이상 올려주세요") List<ImageRequestDto> imageRequestDtoList
     ){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(imageService.getPreSignedUrls("popupstore",imageRequestDto));
+                .body(imageService.getPreSignedUrls("popupstore",imageRequestDtoList));
     }
 }

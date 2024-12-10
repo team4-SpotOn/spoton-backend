@@ -41,18 +41,13 @@ public class S3ImageService {
                 .build();
     }
 
-    public List<S3UrlResponseDto> getPreSignedUrls(String prefix, List<ImageRequestDto> imageRequestDto) {
-        return imageRequestDto
+    public List<S3UrlResponseDto> getPreSignedUrls(String prefix, List<ImageRequestDto> imageRequestDtoList) {
+        return imageRequestDtoList
                 .stream()
-                .map(image -> {
-                 this.validFileName(image.getFileName());
-                 String createFileName = String.format("%s/%s", prefix, this.createUuid() + image.getFileName());
-                 String preSignedUrl = generateResignedUrlRequest(createFileName);
-                 return S3UrlResponseDto.builder()
-                         .preSignedUrl(preSignedUrl)
-                         .imageUrl(baseUrl +createFileName)
-                         .build();
-                }).toList();
+                .map(image ->
+                        this.getPreSignedUrl(prefix, image.getFileName())
+                )
+                .toList();
     }
 
     private String generateResignedUrlRequest(String fileName) {
