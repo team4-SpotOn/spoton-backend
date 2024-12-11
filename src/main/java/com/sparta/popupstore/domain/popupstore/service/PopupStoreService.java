@@ -1,8 +1,11 @@
 package com.sparta.popupstore.domain.popupstore.service;
 
+import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.company.entity.Company;
+import com.sparta.popupstore.domain.kakaoaddress.dto.KakaoAddressApiDto;
+import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreImageRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
@@ -18,8 +21,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,6 +43,7 @@ import java.time.LocalDate;
 public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
+    private final KakaoAddressService kakaoAddressService;
     private final String UPLOAD_URL = "uploads";
 
 
@@ -44,6 +56,14 @@ public class PopupStoreService {
                         .map(PopupStoreImageRequestDto::toEntity)
                         .toList()
         );
+
+        // 카카오 주소 API - 위도 경도 구하기
+        KakaoAddressApiDto kakaoAddressApiDto = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
+        double latitude = kakaoAddressApiDto.getDocuments().get(0).getRoadAddress().getLatitude(); // 위도
+        double longitude = kakaoAddressApiDto.getDocuments().get(0).getRoadAddress().getLongitude(); // 경도
+        Address address = new Address(requestDto.getAddress(), latitude, longitude);
+        popupStore.updateAddress(address);
+
         return new PopupStoreCreateResponseDto(popupStore);
     }
 
@@ -138,5 +158,4 @@ public class PopupStoreService {
     public List<PopupStoreFindOneResponseDto> getPopupStoreAll(){
         return popupStoreRepository.findAll().stream().map(PopupStoreFindOneResponseDto::new).toList();
     }
-
 }

@@ -8,26 +8,22 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface PromotionEventRepository extends JpaRepository<PromotionEvent, Long> {
-    @Query("select p from PromotionEvent p left join fetch p.popupStore where p.deletedAt is null")
+    @Query("select p from PromotionEvent p left join fetch p.popupStore")
     Page<PromotionEvent> findAllPromotionalEvents(Pageable pageable);
 
     @Modifying
     @Query("update PromotionEvent p set p.deletedAt = now() where p.id = :promotionEventId")
     void deletePromotionEvent(@Param("promotionEventId") Long promotionEventId);
 
-    @Query("select p from PromotionEvent p where p.id = :promotionEventId and p.deletedAt is null")
-    Optional<PromotionEvent> findByPromotionEventId(@Param("promotionEventId") Long promotionEventId);
-
     @Modifying
-    @Query(value = "delete from events e where timestampdiff(month , e.deleted_at, now()) >= 6", nativeQuery = true)
-    void deletePromotionEventByDeletedAtAfterSixMonths();
+    @Query("delete from PromotionEvent p where p in :promotionEvents")
+    void deleteAllByQuery(List<PromotionEvent> promotionEvents);
 
-    @Modifying
-    @Query("update PromotionEvent p set p.deletedAt = now() where p.endDateTime <= now() and p.deletedAt is null")
-    void softDeletePromotionEventByTerminated();
+    @Query(value = "select * from events e where timestampdiff(month , e.end_date_time, now()) >= 6", nativeQuery = true)
+    List<PromotionEvent> findAllByEndDateTimeAfterSixMonths();
 
 //    추후에 스케쥴러에서 쓰일 수도 있을 것 같아서 일단 주석으로 냅두겠습니당
 //    @Modifying
