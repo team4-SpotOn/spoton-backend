@@ -41,10 +41,10 @@ public class PromotionEventController {
     @CheckAdmin
     @PostMapping("/admin/promotionEvents")
     public ResponseEntity<PromotionEventCreateResponseDto> createEvent(
-            @Valid @RequestBody PromotionEventCreateRequestDto promotionEventCreateRequestDto,
+            @Valid @RequestBody PromotionEventCreateRequestDto createRequestDto,
             @RequestParam(required = false, name = "popupStoreId") Long popupStoreId
             ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(promotionEventService.createEvent(promotionEventCreateRequestDto, popupStoreId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(promotionEventService.createEvent(createRequestDto, popupStoreId));
     }
 
     @Operation(summary = "프로모션 이벤트 다건 조회", description = "현재 등록되어 있는 이벤트들을 보여줍니다. pageNum 과 pageSize 는 default 값이 각각 1과 10입니다.")
@@ -78,10 +78,10 @@ public class PromotionEventController {
     @CheckAdmin
     @PatchMapping("/admin/promotionEvents/{promotionEventId}")
     public ResponseEntity<PromotionEventUpdateResponseDto> updateEvent(
-            @Valid @RequestBody PromotionEventUpdateRequestDto promotionEventUpdateRequestDto,
+            @Valid @RequestBody PromotionEventUpdateRequestDto updateRequestDto,
             @PathVariable(name = "promotionEventId") Long promotionEventId
     ){
-        return ResponseEntity.ok(promotionEventService.updatePromotionEvent(promotionEventUpdateRequestDto, promotionEventId));
+        return ResponseEntity.ok(promotionEventService.updatePromotionEvent(updateRequestDto, promotionEventId));
     }
 
     @Operation(summary = "프로모션 이벤트 삭제")

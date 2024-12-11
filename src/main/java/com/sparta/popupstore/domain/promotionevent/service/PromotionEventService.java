@@ -2,7 +2,7 @@ package com.sparta.popupstore.domain.promotionevent.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.domain.common.util.IsValidNullAndEmpty;
+import com.sparta.popupstore.domain.common.util.ValidUtil;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
@@ -32,10 +32,10 @@ public class PromotionEventService {
     private final S3ImageService s3ImageService;
 
     public PromotionEventCreateResponseDto createEvent(
-            PromotionEventCreateRequestDto promotionEventCreateRequestDto,
+            PromotionEventCreateRequestDto createRequestDto,
             Long popupStoreId
     ) {
-        PromotionEvent promotionEvent = promotionEventCreateRequestDto.toEvent();
+        PromotionEvent promotionEvent = createRequestDto.toEvent();
         if(popupStoreId != null) {
             popupStoreRepository.findById(popupStoreId).ifPresent(promotionEvent::addPopupStore);
         }
@@ -53,25 +53,25 @@ public class PromotionEventService {
 
     @Transactional
     public PromotionEventUpdateResponseDto updatePromotionEvent(
-            PromotionEventUpdateRequestDto promotionEventUpdateRequestDto,
+            PromotionEventUpdateRequestDto updateRequestDto,
             Long promotionEventId
     ) {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
         if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())){
             throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
         }
-        if(IsValidNullAndEmpty.isValidNullAndEmpty(promotionEvent.getImageUrl()) && !Objects.equals(promotionEventUpdateRequestDto.getImageUrl(), promotionEvent.getImageUrl())){
+        if(ValidUtil.isValidNullAndEmpty(promotionEvent.getImageUrl()) && !Objects.equals(updateRequestDto.getImageUrl(), promotionEvent.getImageUrl())){
             s3ImageService.deleteImage(promotionEvent.getImageUrl());
         }
         promotionEvent.updatePromotionEvent(
-                promotionEventUpdateRequestDto.getTitle(),
-                promotionEventUpdateRequestDto.getDescription(),
-                promotionEventUpdateRequestDto.getDiscountPercentage(),
-                promotionEventUpdateRequestDto.getTotalCount(),
-                promotionEventUpdateRequestDto.getCouponExpirationPeriod(),
-                promotionEventUpdateRequestDto.getStartDateTime(),
-                promotionEventUpdateRequestDto.getEndDateTime(),
-                promotionEventUpdateRequestDto.getImageUrl()
+                updateRequestDto.getTitle(),
+                updateRequestDto.getDescription(),
+                updateRequestDto.getDiscountPercentage(),
+                updateRequestDto.getTotalCount(),
+                updateRequestDto.getCouponExpirationPeriod(),
+                updateRequestDto.getStartDateTime(),
+                updateRequestDto.getEndDateTime(),
+                updateRequestDto.getImageUrl()
         );
         return new PromotionEventUpdateResponseDto(promotionEvent);
     }
