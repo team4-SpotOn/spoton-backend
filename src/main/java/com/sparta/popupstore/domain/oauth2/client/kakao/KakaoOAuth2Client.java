@@ -2,9 +2,11 @@ package com.sparta.popupstore.domain.oauth2.client.kakao;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
+import com.sparta.popupstore.domain.oauth2.client.common.OAuth2Client;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
 import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoTokenResponse;
 import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoUserInfoResponse;
+import com.sparta.popupstore.domain.oauth2.type.OAuth2Provider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
@@ -17,7 +19,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class KakaoOAuth2Client {
+public class KakaoOAuth2Client implements OAuth2Client {
 
     private final static String AUTH_SERVER_BASE_URL = "https://kauth.kakao.com";
     private final static String RESOURCE_SERVER_BASE_URL = "https://kapi.kakao.com";
@@ -29,6 +31,7 @@ public class KakaoOAuth2Client {
 
     private final RestClient restClient;
 
+    @Override
     public String generateSigninPageUrl() {
         return AUTH_SERVER_BASE_URL
                 + "/oauth/authorize"
@@ -37,6 +40,7 @@ public class KakaoOAuth2Client {
                 + "&response_type=" + "code";
     }
 
+    @Override
     public String getAccessToken(String authorizationCode) {
         var body = new LinkedMultiValueMap<String, String>();
         body.add("grant_type", "authorization_code");
@@ -58,6 +62,7 @@ public class KakaoOAuth2Client {
                 .orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_TOKEN_FAULT));
     }
 
+    @Override
     public OAuth2UserInfo getUserInfo(String accessToken) {
         var body = new LinkedMultiValueMap<String, String>();
         body.add("property_keys", "[\"kakao_account.email\"]");
@@ -74,6 +79,11 @@ public class KakaoOAuth2Client {
                         })
                         .body(KakaoUserInfoResponse.class)
         ).orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_USERINFO_FAULT));
+    }
+
+    @Override
+    public boolean supports(OAuth2Provider provider) {
+        return provider == OAuth2Provider.KAKAO;
     }
 
 }
