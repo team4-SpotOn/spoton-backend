@@ -31,6 +31,16 @@ public class OAuth2SigninController {
         response.sendRedirect(signinPageUrl);
     }
 
+    @GetMapping("/oauth2/callback/{provider}/test")
+    public ResponseEntity<?> callbackTest(
+            @PathVariable OAuth2Provider provider,
+            @RequestParam(name = "code") String authorizationCode
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(oAuth2SigninService.callbackTest(provider, authorizationCode));
+    }
+
     @GetMapping("/oauth2/callback/{provider}")
     public ResponseEntity<Void> callback(
             @PathVariable OAuth2Provider provider,

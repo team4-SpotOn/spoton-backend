@@ -4,7 +4,7 @@ import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2Client;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
-import com.sparta.popupstore.domain.oauth2.client.google.dto.GoogleTokenResponse;
+import com.sparta.popupstore.domain.oauth2.client.common.TokenResponse;
 import com.sparta.popupstore.domain.oauth2.client.google.dto.GoogleUserInfoResponse;
 import com.sparta.popupstore.domain.oauth2.type.OAuth2Provider;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GoogleOAuth2Client implements OAuth2Client {
 
-    private final static String AUTH_SERVER_BASE_URL = "https://accounts.google.com";
-    private final static String RESOURCE_SERVER_BASE_URL = "https://www.googleapis.com";
+    private final static String AUTH_SERVER_URL = "https://accounts.google.com/o/oauth2/v2/auth";
+    private final static String TOKEN_SERVER_URL = "https://oauth2.googleapis.com/token";
+    private final static String RESOURCE_SERVER_URL = "https://www.googleapis.com/userinfo/v2/me";
 
     @Value("${oauth2.google.client_id}")
     private String clientId;
@@ -37,8 +38,7 @@ public class GoogleOAuth2Client implements OAuth2Client {
 
     @Override
     public String generateSigninPageUrl() {
-        return AUTH_SERVER_BASE_URL
-                + "/o/oauth2/v2/auth"
+        return AUTH_SERVER_URL
                 + "?client_id=" + clientId
                 + "&redirect_uri=" + redirectUri
                 + "&scope=" + scope
@@ -51,22 +51,22 @@ public class GoogleOAuth2Client implements OAuth2Client {
         body.add("grant_type", "authorization_code");
         body.add("client_id", clientId);
         body.add("client_secret", clientSecret);
-        body.add("scope", scope);
+        body.add("redirect_uri", redirectUri);
         body.add("code", authorizationCode);
 
         return Optional.ofNullable(
                         restClient.post()
-                                .uri(AUTH_SERVER_BASE_URL + "/token")
+                                .uri(TOKEN_SERVER_URL)
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                                 .body(body)
                                 .retrieve()
-                                .onStatus(HttpStatusCode::isError, (req, resq) -> {
+                                .onStatus(HttpStatusCode::isError, (req, resp) -> {
                                     throw new CustomApiException(ErrorCode.SOCIAL_TOKEN_ERROR);
                                 })
-                                .body(GoogleTokenResponse.class)
+                                .body(TokenResponse.class)
                 )
-                .map(GoogleTokenResponse::accessToken)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_TOKEN_ERROR));
+                .map(TokenResponse::accessToken)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
     }
 
     @Override
@@ -76,7 +76,7 @@ public class GoogleOAuth2Client implements OAuth2Client {
 
         return Optional.ofNullable(
                 restClient.get()
-                        .uri(RESOURCE_SERVER_BASE_URL + "/userinfo/v2/me")
+                        .uri(RESOURCE_SERVER_URL)
                         .header("Authorization", "Bearer " + accessToken)
                         .retrieve()
                         .onStatus(HttpStatusCode::isError, (req, resp) -> {
@@ -89,5 +89,22 @@ public class GoogleOAuth2Client implements OAuth2Client {
     @Override
     public boolean supports(OAuth2Provider provider) {
         return provider == OAuth2Provider.GOOGLE;
+    }
+
+    @Override
+    public Object callbackTest(String authorizationCode) {
+        var body = new LinkedMultiValueMap<String, String>();
+        body.add("grant_type", "authorization_code");
+        body.add("client_id", clientId);
+        body.add("client_secret", clientSecret);
+        body.add("redirect_uri", redirectUri);
+        body.add("code", authorizationCode);
+
+        return restClient.post()
+                .uri(TOKEN_SERVER_URL)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(body)
+                .retrieve()
+                .body(TokenResponse.class);
     }
 }

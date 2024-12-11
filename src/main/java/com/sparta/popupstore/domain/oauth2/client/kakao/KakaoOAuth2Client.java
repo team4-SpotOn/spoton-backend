@@ -4,7 +4,7 @@ import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2Client;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
-import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoTokenResponse;
+import com.sparta.popupstore.domain.oauth2.client.common.TokenResponse;
 import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoUserInfoResponse;
 import com.sparta.popupstore.domain.oauth2.type.OAuth2Provider;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class KakaoOAuth2Client implements OAuth2Client {
 
-    private final static String AUTH_SERVER_BASE_URL = "https://kauth.kakao.com";
-    private final static String RESOURCE_SERVER_BASE_URL = "https://kapi.kakao.com";
+    private final static String AUTH_SERVER_URL = "https://kauth.kakao.com/oauth/authorize";
+    private final static String TOKEN_SERVER_URL = "https://kauth.kakao.com/oauth/token";
+    private final static String RESOURCE_SERVER_URL = "https://kapi.kakao.com/v2/user/me";
 
     @Value("${oauth2.kakao.client_id}")
     private String clientId;
@@ -33,8 +34,7 @@ public class KakaoOAuth2Client implements OAuth2Client {
 
     @Override
     public String generateSigninPageUrl() {
-        return AUTH_SERVER_BASE_URL
-                + "/oauth/authorize"
+        return AUTH_SERVER_URL
                 + "?client_id=" + clientId
                 + "&redirect_uri=" + redirectUrl
                 + "&response_type=" + "code";
@@ -49,17 +49,17 @@ public class KakaoOAuth2Client implements OAuth2Client {
 
         return Optional.ofNullable(
                         restClient.post()
-                                .uri(AUTH_SERVER_BASE_URL + "/oauth/token")
+                                .uri(TOKEN_SERVER_URL)
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                                 .body(body)
                                 .retrieve()
                                 .onStatus(HttpStatusCode::isError, (req, resp) -> {
                                     throw new CustomApiException(ErrorCode.SOCIAL_TOKEN_ERROR);
                                 })
-                                .body(KakaoTokenResponse.class)
+                                .body(TokenResponse.class)
                 )
-                .map(KakaoTokenResponse::accessToken)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_TOKEN_ERROR));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_TOKEN_ERROR))
+                .accessToken();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class KakaoOAuth2Client implements OAuth2Client {
 
         return Optional.ofNullable(
                 restClient.post()
-                        .uri(RESOURCE_SERVER_BASE_URL + "/v2/user/me")
+                        .uri(RESOURCE_SERVER_URL)
                         .header("Authorization", "Bearer " + accessToken)
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .body(body)
@@ -84,6 +84,23 @@ public class KakaoOAuth2Client implements OAuth2Client {
     @Override
     public boolean supports(OAuth2Provider provider) {
         return provider == OAuth2Provider.KAKAO;
+    }
+
+    @Override
+    public Object callbackTest(String authorizationCode) {
+        var body = new LinkedMultiValueMap<String, String>();
+        body.add("grant_type", "authorization_code");
+        body.add("client_id", clientId);
+        body.add("code", authorizationCode);
+        return restClient.post()
+                .uri(AUTH_SERVER_URL)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(body)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, (req, resp) -> {
+                    throw new CustomApiException(ErrorCode.SOCIAL_TOKEN_ERROR);
+                })
+                .body(TokenResponse.class);
     }
 
 }

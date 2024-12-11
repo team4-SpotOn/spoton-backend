@@ -36,4 +36,9 @@ public class OAuth2SigninService {
                 .findFirst()
                 .orElseThrow(() -> new CustomApiException(ErrorCode.UNKNOWN_PROVIDER));
     }
+
+    public Object callbackTest(OAuth2Provider provider, String authorizationCode) {
+        OAuth2Client client = getClient(provider);
+        return client.callbackTest(authorizationCode);
+    }
 }

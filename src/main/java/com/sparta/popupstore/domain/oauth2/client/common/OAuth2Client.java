@@ -11,4 +11,6 @@ public interface OAuth2Client {
     OAuth2UserInfo getUserInfo(String accessToken);
 
     boolean supports(OAuth2Provider provider);
+
+    Object callbackTest(String authorizationCode);
 }
