@@ -61,7 +61,7 @@ public class PopupStore extends BaseEntity {
 
     public PopupStore update(PopupStoreUpdateRequestDto requestDto) {
         this.name = requestDto.getName() != null ? requestDto.getName() : this.name;
-        this.contents = requestDto.getContent() != null ? requestDto.getContent() : this.contents;
+        this.contents = requestDto.getContents() != null ? requestDto.getContents() : this.contents;
         this.price = requestDto.getPrice() != null ? Integer.parseInt(requestDto.getPrice()) : this.price;
         //this.address = address update
         this.startDate = requestDto.getStartDate() != null ? requestDto.getStartDate() : this.startDate;
