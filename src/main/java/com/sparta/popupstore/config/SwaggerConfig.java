@@ -18,8 +18,8 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("CodeArena Swagger")
-                .description("CodeArena 유저 및 인증 , ps, 알림에 관한 REST API")
+                .title("SpotOn 팝업스토어 플랫폼")
+                .description("팝업스토어 예약, 확인 및 검색, QR 코드 등 RestFul API")
                 .version("1.0.0");
     }
 }
