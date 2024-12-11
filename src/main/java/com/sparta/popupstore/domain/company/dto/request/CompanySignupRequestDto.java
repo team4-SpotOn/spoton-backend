@@ -20,8 +20,6 @@ public class CompanySignupRequestDto {
     private String ceoName;
     @NotBlank(message = "회사명을 입력해 주세요.")
     private String name;
-    @NotBlank(message = "회사 주소를 입력해 주세요.")
-    private String address;
     @NotBlank(message = "회사 전화번호를 입력해 주세요.")
     private String phone;
     @NotBlank(message = "회사 사이트를 입력해 주세요.")
@@ -35,7 +33,6 @@ public class CompanySignupRequestDto {
                 .password(encodedPassword)
                 .ceoName(this.ceoName)
                 .name(this.name)
-                .address(this.address)
                 .phone(this.phone)
                 .website(this.website)
                 .businessLicense(this.businessLicense)
