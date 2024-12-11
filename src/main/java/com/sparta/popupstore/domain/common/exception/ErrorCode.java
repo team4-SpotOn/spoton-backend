@@ -37,9 +37,9 @@ public enum ErrorCode {
     PASSWORD_MISS_MATCH(HttpStatus.BAD_REQUEST, "비밀번호를 다시 입력해주세요."),
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "로그인 토큰이 없습니다."),
     INVALID_TOKEN_ERROR(HttpStatus.UNAUTHORIZED, "잘못된 토큰 정보입니다."),
-    UNKNOWN_PROVIDER(HttpStatus.BAD_REQUEST, "지원하지 않는 소셜 로그인입니다."),
-    SOCIAL_TOKEN_FAULT(HttpStatus.UNAUTHORIZED, "소셜 로그인 토큰 조회 실패"),
-    SOCIAL_USERINFO_FAULT(HttpStatus.BAD_REQUEST, "소셜 로그인 유저 정보 조회 실패"),
+    UNKNOWN_PROVIDER(HttpStatus.BAD_REQUEST, "지원하지 않는 OAuth Provider 입니다."),
+    SOCIAL_TOKEN_ERROR(HttpStatus.UNAUTHORIZED, "소셜 로그인 토큰 조회 실패"),
+    SOCIAL_USERINFO_ERROR(HttpStatus.BAD_REQUEST, "소셜 로그인 유저 정보 조회 실패"),
 
     //image
     NOT_CORRECT_FORMAT(HttpStatus.BAD_REQUEST, "올바른 파일 형식이 아닙니다."),
