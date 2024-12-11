@@ -28,7 +28,7 @@ public class PopupStoreUpdateRequestDto {
     private String price;
     @NotBlank(message = "팝업스토어 내용을 입력해주세요.")
     private String content;
-    private String imagePath;
+    private String imageUrl;
     @NotBlank(message = "팝업스토어 주소를 입력해주세요.")
     private String address;
 }

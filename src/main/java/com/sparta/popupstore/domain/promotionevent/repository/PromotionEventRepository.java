@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface PromotionEventRepository extends JpaRepository<PromotionEvent, Long> {
@@ -28,6 +30,8 @@ public interface PromotionEventRepository extends JpaRepository<PromotionEvent, 
     @Modifying
     @Query("update PromotionEvent p set p.deletedAt = now() where p.endDateTime <= now() and p.deletedAt is null")
     void softDeletePromotionEventByTerminated();
+
+    List<PromotionEvent> findAllByEndDateTimeBeforeAndDeletedAtIsNull(LocalDateTime now);
 
 //    추후에 스케쥴러에서 쓰일 수도 있을 것 같아서 일단 주석으로 냅두겠습니당
 //    @Modifying

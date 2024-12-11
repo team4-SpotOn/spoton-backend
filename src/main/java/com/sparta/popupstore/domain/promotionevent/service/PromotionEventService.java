@@ -82,6 +82,9 @@ public class PromotionEventService {
         if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())){
             throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
         }
+        if(ValidUtil.isValidNullAndEmpty(promotionEvent.getImageUrl())){
+            s3ImageService.deleteImage(promotionEvent.getImageUrl());
+        }
         promotionEventRepository.deletePromotionEvent(promotionEventId);
     }
 
