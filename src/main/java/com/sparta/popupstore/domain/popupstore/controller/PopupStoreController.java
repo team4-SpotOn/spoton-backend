@@ -1,6 +1,7 @@
 package com.sparta.popupstore.domain.popupstore.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthCompany;
+import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
@@ -9,6 +10,7 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
+import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +31,7 @@ public class PopupStoreController {
 
     private final PopupStoreService popupStoreService;
 
-    @Operation(summary = "팝업스토어 생성")
+    @Operation(summary = "회사 - 팝업스토어 생성")
     @Parameter(name = "name", description = "팝업스토어 명")
     @Parameter(name = "content", description = "팝업스토어 내용")
     @Parameter(name = "price", description = "팝업스토어 가격")
@@ -85,7 +87,7 @@ public class PopupStoreController {
         return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, company, requestDto));
     }
 
-    @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
+    @Operation(summary = "전체 - 팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
     @GetMapping("/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(
             @PathVariable Long popupStoreId,
