@@ -30,7 +30,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -42,6 +41,7 @@ public class PopupStoreService {
     private final KakaoAddressService kakaoAddressService;
     private final PopupStoreOperatingRepository popupStoreOperatingRepository;
     private final S3ImageService s3ImageService;
+    private final PopupStoreOperatingService popupStoreOperatingService;
 
     // 팝업스토어 생성
     @Transactional
@@ -64,7 +64,7 @@ public class PopupStoreService {
         popupStore.updateAddress(address);
 
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+                .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -78,7 +78,7 @@ public class PopupStoreService {
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+                .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -103,43 +103,13 @@ public class PopupStoreService {
         }
 
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+                .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
                 .filter(Objects::nonNull)
                 .toList();
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
         return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), popupStoreOperatingRepository.saveAll(operatingList));
-    }
-
-    // 운영 시간 처리 로직
-    private PopupStoreOperating createOperatingHours(PopupStore popupStore, DayOfWeek dayOfWeek, Map<DayOfWeek, LocalTime> startTimes, Map<DayOfWeek, LocalTime> endTimes) {
-        LocalTime startTime = startTimes.get(dayOfWeek);
-        LocalTime endTime = endTimes.get(dayOfWeek);
-
-        if (startTime == null && endTime == null) {
-            return null;
-        }
-
-        if (startTime == null || endTime == null) {
-            throw new CustomApiException(ErrorCode.POPUP_STORE_OPERATING_BAD_REQUEST);
-        }
-
-        return PopupStoreOperating.builder()
-                .popupStore(popupStore)
-                .dayOfWeek(dayOfWeek)
-                .startTime(startTime)
-                .endTime(endTime)
-                .build();
-    }
-
-    private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
-        List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
-        List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
-                                                                            .map(PopupStoreImageRequestDto::toEntity)
-                                                                            .toList();
-        popupStoreImageList.forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
-        popupStore.updateImages(requestImageList);
     }
 
     // 팝업스토어 진행여부 판단
