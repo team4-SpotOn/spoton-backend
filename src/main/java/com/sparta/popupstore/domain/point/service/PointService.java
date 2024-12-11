@@ -1,5 +1,7 @@
 package com.sparta.popupstore.domain.point.service;
 
+import com.sparta.popupstore.domain.point.dto.request.PointChargeRequestDto;
+import com.sparta.popupstore.domain.point.dto.response.PointChargeResponseDto;
 import com.sparta.popupstore.domain.point.entity.PointChargedLog;
 import com.sparta.popupstore.domain.point.entity.PointUsedLog;
 import com.sparta.popupstore.domain.point.repository.PointChargedLogRepository;
@@ -16,39 +18,18 @@ public class PointService {
     private final PointChargedLogRepository pointChargedLogRepository;
     private final PointUsedLogRepository pointUsedLogRepository;
 
-    public PointChargedLog pointCharge(User user, PointChargedLog chargeLog) {
-       int totalPoint = totalPoint(user);
-
-       PointChargedLog pointChargedLog = new PointChargedLog(
-           chargeLog.getId(),
-           chargeLog.getUser(),
-           chargeLog.getPrevPoint(),
-           chargeLog.getChargedPoint(),
-           chargeLog.getChargedAt()
-       );
-
-       return pointChargedLogRepository.save(pointChargedLog);
+    public PointChargeResponseDto pointCharge(User user, PointChargeRequestDto chargeRequest) {
+      PointChargedLog chargedLog = chargeRequest.toEntity(user);
+      user.Point(chargeRequest.getChargedPoint());
+      chargedLog = pointChargedLogRepository.save(chargedLog);
+      return new PointChargeResponseDto(chargedLog);
     }
 
-    public List<PointChargedLog> pointChargeLogs(PointChargedLog chargeLog) {
-        return pointChargedLogRepository.findByChargedPoint(chargeLog.getId());
+    public List<PointChargedLog> pointChargeLogs(User user) {
+      return pointChargedLogRepository.findByUserId(user.getId());
     }
 
     public List<PointUsedLog> pointUsedLogs(PointUsedLog usedLog) {
         return pointUsedLogRepository.findByUsedPoint(usedLog.getId());
-    }
-
-    private int totalPoint(User user){
-        int totalCharged = pointChargedLogRepository.findByChargedPoint(user.getId())
-            .stream()
-            .mapToInt(PointChargedLog::getChargedPoint)
-            .sum();
-
-        int totalUsed = pointUsedLogRepository.findByUsedPoint(user.getId())
-            .stream()
-            .mapToInt(PointUsedLog::getUsedPoint)
-            .sum();
-
-        return totalCharged - totalUsed;
     }
 }

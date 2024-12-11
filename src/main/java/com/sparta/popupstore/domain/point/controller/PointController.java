@@ -1,6 +1,9 @@
 package com.sparta.popupstore.domain.point.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
+import com.sparta.popupstore.domain.point.dto.request.PointChargeRequestDto;
+import com.sparta.popupstore.domain.point.dto.response.PointChargeResponseDto;
+import com.sparta.popupstore.domain.point.dto.response.PointChargedLogResponseDto;
 import com.sparta.popupstore.domain.point.entity.PointChargedLog;
 import com.sparta.popupstore.domain.point.entity.PointUsedLog;
 import com.sparta.popupstore.domain.point.service.PointService;
@@ -23,15 +26,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class PointController {
   private final PointService pointService;
 
-  @PostMapping("/charge")
-  public ResponseEntity<PointChargedLog> pointCharged(@AuthUser User user,@RequestBody PointChargedLog pointChargedLog) {
-    pointService.pointCharge(user, pointChargedLog);
-    return ResponseEntity.status(HttpStatus.CREATED).body(pointChargedLog);
+  @PostMapping("/charge/{userId}")
+  public ResponseEntity<PointChargeResponseDto> pointCharged(@AuthUser User user,@RequestBody PointChargeRequestDto chargeRequest) {
+    PointChargeResponseDto result = pointService.pointCharge(user, chargeRequest);
+    return ResponseEntity.status(HttpStatus.CREATED).body(result);
   }
 
   @GetMapping("/charge")
-  public ResponseEntity<List<PointChargedLog>> pointChargeLoge(@AuthUser User user,@RequestBody PointChargedLog pointChargedLog) {
-    List<PointChargedLog> chargedLogs = pointService.pointChargeLogs(pointChargedLog);
+  public ResponseEntity<List<PointChargedLog>> pointChargeLoge(@AuthUser User user) {
+    List<PointChargedLog> chargedLogs = pointService.pointChargeLogs(user);
     return ResponseEntity.ok(chargedLogs);
   }
 
