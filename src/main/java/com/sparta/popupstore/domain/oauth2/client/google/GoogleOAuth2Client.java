@@ -71,9 +71,6 @@ public class GoogleOAuth2Client implements OAuth2Client {
 
     @Override
     public OAuth2UserInfo getUserInfo(String accessToken) {
-        var body = new LinkedMultiValueMap<String, String>();
-        body.add("scope", scope);
-
         return Optional.ofNullable(
                 restClient.get()
                         .uri(RESOURCE_SERVER_URL)
