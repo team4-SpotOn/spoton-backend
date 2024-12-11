@@ -50,13 +50,13 @@ public class S3ImageService {
                 .toList();
     }
 
-    public void deleteImage(ImageRequestDto imageRequestDto) {
-        if(!imageRequestDto.getFileName().contains(baseUrl)){
+    public void deleteImage(String fileName) {
+        if(!fileName.contains(baseUrl)){
             throw new CustomApiException(ErrorCode.NOT_CORRECT_URL_FORMAT);
         }
-        String fileName = imageRequestDto.getFileName().substring(baseUrl.length());
+        String key = fileName.substring(baseUrl.length());
         try{
-            amazonS3.deleteObject(bucket, fileName);
+            amazonS3.deleteObject(bucket, key);
         }
         catch (AmazonS3Exception e){
             throw new CustomApiException(ErrorCode.FAIL_DELETE_IMAGE_FILE);

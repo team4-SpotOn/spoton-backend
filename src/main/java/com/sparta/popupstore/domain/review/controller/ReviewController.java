@@ -41,11 +41,12 @@ public class ReviewController {
             .body(reviewService.createReview(user,popupStoreId, requestDto));
     }
 
-    @Operation(summary = "리뷰생성")
+    @Operation(summary = "리뷰수정")
     @Parameter(name = "popupStoreId", description = "팝업스토어 고유번호")
     @Parameter(name = "contents", description = "수정된 리뷰내용")
     @Parameter(name = "star", description = "수정된 별점")
     @Parameter(name = "name", description = "유저이름")
+    @Parameter(name = "imageUrl", description = "이미지 경로")
     @PatchMapping("/{reviewId}")
     public ResponseEntity<ReviewUpdateResponseDto> updateReview(@AuthUser User user, @PathVariable Long reviewId, @RequestBody ReviewUpdateRequestDto updateRequestDto) {
         return ResponseEntity.ok(reviewService.updateReview(user, reviewId, updateRequestDto));
