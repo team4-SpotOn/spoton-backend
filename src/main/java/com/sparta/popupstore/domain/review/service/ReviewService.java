@@ -34,15 +34,13 @@ public class ReviewService {
     private final ReservationRepository reservationRepository;
     private final S3ImageService s3ImageService;
 
-    public ReviewCreateResponseDto createReview(User user,Long popupStoreId, ReviewCreateRequestDto requestDto) {
+    public ReviewCreateResponseDto createReview(User user, Long popupStoreId, ReviewCreateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-            .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-
-        boolean hasVisitedOrReserved = reservationRepository.existsByUserAndPopupStore(user, popupStore);
-
-        if (!hasVisitedOrReserved) {
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+        if(!reservationRepository.existsByUserAndPopupStore(user, popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_RESERVATION);
         }
+
         Review review = requestDto.toEntity(user, popupStore);
         review = reviewRepository.save(review);
         return new ReviewCreateResponseDto(review);
@@ -51,27 +49,29 @@ public class ReviewService {
     @Transactional
     public ReviewUpdateResponseDto updateReview(User user, Long reviewId, ReviewUpdateRequestDto updateRequestDto) {
         Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
-        if (!review.getUser().getId().equals(user.getId())) {
+                .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
+        if(!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_NOT_UPDATE);
         }
-        if(ValidUtil.isValidNullAndEmpty(review.getImageUrl()) &&!Objects.equals(review.getImageUrl(), updateRequestDto.getImageUrl())) {
-                s3ImageService.deleteImage(review.getImageUrl());
+
+        if(ValidUtil.isValidNullAndEmpty(review.getImageUrl()) && !Objects.equals(review.getImageUrl(), updateRequestDto.getImageUrl())) {
+            s3ImageService.deleteImage(review.getImageUrl());
         }
         review.update(
-            updateRequestDto.getContents(),
-            updateRequestDto.getStar(),
-            updateRequestDto.getImageUrl()
+                updateRequestDto.getContents(),
+                updateRequestDto.getStar(),
+                updateRequestDto.getImageUrl()
         );
         return new ReviewUpdateResponseDto(review);
     }
 
-    public void deleteReview(User user, Long reviewId){
+    public void deleteReview(User user, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
-        if (!review.getUser().getId().equals(user.getId())) {
+                .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
+        if(!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_CANT_DELETE);
         }
+
         if(ValidUtil.isValidNullAndEmpty(review.getImageUrl())) {
             s3ImageService.deleteImage(review.getImageUrl());
         }
@@ -79,7 +79,6 @@ public class ReviewService {
     }
 
     public Page<ReviewFindAllResponseDto> findReview(Long popupStoreId, Pageable pageable) {
-        return reviewRepository.findByPopupStoreId(popupStoreId, pageable)
-            .map(ReviewFindAllResponseDto::new);
+        return reviewRepository.findByPopupStoreId(popupStoreId, pageable).map(ReviewFindAllResponseDto::new);
     }
 }
