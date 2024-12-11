@@ -35,7 +35,7 @@ public class ReviewService {
 
     public ReviewCreateResponseDto createReview(User user,Long popupStoreId, ReviewCreateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-            .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+            .orElseThrow(() ->  new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
         boolean hasVisitedOrReserved = reservationRepository.existsByUserAndPopupStore(user, popupStore);
 
