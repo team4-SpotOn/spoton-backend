@@ -17,6 +17,8 @@ import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreOperatingRepository;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.domain.user.entity.User;
+import com.sparta.popupstore.domain.user.entity.UserRole;
 import com.sparta.popupstore.web.WebUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,17 +26,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -43,13 +41,14 @@ public class PopupStoreService {
     private final PopupStoreRepository popupStoreRepository;
     private final KakaoAddressService kakaoAddressService;
     private final PopupStoreOperatingRepository popupStoreOperatingRepository;
-    private final String UPLOAD_URL = "uploads";
     private final S3ImageService s3ImageService;
 
-
+    // 팝업스토어 생성
     @Transactional
     public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company));
+
+        // 이미지 URL 추가
         popupStore.addImageList(
                 requestDto.getImages()
                         .stream()
@@ -91,7 +90,8 @@ public class PopupStoreService {
 
         this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
-        return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
+
+        return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore.update(requestDto)), updateOperatingHours(popupStore, requestDto.getStartTimes(), requestDto.getEndTimes()));
     }
 
     // 회사 - 팝업 스토어 수정
@@ -108,26 +108,49 @@ public class PopupStoreService {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
 
-        List<PopupStoreOperating> popupStoreOperatingList = new ArrayList<>();
-        for (String day : requestDto.getStartTimes().keySet()) {
-            DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
-            LocalTime startTime = requestDto.getStartTimes().get(day);
-            LocalTime endTime = requestDto.getEndTimes().get(day);
-
-            PopupStoreOperating operating = PopupStoreOperating.builder()
-                    .popupStore(popupStore)
-                    .dayOfWeek(dayOfWeek)
-                    .startTime(startTime)
-                    .endTime(endTime)
-                    .build();
-            popupStoreOperatingList.add(operating);
-            popupStoreOperatingRepository.save(operating);
-        }
+        updateOperatingHours(popupStore, requestDto.getStartTimes(), requestDto.getEndTimes());
+        popupStore.update(requestDto);
 
         this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
+        return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore.update(requestDto)), updateOperatingHours(popupStore, requestDto.getStartTimes(), requestDto.getEndTimes()));
+    }
 
-        return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
+    // 운영 시간 처리 로직
+    private List<PopupStoreOperating> processOperatingHours(PopupStore popupStore, Map<String, LocalTime> startTimes, Map<String, LocalTime> endTimes) {
+        return startTimes.keySet().stream()
+                .map(day -> {
+                    DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
+                    LocalTime startTime = startTimes.get(day);
+                    LocalTime endTime = endTimes.get(day);
+
+                    if (startTime == null && endTime == null) {
+                        return PopupStoreOperating.builder()
+                                .popupStore(popupStore)
+                                .dayOfWeek(dayOfWeek)
+                                .startTime(null)
+                                .endTime(null)
+                                .build();
+                    }
+
+                    if (startTime == null || endTime == null) {
+                        throw new CustomApiException(ErrorCode.POPUP_STORE_OPERATING_BAD_REQUEST);
+                    }
+
+                    return PopupStoreOperating.builder()
+                            .popupStore(popupStore)
+                            .dayOfWeek(dayOfWeek)
+                            .startTime(startTime)
+                            .endTime(endTime)
+                            .build();
+                })
+                .toList();
+    }
+
+    // 운영 시간 수정
+    private List<PopupStoreOperating> updateOperatingHours(PopupStore popupStore, Map<String, LocalTime> startTimes, Map<String, LocalTime> endTimes) {
+        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
+        return popupStoreOperatingRepository.saveAll(processOperatingHours(popupStore, startTimes, endTimes));
     }
 
     private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
@@ -139,6 +162,7 @@ public class PopupStoreService {
         popupStore.updateImages(requestImageList);
     }
 
+    // 팝업스토어 진행여부 판단
     private boolean isEditable(PopupStore popupStore) {
         return popupStore.getStartDate().isAfter(LocalDate.now());
     }
