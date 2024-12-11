@@ -42,11 +42,4 @@ public class PromotionEventEndCouponDeleteScheduler {
         log.info("softDeleteCoupon 스케줄러");
         couponRepository.softDeleteCouponByExpiration();
     }
-
-    @Transactional
-    @Scheduled(fixedRate = 3600001) // 1시간마다 실행
-    public void softDeletePromotionEvent(){
-        log.info("이벤트 softDelete 스케줄러");
-        promotionEventRepository.softDeletePromotionEventByTerminated();
-    }
 }

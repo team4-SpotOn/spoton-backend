@@ -91,6 +91,9 @@ public class PromotionEventService {
     @Transactional
     public CouponCreateResponseDto couponApplyAndIssuance(Long promotionEventId, User user) {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
+        if(promotionEvent.getEndDateTime().isBefore(LocalDateTime.now())){
+            throw new CustomApiException(ErrorCode.PROMOTION_EVENT_END);
+        }
         if(promotionEvent.getCouponGetCount() == promotionEvent.getTotalCount()){
             throw new CustomApiException(ErrorCode.COUPON_SOLD_OUT);
         }
