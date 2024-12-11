@@ -193,6 +193,7 @@ public class PopupStoreService {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
         popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
+        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         popupStoreRepository.deleteById(popupStoreId);
     }
 
@@ -200,6 +201,7 @@ public class PopupStoreService {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
         popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
+        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         popupStoreRepository.deleteById(popupStoreId);
     }
 
