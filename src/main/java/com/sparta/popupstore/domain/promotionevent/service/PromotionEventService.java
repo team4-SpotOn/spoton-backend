@@ -82,12 +82,18 @@ public class PromotionEventService {
         if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())){
             throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
         }
+        if(ValidUtil.isValidNullAndEmpty(promotionEvent.getImageUrl())){
+            s3ImageService.deleteImage(promotionEvent.getImageUrl());
+        }
         promotionEventRepository.deletePromotionEvent(promotionEventId);
     }
 
     @Transactional
     public CouponCreateResponseDto couponApplyAndIssuance(Long promotionEventId, User user) {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
+        if(promotionEvent.getEndDateTime().isBefore(LocalDateTime.now())){
+            throw new CustomApiException(ErrorCode.PROMOTION_EVENT_END);
+        }
         if(promotionEvent.getCouponGetCount() == promotionEvent.getTotalCount()){
             throw new CustomApiException(ErrorCode.COUPON_SOLD_OUT);
         }
@@ -97,9 +103,9 @@ public class PromotionEventService {
     }
 
     private PromotionEvent getPromotionEvent(Long promotionEventId) {
-        return promotionEventRepository.findByPromotionEventId(promotionEventId)
+        return promotionEventRepository.findById(promotionEventId)
                 .orElseThrow(
-                        ()-> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT)
+                        ()-> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND)
                 );
     }
 }
