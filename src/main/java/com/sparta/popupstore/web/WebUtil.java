@@ -16,8 +16,8 @@ public class WebUtil {
         ResponseCookie cookie = ResponseCookie.from(name)
                 .path("/")
                 .maxAge(VIEW_TOKEN_LIFETIME)
-                .httpOnly(true)  // HTTP 전용으로 설정
-                .sameSite("Strict")  // SameSite 속성 설정
+                .httpOnly(true)
+                .sameSite("Strict")  // 설정 고민해봐야될 듯...
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
