@@ -68,6 +68,12 @@ public class PopupStore extends BaseEntity {
         this.endDate = requestDto.getEndDate() != null ? requestDto.getEndDate() : this.endDate;
     }
 
+
+    // 위도,경도 저장을 위한 address 업데이트
+    public void updateAddress(Address address) {
+        this.address = address;
+    }
+
     public void viewPopupStore() {
         this.view += 1;
     }
