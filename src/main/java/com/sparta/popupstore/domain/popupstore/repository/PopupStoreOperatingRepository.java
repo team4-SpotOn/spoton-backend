@@ -8,8 +8,5 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface PopupStoreOperatingRepository extends JpaRepository<PopupStoreOperating, Long> {
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM PopupStoreOperating po WHERE po.popupStore = :popupStore")
     void deleteByPopupStore(PopupStore popupStore);
 }
