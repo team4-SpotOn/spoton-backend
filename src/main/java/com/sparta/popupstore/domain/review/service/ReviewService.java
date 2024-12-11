@@ -71,6 +71,9 @@ public class ReviewService {
         if (!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_CANT_DELETE);
         }
+        if(review.getImageUrl() != null && !review.getImageUrl().isEmpty()) {
+            s3ImageService.deleteImage(review.getImageUrl());
+        }
         reviewRepository.delete(review);
     }
 
