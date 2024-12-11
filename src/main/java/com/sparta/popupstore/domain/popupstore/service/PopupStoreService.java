@@ -13,12 +13,16 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
+import com.sparta.popupstore.domain.popupstore.repository.PopupStoreImageRepository;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.s3.S3ImageService;
 import com.sparta.popupstore.web.WebUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -44,7 +48,9 @@ public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
     private final KakaoAddressService kakaoAddressService;
+    private final PopupStoreImageRepository popupStoreImageRepository;
     private final String UPLOAD_URL = "uploads";
+    private final S3ImageService s3ImageService;
 
 
     @Transactional
@@ -84,13 +90,25 @@ public class PopupStoreService {
 
     // 관리자 - 팝업 스토어 수정
     @Transactional
-    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
+    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
-        if (imageFile != null) saveImageFile(imageFile);
-        popupStore.update(requestDto);
+        List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
+        List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
+                                                                            .map(PopupStoreImageRequestDto::toEntity)
+                                                                            .toList();
+        popupStoreImageList.stream()
+                .filter(image ->
+                        !requestImageList.contains(image)
+                )
+                .forEach(image -> {
+                    s3ImageService.deleteImage(image.getImageUrl());
+                    popupStoreImageList.remove(image);
+                });
 
+        popupStore.updateImages(requestImageList);
+        popupStore.update(requestDto);
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
     }
 
