@@ -16,14 +16,39 @@ public class PointService {
     private final PointChargedLogRepository pointChargedLogRepository;
     private final PointUsedLogRepository pointUsedLogRepository;
 
-    public PointChargedLog pointCharge(User user, PointChargedLog pointChargedLog) {
-        return null;
+    public PointChargedLog pointCharge(User user, PointChargedLog chargeLog) {
+       int totalPoint = totalPoint(user);
+
+       PointChargedLog pointChargedLog = new PointChargedLog(
+           chargeLog.getId(),
+           chargeLog.getUser(),
+           chargeLog.getPrevPoint(),
+           chargeLog.getChargedPoint(),
+           chargeLog.getChargedAt()
+       );
+
+       return pointChargedLogRepository.save(pointChargedLog);
     }
 
-    public List<PointChargedLog> pointChargeLog() {
-        return null;
+    public List<PointChargedLog> pointChargeLogs(PointChargedLog chargeLog) {
+        return pointChargedLogRepository.findByChargedPoint(chargeLog.getId());
     }
-    public List<PointUsedLog> pointUsedLogs() {
-        return null;
+
+    public List<PointUsedLog> pointUsedLogs(PointUsedLog usedLog) {
+        return pointUsedLogRepository.findByUsedPoint(usedLog.getId());
+    }
+
+    private int totalPoint(User user){
+        int totalCharged = pointChargedLogRepository.findByChargedPoint(user.getId())
+            .stream()
+            .mapToInt(PointChargedLog::getChargedPoint)
+            .sum();
+
+        int totalUsed = pointUsedLogRepository.findByUsedPoint(user.getId())
+            .stream()
+            .mapToInt(PointUsedLog::getUsedPoint)
+            .sum();
+
+        return totalCharged - totalUsed;
     }
 }

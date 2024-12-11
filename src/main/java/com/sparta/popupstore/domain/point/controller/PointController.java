@@ -6,7 +6,10 @@ import com.sparta.popupstore.domain.point.entity.PointUsedLog;
 import com.sparta.popupstore.domain.point.service.PointService;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,17 +24,20 @@ public class PointController {
   private final PointService pointService;
 
   @PostMapping("/charge")
-  public PointChargedLog pointCharge(@AuthUser User user,@RequestBody PointChargedLog pointChargedLog) {
-    return null;
+  public ResponseEntity<PointChargedLog> pointCharged(@AuthUser User user,@RequestBody PointChargedLog pointChargedLog) {
+    pointService.pointCharge(user, pointChargedLog);
+    return ResponseEntity.status(HttpStatus.CREATED).body(pointChargedLog);
   }
 
   @GetMapping("/charge")
-  public PointChargedLog pointChargeLoge(@AuthUser User user,@RequestBody PointChargedLog pointChargedLog) {
-    return null;
+  public ResponseEntity<List<PointChargedLog>> pointChargeLoge(@AuthUser User user,@RequestBody PointChargedLog pointChargedLog) {
+    List<PointChargedLog> chargedLogs = pointService.pointChargeLogs(pointChargedLog);
+    return ResponseEntity.ok(chargedLogs);
   }
 
-  @GetMapping("/use")
-  public PointUsedLog pointUsedLog(@AuthUser User user,@RequestBody PointUsedLog pointUsedLog) {
-    return null;
+  @GetMapping("/used")
+  public ResponseEntity<List<PointUsedLog>> pointUsedLog(@AuthUser User user,@RequestBody PointUsedLog pointUsedLog) {
+    List<PointUsedLog> UsedLogs = pointService.pointUsedLogs(pointUsedLog);
+    return ResponseEntity.ok(UsedLogs);
   }
 }
