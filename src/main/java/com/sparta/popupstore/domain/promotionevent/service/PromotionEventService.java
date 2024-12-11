@@ -100,7 +100,7 @@ public class PromotionEventService {
     }
 
     private PromotionEvent getPromotionEvent(Long promotionEventId) {
-        return promotionEventRepository.findByPromotionEventId(promotionEventId)
+        return promotionEventRepository.findByIdAndDeletedAtIsNull(promotionEventId)
                 .orElseThrow(
                         ()-> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT)
                 );
