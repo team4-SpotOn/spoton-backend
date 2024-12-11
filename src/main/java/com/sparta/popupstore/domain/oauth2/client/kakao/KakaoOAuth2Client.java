@@ -54,12 +54,12 @@ public class KakaoOAuth2Client implements OAuth2Client {
                                 .body(body)
                                 .retrieve()
                                 .onStatus(HttpStatusCode::isError, (req, resp) -> {
-                                    throw new CustomApiException(ErrorCode.SOCIAL_TOKEN_FAULT);
+                                    throw new CustomApiException(ErrorCode.SOCIAL_TOKEN_ERROR);
                                 })
                                 .body(KakaoTokenResponse.class)
                 )
                 .map(KakaoTokenResponse::accessToken)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_TOKEN_FAULT));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_TOKEN_ERROR));
     }
 
     @Override
@@ -75,10 +75,10 @@ public class KakaoOAuth2Client implements OAuth2Client {
                         .body(body)
                         .retrieve()
                         .onStatus(HttpStatusCode::isError, (req, resp) -> {
-                            throw new CustomApiException(ErrorCode.SOCIAL_USERINFO_FAULT);
+                            throw new CustomApiException(ErrorCode.SOCIAL_USERINFO_ERROR);
                         })
                         .body(KakaoUserInfoResponse.class)
-        ).orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_USERINFO_FAULT));
+        ).orElseThrow(() -> new CustomApiException(ErrorCode.SOCIAL_USERINFO_ERROR));
     }
 
     @Override
