@@ -28,17 +28,20 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-
     @Operation(summary = "리뷰생성")
     @Parameter(name = "popupStoreId", description = "팝업스토어 고유번호")
     @Parameter(name = "contents", description = "리뷰내용")
     @Parameter(name = "star", description = "별점")
     @Parameter(name = "name", description = "유저이름")
     @PostMapping("/popupstores/{popupStoreId}")
-    public ResponseEntity<ReviewCreateResponseDto> createReview(@AuthUser User user ,@PathVariable Long popupStoreId, @RequestBody ReviewCreateRequestDto requestDto) {
+    public ResponseEntity<ReviewCreateResponseDto> createReview(
+            @AuthUser User user,
+            @PathVariable Long popupStoreId,
+            @RequestBody ReviewCreateRequestDto requestDto
+    ) {
         return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(reviewService.createReview(user,popupStoreId, requestDto));
+                .status(HttpStatus.CREATED)
+                .body(reviewService.createReview(user, popupStoreId, requestDto));
     }
 
     @Operation(summary = "리뷰수정")
@@ -48,16 +51,26 @@ public class ReviewController {
     @Parameter(name = "name", description = "유저이름")
     @Parameter(name = "imageUrl", description = "이미지 경로")
     @PatchMapping("/{reviewId}")
-    public ResponseEntity<ReviewUpdateResponseDto> updateReview(@AuthUser User user, @PathVariable Long reviewId, @RequestBody ReviewUpdateRequestDto updateRequestDto) {
-        return ResponseEntity.ok(reviewService.updateReview(user, reviewId, updateRequestDto));
+    public ResponseEntity<ReviewUpdateResponseDto> updateReview(
+            @AuthUser User user,
+            @PathVariable Long reviewId,
+            @RequestBody ReviewUpdateRequestDto updateRequestDto
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(reviewService.updateReview(user, reviewId, updateRequestDto));
     }
 
     @Operation(summary = "리뷰삭제")
     @DeleteMapping("/{reviewId}")
-    public ResponseEntity<Void> deleteReview(@AuthUser User user ,
-        @PathVariable Long reviewId) {
+    public ResponseEntity<Void> deleteReview(
+            @AuthUser User user,
+            @PathVariable Long reviewId
+    ) {
         reviewService.deleteReview(user, reviewId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @Operation(summary = "리뷰조회")
@@ -66,8 +79,12 @@ public class ReviewController {
     @Parameter(name = "star", description = "수정된 별점")
     @Parameter(name = "name", description = "유저이름")
     @GetMapping("/popupstores/{popupStoreId}")
-    public Page<ReviewFindAllResponseDto> findReviews(@PathVariable Long popupStoreId,
-        @PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return reviewService.findReview(popupStoreId, pageable);
+    public ResponseEntity<Page<ReviewFindAllResponseDto>> findReviews(
+            @PathVariable Long popupStoreId,
+            @PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(reviewService.findReview(popupStoreId, pageable));
     }
 }
