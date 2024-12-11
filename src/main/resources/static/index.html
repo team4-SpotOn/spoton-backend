@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SpotOn 팝업 스토어 플랫폼</title>
+    <link rel="stylesheet" href="css/popup.css">
+    <!-- font-awesome(폰트어썸) -->
+    <link crossorigin="anonymous"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+          integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+          referrerpolicy="no-referrer" rel="stylesheet"/>
+    <script src="apikey.js" type="text/javascript"></script>
+    <!-- 제이쿼리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      // 팝업스토어 단건조회
+      $(function () {
+        let popupStoreId = 1;
+        $.ajax({
+          type: "GET",
+          url: `/popupstores/${popupStoreId}`,
+          success: function (response) {
+            let popupName = response['name'];
+            let latitude = response['address']['latitude'];
+            let longitude = response['address']['longitude'];
+            let price = response['price'];
+            let startDate = response['startDate'];
+            let endDate = response['endDate'];
+            console.log(response);
+            const script = document.createElement("script");
+            const apiKey = config.apikey
+            script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer,services&`;
+            document.head.appendChild(script);
+            script.onload = () => {
+              kakao.maps.load(() => {
+                    const node = document.getElementById('OneMap'); // 지도를 표시할 div
+                    const center = new kakao.maps.LatLng(37.5666826, 126.9786567);
+                    const options = {
+                      center,
+                      level: 5
+                    };
+
+                    function relayout() {
+                      map.relayout();
+                    }
+
+                    const map = new kakao.maps.Map(node, options);
+                    var markerPosition = new kakao.maps.LatLng(latitude, longitude);
+                    var marker = new kakao.maps.Marker({
+                      position: markerPosition
+                    });
+                    marker.setMap(map);
+                    var iwContent = '<div style="padding:5px; width:150px; height:100px; color:#fff; background:#11264f;"><span style="width:100%; float:left; font-size:12px;">'
+                            + popupName
+                            + '</span> <span style="width:100%; float:left; font-size:12px;">금액 : ' + price
+                            + '원</span><span style="width:100%; float:left; font-size:12px;">시작일 : '
+                            + startDate
+                            + '</span><span style="width:100%; float:left; font-size:12px;">종료일 : '
+                            + endDate + '</span></div>',
+                        iwPosition = new kakao.maps.LatLng(latitude, longitude);
+                    var infowindow = new kakao.maps.InfoWindow({
+                      position: iwPosition,
+                      content: iwContent
+                    });
+                    infowindow.open(map, marker);
+                  }
+              )
+            };
+          }
+        });
+
+        // 추후에 쿠키로 체크해서 확인
+        $(document).on('click', ".reviewText", function () {
+          alert("리뷰는 로그인 해야만 등록이 가능합니다.");
+          return false;
+        })
+
+        $(".reviewSubmit").click(function () {
+          alert("리뷰는 로그인 해야만 등록이 가능합니다.");
+          return false;
+        })
+
+      })
+    </script>
+</head>
+<body>
+<h1>SpotOn 팝업스토어 플랫폼</h1>
+<div class="commonBox">
+    <div>
+        <div>
+
+            <!-- 팝업스토어 단건 전체 영역 -->
+            <div class="popupOneStoreBox">
+
+                <!-- 팝업스토어 이미지 영역 -->
+                <div class="popupImageBox">
+                    <img src="image.png" alt="팝업스토어 메인 이미지">
+                </div>
+                <!-- 팝업스토어 이름, 운영일, 주소 -->
+                <div class="popupContentBox">
+                    <div class="count">
+                        <span>1706</span><i class="fas fa-eye"></i>
+                    </div>
+                    <div class="popupName">치킨치킨 달려</div>
+                    <div class="popupPrice">입장료 : 45,000원</div>
+                    <div class="popupDate">2024.12.12 ~ 2024.12.31</div>
+                    <div class="popupAddress">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>대한민국 서울특별시 중구 소공동 세종대로18길 2</span>
+                    </div>
+                </div>
+
+                <!-- 팝업스토어 기타 사항 -->
+                <div class="popupEtcBox">
+                    <div>
+                        <div class="etcTop"><i class="fas fa-car-side"></i></div>
+                        <div><span>주차가능</span></div>
+                    </div>
+                    <div>
+                        <div class="etcTop"><i class="fas fa-ban"></i></div>
+                        <div><span>식음료 반입금지</span></div>
+                    </div>
+                    <div>
+                        <div class="etcTop"><i class="fas fa-wifi"></i></div>
+                        <div><span>와이파이 가능</span></div>
+                    </div>
+                    <div>
+                        <div class="etcTop"><i class="fas fa-paw"></i></div>
+                        <div><span>반려동물 동반</span></div>
+                    </div>
+                </div>
+
+
+                <!-- 팝업스토어 운영시간, 설명글 -->
+                <div class="popupOperatingBox">
+                    <div class="titleBox">운영 시간</div>
+                    <div class="operatingTime">
+                        <div>월요일 : 10:00 - 20:00 </div>
+                        <div>화요일 : 10:00 - 20:00 </div>
+                        <div>수요일 : 10:00 - 20:00 </div>
+                        <div>목요일 : 10:00 - 20:00 </div>
+                        <div>금요일 : 10:00 - 20:00 </div>
+                        <div>토요일 : 10:00 - 20:00 </div>
+                        <div>일요일 : 10:00 - 20:00 </div>
+                    </div>
+
+                    <div class="popupContentTitle">팝업스토어 소개)</div>
+                    <div class="popupTextArea">
+    <pre>
+    ㅣ𝐏𝐀𝐑𝐍𝐀𝐒 𝐌𝐀𝐋𝐋 𝐏𝐎𝐏-𝐔𝐏 𝐒𝐓𝐎𝐑𝐄
+    [Green Ambient: 공간을 채우는 향, 자연과 감각이 만나는 순간]
+    플랫츠 디퓨저의 프리런칭을 오프라인으로 선보이는 파르나스몰 팝업스토어에 초대합니다.
+
+
+    식물이 성장하는 데 필수적인 4가지 요소인 토양, 태양, 공기, 물에서 영감을 받은 플랫츠디퓨저
+    • 새벽 숲의 신비로움과 흙 내음을 담은 우디향 #EARTHY
+    • 햇살 가득한 들판의 싱그러운 풀 내음과 꽃향기를 담은 시트러스 향 #SUNDEW
+
+
+    📍 팝업 위치: 파르나스 B1F 에스컬레이터 옆 보이드 공간
+    📍 팝업 기간: 24.12.01 (일) - 12.24 (토)
+    📍 운영 시간: 오전 10시 30분 - 오후 10시
+
+    📍 PROMOTION
+    -팝업 기념 디퓨저 30% OFF
+    -전 제품 구매 시 기프트 포장
+    -인스타그램 이벤트 참여 시 플랫츠 기프트 증정
+    -팝업스토어 한정 식물세트 판매
+
+    설레는 연말을 기다리며, 자연의 향을 담은 플랫츠 디퓨저로 기분 좋은 선물을 마련해 보세요!✨
+    </pre>
+                    </div>
+                </div>
+                <!-- 팝업스토어 지도 -->
+                <div class="popupMapBox">
+                    <div class="resevationBox">
+                        <button type="button" class="mainBackColor resevationBtn">
+                            팝업 예약
+                        </button>
+                    </div>
+                    <div id="OneMap">
+                    </div>
+                </div>
+
+                <!-- 팝업스토어 리뷰 -->
+                <div class="popupReviewBox">
+
+                    <div class="reviewList">
+
+                    </div>
+
+                    <div class="reviewForm">
+                        <div class="reviewTitle">
+                            <span>리뷰 작성</span>
+                        </div>
+                        <div class="reviewRating">
+                                <span>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </span>
+                        </div>
+                        <div class="reviewContent">
+                            <textarea class="reviewText" placeholder="팝업스토어에 대한 리뷰를 남겨주세요. 리뷰는 로그인 해야만 남길 수 있습니다."></textarea>
+                        </div>
+                        <div class="reviewButtonBox">
+                            <input type="file" name="files">
+                            <button type="button" class="mainBorderColor subBtn">이미지 첨부</button>
+                            <button type="button" class="mainBackColor mainBtn reviewSubmit">리뷰 작성</button>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
