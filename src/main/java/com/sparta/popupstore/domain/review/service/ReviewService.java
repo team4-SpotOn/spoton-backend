@@ -13,12 +13,17 @@ import com.sparta.popupstore.domain.review.dto.response.ReviewUpdateResponseDto;
 import com.sparta.popupstore.domain.review.entity.Review;
 import com.sparta.popupstore.domain.review.repository.ReviewRepository;
 import com.sparta.popupstore.domain.user.entity.User;
+import com.sparta.popupstore.s3.S3ImageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -26,6 +31,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final PopupStoreRepository popupStoreRepository;
     private final ReservationRepository reservationRepository;
+    private final S3ImageService s3ImageService;
 
     public ReviewCreateResponseDto createReview(User user,Long popupStoreId, ReviewCreateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
@@ -36,7 +42,6 @@ public class ReviewService {
         if (!hasVisitedOrReserved) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_RESERVATION);
         }
-
         Review review = requestDto.toEntity(user, popupStore);
         review = reviewRepository.save(review);
         return new ReviewCreateResponseDto(review);
@@ -45,14 +50,17 @@ public class ReviewService {
     @Transactional
     public ReviewUpdateResponseDto updateReview(User user, Long reviewId, ReviewUpdateRequestDto updateRequestDto) {
         Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));;
-
+            .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
         if (!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_NOT_UPDATE);
         }
+        if(review.getImageUrl() != null && !review.getImageUrl().isEmpty() &&!Objects.equals(review.getImageUrl(), updateRequestDto.getImageUrl())) {
+                s3ImageService.deleteImage(review.getImageUrl());
+        }
         review.update(
             updateRequestDto.getContents(),
-            updateRequestDto.getStar()
+            updateRequestDto.getStar(),
+            updateRequestDto.getImageUrl()
         );
         return new ReviewUpdateResponseDto(review);
     }

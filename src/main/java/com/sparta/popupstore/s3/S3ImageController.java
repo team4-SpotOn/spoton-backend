@@ -50,7 +50,7 @@ public class S3ImageController {
     public ResponseEntity<Void> deleteImage(
             @RequestBody ImageRequestDto imageRequestDto
     ){
-        imageService.deleteImage(imageRequestDto);
+        imageService.deleteImage(imageRequestDto.getFileName());
         return ResponseEntity.noContent().build();
     }
 }
