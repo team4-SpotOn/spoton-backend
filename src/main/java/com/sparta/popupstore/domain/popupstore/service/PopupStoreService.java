@@ -14,7 +14,6 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneRes
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
-import com.sparta.popupstore.domain.popupstore.repository.PopupStoreImageRepository;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.s3.S3ImageService;
 import com.sparta.popupstore.web.WebUtil;
@@ -22,25 +21,16 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
-
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +38,6 @@ public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
     private final KakaoAddressService kakaoAddressService;
-    private final PopupStoreImageRepository popupStoreImageRepository;
     private final String UPLOAD_URL = "uploads";
     private final S3ImageService s3ImageService;
 
@@ -102,11 +91,7 @@ public class PopupStoreService {
                 .filter(image ->
                         !requestImageList.contains(image)
                 )
-                .forEach(image -> {
-                    s3ImageService.deleteImage(image.getImageUrl());
-                    popupStoreImageList.remove(image);
-                });
-
+                .forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
         popupStore.updateImages(requestImageList);
         popupStore.update(requestDto);
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));

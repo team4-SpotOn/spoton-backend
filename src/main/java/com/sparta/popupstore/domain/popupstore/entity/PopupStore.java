@@ -79,6 +79,7 @@ public class PopupStore extends BaseEntity {
     }
 
     public void updateImages(List<PopupStoreImage> imageList) {
+        this.popupStoreImageList.clear();
         this.popupStoreImageList.addAll(imageList.stream().map(image ->{
                     image.addPopupStore(this);
                     return image;
