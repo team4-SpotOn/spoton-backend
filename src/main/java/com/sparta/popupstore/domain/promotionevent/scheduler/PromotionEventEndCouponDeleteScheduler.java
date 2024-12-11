@@ -33,7 +33,7 @@ public class PromotionEventEndCouponDeleteScheduler {
                 s3ImageService.deleteImage(event.getImageUrl());
             }
         }
-        promotionEventRepository.deletePromotionEventByDeletedAtAfterSixMonths();
+        promotionEventRepository.deleteAllByQuery(eventList);
     }
 
     @Transactional
