@@ -1,11 +1,10 @@
-package com.sparta.popupstore.domain.popupstore.dto.response;
-
+package com.sparta.popupstore.domain.kakaoaddress.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class KakaoSearchApiDto {
+public class KakaoAddressApiDto {
 
     @JsonProperty("documents")
     private List<Document> documents;
@@ -32,8 +31,7 @@ public class KakaoSearchApiDto {
         private Double latitude;    // 위도
     }
 
-    public KakaoSearchApiDto() {
-        // 기본 생성자
-    }
 
+    public KakaoAddressApiDto() {
+    }
 }

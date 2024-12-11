@@ -4,10 +4,11 @@ import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.company.entity.Company;
+import com.sparta.popupstore.domain.kakaoaddress.dto.KakaoAddressApiDto;
+import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreImageRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.KakaoSearchApiDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
@@ -22,8 +23,10 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +43,7 @@ import java.time.LocalDate;
 public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
+    private final KakaoAddressService kakaoAddressService;
     private final String UPLOAD_URL = "uploads";
 
 
@@ -54,9 +58,9 @@ public class PopupStoreService {
         );
 
         // 카카오 주소 API - 위도 경도 구하기
-        KakaoSearchApiDto kakaoSearchApiDto = getKakaoAddress(requestDto.getAddress());
-        double latitude = kakaoSearchApiDto.getDocuments().get(0).getRoadAddress().getLatitude(); // 위도
-        double longitude = kakaoSearchApiDto.getDocuments().get(0).getRoadAddress().getLongitude(); // 경도
+        KakaoAddressApiDto kakaoAddressApiDto = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
+        double latitude = kakaoAddressApiDto.getDocuments().get(0).getRoadAddress().getLatitude(); // 위도
+        double longitude = kakaoAddressApiDto.getDocuments().get(0).getRoadAddress().getLongitude(); // 경도
         Address address = new Address(requestDto.getAddress(), latitude, longitude);
         popupStore.updateAddress(address);
 
@@ -154,24 +158,4 @@ public class PopupStoreService {
     public List<PopupStoreFindOneResponseDto> getPopupStoreAll(){
         return popupStoreRepository.findAll().stream().map(PopupStoreFindOneResponseDto::new).toList();
     }
-    // 카카오 주소 api service
-    @Value("${kakao.api.restful.key}")
-    private String restAPIKey;
-    public KakaoSearchApiDto getKakaoAddress(String address) {
-        String url = "https://dapi.kakao.com/v2/local/search/address.json?query="+address;
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", restAPIKey);
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<?> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<KakaoSearchApiDto> response = restTemplate.exchange(
-            url,
-            HttpMethod.GET,
-            entity,
-            KakaoSearchApiDto.class
-        );
-        return response.getBody();
-    }
-
 }

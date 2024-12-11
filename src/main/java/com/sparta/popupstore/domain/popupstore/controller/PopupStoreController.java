@@ -4,7 +4,6 @@ import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.KakaoSearchApiDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
@@ -100,11 +99,5 @@ public class PopupStoreController {
     @GetMapping("/popupstores")
     public ResponseEntity<List<PopupStoreFindOneResponseDto>> getPopupStoreAll() {
         return ResponseEntity.ok(popupStoreService.getPopupStoreAll());
-    }
-
-    @Operation(summary = "카카오 주소 API", description = "주소 기준 위도/경도 구하기")
-    @GetMapping("/popupstores/kakaoapi/{address}")
-    public KakaoSearchApiDto getKakaoAddress(@PathVariable String address) {
-        return popupStoreService.getKakaoAddress(address);
     }
 }
