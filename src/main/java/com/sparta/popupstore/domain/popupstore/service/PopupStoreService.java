@@ -33,6 +33,7 @@ import java.util.List;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -63,23 +64,12 @@ public class PopupStoreService {
         Address address = new Address(requestDto.getAddress(), latitude, longitude);
         popupStore.updateAddress(address);
 
-        List<PopupStoreOperating> popupStoreOperatingList = new ArrayList<>();
-        for (String day : requestDto.getStartTimes().keySet()) {
-            DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
-            LocalTime startTime = requestDto.getStartTimes().get(day);
-            LocalTime endTime = requestDto.getEndTimes().get(day);
+        List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
+                .map(dayOfWeek -> createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+                .filter(Objects::nonNull)
+                .toList();
 
-            PopupStoreOperating operating = PopupStoreOperating.builder()
-                    .popupStore(popupStore)
-                    .dayOfWeek(dayOfWeek)
-                    .startTime(startTime)
-                    .endTime(endTime)
-                    .build();
-            popupStoreOperatingList.add(operating);
-            popupStoreOperatingRepository.save(operating);
-        }
-
-        return new PopupStoreCreateResponseDto(popupStore, popupStoreOperatingList);
+        return new PopupStoreCreateResponseDto(popupStore, popupStoreOperatingRepository.saveAll(operatingList));
     }
 
     // 관리자 - 팝업 스토어 수정
@@ -88,10 +78,15 @@ public class PopupStoreService {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
-        this.updateImage(popupStore, requestDto);
-        popupStore.update(requestDto);
+        List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
+                .map(dayOfWeek -> createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+                .filter(Objects::nonNull)
+                .toList();
 
-        return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore.update(requestDto)), updateOperatingHours(popupStore, requestDto.getStartTimes(), requestDto.getEndTimes()));
+        this.updateImage(popupStore, requestDto);
+
+        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
+        return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), popupStoreOperatingRepository.saveAll(operatingList));
     }
 
     // 회사 - 팝업 스토어 수정
@@ -108,49 +103,35 @@ public class PopupStoreService {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
 
-        updateOperatingHours(popupStore, requestDto.getStartTimes(), requestDto.getEndTimes());
-        popupStore.update(requestDto);
-
+        List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
+                .map(dayOfWeek -> createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+                .filter(Objects::nonNull)
+                .toList();
+        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
-        return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore.update(requestDto)), updateOperatingHours(popupStore, requestDto.getStartTimes(), requestDto.getEndTimes()));
+        return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), popupStoreOperatingRepository.saveAll(operatingList));
     }
 
     // 운영 시간 처리 로직
-    private List<PopupStoreOperating> processOperatingHours(PopupStore popupStore, Map<String, LocalTime> startTimes, Map<String, LocalTime> endTimes) {
-        return startTimes.keySet().stream()
-                .map(day -> {
-                    DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
-                    LocalTime startTime = startTimes.get(day);
-                    LocalTime endTime = endTimes.get(day);
+    private PopupStoreOperating createOperatingHours(PopupStore popupStore, DayOfWeek dayOfWeek, Map<DayOfWeek, LocalTime> startTimes, Map<DayOfWeek, LocalTime> endTimes) {
+        LocalTime startTime = startTimes.get(dayOfWeek);
+        LocalTime endTime = endTimes.get(dayOfWeek);
 
-                    if (startTime == null && endTime == null) {
-                        return PopupStoreOperating.builder()
-                                .popupStore(popupStore)
-                                .dayOfWeek(dayOfWeek)
-                                .startTime(null)
-                                .endTime(null)
-                                .build();
-                    }
+        if (startTime == null && endTime == null) {
+            return null;
+        }
 
-                    if (startTime == null || endTime == null) {
-                        throw new CustomApiException(ErrorCode.POPUP_STORE_OPERATING_BAD_REQUEST);
-                    }
+        if (startTime == null || endTime == null) {
+            throw new CustomApiException(ErrorCode.POPUP_STORE_OPERATING_BAD_REQUEST);
+        }
 
-                    return PopupStoreOperating.builder()
-                            .popupStore(popupStore)
-                            .dayOfWeek(dayOfWeek)
-                            .startTime(startTime)
-                            .endTime(endTime)
-                            .build();
-                })
-                .toList();
-    }
-
-    // 운영 시간 수정
-    private List<PopupStoreOperating> updateOperatingHours(PopupStore popupStore, Map<String, LocalTime> startTimes, Map<String, LocalTime> endTimes) {
-        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        return popupStoreOperatingRepository.saveAll(processOperatingHours(popupStore, startTimes, endTimes));
+        return PopupStoreOperating.builder()
+                .popupStore(popupStore)
+                .dayOfWeek(dayOfWeek)
+                .startTime(startTime)
+                .endTime(endTime)
+                .build();
     }
 
     private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
