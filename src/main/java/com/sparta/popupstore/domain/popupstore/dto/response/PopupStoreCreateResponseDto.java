@@ -14,7 +14,7 @@ public class PopupStoreCreateResponseDto {
     @Schema(description = "생성된 팝업스토어 명")
     private final String name;
     @Schema(description = "생성된 팝업스토어 내용")
-    private final String content;
+    private final String contents;
     @Schema(description = "생성된 팝업스토어 가격")
     private final int price;
     @Schema(description = "생성된 팝업스토어 주소")
@@ -26,17 +26,16 @@ public class PopupStoreCreateResponseDto {
     @Schema(description = "생성된 팝업스토어 이미지 리스트")
     private final List<PopupStoreImageResponseDto> imageList;
     @Schema(description = "생성된 팝업스토어 운영시간")
-    private List<PopupStoreOperating> popupStoreOperatingList;
-
+    private final List<PopupStoreOperating> operatingList;
 
     public PopupStoreCreateResponseDto(PopupStore popupStore, List<PopupStoreOperating> popupStoreOperatingList) {
         this.name = popupStore.getName();
-        this.content = popupStore.getContents();
+        this.contents = popupStore.getContents();
         this.price = popupStore.getPrice();
         this.address = popupStore.getAddress();
         this.startDate = popupStore.getStartDate();
         this.endDate = popupStore.getEndDate();
-        this.popupStoreOperatingList = popupStoreOperatingList;
+        this.operatingList = popupStoreOperatingList;
         this.imageList = popupStore.getPopupStoreImageList().stream().map(PopupStoreImageResponseDto::new).toList();
     }
 }
