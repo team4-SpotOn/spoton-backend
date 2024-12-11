@@ -16,6 +16,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -132,4 +133,10 @@ public class PopupStoreService {
 
         popupStoreRepository.deleteById(popupStoreId);
     }
+
+    // 임시 팝업 스토어 전체목록(지도용)
+    public List<PopupStoreFindOneResponseDto> getPopupStoreAll(){
+        return popupStoreRepository.findAll().stream().map(PopupStoreFindOneResponseDto::new).toList();
+    }
+
 }

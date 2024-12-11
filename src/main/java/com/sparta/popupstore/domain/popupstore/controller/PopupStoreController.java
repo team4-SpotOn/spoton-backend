@@ -1,7 +1,5 @@
 package com.sparta.popupstore.domain.popupstore.controller;
-
 import com.sparta.popupstore.domain.common.annotation.AuthCompany;
-import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
@@ -10,14 +8,12 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
-import com.sparta.popupstore.domain.user.entity.User;
-import com.sparta.popupstore.web.WebUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -96,5 +92,12 @@ public class PopupStoreController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    // 팝업스토어 전체목록 지도용
+    @Operation(summary = "임시 팝업 전제조회(지도용)", description = "지도 팝업스토어 전체목록")
+    @GetMapping("/popupstores")
+    public ResponseEntity<List<PopupStoreFindOneResponseDto>> getPopupStoreAll() {
+        return ResponseEntity.ok(popupStoreService.getPopupStoreAll());
     }
 }

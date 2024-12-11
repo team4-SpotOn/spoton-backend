@@ -1,0 +1,254 @@
+/* 전체 공통css */
+* {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+a, button {
+  cursor: pointer;
+}
+
+/* 공통 색상 잡기  */
+.mainBackColor {
+  background-color: #81D4FA;
+}
+
+/* 배경색 메인 */
+.mainTextColor {
+  color: #81D4FA;
+}
+
+/* 글자색 메인 */
+.mainBorderColor {
+  border: 1px solid #81D4FA;
+  color: #81D4FA;
+}
+
+/* 글자와 선 메인 */
+.mainBtn {
+  border: none;
+  color: #fff;
+}
+
+.subBtn {
+  background: none;
+}
+
+/* 기본 레이아웃  */
+.commonBox {
+  width: 100%;
+  float: left;
+  min-width: 1200px;
+  margin-top: 50px;
+}
+
+.commonBox > div {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.commonBox > div > div {
+  width: 100%;
+  float: left;
+}
+
+/* 팝업이미지 영역  */
+.popupOneStoreBox {
+  width: 100%;
+  float: left;
+  margin: 30px 0px;
+}
+
+.popupOneStoreBox > div {
+  width: 100%;
+  float: left;
+}
+
+.popupOneStoreBox .popupImageBox > img {
+  width: 100%;
+  float: left;
+}
+
+/* 팝업이름, 입장료, 기간 등  */
+.popupOneStoreBox .popupContentBox > div {
+  width: 100%;
+  float: left;
+}
+
+.popupOneStoreBox .popupContentBox .count {
+  text-align: right;
+  color: #888;
+  margin-top: 10px;
+}
+
+.popupOneStoreBox .popupContentBox .count > span {
+  margin-right: 5px;
+}
+
+.popupOneStoreBox .popupContentBox .popupName {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.popupOneStoreBox .popupContentBox .popupPrice {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 5px 0px;
+}
+
+.popupOneStoreBox .popupContentBox .popupDate {
+  font-size: 14px;
+}
+
+.popupOneStoreBox .popupContentBox .popupAddress {
+  color: #888;
+  margin: 10px 0px;
+}
+
+.popupOneStoreBox .popupContentBox .popupAddress > i {
+  margin-right: 5px;
+}
+
+/* 기타사항 영역  */
+.popupOneStoreBox .popupEtcBox {
+  margin: 20px 0px;
+  padding: 30px 0px;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  text-align: center;
+}
+
+.popupOneStoreBox .popupEtcBox > div {
+  width: 25%;
+  float: left;
+}
+
+.popupOneStoreBox .popupEtcBox > div > div {
+  width: 100%;
+  float: left;
+}
+
+.popupOneStoreBox .popupEtcBox > div > .etcTop {
+  margin-bottom: 5px;
+}
+
+.popupOneStoreBox .popupEtcBox > div > div > span {
+  font-size: 15px;
+}
+
+.popupOneStoreBox .popupEtcBox > div > div > i {
+  font-size: 25px;
+}
+
+/* 운영시간, 팝업 설명 영역  */
+.popupOneStoreBox .popupOperatingBox > div {
+  width: 100%;
+  float: left;
+}
+
+.popupOneStoreBox .popupOperatingBox > div > div {
+  width: 100%;
+  float: left;
+}
+
+.popupOneStoreBox .popupOperatingBox .titleBox {
+  font-weight: 600;
+}
+
+.popupOneStoreBox .popupOperatingBox .operatingTime {
+  padding-left: 10px;
+}
+
+.popupOneStoreBox .popupOperatingBox .popupContentTitle {
+  font-size: 20px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.popupOneStoreBox .popupOperatingBox .popupTextArea {
+  margin: 15px 0px;
+  padding: 15px;
+  background-color: #ccc;
+}
+
+/* 지도 영역  */
+.popupOneStoreBox .popupMapBox .resevationBox {
+  width: 100%;
+  float: left;
+  margin-bottom: 15px;
+}
+
+.popupOneStoreBox .popupMapBox .resevationBox > button {
+  width: 100px;
+  float: right;
+  height: 35px;
+  text-align: center;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+#OneMap {
+  width: 1200px;
+  height: 500px;
+}
+
+/* 리뷰영역  */
+.popupOneStoreBox .popupReviewBox {
+  margin-top: 30px;
+}
+
+.popupOneStoreBox .popupReviewBox > div {
+  width: 100%;
+  float: left;
+}
+
+.popupOneStoreBox .popupReviewBox .reviewForm > div {
+  width: 100%;
+  float: left;
+}
+
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewTitle {
+  border-bottom: 1px solid;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewTitle > span {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewRating {
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewContent {
+  margin: 15px 0px;
+}
+
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewContent > textarea {
+  width: 100%;
+  float: left;
+  padding: 10px;
+  height: 250px;
+  resize: none;
+  border-color: #ccc;
+}
+
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewButtonBox {
+  text-align: right;
+}
+
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewButtonBox > button {
+  width: 100px;
+  height: 35px;
+  text-align: center;
+  font-weight: bold;
+}
