@@ -103,9 +103,9 @@ public class PromotionEventService {
     }
 
     private PromotionEvent getPromotionEvent(Long promotionEventId) {
-        return promotionEventRepository.findByIdAndDeletedAtIsNull(promotionEventId)
+        return promotionEventRepository.findById(promotionEventId)
                 .orElseThrow(
-                        ()-> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT)
+                        ()-> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND)
                 );
     }
 }

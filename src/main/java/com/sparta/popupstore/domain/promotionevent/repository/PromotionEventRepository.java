@@ -9,17 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface PromotionEventRepository extends JpaRepository<PromotionEvent, Long> {
-    @Query("select p from PromotionEvent p left join fetch p.popupStore where p.deletedAt is null")
+    @Query("select p from PromotionEvent p left join fetch p.popupStore")
     Page<PromotionEvent> findAllPromotionalEvents(Pageable pageable);
 
     @Modifying
     @Query("update PromotionEvent p set p.deletedAt = now() where p.id = :promotionEventId")
     void deletePromotionEvent(@Param("promotionEventId") Long promotionEventId);
-
-    Optional<PromotionEvent> findByIdAndDeletedAtIsNull(Long promotionEventId);
 
     @Modifying
     @Query("delete from PromotionEvent p where p in :promotionEvents")
