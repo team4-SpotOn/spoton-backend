@@ -8,6 +8,8 @@ import java.util.List;
 
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
 public class PopupStoreFindOneResponseDto {
     @Schema(description = "팝업스토어 이름")
