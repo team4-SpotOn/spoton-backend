@@ -59,13 +59,15 @@ public class PopupStore extends BaseEntity {
         ).toList();
     }
 
-    public void update(PopupStoreUpdateRequestDto requestDto) {
+    public PopupStore update(PopupStoreUpdateRequestDto requestDto) {
         this.name = requestDto.getName() != null ? requestDto.getName() : this.name;
         this.contents = requestDto.getContent() != null ? requestDto.getContent() : this.contents;
         this.price = requestDto.getPrice() != null ? Integer.parseInt(requestDto.getPrice()) : this.price;
         //this.address = address update
         this.startDate = requestDto.getStartDate() != null ? requestDto.getStartDate() : this.startDate;
         this.endDate = requestDto.getEndDate() != null ? requestDto.getEndDate() : this.endDate;
+
+        return this;
     }
 
 
