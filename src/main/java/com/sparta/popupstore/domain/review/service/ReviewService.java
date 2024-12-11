@@ -2,6 +2,7 @@ package com.sparta.popupstore.domain.review.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
+import com.sparta.popupstore.domain.common.util.ValidUtil;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.reservation.repository.ReservationRepository;
@@ -54,7 +55,7 @@ public class ReviewService {
         if (!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_NOT_UPDATE);
         }
-        if(review.getImageUrl() != null && !review.getImageUrl().isEmpty() &&!Objects.equals(review.getImageUrl(), updateRequestDto.getImageUrl())) {
+        if(ValidUtil.isValidNullAndEmpty(review.getImageUrl()) &&!Objects.equals(review.getImageUrl(), updateRequestDto.getImageUrl())) {
                 s3ImageService.deleteImage(review.getImageUrl());
         }
         review.update(
@@ -71,7 +72,7 @@ public class ReviewService {
         if (!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_CANT_DELETE);
         }
-        if(review.getImageUrl() != null && !review.getImageUrl().isEmpty()) {
+        if(ValidUtil.isValidNullAndEmpty(review.getImageUrl())) {
             s3ImageService.deleteImage(review.getImageUrl());
         }
         reviewRepository.delete(review);
