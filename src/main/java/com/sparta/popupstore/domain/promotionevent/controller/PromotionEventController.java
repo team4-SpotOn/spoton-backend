@@ -36,6 +36,7 @@ public class PromotionEventController {
     @Parameter(name = "couponExpirationPeriod", description = "쿠폰 만료 기간")
     @Parameter(name = "startTime", description = "시작일")
     @Parameter(name = "endTime", description = "종료일")
+    @Parameter(name = "imageUrl", description = "이미지 저장된 경로")
     @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호 / 만약 전체를 대상으로 진행하는 이벤트 일 시 팝업스토어 고유번호는 생략")
     @CheckAdmin
     @PostMapping("/admin/promotionEvents")
@@ -73,6 +74,7 @@ public class PromotionEventController {
     @Parameter(name = "couponExpirationPeriod", description = "쿠폰 만료 기간")
     @Parameter(name = "startTime", description = "시작일")
     @Parameter(name = "endTime", description = "종료일")
+    @Parameter(name = "imageUrl", description = "이미지 저장된 경로")
     @CheckAdmin
     @PatchMapping("/admin/promotionEvents/{promotionEventId}")
     public ResponseEntity<PromotionEventUpdateResponseDto> updateEvent(

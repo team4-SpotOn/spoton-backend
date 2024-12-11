@@ -72,7 +72,8 @@ public class PromotionEvent extends BaseEntity {
             int totalCount,
             int couponExpirationPeriod,
             LocalDateTime startDateTime,
-            LocalDateTime endDateTime
+            LocalDateTime endDateTime,
+            String imageUrl
     ) {
         this.title = title;
         this.description = description;
@@ -81,6 +82,7 @@ public class PromotionEvent extends BaseEntity {
         this.couponExpirationPeriod = couponExpirationPeriod;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
+        this.imageUrl = imageUrl;
     }
 
     public void couponGetCountUp() {
