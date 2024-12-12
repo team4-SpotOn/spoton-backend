@@ -13,30 +13,24 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.s3.S3ImageService;
 import com.sparta.popupstore.web.WebUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +39,7 @@ public class PopupStoreService {
     private final PopupStoreRepository popupStoreRepository;
     private final KakaoAddressService kakaoAddressService;
     private final String UPLOAD_URL = "uploads";
+    private final S3ImageService s3ImageService;
 
 
     @Transactional
@@ -84,13 +79,21 @@ public class PopupStoreService {
 
     // 관리자 - 팝업 스토어 수정
     @Transactional
-    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
+    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
-        if (imageFile != null) saveImageFile(imageFile);
+        List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
+        List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
+                                                                            .map(PopupStoreImageRequestDto::toEntity)
+                                                                            .toList();
+        popupStoreImageList.stream()
+                .filter(image ->
+                        !requestImageList.contains(image)
+                )
+                .forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
+        popupStore.updateImages(requestImageList);
         popupStore.update(requestDto);
-
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
     }
 

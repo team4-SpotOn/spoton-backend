@@ -1,4 +1,5 @@
 package com.sparta.popupstore.domain.popupstore.controller;
+
 import com.sparta.popupstore.domain.common.annotation.AuthCompany;
 import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.company.entity.Company;
@@ -13,12 +14,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,10 +41,9 @@ public class PopupStoreController {
     @PatchMapping("/admin/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
             @PathVariable Long popupStoreId,
-            @RequestPart("requestDto") @Valid PopupStoreUpdateRequestDto requestDto,
-            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+            @RequestBody @Valid PopupStoreUpdateRequestDto requestDto
     ) {
-        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, requestDto, imageFile));
+        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, requestDto));
     }
 
     @Operation(summary = "회사 - 팝업 스토어 수정")
