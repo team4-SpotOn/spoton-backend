@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -51,10 +50,9 @@ public class PopupStoreController {
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
             @PathVariable Long popupStoreId,
             @AuthCompany Company company,
-            @RequestPart("requestDto") @Valid PopupStoreUpdateRequestDto requestDto,
-            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+            @RequestBody @Valid PopupStoreUpdateRequestDto requestDto
     ) {
-        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, company, requestDto, imageFile));
+        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, company, requestDto));
     }
 
     @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
