@@ -140,14 +140,13 @@ public class PopupStoreService {
         if(popupStore.getStartDate().isBefore(LocalDate.now())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
-
         popupStoreRepository.deleteById(popupStoreId);
     }
 
     public void deletePopupStore(Long popupStoreId) {
-        popupStoreRepository.findById(popupStoreId)
+        PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-
+        popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
         popupStoreRepository.deleteById(popupStoreId);
     }
 
