@@ -13,10 +13,11 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreOperatingRepository;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.s3.service.S3ImageService;
 import com.sparta.popupstore.web.WebUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,10 +28,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.List;
-import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -110,6 +109,15 @@ public class PopupStoreService {
         this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
         return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), popupStoreOperatingRepository.saveAll(operatingList));
+    }
+
+    private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
+        List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
+        List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
+                .map(PopupStoreImageRequestDto::toEntity)
+                .toList();
+        popupStoreImageList.forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
+        popupStore.updateImages(requestImageList);
     }
 
     // 팝업스토어 진행여부 판단
