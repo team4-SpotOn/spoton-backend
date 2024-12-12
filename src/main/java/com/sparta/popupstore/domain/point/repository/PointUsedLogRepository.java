@@ -5,6 +5,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PointUsedLogRepository extends JpaRepository<PointUsedLog, Long> {
-
-  List<PointUsedLog> findByUsedPoint(Long userId);
+  List<PointUsedLog> findByUserId(Long userId);
 }

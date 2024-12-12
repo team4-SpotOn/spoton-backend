@@ -28,17 +28,21 @@ public class PointUsedLog {
     private Long popupstoreId;
     private int prevPoint;
     private int usedPoint;
+    @JoinColumn(name = "serial_number")
+    private String serialNumber;
 
     @CreatedDate
     @Column(updatable = false)
     protected LocalDateTime usedAt;
 
     @Builder
-    public PointUsedLog(Long id, User user, Long popupstoreId, int prevPoint, int usedPoint) {
+    public PointUsedLog(Long id, User user, Long popupstoreId, int prevPoint, int usedPoint, LocalDateTime usedAt, String serialNumber) {
         this.id = id;
         this.user = user;
         this.popupstoreId = popupstoreId;
         this.prevPoint = prevPoint;
         this.usedPoint = usedPoint;
+        this.usedAt = usedAt;
+        this.serialNumber = serialNumber;
     }
 }

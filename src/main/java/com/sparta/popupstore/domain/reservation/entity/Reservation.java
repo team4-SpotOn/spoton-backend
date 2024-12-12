@@ -4,6 +4,7 @@ import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -34,4 +35,13 @@ public class Reservation {
     @CreatedDate
     @Column(updatable = false)
     protected LocalDateTime createdAt;
+
+    @Builder
+    public Reservation(Long id, User user, PopupStore popupStore, LocalDateTime reservationAt, LocalDateTime createdAt) {
+        this.id = id;
+        this.user = user;
+        this.popupStore = popupStore;
+        this.reservationAt = reservationAt;
+        this.createdAt = createdAt;
+    }
 }
