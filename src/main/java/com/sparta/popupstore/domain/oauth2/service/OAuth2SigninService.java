@@ -30,15 +30,15 @@ public class OAuth2SigninService {
         return socialUserService.signupIfAbsent(userInfo);
     }
 
+    public String getAccessToken(OAuth2Provider provider, String authorizationCode) {
+        OAuth2Client client = getClient(provider);
+        return client.getAccessToken(authorizationCode);
+    }
+
     public OAuth2Client getClient(OAuth2Provider provider) {
         return clientList.stream()
                 .filter(client -> client.supports(provider))
                 .findFirst()
                 .orElseThrow(() -> new CustomApiException(ErrorCode.UNKNOWN_PROVIDER));
-    }
-
-    public Object callbackTest(OAuth2Provider provider, String authorizationCode) {
-        OAuth2Client client = getClient(provider);
-        return client.callbackTest(authorizationCode);
     }
 }
