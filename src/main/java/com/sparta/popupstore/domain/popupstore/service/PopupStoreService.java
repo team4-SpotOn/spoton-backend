@@ -13,30 +13,19 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.s3.service.S3ImageService;
 import com.sparta.popupstore.web.WebUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +34,7 @@ public class PopupStoreService {
     private final PopupStoreRepository popupStoreRepository;
     private final KakaoAddressService kakaoAddressService;
     private final String UPLOAD_URL = "uploads";
+    private final S3ImageService s3ImageService;
 
 
     @Transactional
@@ -67,36 +57,35 @@ public class PopupStoreService {
         return new PopupStoreCreateResponseDto(popupStore);
     }
 
-    private String saveImageFile(MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new IllegalArgumentException("File is empty");
-        }
-
-        try {
-            Path path = Paths.get(UPLOAD_URL, System.currentTimeMillis() + "_" + file.getOriginalFilename());
-            Files.createDirectories(path.getParent());
-            Files.write(path, file.getBytes());
-            return path.toString();
-        } catch (IOException e) {
-            throw new CustomApiException(ErrorCode.IMAGE_SAVE_FAILURE);
-        }
-    }
+//    private String saveImageFile(MultipartFile file) {
+//        if (file.isEmpty()) {
+//            throw new IllegalArgumentException("File is empty");
+//        }
+//
+//        try {
+//            Path path = Paths.get(UPLOAD_URL, System.currentTimeMillis() + "_" + file.getOriginalFilename());
+//            Files.createDirectories(path.getParent());
+//            Files.write(path, file.getBytes());
+//            return path.toString();
+//        } catch (IOException e) {
+//            throw new CustomApiException(ErrorCode.IMAGE_SAVE_FAILURE);
+//        }
+//    }
 
     // 관리자 - 팝업 스토어 수정
     @Transactional
-    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
+    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
-        if (imageFile != null) saveImageFile(imageFile);
+        this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
-
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
     }
 
     // 회사 - 팝업 스토어 수정
     @Transactional
-    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
+    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
@@ -107,11 +96,19 @@ public class PopupStoreService {
         if (!isEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
-
-        if (imageFile != null) saveImageFile(imageFile);
+        this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
 
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
+    }
+
+    private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
+        List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
+        List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
+                                                                            .map(PopupStoreImageRequestDto::toEntity)
+                                                                            .toList();
+        popupStoreImageList.forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
+        popupStore.updateImages(requestImageList);
     }
 
     private boolean isEditable(PopupStore popupStore) {
@@ -143,14 +140,14 @@ public class PopupStoreService {
         if(popupStore.getStartDate().isBefore(LocalDate.now())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
-
+        popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
         popupStoreRepository.deleteById(popupStoreId);
     }
 
     public void deletePopupStore(Long popupStoreId) {
-        popupStoreRepository.findById(popupStoreId)
+        PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-
+        popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
         popupStoreRepository.deleteById(popupStoreId);
     }
 

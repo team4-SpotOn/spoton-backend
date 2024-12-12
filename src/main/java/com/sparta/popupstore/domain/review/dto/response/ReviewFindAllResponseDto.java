@@ -18,10 +18,14 @@ public class ReviewFindAllResponseDto {
   @Schema(description = "유저이름")
   private final String name;
 
+  @Schema(description = "이미지 저장한 경로")
+  private final String imageUrl;
+
   public ReviewFindAllResponseDto(Review review) {
     this.id = review.getId();
     this.star = review.getStar();
     this.contents = review.getContents();
     this.name =review.getUser().getName();
+    this.imageUrl = review.getImageUrl();
   }
 }

@@ -14,7 +14,7 @@ import com.sparta.popupstore.domain.review.dto.response.ReviewUpdateResponseDto;
 import com.sparta.popupstore.domain.review.entity.Review;
 import com.sparta.popupstore.domain.review.repository.ReviewRepository;
 import com.sparta.popupstore.domain.user.entity.User;
-import com.sparta.popupstore.s3.S3ImageService;
+import com.sparta.popupstore.s3.service.S3ImageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -27,7 +27,7 @@ public class PopupStore extends BaseEntity {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PopupStoreImage> popupStoreImageList = new ArrayList<>();
     private String name;
     private String contents;
@@ -76,5 +76,14 @@ public class PopupStore extends BaseEntity {
 
     public void viewPopupStore() {
         this.view += 1;
+    }
+
+    public void updateImages(List<PopupStoreImage> imageList) {
+        this.popupStoreImageList.clear();
+        this.popupStoreImageList.addAll(imageList.stream().map(image ->{
+                    image.addPopupStore(this);
+                    return image;
+                }
+        ).toList());
     }
 }

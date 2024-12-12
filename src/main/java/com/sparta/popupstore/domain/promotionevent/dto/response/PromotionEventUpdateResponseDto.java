@@ -24,6 +24,8 @@ public class PromotionEventUpdateResponseDto {
     private final LocalDateTime startDateTime;
     @Schema(description = "수정된 프로모션 이벤트 종료일")
     private final LocalDateTime endDateTime;
+    @Schema(description = "수정일 프로모션 이벤트 이미지 저장된 경로")
+    private final String imageUrl;
 
     public PromotionEventUpdateResponseDto(PromotionEvent promotionEvent) {
         this.id = promotionEvent.getId();
@@ -34,5 +36,6 @@ public class PromotionEventUpdateResponseDto {
         this.couponExpirationPeriod = promotionEvent.getCouponExpirationPeriod();
         this.startDateTime = promotionEvent.getStartDateTime();
         this.endDateTime = promotionEvent.getEndDateTime();
+        this.imageUrl = promotionEvent.getImageUrl();
     }
 }

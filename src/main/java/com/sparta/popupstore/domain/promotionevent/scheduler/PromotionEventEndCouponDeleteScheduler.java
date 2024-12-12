@@ -4,7 +4,7 @@ import com.sparta.popupstore.domain.common.util.ValidUtil;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
-import com.sparta.popupstore.s3.S3ImageService;
+import com.sparta.popupstore.s3.service.S3ImageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

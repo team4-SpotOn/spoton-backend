@@ -1,4 +1,5 @@
 package com.sparta.popupstore.domain.popupstore.controller;
+
 import com.sparta.popupstore.domain.common.annotation.AuthCompany;
 import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.company.entity.Company;
@@ -10,22 +11,34 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResp
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
+@Tag(name = "PopupStore", description = "팝업스토어 관련 api")
 @RestController
 @RequiredArgsConstructor
 public class PopupStoreController {
 
     private final PopupStoreService popupStoreService;
 
+    @Operation(summary = "팝업스토어 생성")
+    @Parameter(name = "name", description = "팝업스토어 명")
+    @Parameter(name = "content", description = "팝업스토어 내용")
+    @Parameter(name = "price", description = "팝업스토어 가격")
+    @Parameter(name = "address", description = "팝업스토어 주소")
+    @Parameter(name = "startDate", description = "팝업스토어 시작일")
+    @Parameter(name = "endDate", description = "팝업스토어 종료일")
+    @Parameter(name = "startTime", description = "팝업스토어 개장시간")
+    @Parameter(name = "endTime", description = "팝업스토어 폐장시간")
+    @Parameter(name = "images", description = "이미지 명과 이미지 순서가 들어있는 List Dto")
     @PostMapping("/popupstores")
     public ResponseEntity<PopupStoreCreateResponseDto> createPopupStore(
             @AuthCompany Company company,
@@ -35,25 +48,41 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "관리자 - 팝업 스토어 수정")
+    @Parameter(name = "name", description = "수정할 팝업스토어 명")
+    @Parameter(name = "content", description = "수정할 팝업스토어 내용")
+    @Parameter(name = "price", description = "수정할 팝업스토어 가격")
+    @Parameter(name = "address", description = "수정할 팝업스토어 주소")
+    @Parameter(name = "startDate", description = "수정할 팝업스토어 시작일")
+    @Parameter(name = "endDate", description = "수정할 팝업스토어 종료일")
+    @Parameter(name = "startTime", description = "수정할 팝업스토어 개장시간")
+    @Parameter(name = "endTime", description = "수정할 팝업스토어 폐장시간")
+    @Parameter(name = "images", description = "수정할 이미지 명과 이미지 순서가 들어있는 List Dto")
     @CheckAdmin
     @PatchMapping("/admin/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
             @PathVariable Long popupStoreId,
-            @RequestPart("requestDto") @Valid PopupStoreUpdateRequestDto requestDto,
-            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+            @RequestBody @Valid PopupStoreUpdateRequestDto requestDto
     ) {
-        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, requestDto, imageFile));
+        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, requestDto));
     }
 
     @Operation(summary = "회사 - 팝업 스토어 수정")
+    @Parameter(name = "name", description = "수정할 팝업스토어 명")
+    @Parameter(name = "content", description = "수정할 팝업스토어 내용")
+    @Parameter(name = "price", description = "수정할 팝업스토어 가격")
+    @Parameter(name = "address", description = "수정할 팝업스토어 주소")
+    @Parameter(name = "startDate", description = "수정할 팝업스토어 시작일")
+    @Parameter(name = "endDate", description = "수정할 팝업스토어 종료일")
+    @Parameter(name = "startTime", description = "수정할 팝업스토어 개장시간")
+    @Parameter(name = "endTime", description = "수정할 팝업스토어 폐장시간")
+    @Parameter(name = "images", description = "수정할 이미지 명과 이미지 순서가 들어있는 List Dto")
     @PatchMapping("/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
             @PathVariable Long popupStoreId,
             @AuthCompany Company company,
-            @RequestPart("requestDto") @Valid PopupStoreUpdateRequestDto requestDto,
-            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+            @RequestBody @Valid PopupStoreUpdateRequestDto requestDto
     ) {
-        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, company, requestDto, imageFile));
+        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, company, requestDto));
     }
 
     @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
