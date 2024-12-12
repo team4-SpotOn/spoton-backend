@@ -84,21 +84,4 @@ public class NaverOAuth2Client implements OAuth2Client {
     public boolean supports(OAuth2Provider provider) {
         return provider == OAuth2Provider.NAVER;
     }
-
-    @Override
-    public Object callbackTest(String authorizationCode) {
-        var body = new LinkedMultiValueMap<String, String>();
-        body.add("grant_type", "authorization_code");
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("redirect_uri", redirectUri);
-        body.add("code", authorizationCode);
-
-        return restClient.post()
-                .uri(TOKEN_SERVER_URL)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(body)
-                .retrieve()
-                .body(TokenResponse.class);
-    }
 }

@@ -37,7 +37,7 @@ public class KakaoOAuth2Client implements OAuth2Client {
         return AUTH_SERVER_URL
                 + "?client_id=" + clientId
                 + "&redirect_uri=" + redirectUrl
-                + "&response_type=" + "code";
+                + "&response_type=code";
     }
 
     @Override
@@ -85,22 +85,4 @@ public class KakaoOAuth2Client implements OAuth2Client {
     public boolean supports(OAuth2Provider provider) {
         return provider == OAuth2Provider.KAKAO;
     }
-
-    @Override
-    public Object callbackTest(String authorizationCode) {
-        var body = new LinkedMultiValueMap<String, String>();
-        body.add("grant_type", "authorization_code");
-        body.add("client_id", clientId);
-        body.add("code", authorizationCode);
-        return restClient.post()
-                .uri(AUTH_SERVER_URL)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(body)
-                .retrieve()
-                .onStatus(HttpStatusCode::isError, (req, resp) -> {
-                    throw new CustomApiException(ErrorCode.SOCIAL_TOKEN_ERROR);
-                })
-                .body(TokenResponse.class);
-    }
-
 }

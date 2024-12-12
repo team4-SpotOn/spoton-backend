@@ -42,7 +42,7 @@ public class GoogleOAuth2Client implements OAuth2Client {
                 + "?client_id=" + clientId
                 + "&redirect_uri=" + redirectUri
                 + "&scope=" + scope
-                + "&response_type=" + "code";
+                + "&response_type=code";
     }
 
     @Override
@@ -86,22 +86,5 @@ public class GoogleOAuth2Client implements OAuth2Client {
     @Override
     public boolean supports(OAuth2Provider provider) {
         return provider == OAuth2Provider.GOOGLE;
-    }
-
-    @Override
-    public Object callbackTest(String authorizationCode) {
-        var body = new LinkedMultiValueMap<String, String>();
-        body.add("grant_type", "authorization_code");
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("redirect_uri", redirectUri);
-        body.add("code", authorizationCode);
-
-        return restClient.post()
-                .uri(TOKEN_SERVER_URL)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(body)
-                .retrieve()
-                .body(TokenResponse.class);
     }
 }
