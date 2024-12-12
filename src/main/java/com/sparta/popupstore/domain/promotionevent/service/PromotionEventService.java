@@ -11,7 +11,7 @@ import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
 import com.sparta.popupstore.domain.user.entity.User;
-import com.sparta.popupstore.s3.S3ImageService;
+import com.sparta.popupstore.s3.service.S3ImageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

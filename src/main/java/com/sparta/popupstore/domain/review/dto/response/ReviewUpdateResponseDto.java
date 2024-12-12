@@ -23,11 +23,15 @@ public class ReviewUpdateResponseDto {
   @Schema(description = "수정일")
   private final LocalDateTime updatedAt;
 
+  @Schema(description = "수정된 이미지 저장한 경로")
+  private final String imageUrl;
+
   public ReviewUpdateResponseDto(Review review) {
     this.id = review.getId();
     this.star = review.getStar();
     this.contents = review.getContents();
     this.name =review.getUser().getName();
     this.updatedAt = review.getUpdatedAt();
+    this.imageUrl = review.getImageUrl();
   }
 }

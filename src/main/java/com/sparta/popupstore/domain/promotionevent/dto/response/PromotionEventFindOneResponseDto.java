@@ -26,6 +26,8 @@ public class PromotionEventFindOneResponseDto {
     private final LocalDateTime startDateTime;
     @Schema(description = "프로모션 이벤트 종료일")
     private final LocalDateTime endDateTime;
+    @Schema(description = "프로모션 이벤트 이미지 저장된 경로")
+    private final String imageUrl;
 
     public PromotionEventFindOneResponseDto(PromotionEvent promotionEvent) {
         this.id = promotionEvent.getId();
@@ -37,5 +39,6 @@ public class PromotionEventFindOneResponseDto {
         this.couponExpirationPeriod = promotionEvent.getCouponExpirationPeriod();
         this.startDateTime = promotionEvent.getStartDateTime();
         this.endDateTime = promotionEvent.getEndDateTime();
+        this.imageUrl = promotionEvent.getImageUrl();
     }
 }
