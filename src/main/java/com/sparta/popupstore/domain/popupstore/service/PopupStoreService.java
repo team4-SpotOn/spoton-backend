@@ -147,7 +147,7 @@ public class PopupStoreService {
         if(!popupStore.getCompany().getId().equals(company.getId())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
         }
-        if(popupStore.getStartDate().isBefore(LocalDate.now())) {
+        if (!isEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
         popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
