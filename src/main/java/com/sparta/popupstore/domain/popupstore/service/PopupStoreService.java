@@ -23,12 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -62,20 +57,20 @@ public class PopupStoreService {
         return new PopupStoreCreateResponseDto(popupStore);
     }
 
-    private String saveImageFile(MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new IllegalArgumentException("File is empty");
-        }
-
-        try {
-            Path path = Paths.get(UPLOAD_URL, System.currentTimeMillis() + "_" + file.getOriginalFilename());
-            Files.createDirectories(path.getParent());
-            Files.write(path, file.getBytes());
-            return path.toString();
-        } catch (IOException e) {
-            throw new CustomApiException(ErrorCode.IMAGE_SAVE_FAILURE);
-        }
-    }
+//    private String saveImageFile(MultipartFile file) {
+//        if (file.isEmpty()) {
+//            throw new IllegalArgumentException("File is empty");
+//        }
+//
+//        try {
+//            Path path = Paths.get(UPLOAD_URL, System.currentTimeMillis() + "_" + file.getOriginalFilename());
+//            Files.createDirectories(path.getParent());
+//            Files.write(path, file.getBytes());
+//            return path.toString();
+//        } catch (IOException e) {
+//            throw new CustomApiException(ErrorCode.IMAGE_SAVE_FAILURE);
+//        }
+//    }
 
     // 관리자 - 팝업 스토어 수정
     @Transactional
@@ -83,23 +78,14 @@ public class PopupStoreService {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
-        List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
-        List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
-                                                                            .map(PopupStoreImageRequestDto::toEntity)
-                                                                            .toList();
-        popupStoreImageList.stream()
-                .filter(image ->
-                        !requestImageList.contains(image)
-                )
-                .forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
-        popupStore.updateImages(requestImageList);
+        this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
     }
 
     // 회사 - 팝업 스토어 수정
     @Transactional
-    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto, MultipartFile imageFile) {
+    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
@@ -110,11 +96,19 @@ public class PopupStoreService {
         if (!isEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
-
-        if (imageFile != null) saveImageFile(imageFile);
+        this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
 
         return new PopupStoreUpdateResponseDto(popupStoreRepository.save(popupStore));
+    }
+
+    private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
+        List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
+        List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
+                                                                            .map(PopupStoreImageRequestDto::toEntity)
+                                                                            .toList();
+        popupStoreImageList.forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
+        popupStore.updateImages(requestImageList);
     }
 
     private boolean isEditable(PopupStore popupStore) {
