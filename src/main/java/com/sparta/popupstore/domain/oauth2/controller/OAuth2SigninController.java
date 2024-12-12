@@ -43,4 +43,14 @@ public class OAuth2SigninController {
                 .status(HttpStatus.OK)
                 .build();
     }
+
+    @GetMapping("/oauth2/callback/{provider}/token")
+    public ResponseEntity<String> getAccessToken(
+            @PathVariable OAuth2Provider provider,
+            @RequestParam(name = "code") String authorizationCode
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(oAuth2SigninService.getAccessToken(provider, authorizationCode));
+    }
 }
