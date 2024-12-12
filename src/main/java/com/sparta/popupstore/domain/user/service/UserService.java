@@ -1,8 +1,11 @@
 package com.sparta.popupstore.domain.user.service;
 
 import com.sparta.popupstore.config.PasswordEncoder;
+import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
+import com.sparta.popupstore.domain.kakaoaddress.dto.KakaoAddressApiDto;
+import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
 import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
 import com.sparta.popupstore.domain.user.dto.request.UserDeleteRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
@@ -26,6 +29,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CouponRepository couponRepository;
+    private final KakaoAddressService kakaoAddressService;
     private final PasswordEncoder passwordEncoder;
 
     public UserSignupResponseDto signup(UserSignupRequestDto requestDto) {
@@ -35,6 +39,15 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
         User user = requestDto.toEntity(encodedPassword);
+
+        // 카카오 주소 API - 위도 경도 구하기
+        KakaoAddressApiDto kakaoAddressApiDto = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
+        double latitude = kakaoAddressApiDto.getDocuments().get(0).getRoadAddress().getLatitude(); // 위도
+        double longitude = kakaoAddressApiDto.getDocuments().get(0).getRoadAddress().getLongitude(); // 경도
+        Address address = new Address(requestDto.getAddress(), latitude, longitude);
+        user.updateAddress(address);
+
+
         return new UserSignupResponseDto(userRepository.save(user));
     }
 
@@ -46,6 +59,13 @@ public class UserService {
         }
 
         return user;
+    }
+
+    // 임시 유저 주소 기준 지도
+    public UserMyPageResponseDto getUserMyPageKakaoAddressApi(Long userId){
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new CustomApiException(ErrorCode.INCORRECT_EMAIL_OR_PASSWORD));
+        return new UserMyPageResponseDto(user.getEmail(),user.getName(),user.getAddress());
     }
 
     // 유저 마이페이지

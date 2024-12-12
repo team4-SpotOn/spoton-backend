@@ -37,6 +37,12 @@ public class User extends BaseEntity {
         this.point = point;
     }
 
+    // 위도,경도 저장을 위한 address 업데이트
+    public void updateAddress(Address address) {
+        this.address = address;
+    }
+
+
     public void update(String address) {
         // this.address = address update
     }

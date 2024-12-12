@@ -81,6 +81,14 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "고객 주소 지도 api 임시", description = "---")
+    @GetMapping("/mypage/{userId}")
+    public ResponseEntity<UserMyPageResponseDto> getUserMyPageKakaoAddressApi(@PathVariable Long userId) {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(userService.getUserMyPageKakaoAddressApi(userId));
+    }
+
     @Operation(summary = "유저 마이페이지", description = "고객이 로그인 호 확인하는 마이페이지")
     @GetMapping("/mypage")
     public ResponseEntity<UserMyPageResponseDto> getUserMyPage(@AuthUser User user) {
