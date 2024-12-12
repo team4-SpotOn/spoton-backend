@@ -15,7 +15,7 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResp
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
-import com.sparta.popupstore.s3.S3ImageService;
+import com.sparta.popupstore.s3.service.S3ImageService;
 import com.sparta.popupstore.web.WebUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -140,6 +140,7 @@ public class PopupStoreService {
         if(popupStore.getStartDate().isBefore(LocalDate.now())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
+        popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
         popupStoreRepository.deleteById(popupStoreId);
     }
 

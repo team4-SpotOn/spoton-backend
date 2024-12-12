@@ -1,4 +1,4 @@
-package com.sparta.popupstore.s3;
+package com.sparta.popupstore.s3.service;
 
 
 import com.amazonaws.HttpMethod;
