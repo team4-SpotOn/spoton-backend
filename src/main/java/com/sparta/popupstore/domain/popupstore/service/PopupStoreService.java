@@ -107,11 +107,7 @@ public class PopupStoreService {
         List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
                                                                             .map(PopupStoreImageRequestDto::toEntity)
                                                                             .toList();
-        popupStoreImageList.stream()
-                .filter(image ->
-                        !requestImageList.contains(image)
-                )
-                .forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
+        popupStoreImageList.forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
         popupStore.updateImages(requestImageList);
     }
 
