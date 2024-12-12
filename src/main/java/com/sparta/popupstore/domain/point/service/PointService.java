@@ -1,5 +1,7 @@
 package com.sparta.popupstore.domain.point.service;
 
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.point.dto.request.PointChargeRequestDto;
 import com.sparta.popupstore.domain.point.dto.request.PointUsedRequestDto;
 import com.sparta.popupstore.domain.point.dto.response.PointChargeResponseDto;
@@ -24,6 +26,10 @@ public class PointService {
     private final PointUsedLogRepository pointUsedLogRepository;
 
     public PointChargeResponseDto pointCharge(User user, PointChargeRequestDto chargeRequest) {
+      if (chargeRequest.getChargedPoint() <= 1000) {
+        throw new CustomApiException(ErrorCode.LACK_OF_POINT);
+      }
+
       PointChargedLog chargedLog = chargeRequest.toEntity(user);
       user.Point(chargeRequest.getChargedPoint());
       chargedLog = pointChargedLogRepository.save(chargedLog);
@@ -38,6 +44,13 @@ public class PointService {
     }
 
     public PointUseResponseDto pointUsed(User user,PointUsedRequestDto usedRequest, PopupStore popupStore) {
+      if (popupStore == null) {
+        throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND);
+      }
+      if (user.getPoint() < popupStore.getPrice()) {
+        throw new CustomApiException(ErrorCode.LACK_OF_POINT);
+      }
+
       user.Point(user.getPoint()-popupStore.getPrice());
       PointUsedLog usedLog = usedRequest.toEntity(user,popupStore);
       usedLog = pointUsedLogRepository.save(usedLog);
