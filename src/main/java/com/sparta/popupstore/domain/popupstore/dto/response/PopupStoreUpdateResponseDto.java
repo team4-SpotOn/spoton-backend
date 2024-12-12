@@ -2,6 +2,7 @@ package com.sparta.popupstore.domain.popupstore.dto.response;
 
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -19,19 +20,22 @@ public class PopupStoreUpdateResponseDto {
     @Schema(description = "수정된 팝업스토어 가격")
     private final int price;
     @Schema(description = "수정된 팝업스토어 내용")
-    private final String content;
+    private final String contents;
     @Schema(description = "수정된 팝업스토어 주소")
     private final Address address;
     @Schema(description = "수정된 팝업스토어 이미지 리스트")
     private final List<PopupStoreImageResponseDto> imageList;
+    @Schema(description = "수정된 팝업스토어 운영시간")
+    private final List<PopupStoreOperating> operatingList;
 
-    public PopupStoreUpdateResponseDto(PopupStore popupStore) {
+    public PopupStoreUpdateResponseDto(PopupStore popupStore, List<PopupStoreOperating> popupStoreOperatingList) {
         this.name = popupStore.getName();
         this.startDate = popupStore.getStartDate();
         this.endDate = popupStore.getEndDate();
         this.price = popupStore.getPrice();
-        this.content = popupStore.getContents();
+        this.contents = popupStore.getContents();
         this.address = popupStore.getAddress();
         this.imageList = popupStore.getPopupStoreImageList().stream().map(PopupStoreImageResponseDto::new).toList();
+        this.operatingList = popupStoreOperatingList;
     }
 }

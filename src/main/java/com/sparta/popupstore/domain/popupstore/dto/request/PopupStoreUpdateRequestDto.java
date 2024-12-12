@@ -8,9 +8,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.HashMap;
 
 @Getter
 public class PopupStoreUpdateRequestDto {
@@ -22,16 +24,14 @@ public class PopupStoreUpdateRequestDto {
     @NotNull(message = "팝업스토어 종료날짜 입력해주세요.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-    @NotNull(message = "팝업스토어 개장시간 입력해주세요.")
-    @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime startTime;
-    @NotNull(message = "팝업스토어 폐장시간 입력해주세요.")
-    @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime endTime;
+    @NotNull(message = "팝업스토어 개장시간을 입력해주세요.")
+    private HashMap<DayOfWeek, LocalTime> startTimes;
+    @NotNull(message = "팝업스토어 폐장시간을 입력해주세요.")
+    private HashMap<DayOfWeek, LocalTime> endTimes;
     @Min(value = 0, message = "가격은 0이상이어야만 합니다.")
     private String price;
     @NotBlank(message = "팝업스토어 내용을 입력해주세요.")
-    private String content;
+    private String contents;
     @NotBlank(message = "팝업스토어 주소를 입력해주세요.")
     private String address;
     @Valid

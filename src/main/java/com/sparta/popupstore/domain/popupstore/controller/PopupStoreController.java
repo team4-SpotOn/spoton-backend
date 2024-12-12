@@ -29,7 +29,7 @@ public class PopupStoreController {
 
     private final PopupStoreService popupStoreService;
 
-    @Operation(summary = "팝업스토어 생성")
+    @Operation(summary = "회사 - 팝업스토어 생성")
     @Parameter(name = "name", description = "팝업스토어 명")
     @Parameter(name = "content", description = "팝업스토어 내용")
     @Parameter(name = "price", description = "팝업스토어 가격")
@@ -85,7 +85,7 @@ public class PopupStoreController {
         return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, company, requestDto));
     }
 
-    @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
+    @Operation(summary = "전체 - 팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
     @GetMapping("/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(
             @PathVariable Long popupStoreId,

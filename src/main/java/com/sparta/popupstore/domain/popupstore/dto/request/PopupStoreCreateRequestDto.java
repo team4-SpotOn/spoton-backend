@@ -9,8 +9,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Getter
@@ -19,7 +21,7 @@ public class PopupStoreCreateRequestDto {
     @NotNull(message = "팝업스토어 이름을 입력해주세요.")
     private String name;
     @NotNull(message = "팝업스토어 내용을 입력해주세요.")
-    private String content;
+    private String contents;
     @Min(value = 0, message = "가격은 0이상이어야만 합니다.")
     private int price;
     @NotNull(message = "팝업스토어 주소를 입력해주세요.")
@@ -29,9 +31,9 @@ public class PopupStoreCreateRequestDto {
     @NotNull(message = "팝업스토어 종료일을 입력해주세요.")
     private LocalDate endDate;
     @NotNull(message = "팝업스토어 개장시간을 입력해주세요.")
-    private LocalTime startTime;
+    private HashMap<DayOfWeek, LocalTime> startTimes;
     @NotNull(message = "팝업스토어 폐장시간을 입력해주세요.")
-    private LocalTime endTime;
+    private HashMap<DayOfWeek, LocalTime> endTimes;
     @Valid
     @NotEmpty(message = "하나 이상의 이미지를 넣어주세요")
     private List<PopupStoreImageRequestDto> images;
@@ -40,7 +42,7 @@ public class PopupStoreCreateRequestDto {
         return PopupStore.builder()
                 .company(company)
                 .name(this.name)
-                .contents(this.content)
+                .contents(this.contents)
                 .price(this.price)
                 .address(this.address)
                 .startDate(this.startDate)
