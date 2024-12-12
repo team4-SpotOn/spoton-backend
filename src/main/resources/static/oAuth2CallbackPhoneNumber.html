@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SpotOn 팝업 스토어 플랫폼</title>
+    <link rel="stylesheet" href="css/popup.css">
+    <!-- font-awesome(폰트어썸) -->
+    <link crossorigin="anonymous"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+          integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+          referrerpolicy="no-referrer" rel="stylesheet"/>
+    <!-- 제이쿼리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      // 전화번호 등록
+      $(function () {
+        $(".submitBtn").click(function(){
+          const phoneNumber = $(".phoneNumber").val();
+          console.log(phoneNumber);
+          if(phoneNumber.length != 11){
+            alert("숫자 11자리를 입력해주세요.");
+            return false;
+          }
+
+          $.ajax({
+            url : "/oAuth2CallbackPhoneNumber",
+            type : "POST",
+            data : { "phoneNumber" : phoneNumber },
+            success : function(response){
+              console.log(response);
+              window.location.replace("index.html");
+            }
+          })
+        })
+      })
+    </script>
+</head>
+<body>
+<div class="commonBox">
+    <div>
+        <div>
+            <h1 style="text-align:center;">전화번호 등록</h1>
+            <div style="width:100%; float:left; text-align:center; padding:50px 0px;">
+                <input type="text" class="phoneNumber" name="phoneNumber" placeholder="하이픈(-)없이 숫자만 11자리 입력해주세요" style="width:300px; border:1px solid #ccc; height:35px;">
+                <button type="button" class="submitBtn mainBtn" style="width:110px; height:35px; font-size:15px;">번호 등록</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
