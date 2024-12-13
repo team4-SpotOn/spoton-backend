@@ -14,7 +14,7 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttributes;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttribute;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreAttributeRepository;
@@ -71,9 +71,9 @@ public class PopupStoreService {
                 .toList();
 
         // 속성 설정
-        updateAttributes(popupStore.getId(), requestDto.getAttributes());
+        List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
 
-        return new PopupStoreCreateResponseDto(popupStore, operatingList, popupStoreAttributesRepository.findByPopupStoreId(popupStore.getId()));
+        return new PopupStoreCreateResponseDto(popupStore, operatingList, attributes);
     }
 
     // 관리자 - 팝업 스토어 수정
@@ -89,9 +89,10 @@ public class PopupStoreService {
 
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         this.updateImage(popupStore, requestDto);
-        updateAttributes(popupStore.getId(), requestDto.getAttributes());
+        // 속성 설정
+        List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
 
-        return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), operatingList, popupStoreAttributesRepository.findByPopupStoreId(popupId));
+        return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), operatingList, attributes);
     }
 
     // 회사 - 팝업 스토어 수정
@@ -104,7 +105,7 @@ public class PopupStoreService {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
         }
 
-        if (!isEditable(popupStore)) {
+        if (isEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
 
@@ -112,11 +113,13 @@ public class PopupStoreService {
                 .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
                 .filter(Objects::nonNull)
                 .toList();
+
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         this.updateImage(popupStore, requestDto);
-        updateAttributes(popupStore.getId(), requestDto.getAttributes());
+        // 속성 설정
+        List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
 
-        return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), operatingList, popupStoreAttributesRepository.findByPopupStoreId(popupId));
+        return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), operatingList, attributes);
     }
 
     private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
@@ -129,17 +132,17 @@ public class PopupStoreService {
     }
 
     // 속성 업데이트 메서드
-    private void updateAttributes(Long popupStoreId, List<PopupStoreAttributeRequestDto> attributeDtos) {
-        popupStoreAttributesRepository.deleteByPopupStoreId(popupStoreId);
-        List<PopupStoreAttributes> newAttributes = attributeDtos.stream()
-                .map(dto -> new PopupStoreAttributes(popupStoreRepository.getOne(popupStoreId), dto.getAttribute(), dto.getIsAllow()))
+    private List<PopupStoreAttribute> updateAttributes(PopupStore popupStore, List<PopupStoreAttributeRequestDto> attributeDtos) {
+        popupStoreAttributesRepository.deleteByPopupStore(popupStore);
+        List<PopupStoreAttribute> newAttributes = attributeDtos.stream()
+                .map(dto -> new PopupStoreAttribute(popupStore, dto.getAttribute(), dto.getIsAllow()))
                 .toList();
-        popupStoreAttributesRepository.saveAll(newAttributes);
+        return popupStoreAttributesRepository.saveAll(newAttributes);
     }
 
     // 팝업스토어 진행여부 판단
     private boolean isEditable(PopupStore popupStore) {
-        return popupStore.getStartDate().isAfter(LocalDate.now());
+        return popupStore.getStartDate().isBefore(LocalDate.now());
     }
 
     // 팝업스토어 단건조회
@@ -164,12 +167,13 @@ public class PopupStoreService {
         if (!popupStore.getCompany().getId().equals(company.getId())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
         }
-        if (!isEditable(popupStore)) {
+        if (isEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
         popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
+
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        List<PopupStoreAttributes> attributes = popupStoreAttributesRepository.findByPopupStoreId(popupStoreId);
+        List<PopupStoreAttribute> attributes = popupStoreAttributesRepository.findByPopupStore(popupStore);
         popupStoreAttributesRepository.deleteAll(attributes);
         popupStoreRepository.deleteById(popupStoreId);
     }
@@ -178,8 +182,9 @@ public class PopupStoreService {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
         popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
+
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        List<PopupStoreAttributes> attributes = popupStoreAttributesRepository.findByPopupStoreId(popupStoreId);
+        List<PopupStoreAttribute> attributes = popupStoreAttributesRepository.findByPopupStore(popupStore);
         popupStoreAttributesRepository.deleteAll(attributes);
         popupStoreRepository.deleteById(popupStoreId);
     }
