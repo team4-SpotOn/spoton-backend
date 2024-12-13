@@ -11,8 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -27,8 +25,6 @@ public class PopupStore extends BaseEntity {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PopupStoreImage> popupStoreImageList;
     private String name;
     private String contents;
     private int price;

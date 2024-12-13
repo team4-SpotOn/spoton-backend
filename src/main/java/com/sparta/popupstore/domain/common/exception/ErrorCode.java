@@ -50,6 +50,9 @@ public enum ErrorCode {
 
     //point
     NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST,"결제가능한 포인트가 아닙니다." ),
+
+    // address error
+    KAKAO_ADDRESS_API_ERROR(HttpStatus.BAD_REQUEST, "카카오 지도 에러"),
     ;
     private final HttpStatus status;
     private final String message;

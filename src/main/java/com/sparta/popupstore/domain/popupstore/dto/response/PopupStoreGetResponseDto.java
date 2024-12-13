@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-public class PopupStoreFindOneResponseDto {
+public class PopupStoreGetResponseDto {
     @Schema(description = "팝업스토어 이름")
     private final String name;
     @Schema(description = "팝업스토어 시작일")
@@ -34,7 +34,7 @@ public class PopupStoreFindOneResponseDto {
     @Schema(description = "팝업스토어 속성 리스트")
     private final List<PopupStoreAttributeResponseDto> attributeList;
 
-    public PopupStoreFindOneResponseDto(
+    public PopupStoreGetResponseDto(
             PopupStore popupStore,
             List<PopupStoreImage> imageList,
             List<PopupStoreOperating> operatingList,
