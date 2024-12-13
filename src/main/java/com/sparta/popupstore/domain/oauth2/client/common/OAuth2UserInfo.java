@@ -10,5 +10,5 @@ public class OAuth2UserInfo {
 
     private OAuth2Provider provider;
     private String providerId;
-    private String email;
+    private String phoneNumber;
 }

@@ -18,7 +18,7 @@ public class SocialUserService {
                     SocialUser newSocialUser = SocialUser.builder()
                             .provider(userInfo.getProvider())
                             .providerId(userInfo.getProviderId())
-                            .email(userInfo.getEmail())
+                            .phoneNumber(userInfo.getPhoneNumber())
                             .build();
                     return socialUserRepository.save(newSocialUser);
                 });

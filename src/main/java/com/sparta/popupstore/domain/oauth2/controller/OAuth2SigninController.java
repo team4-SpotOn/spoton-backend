@@ -38,7 +38,7 @@ public class OAuth2SigninController {
             HttpServletResponse response
     ) {
         SocialUser socialUser = oAuth2SigninService.signin(provider, authorizationCode);
-        jwtUtil.addJwtToCookie(socialUser.getEmail(), response);
+        jwtUtil.addJwtToCookie(socialUser.getPhoneNumber(), response);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

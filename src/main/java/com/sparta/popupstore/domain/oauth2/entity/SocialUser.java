@@ -21,13 +21,13 @@ public class SocialUser extends BaseEntity {
     private OAuth2Provider provider;
 
     private String providerId;
-    private String email;
+    private String phoneNumber;
 
     @Builder
-    public SocialUser(Long id, OAuth2Provider provider, String providerId, String email) {
+    public SocialUser(Long id, OAuth2Provider provider, String providerId, String phoneNumber) {
         this.id = id;
         this.provider = provider;
         this.providerId = providerId;
-        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 }
