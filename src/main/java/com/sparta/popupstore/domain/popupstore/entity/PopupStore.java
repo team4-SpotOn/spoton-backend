@@ -3,7 +3,6 @@ package com.sparta.popupstore.domain.popupstore.entity;
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
 import com.sparta.popupstore.domain.company.entity.Company;
-import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,13 +45,13 @@ public class PopupStore extends BaseEntity {
         this.endDate = endDate;
     }
 
-    public void update(PopupStoreUpdateRequestDto requestDto, Address address) {
-        this.name = requestDto.getName() != null ? requestDto.getName() : this.name;
-        this.contents = requestDto.getContents() != null ? requestDto.getContents() : this.contents;
-        this.price = requestDto.getPrice() != null ? Integer.parseInt(requestDto.getPrice()) : this.price;
+    public void update(String name, String contents, int price, Address address, LocalDate startDate, LocalDate endDate) {
+        this.name = name;
+        this.contents = contents;
+        this.price = price;
         this.address = address;
-        this.startDate = requestDto.getStartDate() != null ? requestDto.getStartDate() : this.startDate;
-        this.endDate = requestDto.getEndDate() != null ? requestDto.getEndDate() : this.endDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public void viewPopupStore() {

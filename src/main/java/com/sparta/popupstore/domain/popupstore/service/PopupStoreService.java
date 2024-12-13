@@ -99,7 +99,14 @@ public class PopupStoreService {
     private PopupStoreUpdateResponseDto updatePopupStore(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
         Address address = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
 
-        popupStore.update(requestDto, address);
+        popupStore.update(
+                requestDto.getName(),
+                requestDto.getContents(),
+                Integer.parseInt(requestDto.getPrice()),
+                address,
+                requestDto.getStartDate(),
+                requestDto.getEndDate()
+        );
 
         imageUtil.deletePopupStoreImageList(popupStore);
         var imageList = imageUtil.createPopupStoreImageList(popupStore, requestDto.getImageList());
