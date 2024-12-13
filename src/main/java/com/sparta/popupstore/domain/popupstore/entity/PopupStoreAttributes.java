@@ -26,5 +26,4 @@ public class PopupStoreAttributes {
         this.attribute = attribute;
         this.isAllow = isAllow;
     }
-
 }
