@@ -47,7 +47,7 @@ public class PointController {
 
   @Operation(summary = "포인트 사용")
   @Parameter(name = "usedPoint", description = "포인트사용량")
-  @PostMapping("/used/{popupStoreId}")
+  @PostMapping("/used/popupStoreId/{popupStoreId}")
   public ResponseEntity <PointUseResponseDto> pointUsed(@AuthUser User user,@PathVariable Long popupStoreId
       ,@RequestBody PointUseRequestDto usedRequest) {
     return ResponseEntity.status(HttpStatus.CREATED).body(pointService.pointUsed(user, usedRequest, popupStoreId));
