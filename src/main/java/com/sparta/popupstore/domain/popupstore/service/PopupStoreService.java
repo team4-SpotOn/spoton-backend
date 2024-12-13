@@ -126,29 +126,6 @@ public class PopupStoreService {
         return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), operatingList, attributes);
     }
 
-    private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
-        List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
-        List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
-                .map(imageDto -> imageDto.toEntity(popupStore))
-                .toList();
-        popupStoreImageList.forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
-        popupStore.updateImages(requestImageList);
-    }
-
-    // 속성 업데이트 메서드
-    private List<PopupStoreAttribute> updateAttributes(PopupStore popupStore, List<PopupStoreAttributeRequestDto> attributeDtos) {
-        popupStoreAttributesRepository.deleteByPopupStore(popupStore);
-        List<PopupStoreAttribute> newAttributes = attributeDtos.stream()
-                .map(dto -> new PopupStoreAttribute(popupStore, dto.getAttribute(), dto.getIsAllow()))
-                .toList();
-        return popupStoreAttributesRepository.saveAll(newAttributes);
-    }
-
-    // 팝업스토어 진행여부 판단
-    private boolean isEditable(PopupStore popupStore) {
-        return popupStore.getStartDate().isBefore(LocalDate.now());
-    }
-
     // 팝업스토어 단건조회
     public PopupStoreFindOneResponseDto getPopupStoreOne(Long popupId, HttpServletRequest request, HttpServletResponse response) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
@@ -195,4 +172,29 @@ public class PopupStoreService {
     public List<PopupStoreFindOneResponseDto> getPopupStoreAll() {
         return popupStoreRepository.findAll().stream().map(PopupStoreFindOneResponseDto::new).toList();
     }
+
+
+    private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
+        List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
+        List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
+                .map(imageDto -> imageDto.toEntity(popupStore))
+                .toList();
+        popupStoreImageList.forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
+        popupStore.updateImages(requestImageList);
+    }
+
+    // 속성 업데이트 메서드
+    private List<PopupStoreAttribute> updateAttributes(PopupStore popupStore, List<PopupStoreAttributeRequestDto> attributeDtos) {
+        popupStoreAttributesRepository.deleteByPopupStore(popupStore);
+        List<PopupStoreAttribute> newAttributes = attributeDtos.stream()
+                .map(dto -> new PopupStoreAttribute(popupStore, dto.getAttribute(), dto.getIsAllow()))
+                .toList();
+        return popupStoreAttributesRepository.saveAll(newAttributes);
+    }
+
+    // 팝업스토어 진행여부 판단
+    private boolean isEditable(PopupStore popupStore) {
+        return popupStore.getStartDate().isBefore(LocalDate.now());
+    }
+
 }
