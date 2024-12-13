@@ -70,6 +70,7 @@ public class PopupStoreService {
                 .filter(Objects::nonNull)
                 .toList();
 
+        operatingList = popupStoreOperatingRepository.saveAll(operatingList);
         // 속성 설정
         List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
 
@@ -89,6 +90,7 @@ public class PopupStoreService {
 
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         this.updateImage(popupStore, requestDto);
+        operatingList = popupStoreOperatingRepository.saveAll(operatingList);
         // 속성 설정
         List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
 
@@ -116,6 +118,7 @@ public class PopupStoreService {
 
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         this.updateImage(popupStore, requestDto);
+        operatingList = popupStoreOperatingRepository.saveAll(operatingList);
         // 속성 설정
         List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
 
@@ -173,9 +176,8 @@ public class PopupStoreService {
         popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
 
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        List<PopupStoreAttribute> attributes = popupStoreAttributesRepository.findByPopupStore(popupStore);
-        popupStoreAttributesRepository.deleteAll(attributes);
-        popupStoreRepository.deleteById(popupStoreId);
+        popupStoreAttributesRepository.deleteByPopupStore(popupStore);
+        popupStoreRepository.delete(popupStore);
     }
 
     public void deletePopupStore(Long popupStoreId) {
@@ -184,9 +186,8 @@ public class PopupStoreService {
         popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
 
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        List<PopupStoreAttribute> attributes = popupStoreAttributesRepository.findByPopupStore(popupStore);
-        popupStoreAttributesRepository.deleteAll(attributes);
-        popupStoreRepository.deleteById(popupStoreId);
+        popupStoreAttributesRepository.deleteByPopupStore(popupStore);
+        popupStoreRepository.delete(popupStore);
     }
 
     // 임시 팝업 스토어 전체목록(지도용)
