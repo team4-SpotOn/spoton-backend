@@ -28,10 +28,6 @@ public class PointService {
     private final PopupStoreRepository popupStoreRepository;
 
     public PointChargeResponseDto pointCharge(User user, PointChargeRequestDto chargeRequest) {
-      if (chargeRequest.getChargedPoint() <= 1000) {
-        throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
-      }
-
       PointChargedLog chargedLog = chargeRequest.toEntity(user);
       chargedLog = pointChargedLogRepository.save(chargedLog);
       user.ChargePoint(chargeRequest.getChargedPoint());

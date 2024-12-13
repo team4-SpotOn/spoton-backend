@@ -8,7 +8,6 @@ import com.sparta.popupstore.domain.point.dto.response.PointChargedLogResponseDt
 import com.sparta.popupstore.domain.point.dto.response.PointUseResponseDto;
 import com.sparta.popupstore.domain.point.dto.response.PointUsedLogResponseDto;
 import com.sparta.popupstore.domain.point.service.PointService;
-import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Point", description = "포인트 관련 API")
 public class PointController {
   private final PointService pointService;
-  private final PopupStoreRepository popupStoreRepository;
 
   @Operation(summary = "포인트 충전")
   @Parameter(name = "chargedPoint", description = "포인트충전량")
