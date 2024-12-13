@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface PopupStoreImageRepository extends JpaRepository<PopupStoreImage, Long> {
     List<PopupStoreImage> findByPopupStore(PopupStore popupStore);
+
+    void deleteByPopupStore(PopupStore popupStore);
 }

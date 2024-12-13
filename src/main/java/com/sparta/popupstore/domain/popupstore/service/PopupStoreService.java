@@ -12,11 +12,10 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
-import com.sparta.popupstore.domain.popupstore.repository.PopupStoreAttributeRepository;
-import com.sparta.popupstore.domain.popupstore.repository.PopupStoreImageRepository;
-import com.sparta.popupstore.domain.popupstore.repository.PopupStoreOperatingRepository;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
-import com.sparta.popupstore.s3.service.S3ImageService;
+import com.sparta.popupstore.domain.popupstore.util.AttributeUtil;
+import com.sparta.popupstore.domain.popupstore.util.ImageUtil;
+import com.sparta.popupstore.domain.popupstore.util.OperatingUtil;
 import com.sparta.popupstore.web.WebUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,11 +32,10 @@ import java.util.List;
 public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
-    private final PopupStoreOperatingRepository popupStoreOperatingRepository;
-    private final PopupStoreAttributeRepository popupStoreAttributesRepository;
-    private final PopupStoreImageRepository popupStoreImageRepository;
     private final KakaoAddressService kakaoAddressService;
-    private final S3ImageService s3ImageService;
+    private final ImageUtil imageUtil;
+    private final OperatingUtil operatingUtil;
+    private final AttributeUtil attributeUtil;
 
     // 팝업스토어 생성
     @Transactional
@@ -48,27 +46,14 @@ public class PopupStoreService {
 
         PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company, address));
 
-
         // 이미지 URL 추가
-        var imageList = popupStoreImageRepository.saveAll(
-                requestDto.getImageList().stream()
-                        .map(imageDto -> imageDto.toEntity(popupStore))
-                        .toList()
-        );
+        var imageList = imageUtil.createPopupStoreImageList(popupStore, requestDto.getImageList());
 
         // 팝업스토어 운영 시간 저장
-        var operatingList = popupStoreOperatingRepository.saveAll(
-                requestDto.getOperatingList().stream()
-                        .map(operationDto -> operationDto.toEntity(popupStore))
-                        .toList()
-        );
+        var operatingList = operatingUtil.createPopupStoreOperatingList(popupStore, requestDto.getOperatingList());
 
         // 속성 설정
-        var attributeList = popupStoreAttributesRepository.saveAll(
-                requestDto.getAttributeList().stream()
-                        .map(attributeDto -> attributeDto.toEntity(popupStore))
-                        .toList()
-        );
+        var attributeList = attributeUtil.createPopupStoreAttributeList(popupStore, requestDto.getAttributeList());
 
         return new PopupStoreCreateResponseDto(popupStore, imageList, operatingList, attributeList);
     }
@@ -87,16 +72,20 @@ public class PopupStoreService {
             WebUtil.addCookie(response, cookieName);
         }
 
-        var imageList = popupStoreImageRepository.findByPopupStore(popupStore);
-        return new PopupStoreFindOneResponseDto(popupStore, imageList);
+        var imageList = imageUtil.getPopupStoreImageList(popupStore);
+        var operatingList = operatingUtil.getPopupStoreOperatingList(popupStore);
+        var attributeList = attributeUtil.getPopupStoreAttributeList(popupStore);
+        return new PopupStoreFindOneResponseDto(popupStore, imageList, operatingList, attributeList);
     }
 
     // 임시 팝업 스토어 전체목록(지도용)
     public List<PopupStoreFindOneResponseDto> getPopupStoreAll() {
         return popupStoreRepository.findAll().stream()
                 .map(popupStore -> {
-                    var imageList = popupStoreImageRepository.findByPopupStore(popupStore);
-                    return new PopupStoreFindOneResponseDto(popupStore, imageList);
+                    var imageList = imageUtil.getPopupStoreImageList(popupStore);
+                    var operatingList = operatingUtil.getPopupStoreOperatingList(popupStore);
+                    var attributeList = attributeUtil.getPopupStoreAttributeList(popupStore);
+                    return new PopupStoreFindOneResponseDto(popupStore, imageList, operatingList, attributeList);
                 })
                 .toList();
     }
@@ -106,12 +95,7 @@ public class PopupStoreService {
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-        if(!popupStore.getCompany().equals(company)) {
-            throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
-        }
-        if(isNotEditable(popupStore)) {
-            throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
-        }
+        isEditable(company, popupStore);
 
         return updatePopupStore(popupStore, requestDto);
     }
@@ -131,33 +115,14 @@ public class PopupStoreService {
 
         popupStore.update(requestDto, address);
 
-        popupStoreImageRepository
-                .findByPopupStore(popupStore)
-                .forEach(image -> {
-                    s3ImageService.deleteImage(image.getImageUrl());
-                    popupStoreImageRepository.delete(image);
-                });
+        imageUtil.deletePopupStoreImageList(popupStore);
+        var imageList = imageUtil.createPopupStoreImageList(popupStore, requestDto.getImageList());
 
-        var imageList = popupStoreImageRepository.saveAll(
-                requestDto.getImageList().stream()
-                        .map(imageDto -> imageDto.toEntity(popupStore))
-                        .toList()
-        );
+        operatingUtil.deletePopupStoreOperatingList(popupStore);
+        var operatingList = operatingUtil.createPopupStoreOperatingList(popupStore, requestDto.getOperatingList());
 
-        var operatingList = requestDto.getOperatingList().stream()
-                .map(operatingDto -> popupStoreOperatingRepository
-                        .findByPopupStoreAndDayOfWeek(popupStore, operatingDto.getDayOfWeek())
-                        .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_OPERATING_BAD_REQUEST))
-                        .update(operatingDto.getStartTime(), operatingDto.getEndTime())
-                )
-                .toList();
-
-        popupStoreAttributesRepository.deleteByPopupStore(popupStore);
-        var attributeList = popupStoreAttributesRepository.saveAll(
-                requestDto.getAttributeList().stream()
-                        .map(attributeDto -> attributeDto.toEntity(popupStore))
-                        .toList()
-        );
+        attributeUtil.deletePopupAttributeList(popupStore);
+        var attributeList = attributeUtil.createPopupStoreAttributeList(popupStore, requestDto.getAttributeList());
 
         return new PopupStoreUpdateResponseDto(popupStore, imageList, operatingList, attributeList);
     }
@@ -165,12 +130,7 @@ public class PopupStoreService {
     public void deletePopupStore(Company company, Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-        if(!popupStore.getCompany().getId().equals(company.getId())) {
-            throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
-        }
-        if(isNotEditable(popupStore)) {
-            throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
-        }
+        isEditable(company, popupStore);
 
         deletePopupStore(popupStore);
     }
@@ -183,19 +143,19 @@ public class PopupStoreService {
     }
 
     private void deletePopupStore(PopupStore popupStore) {
-        popupStoreImageRepository.findByPopupStore(popupStore)
-                .forEach(image -> {
-                    s3ImageService.deleteImage(image.getImageUrl());
-                    popupStoreImageRepository.delete(image);
-                });
-        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        popupStoreAttributesRepository.deleteByPopupStore(popupStore);
+        imageUtil.deletePopupStoreImageList(popupStore);
+        operatingUtil.deletePopupStoreOperatingList(popupStore);
+        attributeUtil.deletePopupAttributeList(popupStore);
         popupStoreRepository.delete(popupStore);
     }
 
     // 팝업스토어 진행여부 판단
-    private boolean isNotEditable(PopupStore popupStore) {
-        return popupStore.getStartDate().isBefore(LocalDate.now());
+    private void isEditable(Company company, PopupStore popupStore) {
+        if(!popupStore.getCompany().getId().equals(company.getId())) {
+            throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
+        }
+        if(popupStore.getStartDate().isBefore(LocalDate.now())) {
+            throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
+        }
     }
-
 }

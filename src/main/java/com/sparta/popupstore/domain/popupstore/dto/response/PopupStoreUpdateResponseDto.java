@@ -32,7 +32,12 @@ public class PopupStoreUpdateResponseDto {
     @Schema(description = "생성된 팝업스토어 속성 리스트")
     private final List<PopupStoreAttributeResponseDto> attributeList;
 
-    public PopupStoreUpdateResponseDto(PopupStore popupStore, List<PopupStoreImage> imageList, List<PopupStoreOperating> operatingList, List<PopupStoreAttribute> attributeList) {
+    public PopupStoreUpdateResponseDto(
+            PopupStore popupStore,
+            List<PopupStoreImage> imageList,
+            List<PopupStoreOperating> operatingList,
+            List<PopupStoreAttribute> attributeList
+    ) {
         this.name = popupStore.getName();
         this.startDate = popupStore.getStartDate();
         this.endDate = popupStore.getEndDate();
