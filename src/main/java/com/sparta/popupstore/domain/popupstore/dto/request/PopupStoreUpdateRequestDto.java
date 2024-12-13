@@ -11,8 +11,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 
 @Getter
 public class PopupStoreUpdateRequestDto {
@@ -37,4 +37,7 @@ public class PopupStoreUpdateRequestDto {
     @Valid
     @NotEmpty(message = "하나 이상의 이미지를 넣어주세요")
     private List<PopupStoreImageRequestDto> images;
+    @Valid
+    @NotEmpty(message = "하나 이상의 속성을 넣어주세요")
+    private List<PopupStoreAttributeRequestDto> attributes; // 속성 추가
 }
