@@ -1,7 +1,9 @@
 package com.sparta.popupstore.domain.popupstore.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
