@@ -28,7 +28,6 @@ public class PointUsedLog {
     private Long popupstoreId;
     private int prevPoint;
     private int usedPoint;
-    @JoinColumn(name = "serial_number")
     private String serialNumber;
 
     @CreatedDate

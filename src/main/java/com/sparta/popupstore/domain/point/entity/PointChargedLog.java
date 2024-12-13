@@ -27,7 +27,6 @@ public class PointChargedLog {
 
     private int prevPoint;
     private int chargedPoint;
-    @JoinColumn(name = "serial_number")
     private String serialNumber;
 
     @CreatedDate

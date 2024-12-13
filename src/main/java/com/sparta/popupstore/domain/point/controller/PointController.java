@@ -8,6 +8,7 @@ import com.sparta.popupstore.domain.point.dto.response.PointChargedLogResponseDt
 import com.sparta.popupstore.domain.point.dto.response.PointUseResponseDto;
 import com.sparta.popupstore.domain.point.dto.response.PointUsedLogResponseDto;
 import com.sparta.popupstore.domain.point.service.PointService;
+import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,7 +34,8 @@ public class PointController {
   @Operation(summary = "포인트 충전")
   @Parameter(name = "chargedPoint", description = "포인트충전량")
   @PostMapping("/charge")
-  public ResponseEntity<PointChargeResponseDto> pointCharge(@AuthUser User user,@RequestBody PointChargeRequestDto chargeRequest) {
+  public ResponseEntity<PointChargeResponseDto> pointCharge(@AuthUser User user,@RequestBody PointChargeRequestDto chargeRequest
+          ,@RequestBody Coupon coupon) {
     return ResponseEntity.status(HttpStatus.CREATED).body(pointService.pointCharge(user, chargeRequest));
   }
 
@@ -47,7 +49,7 @@ public class PointController {
   @Parameter(name = "usedPoint", description = "포인트사용량")
   @PostMapping("/used/popupStore/{popupStoreId}")
   public ResponseEntity <PointUseResponseDto> pointUsed(@AuthUser User user,@PathVariable Long popupStoreId
-      ,@RequestBody PointUseRequestDto usedRequest) {
+      ,@RequestBody PointUseRequestDto usedRequest, @RequestBody Coupon coupon) {
     return ResponseEntity.status(HttpStatus.CREATED).body(pointService.pointUsed(user, usedRequest, popupStoreId));
   }
 

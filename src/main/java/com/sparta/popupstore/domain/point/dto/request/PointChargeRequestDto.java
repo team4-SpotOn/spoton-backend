@@ -7,12 +7,13 @@ import lombok.Getter;
 @Getter
 public class PointChargeRequestDto {
   private int chargedPoint;
+  private String serialNumber;
 
   public PointChargedLog toEntity(User user) {
     return PointChargedLog.builder()
         .user(user)
         .chargedPoint(this.chargedPoint)
-        .prevPoint(user.getPoint())
+        .prevPoint(user.getPoint()).serialNumber(this.serialNumber)
         .build();
   }
 }
