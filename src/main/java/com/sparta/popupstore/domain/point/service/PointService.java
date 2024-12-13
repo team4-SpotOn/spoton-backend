@@ -3,7 +3,7 @@ package com.sparta.popupstore.domain.point.service;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.point.dto.request.PointChargeRequestDto;
-import com.sparta.popupstore.domain.point.dto.request.PointUsedRequestDto;
+import com.sparta.popupstore.domain.point.dto.request.PointUseRequestDto;
 import com.sparta.popupstore.domain.point.dto.response.PointChargeResponseDto;
 import com.sparta.popupstore.domain.point.dto.response.PointChargedLogResponseDto;
 import com.sparta.popupstore.domain.point.dto.response.PointUseResponseDto;
@@ -13,6 +13,7 @@ import com.sparta.popupstore.domain.point.entity.PointUsedLog;
 import com.sparta.popupstore.domain.point.repository.PointChargedLogRepository;
 import com.sparta.popupstore.domain.point.repository.PointUsedLogRepository;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class PointService {
 
     private final PointChargedLogRepository pointChargedLogRepository;
     private final PointUsedLogRepository pointUsedLogRepository;
+    private final PopupStoreRepository popupStoreRepository;
 
     public PointChargeResponseDto pointCharge(User user, PointChargeRequestDto chargeRequest) {
       if (chargeRequest.getChargedPoint() <= 1000) {
@@ -31,36 +33,37 @@ public class PointService {
       }
 
       PointChargedLog chargedLog = chargeRequest.toEntity(user);
-      user.Point(chargeRequest.getChargedPoint());
+      user.ChargePoint(chargeRequest.getChargedPoint());
       chargedLog = pointChargedLogRepository.save(chargedLog);
       return new PointChargeResponseDto(chargedLog);
     }
 
     public List<PointChargedLogResponseDto> pointChargeLogs(User user) {
-      return pointChargedLogRepository.findByUserId(user.getId())
+      return pointChargedLogRepository.findByUser(user)
           .stream()
-          .map(ChargedLog -> new PointChargedLogResponseDto(user ,ChargedLog))
+          .map(PointChargedLogResponseDto::new)
           .toList();
     }
 
-    public PointUseResponseDto pointUsed(User user,PointUsedRequestDto usedRequest, PopupStore popupStore) {
-      if (popupStore == null) {
-        throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND);
-      }
-      if (user.getPoint() < popupStore.getPrice()) {
-        throw new CustomApiException(ErrorCode.LACK_OF_POINT);
-      }
+    public PointUseResponseDto pointUsed(User user, PointUseRequestDto usedRequest, Long popupStoreId) {
+        PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
+            .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
-      user.Point(user.getPoint()-popupStore.getPrice());
-      PointUsedLog usedLog = usedRequest.toEntity(user,popupStore);
-      usedLog = pointUsedLogRepository.save(usedLog);
-      return new PointUseResponseDto(usedLog);
+        if (user.getPoint() < popupStore.getPrice()) {
+            throw new RuntimeException("포인트가 부족합니다.");
+        }
+
+        user.ChargePoint(- popupStore.getPrice());
+        PointUsedLog usedLog = usedRequest.toEntity(user, popupStore);
+        usedLog = pointUsedLogRepository.save(usedLog);
+
+        return new PointUseResponseDto(usedLog);
     }
 
     public List<PointUsedLogResponseDto> pointUsedLogs(User user) {
-      return pointUsedLogRepository.findByUserId(user.getId())
+      return pointUsedLogRepository.findByUser(user)
           .stream()
-          .map(UsedLog -> new PointUsedLogResponseDto(user, UsedLog))
+          .map(PointUsedLogResponseDto::new)
           .toList();
     }
 }

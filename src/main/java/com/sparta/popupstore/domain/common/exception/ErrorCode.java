@@ -48,7 +48,7 @@ public enum ErrorCode {
     NOT_CORRECT_URL_FORMAT(HttpStatus.BAD_REQUEST, "올바른 파일 이름이 아닙니다."),
 
     //point
-    LACK_OF_POINT(HttpStatus.BAD_REQUEST,"결제가능한 최소금액이 아닙니다." )
+    LACK_OF_POINT(HttpStatus.BAD_REQUEST,"결제가능한 최소금액이 아닙니다." ),
     ;
     private final HttpStatus status;
     private final String message;

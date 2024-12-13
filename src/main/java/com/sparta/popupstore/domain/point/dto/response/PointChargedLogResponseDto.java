@@ -1,8 +1,6 @@
 package com.sparta.popupstore.domain.point.dto.response;
 
 import com.sparta.popupstore.domain.point.entity.PointChargedLog;
-
-import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -22,12 +20,12 @@ public class PointChargedLogResponseDto {
   @Schema(description = "충전 시간")
   protected LocalDateTime chargedAt;
 
-  public PointChargedLogResponseDto(User user,PointChargedLog ChargedLog) {
-    this.id = ChargedLog.getId();
-    this.name = user.getName();
-    this.prevPoint = ChargedLog.getPrevPoint();
-    this.chargedPoint = ChargedLog.getChargedPoint();
-    this.serialNumber = ChargedLog.getSerialNumber();
-    this.chargedAt = ChargedLog.getChargedAt();
+  public PointChargedLogResponseDto(PointChargedLog chargedLog) {
+    this.id = chargedLog.getId();
+    this.name = chargedLog.getUser().getName();
+    this.prevPoint = chargedLog.getPrevPoint();
+    this.chargedPoint = chargedLog.getChargedPoint();
+    this.serialNumber = chargedLog.getSerialNumber();
+    this.chargedAt = chargedLog.getChargedAt();
   }
 }
