@@ -49,23 +49,21 @@ public class PopupStoreService {
 
         // 이미지 URL 추가
         popupStore.addImageList(
-                requestDto.getImages()
-                        .stream()
-                        .map(PopupStoreImageRequestDto::toEntity)
-                        .toList()
+            requestDto.getImages()
+                .stream()
+                .map(PopupStoreImageRequestDto::toEntity)
+                .toList()
         );
 
         // 카카오 주소 API - 위도 경도 구하기
         KakaoAddressApiDto kakaoAddressApiDto = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
-        double latitude = kakaoAddressApiDto.getDocuments().get(0).getRoadAddress().getLatitude(); // 위도
-        double longitude = kakaoAddressApiDto.getDocuments().get(0).getRoadAddress().getLongitude(); // 경도
-        Address address = new Address(requestDto.getAddress(), latitude, longitude);
+        Address address = new Address(requestDto.getAddress(), kakaoAddressApiDto);
         popupStore.updateAddress(address);
 
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
-                .filter(Objects::nonNull)
-                .toList();
+            .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+            .filter(Objects::nonNull)
+            .toList();
 
         return new PopupStoreCreateResponseDto(popupStore, popupStoreOperatingRepository.saveAll(operatingList));
     }
@@ -74,12 +72,12 @@ public class PopupStoreService {
     @Transactional
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+            .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
-                .filter(Objects::nonNull)
-                .toList();
+            .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+            .filter(Objects::nonNull)
+            .toList();
 
         this.updateImage(popupStore, requestDto);
 
@@ -91,7 +89,7 @@ public class PopupStoreService {
     @Transactional
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+            .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
         if (!popupStore.getCompany().equals(company)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
@@ -102,9 +100,9 @@ public class PopupStoreService {
         }
 
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
-                .filter(Objects::nonNull)
-                .toList();
+            .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+            .filter(Objects::nonNull)
+            .toList();
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         this.updateImage(popupStore, requestDto);
         popupStore.update(requestDto);
@@ -114,8 +112,8 @@ public class PopupStoreService {
     private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
         List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
         List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
-                .map(PopupStoreImageRequestDto::toEntity)
-                .toList();
+            .map(PopupStoreImageRequestDto::toEntity)
+            .toList();
         popupStoreImageList.forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
         popupStore.updateImages(requestImageList);
     }
@@ -128,7 +126,7 @@ public class PopupStoreService {
     // 팝업스토어 단건조회
     public PopupStoreFindOneResponseDto getPopupStoreOne(Long popupId, HttpServletRequest request, HttpServletResponse response){
         PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+            .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
         String cookieName = "viewedPopup_" + popupId;
 
@@ -143,7 +141,7 @@ public class PopupStoreService {
 
     public void deletePopupStore(Company company, Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+            .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
         if(!popupStore.getCompany().getId().equals(company.getId())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
         }
@@ -157,7 +155,7 @@ public class PopupStoreService {
 
     public void deletePopupStore(Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+            .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
         popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         popupStoreRepository.deleteById(popupStoreId);

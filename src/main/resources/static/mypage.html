@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SpotOn 팝업 스토어 플랫폼</title>
+    <link rel="stylesheet" href="css/popup.css">
+    <!-- font-awesome(폰트어썸) -->
+    <link crossorigin="anonymous"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+          integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+          referrerpolicy="no-referrer" rel="stylesheet"/>
+    <script src="apikey.js" type="text/javascript"></script>
+    <!-- 제이쿼리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      // 팝업스토어 단건조회
+      $(function () {
+
+        let userId = 1;
+        $.ajax({
+          type: "GET",
+          url: `/users/mypage/${userId}`,
+          success: function (response) {
+            console.log(response);
+            let latitude = response['address']['latitude'];
+            let longitude = response['address']['longitude'];
+            let name = response['name'];
+
+            $(".my-latitude").val(latitude);
+            $(".my-longitude").val(longitude);
+
+            const script = document.createElement("script");
+            const apiKey = config.apikey
+            script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer,services&`;
+            document.head.appendChild(script);
+            script.onload = () => {
+              kakao.maps.load(() => {
+                    const node = document.getElementById('myMap'); // 지도를 표시할 div
+                    const center = new kakao.maps.LatLng(latitude, longitude);
+                    const options = {
+                      center,
+                      level: 5
+                    };
+
+                    function relayout() {
+                      map.relayout();
+                    }
+
+                    const map = new kakao.maps.Map(node, options);
+                    var markerPosition = new kakao.maps.LatLng(latitude, longitude);
+                    var marker = new kakao.maps.Marker({
+                      position: markerPosition
+                    });
+                    marker.setMap(map);
+                    var iwContent = '<div style="padding:5px; width:150px; height:100px; color:#fff; background:#11264f;"><span style="width:100%; float:left; font-size:12px;">'
+                            + name+"님의 집"
+                            + '</span>'
+                        iwPosition = new kakao.maps.LatLng(latitude, longitude);
+                    var infowindow = new kakao.maps.InfoWindow({
+                      position: iwPosition,
+                      content: iwContent
+                    });
+                    infowindow.open(map, marker);
+                  }
+              )
+            };
+          }
+        });
+
+        $.ajax({
+          type: "GET",
+          url: `/popupstores`,
+          success: function (response) {
+
+            const myLatitude = $(".my-latitude").val();
+            const myLongitude = $(".my-longitude").val();
+
+            const script = document.createElement("script");
+            const apiKey = config.apikey
+            script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer,services&`;
+            document.head.appendChild(script);
+            script.onload = () => {
+              kakao.maps.load(() => {
+                    const node = document.getElementById('AllMap'); // 지도를 표시할 div
+                    const center = new kakao.maps.LatLng(myLatitude, myLongitude);
+                    const options = {
+                      center,
+                      level: 5
+                    };
+
+                    const map = new kakao.maps.Map(node, options);
+                    for (let i = 0; i < response.length; i++) {
+                      console.log(response[i]);
+
+                      console.log(response[i]['latitude']);
+
+                      let latitude = response[i]['address']['latitude']; // X축
+                      let longitude = response[i]['address']['longitude']; // Y축
+                      let price = response[i]['price']; // 금액
+                      let popupName = response[i]['name']; // 팝업이름
+                      let startDate = response[i]['startDate']; // 시작일
+                      let endDate = response[i]['endDate']; // 시작일
+
+                      let markerPosition = new kakao.maps.LatLng(latitude, longitude);
+                      let marker = new kakao.maps.Marker({
+                        position: markerPosition
+                      });
+                      marker.setMap(map);
+                      var iwContent = '<div style="padding:5px; width:150px; height:100px; color:#fff; background:#11264f;"><span style="width:100%; float:left; font-size:12px;">'
+                              + popupName
+                              + '</span> <span style="width:100%; float:left; font-size:12px;">금액 : '
+                              + price
+                              + '원</span><span style="width:100%; float:left; font-size:12px;">시작일 : '
+                              + startDate
+                              + '</span><span style="width:100%; float:left; font-size:12px;">종료일 : '
+                              + endDate + '</span></div>',
+                          iwPosition = new kakao.maps.LatLng(latitude, longitude);
+                      var infowindow = new kakao.maps.InfoWindow({
+                        position: iwPosition,
+                        content: iwContent
+                      });
+                      infowindow.open(map, marker);
+                    }
+
+                    function relayout() {
+                      map.relayout();
+                    }
+                  }
+              )
+            };
+          }
+        });
+
+      })
+    </script>
+</head>
+<body>
+<div class="commonBox">
+    <div>
+        <div>
+
+            <div style="width:100%; float:left; text-align:center;">
+                <h1>고객 마이페이지</h1>
+                <input type="hidden" class="my-latitude">
+                <input type="hidden" class="my-longitude">
+                <div id="myMap" style="width:1000px; height:750px;"></div>
+            </div>
+
+
+            <div style="width:100%; float:left; margin-top:600px;">
+                <h1>팝업 전체목록</h1>
+                <div id="AllMap" style="width:900px; height:750px; top:50%; transform: translate(50%, -50%); overflow:hidden; position:absolute;"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

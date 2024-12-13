@@ -19,4 +19,11 @@ public class UserMyPageResponseDto {
         this.name = user.getName();
         this.address = user.getAddress();
     }
+
+    public UserMyPageResponseDto(String email, String name, Address address) {
+        this.email = email;
+        this.name = name;
+        this.address = address;
+    }
+
 }
