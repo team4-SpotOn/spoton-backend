@@ -57,9 +57,7 @@ public class PopupStoreService {
 
         // 카카오 주소 API - 위도 경도 구하기
         KakaoAddressApiDto kakaoAddressApiDto = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
-        double latitude = kakaoAddressApiDto.getDocuments().get(0).getRoadAddress().getLatitude(); // 위도
-        double longitude = kakaoAddressApiDto.getDocuments().get(0).getRoadAddress().getLongitude(); // 경도
-        Address address = new Address(requestDto.getAddress(), latitude, longitude);
+        Address address = new Address(requestDto.getAddress(), kakaoAddressApiDto);
         popupStore.updateAddress(address);
 
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
