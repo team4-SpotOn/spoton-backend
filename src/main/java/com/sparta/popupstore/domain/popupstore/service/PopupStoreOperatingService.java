@@ -16,7 +16,12 @@ import java.util.Map;
 public class PopupStoreOperatingService {
 
     // 운영 시간 처리 로직
-    public PopupStoreOperating createOperatingHours(PopupStore popupStore, DayOfWeek dayOfWeek, Map<DayOfWeek, LocalTime> startTimes, Map<DayOfWeek, LocalTime> endTimes) {
+    public PopupStoreOperating createPopupStoreOperating(
+            PopupStore popupStore,
+            DayOfWeek dayOfWeek,
+            Map<DayOfWeek, LocalTime> startTimes,
+            Map<DayOfWeek, LocalTime> endTimes
+    ) {
         LocalTime startTime = startTimes.get(dayOfWeek);
         LocalTime endTime = endTimes.get(dayOfWeek);
 

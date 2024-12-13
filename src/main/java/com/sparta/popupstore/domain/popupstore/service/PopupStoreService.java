@@ -57,23 +57,27 @@ public class PopupStoreService {
         PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company, address));
 
         // 이미지 URL 추가
-        popupStoreImageRepository.saveAll(
-                requestDto.getImages().stream()
+        var imageList = popupStoreImageRepository.saveAll(
+                requestDto.getImageList().stream()
                         .map(imageDto -> imageDto.toEntity(popupStore))
                         .toList()
         );
 
         // 팝업스토어 운영 시간 저장
-        List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
-                .filter(Objects::nonNull)
-                .toList();
+        var operatingList = popupStoreOperatingRepository.saveAll(
+                requestDto.getOperatingList().stream()
+                        .map(operationDto -> operationDto.toEntity(popupStore))
+                        .toList()
+        );
 
-        operatingList = popupStoreOperatingRepository.saveAll(operatingList);
         // 속성 설정
-        List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
+        var attributeList = popupStoreAttributesRepository.saveAll(
+                requestDto.getAttributeList().stream()
+                        .map(attributeDto -> attributeDto.toEntity(popupStore))
+                        .toList()
+        );
 
-        return new PopupStoreCreateResponseDto(popupStore, operatingList, attributes);
+        return new PopupStoreCreateResponseDto(popupStore, imageList, operatingList, attributeList);
     }
 
     // 관리자 - 팝업 스토어 수정
@@ -84,7 +88,7 @@ public class PopupStoreService {
         this.updateImage(popupStore, requestDto);
 
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+                .map(dayOfWeek -> popupStoreOperatingService.createPopupStoreOperating(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -109,7 +113,7 @@ public class PopupStoreService {
         }
 
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+                .map(dayOfWeek -> popupStoreOperatingService.createPopupStoreOperating(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
                 .filter(Objects::nonNull)
                 .toList();
 

@@ -3,6 +3,7 @@ package com.sparta.popupstore.domain.popupstore.dto.response;
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttribute;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -31,15 +32,15 @@ public class PopupStoreCreateResponseDto {
     @Schema(description = "생성된 팝업스토어 속성 리스트")
     private final List<PopupStoreAttributeResponseDto> attributeList;
 
-    public PopupStoreCreateResponseDto(PopupStore popupStore, List<PopupStoreOperating> operatingList, List<PopupStoreAttribute> attributeList) {
+    public PopupStoreCreateResponseDto(PopupStore popupStore, List<PopupStoreImage> imageList, List<PopupStoreOperating> operatingList, List<PopupStoreAttribute> attributeList) {
         this.name = popupStore.getName();
         this.contents = popupStore.getContents();
         this.price = popupStore.getPrice();
         this.address = popupStore.getAddress();
         this.startDate = popupStore.getStartDate();
         this.endDate = popupStore.getEndDate();
+        this.imageList = imageList.stream().map(PopupStoreImageResponseDto::new).toList();
         this.operatingList = operatingList.stream().map(PopupStoreOperatingResponseDto::new).toList();
-        this.imageList = popupStore.getPopupStoreImageList().stream().map(PopupStoreImageResponseDto::new).toList();
         this.attributeList = attributeList.stream().map(PopupStoreAttributeResponseDto::new).toList();
     }
 }
