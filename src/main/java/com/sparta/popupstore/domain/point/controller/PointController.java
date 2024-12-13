@@ -34,8 +34,7 @@ public class PointController {
   @Operation(summary = "포인트 충전")
   @Parameter(name = "chargedPoint", description = "포인트충전량")
   @PostMapping("/charge")
-  public ResponseEntity<PointChargeResponseDto> pointCharge(@AuthUser User user,@RequestBody PointChargeRequestDto chargeRequest
-          ,@RequestBody Coupon coupon) {
+  public ResponseEntity<PointChargeResponseDto> pointCharge(@AuthUser User user,@RequestBody PointChargeRequestDto chargeRequest) {
     return ResponseEntity.status(HttpStatus.CREATED).body(pointService.pointCharge(user, chargeRequest));
   }
 
@@ -49,7 +48,7 @@ public class PointController {
   @Parameter(name = "usedPoint", description = "포인트사용량")
   @PostMapping("/used/popupStore/{popupStoreId}")
   public ResponseEntity <PointUseResponseDto> pointUsed(@AuthUser User user,@PathVariable Long popupStoreId
-      ,@RequestBody PointUseRequestDto usedRequest, @RequestBody Coupon coupon) {
+      ,@RequestBody PointUseRequestDto usedRequest) {
     return ResponseEntity.status(HttpStatus.CREATED).body(pointService.pointUsed(user, usedRequest, popupStoreId));
   }
 
