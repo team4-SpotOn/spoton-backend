@@ -2,10 +2,12 @@ package com.sparta.popupstore.domain.popupstore.dto.request;
 
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
+import lombok.Getter;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
+@Getter
 public class PopupStoreOperatingRequestDto {
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;

@@ -25,7 +25,7 @@ public class PopupStoreCreateRequestDto {
     private LocalDate startDate;
     @NotNull(message = "팝업스토어 종료일을 입력해주세요.")
     private LocalDate endDate;
-    @NotNull(message = "팝업스토어 개장시간을 입력해주세요.")
+    @NotNull(message = "팝업스토어 영업시간을 입력해주세요.")
     private List<PopupStoreOperatingRequestDto> operatingList;
     @NotEmpty(message = "하나 이상의 이미지를 넣어주세요")
     private List<PopupStoreImageRequestDto> imageList;

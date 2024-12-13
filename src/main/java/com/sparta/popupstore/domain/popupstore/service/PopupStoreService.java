@@ -14,8 +14,6 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneRes
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttribute;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreAttributeRepository;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreImageRepository;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreOperatingRepository;
@@ -29,11 +27,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -88,22 +83,11 @@ public class PopupStoreService {
         if(!popupStore.getCompany().equals(company)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
         }
-        if(isEditable(popupStore)) {
+        if(isNotEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
 
-        List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> popupStoreOperatingService.createPopupStoreOperating(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
-                .filter(Objects::nonNull)
-                .toList();
-
-        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        this.updateImage(popupStore, requestDto);
-        operatingList = popupStoreOperatingRepository.saveAll(operatingList);
-        // 속성 설정
-        List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
-
-        return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), operatingList, attributes);
+        return updatePopupStore(popupStore, requestDto);
     }
 
     // 관리자 - 팝업 스토어 수정
@@ -111,19 +95,45 @@ public class PopupStoreService {
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-        this.updateImage(popupStore, requestDto);
 
-        List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> popupStoreOperatingService.createPopupStoreOperating(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
-                .filter(Objects::nonNull)
+        return updatePopupStore(popupStore, requestDto);
+    }
+
+    PopupStoreUpdateResponseDto updatePopupStore(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
+        KakaoAddressApiDto kakaoAddressApiDto = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
+        Address address = new Address(requestDto.getAddress(), kakaoAddressApiDto);
+
+        popupStore.update(requestDto, address);
+
+        popupStoreImageRepository
+                .findAllByPopupStore(popupStore)
+                .forEach(image -> {
+                    s3ImageService.deleteImage(image.getImageUrl());
+                    popupStoreImageRepository.delete(image);
+                });
+
+        var imageList = popupStoreImageRepository.saveAll(
+                requestDto.getImageList().stream()
+                        .map(imageDto -> imageDto.toEntity(popupStore))
+                        .toList()
+        );
+
+        var operatingList = requestDto.getOperatingList().stream()
+                .map(operatingDto -> popupStoreOperatingRepository
+                        .findByPopupStoreAndDayOfWeek(popupStore, operatingDto.getDayOfWeek())
+                        .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_OPERATING_BAD_REQUEST))
+                        .update(operatingDto.getStartTime(), operatingDto.getEndTime())
+                )
                 .toList();
 
-        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        operatingList = popupStoreOperatingRepository.saveAll(operatingList);
-        // 속성 설정
-        List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
+        popupStoreAttributesRepository.deleteByPopupStore(popupStore);
+        var attributeList = popupStoreAttributesRepository.saveAll(
+                requestDto.getAttributeList().stream()
+                        .map(attributeDto -> attributeDto.toEntity(popupStore))
+                        .toList()
+        );
 
-        return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), operatingList, attributes);
+        return new PopupStoreUpdateResponseDto(popupStore, imageList, operatingList, attributeList);
     }
 
     // 팝업스토어 단건조회
@@ -148,7 +158,7 @@ public class PopupStoreService {
         if(!popupStore.getCompany().getId().equals(company.getId())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
         }
-        if(isEditable(popupStore)) {
+        if(isNotEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
         popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
@@ -173,16 +183,6 @@ public class PopupStoreService {
         return popupStoreRepository.findAll().stream().map(PopupStoreFindOneResponseDto::new).toList();
     }
 
-
-    private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
-        List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
-        List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
-                .map(imageDto -> imageDto.toEntity(popupStore))
-                .toList();
-        popupStoreImageList.forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
-        popupStore.updateImages(requestImageList);
-    }
-
     // 속성 업데이트 메서드
     private List<PopupStoreAttribute> updateAttributes(PopupStore popupStore, List<PopupStoreAttributeRequestDto> attributeDtos) {
         popupStoreAttributesRepository.deleteByPopupStore(popupStore);
@@ -193,7 +193,7 @@ public class PopupStoreService {
     }
 
     // 팝업스토어 진행여부 판단
-    private boolean isEditable(PopupStore popupStore) {
+    private boolean isNotEditable(PopupStore popupStore) {
         return popupStore.getStartDate().isBefore(LocalDate.now());
     }
 

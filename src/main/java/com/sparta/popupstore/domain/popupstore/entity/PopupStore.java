@@ -28,7 +28,7 @@ public class PopupStore extends BaseEntity {
     private Company company;
 
     @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PopupStoreImage> popupStoreImageList = new ArrayList<>();
+    private List<PopupStoreImage> popupStoreImageList;
     private String name;
     private String contents;
     private int price;
@@ -50,24 +50,16 @@ public class PopupStore extends BaseEntity {
         this.endDate = endDate;
     }
 
-    public PopupStore update(PopupStoreUpdateRequestDto requestDto) {
+    public void update(PopupStoreUpdateRequestDto requestDto, Address address) {
         this.name = requestDto.getName() != null ? requestDto.getName() : this.name;
         this.contents = requestDto.getContents() != null ? requestDto.getContents() : this.contents;
         this.price = requestDto.getPrice() != null ? Integer.parseInt(requestDto.getPrice()) : this.price;
-        //this.address = address update
+        this.address = address;
         this.startDate = requestDto.getStartDate() != null ? requestDto.getStartDate() : this.startDate;
         this.endDate = requestDto.getEndDate() != null ? requestDto.getEndDate() : this.endDate;
-
-        return this;
     }
 
     public void viewPopupStore() {
         this.view += 1;
-    }
-
-    public void updateImages(List<PopupStoreImage> imageList) {
-        this.popupStoreImageList.clear();
-        this.popupStoreImageList.addAll(imageList.stream().peek(image -> image.updatePopupStore(this)
-        ).toList());
     }
 }
