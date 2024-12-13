@@ -37,6 +37,9 @@ public class PopupStoreCreateRequestDto {
     @Valid
     @NotEmpty(message = "하나 이상의 이미지를 넣어주세요")
     private List<PopupStoreImageRequestDto> images;
+    @Valid
+    @NotEmpty(message = "하나 이상의 속성을 넣어주세요")
+    private List<PopupStoreAttributeRequestDto> attributes;
 
     public PopupStore toEntity(Company company) {
         return PopupStore.builder()
