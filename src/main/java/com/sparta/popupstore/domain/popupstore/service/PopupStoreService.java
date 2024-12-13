@@ -40,16 +40,20 @@ import java.util.Objects;
 public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
-    private final KakaoAddressService kakaoAddressService;
     private final PopupStoreOperatingRepository popupStoreOperatingRepository;
-    private final S3ImageService s3ImageService;
-    private final PopupStoreOperatingService popupStoreOperatingService;
     private final PopupStoreAttributeRepository popupStoreAttributesRepository;
+    private final PopupStoreOperatingService popupStoreOperatingService;
+    private final KakaoAddressService kakaoAddressService;
+    private final S3ImageService s3ImageService;
 
     // 팝업스토어 생성
     @Transactional
     public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto) {
-        PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company));
+        // 카카오 주소 API - 위도 경도 구하기
+        KakaoAddressApiDto kakaoAddressApiDto = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
+        Address address = new Address(requestDto.getAddress(), kakaoAddressApiDto);
+
+        PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company, address));
 
         // 이미지 URL 추가
         popupStore.addImageList(
@@ -59,10 +63,6 @@ public class PopupStoreService {
                         .toList()
         );
 
-        // 카카오 주소 API - 위도 경도 구하기
-        KakaoAddressApiDto kakaoAddressApiDto = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
-        Address address = new Address(requestDto.getAddress(), kakaoAddressApiDto);
-        popupStore.updateAddress(address);
 
         // 팝업스토어 운영 시간 저장
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())

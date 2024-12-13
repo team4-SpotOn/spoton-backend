@@ -39,13 +39,13 @@ public class PopupStore extends BaseEntity {
     private LocalDate endDate;
 
     @Builder
-    public PopupStore(Long id, Company company, String name, String contents, int price, String address, LocalDate startDate, LocalDate endDate) {
+    public PopupStore(Long id, Company company, String name, String contents, int price, Address address, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.company = company;
         this.name = name;
         this.contents = contents;
         this.price = price;
-        this.address = new Address(address);
+        this.address = address;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -65,11 +65,6 @@ public class PopupStore extends BaseEntity {
         this.endDate = requestDto.getEndDate() != null ? requestDto.getEndDate() : this.endDate;
 
         return this;
-    }
-
-    // 위도,경도 저장을 위한 address 업데이트
-    public void updateAddress(Address address) {
-        this.address = address;
     }
 
     public void viewPopupStore() {

@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.popupstore.dto.request;
 
+import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import jakarta.validation.Valid;
@@ -39,13 +40,13 @@ public class PopupStoreCreateRequestDto {
     @NotEmpty(message = "하나 이상의 속성을 넣어주세요")
     private List<PopupStoreAttributeRequestDto> attributes;
 
-    public PopupStore toEntity(Company company) {
+    public PopupStore toEntity(Company company, Address address) {
         return PopupStore.builder()
                 .company(company)
                 .name(this.name)
                 .contents(this.contents)
                 .price(this.price)
-                .address(this.address)
+                .address(address)
                 .startDate(this.startDate)
                 .endDate(this.endDate)
                 .build();
