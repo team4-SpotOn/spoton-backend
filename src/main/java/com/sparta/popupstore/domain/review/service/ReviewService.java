@@ -36,7 +36,7 @@ public class ReviewService {
 
     public ReviewCreateResponseDto createReview(User user, Long popupStoreId, ReviewCreateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-            .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
         if(!reservationRepository.existsByUserAndPopupStore(user, popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_RESERVATION);
         }
@@ -49,7 +49,7 @@ public class ReviewService {
     @Transactional
     public ReviewUpdateResponseDto updateReview(User user, Long reviewId, ReviewUpdateRequestDto updateRequestDto) {
         Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
         if(!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_NOT_UPDATE);
         }
@@ -58,16 +58,16 @@ public class ReviewService {
             s3ImageService.deleteImage(review.getImageUrl());
         }
         review.update(
-            updateRequestDto.getContents(),
-            updateRequestDto.getStar(),
-            updateRequestDto.getImageUrl()
+                updateRequestDto.getContents(),
+                updateRequestDto.getStar(),
+                updateRequestDto.getImageUrl()
         );
         return new ReviewUpdateResponseDto(review);
     }
 
     public void deleteReview(User user, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
         if(!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_CANT_DELETE);
         }
