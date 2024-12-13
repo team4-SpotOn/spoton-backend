@@ -50,12 +50,6 @@ public class PopupStore extends BaseEntity {
         this.endDate = endDate;
     }
 
-    public void addImageList(List<PopupStoreImage> imageList) {
-        this.popupStoreImageList = imageList.stream().peek(
-                image -> image.addPopupStore(this)
-        ).toList();
-    }
-
     public PopupStore update(PopupStoreUpdateRequestDto requestDto) {
         this.name = requestDto.getName() != null ? requestDto.getName() : this.name;
         this.contents = requestDto.getContents() != null ? requestDto.getContents() : this.contents;
@@ -73,7 +67,7 @@ public class PopupStore extends BaseEntity {
 
     public void updateImages(List<PopupStoreImage> imageList) {
         this.popupStoreImageList.clear();
-        this.popupStoreImageList.addAll(imageList.stream().peek(image -> image.addPopupStore(this)
+        this.popupStoreImageList.addAll(imageList.stream().peek(image -> image.updatePopupStore(this)
         ).toList());
     }
 }

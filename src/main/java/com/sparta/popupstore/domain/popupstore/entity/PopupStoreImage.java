@@ -23,12 +23,14 @@ public class PopupStoreImage {
     private int sort;
 
     @Builder
-    public PopupStoreImage(String imageUrl, int sort) {
+    public PopupStoreImage(Long id, PopupStore popupStore, String imageUrl, int sort) {
+        this.id = id;
+        this.popupStore = popupStore;
         this.imageUrl = imageUrl;
         this.sort = sort;
     }
 
-    public void addPopupStore(PopupStore popupStore) {
+    public void updatePopupStore(PopupStore popupStore) {
         this.popupStore = popupStore;
     }
 }

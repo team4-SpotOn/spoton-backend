@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.popupstore.dto.request;
 
+import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -12,8 +13,9 @@ public class PopupStoreImageRequestDto {
     @Min(value = 0, message = "0 이상의 수만 입력해주세요")
     private int sort;
 
-    public PopupStoreImage toEntity() {
+    public PopupStoreImage toEntity(PopupStore popupStore) {
         return PopupStoreImage.builder()
+                .popupStore(popupStore)
                 .imageUrl(imageUrl)
                 .sort(sort)
                 .build();

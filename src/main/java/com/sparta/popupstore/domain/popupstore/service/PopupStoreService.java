@@ -8,7 +8,6 @@ import com.sparta.popupstore.domain.kakaoaddress.dto.KakaoAddressApiDto;
 import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreAttributeRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
-import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreImageRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
@@ -18,6 +17,7 @@ import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttribute;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreAttributeRepository;
+import com.sparta.popupstore.domain.popupstore.repository.PopupStoreImageRepository;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreOperatingRepository;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.s3.service.S3ImageService;
@@ -42,6 +42,7 @@ public class PopupStoreService {
     private final PopupStoreRepository popupStoreRepository;
     private final PopupStoreOperatingRepository popupStoreOperatingRepository;
     private final PopupStoreAttributeRepository popupStoreAttributesRepository;
+    private final PopupStoreImageRepository popupStoreImageRepository;
     private final PopupStoreOperatingService popupStoreOperatingService;
     private final KakaoAddressService kakaoAddressService;
     private final S3ImageService s3ImageService;
@@ -56,13 +57,11 @@ public class PopupStoreService {
         PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company, address));
 
         // 이미지 URL 추가
-        popupStore.addImageList(
-                requestDto.getImages()
-                        .stream()
-                        .map(PopupStoreImageRequestDto::toEntity)
+        popupStoreImageRepository.saveAll(
+                requestDto.getImages().stream()
+                        .map(imageDto -> imageDto.toEntity(popupStore))
                         .toList()
         );
-
 
         // 팝업스토어 운영 시간 저장
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
@@ -82,6 +81,7 @@ public class PopupStoreService {
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+        this.updateImage(popupStore, requestDto);
 
         List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
                 .map(dayOfWeek -> popupStoreOperatingService.createOperatingHours(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
@@ -89,7 +89,6 @@ public class PopupStoreService {
                 .toList();
 
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        this.updateImage(popupStore, requestDto);
         operatingList = popupStoreOperatingRepository.saveAll(operatingList);
         // 속성 설정
         List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
@@ -102,12 +101,10 @@ public class PopupStoreService {
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-
-        if (!popupStore.getCompany().equals(company)) {
+        if(!popupStore.getCompany().equals(company)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
         }
-
-        if (isEditable(popupStore)) {
+        if(isEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
 
@@ -128,7 +125,7 @@ public class PopupStoreService {
     private void updateImage(PopupStore popupStore, PopupStoreUpdateRequestDto requestDto) {
         List<PopupStoreImage> popupStoreImageList = popupStore.getPopupStoreImageList();
         List<PopupStoreImage> requestImageList = requestDto.getImages().stream()
-                .map(PopupStoreImageRequestDto::toEntity)
+                .map(imageDto -> imageDto.toEntity(popupStore))
                 .toList();
         popupStoreImageList.forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
         popupStore.updateImages(requestImageList);
@@ -156,7 +153,7 @@ public class PopupStoreService {
         String cookieName = "viewedPopup_" + popupId;
 
         Cookie cookie = WebUtil.getCookie(request, cookieName);
-        if (cookie == null) {
+        if(cookie == null) {
             popupStore.viewPopupStore();
             popupStoreRepository.save(popupStore);
             WebUtil.addCookie(response, cookieName);
@@ -167,10 +164,10 @@ public class PopupStoreService {
     public void deletePopupStore(Company company, Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-        if (!popupStore.getCompany().getId().equals(company.getId())) {
+        if(!popupStore.getCompany().getId().equals(company.getId())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY);
         }
-        if (isEditable(popupStore)) {
+        if(isEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
         popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
