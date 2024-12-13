@@ -1,7 +1,7 @@
 package com.sparta.popupstore.domain.oauth2.entity;
 
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
-import com.sparta.popupstore.domain.oauth2.type.OAuth2Provider;
+import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,16 +18,16 @@ public class SocialUser extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private OAuth2Provider provider;
+    private OAuth2Platform platform;
 
-    private String providerId;
-    private String email;
+    private String platformId;
+    private String phoneNumber;
 
     @Builder
-    public SocialUser(Long id, OAuth2Provider provider, String providerId, String email) {
+    public SocialUser(Long id, OAuth2Platform platform, String platformId, String phoneNumber) {
         this.id = id;
-        this.provider = provider;
-        this.providerId = providerId;
-        this.email = email;
+        this.platform = platform;
+        this.platformId = platformId;
+        this.phoneNumber = phoneNumber;
     }
 }

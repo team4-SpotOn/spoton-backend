@@ -1,6 +1,6 @@
 package com.sparta.popupstore.config;
 
-import com.sparta.popupstore.domain.oauth2.controller.converter.OAuth2ProviderConverter;
+import com.sparta.popupstore.domain.oauth2.controller.converter.OAuth2PlatformConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final AuthUserResolver authUserResolver;
     private final AuthCompanyResolver authCompanyResolver;
     private final CheckAdminInterceptor checkAdminInterceptor;
-    private final OAuth2ProviderConverter oAuth2ProviderConverter;
+    private final OAuth2PlatformConverter oAuth2PlatformConverter;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -34,7 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(oAuth2ProviderConverter);
+        registry.addConverter(oAuth2PlatformConverter);
     }
 
     @Bean
