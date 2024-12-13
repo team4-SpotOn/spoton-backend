@@ -44,4 +44,8 @@ public class User extends BaseEntity {
     public void delete(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
     }
+
+    public void ChargePoint(int chargedPoint) {
+        this.point += chargedPoint;
+    }
 }

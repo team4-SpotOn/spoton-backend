@@ -47,6 +47,9 @@ public enum ErrorCode {
     PRE_SIGNED_URL_FAIL(HttpStatus.UNAUTHORIZED, "preSingedUrl 생성 실패"),
     FAIL_DELETE_IMAGE_FILE(HttpStatus.UNAUTHORIZED, "이미지 파일 삭제에 실패했습니다."),
     NOT_CORRECT_URL_FORMAT(HttpStatus.BAD_REQUEST, "올바른 파일 이름이 아닙니다."),
+
+    //point
+    NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST,"결제가능한 포인트가 아닙니다." ),
     ;
     private final HttpStatus status;
     private final String message;
