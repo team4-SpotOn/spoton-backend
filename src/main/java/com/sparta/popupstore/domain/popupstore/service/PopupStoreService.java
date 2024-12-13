@@ -80,26 +80,6 @@ public class PopupStoreService {
         return new PopupStoreCreateResponseDto(popupStore, imageList, operatingList, attributeList);
     }
 
-    // 관리자 - 팝업 스토어 수정
-    @Transactional
-    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto) {
-        PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-        this.updateImage(popupStore, requestDto);
-
-        List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
-                .map(dayOfWeek -> popupStoreOperatingService.createPopupStoreOperating(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
-                .filter(Objects::nonNull)
-                .toList();
-
-        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        operatingList = popupStoreOperatingRepository.saveAll(operatingList);
-        // 속성 설정
-        List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
-
-        return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), operatingList, attributes);
-    }
-
     // 회사 - 팝업 스토어 수정
     @Transactional
     public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, Company company, PopupStoreUpdateRequestDto requestDto) {
@@ -119,6 +99,26 @@ public class PopupStoreService {
 
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         this.updateImage(popupStore, requestDto);
+        operatingList = popupStoreOperatingRepository.saveAll(operatingList);
+        // 속성 설정
+        List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
+
+        return new PopupStoreUpdateResponseDto(popupStore.update(requestDto), operatingList, attributes);
+    }
+
+    // 관리자 - 팝업 스토어 수정
+    @Transactional
+    public PopupStoreUpdateResponseDto updatePopupStore(Long popupId, PopupStoreUpdateRequestDto requestDto) {
+        PopupStore popupStore = popupStoreRepository.findById(popupId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+        this.updateImage(popupStore, requestDto);
+
+        List<PopupStoreOperating> operatingList = Arrays.stream(DayOfWeek.values())
+                .map(dayOfWeek -> popupStoreOperatingService.createPopupStoreOperating(popupStore, dayOfWeek, requestDto.getStartTimes(), requestDto.getEndTimes()))
+                .filter(Objects::nonNull)
+                .toList();
+
+        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         operatingList = popupStoreOperatingRepository.saveAll(operatingList);
         // 속성 설정
         List<PopupStoreAttribute> attributes = updateAttributes(popupStore, requestDto.getAttributes());
