@@ -51,11 +51,8 @@ public class PopupStore extends BaseEntity {
     }
 
     public void addImageList(List<PopupStoreImage> imageList) {
-        this.popupStoreImageList = imageList.stream().map(
-                image ->{
-                    image.addPopupStore(this);
-                    return image;
-                }
+        this.popupStoreImageList = imageList.stream().peek(
+                image -> image.addPopupStore(this)
         ).toList();
     }
 
@@ -70,7 +67,6 @@ public class PopupStore extends BaseEntity {
         return this;
     }
 
-
     // 위도,경도 저장을 위한 address 업데이트
     public void updateAddress(Address address) {
         this.address = address;
@@ -82,10 +78,7 @@ public class PopupStore extends BaseEntity {
 
     public void updateImages(List<PopupStoreImage> imageList) {
         this.popupStoreImageList.clear();
-        this.popupStoreImageList.addAll(imageList.stream().map(image ->{
-                    image.addPopupStore(this);
-                    return image;
-                }
+        this.popupStoreImageList.addAll(imageList.stream().peek(image -> image.addPopupStore(this)
         ).toList());
     }
 }

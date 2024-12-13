@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 
 @Getter
-@Setter
 public class PopupStoreCreateRequestDto {
     @NotNull(message = "팝업스토어 이름을 입력해주세요.")
     private String name;
@@ -37,6 +35,9 @@ public class PopupStoreCreateRequestDto {
     @Valid
     @NotEmpty(message = "하나 이상의 이미지를 넣어주세요")
     private List<PopupStoreImageRequestDto> images;
+    @Valid
+    @NotEmpty(message = "하나 이상의 속성을 넣어주세요")
+    private List<PopupStoreAttributeRequestDto> attributes;
 
     public PopupStore toEntity(Company company) {
         return PopupStore.builder()

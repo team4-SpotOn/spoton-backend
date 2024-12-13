@@ -27,7 +27,8 @@ public class PopupStoreOperating {
     private LocalTime endTime;
 
     @Builder
-    PopupStoreOperating(PopupStore popupStore, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
+    public PopupStoreOperating(Long id, PopupStore popupStore, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
+        this.id = id;
         this.popupStore = popupStore;
         this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
