@@ -10,9 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
 
 import java.util.Optional;
@@ -39,15 +37,10 @@ public class KakaoOAuth2Client extends OAuth2Client {
 
     @Override
     public OAuth2UserInfo getUserInfo(String accessToken) {
-        var body = new LinkedMultiValueMap<String, String>();
-        body.add("property_keys", "[\"kakao_account.email\"]");
-
         return Optional.ofNullable(
-                restClient.post()
+                restClient.get()
                         .uri(RESOURCE_SERVER_URL)
                         .header("Authorization", "Bearer " + accessToken)
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .body(body)
                         .retrieve()
                         .onStatus(HttpStatusCode::isError, (req, resp) -> {
                             throw new CustomApiException(ErrorCode.SOCIAL_USERINFO_ERROR);

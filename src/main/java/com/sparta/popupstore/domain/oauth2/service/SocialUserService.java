@@ -18,7 +18,6 @@ public class SocialUserService {
                     SocialUser newSocialUser = SocialUser.builder()
                             .platform(userInfo.getPlatform())
                             .platformId(userInfo.getPlatformId())
-                            .phoneNumber(userInfo.getPhoneNumber())
                             .build();
                     return socialUserRepository.save(newSocialUser);
                 });

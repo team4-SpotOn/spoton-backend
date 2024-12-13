@@ -10,5 +10,4 @@ public class OAuth2UserInfo {
 
     private OAuth2Platform platform;
     private String platformId;
-    private String phoneNumber;
 }

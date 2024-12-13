@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Getter
@@ -22,23 +21,17 @@ public abstract class OAuth2Client {
     private String clientId;
     private String clientSecret;
     private String redirectUri;
-    private String scope;
+    private String scope = "";
 
     private OAuth2Platform platform;
     private RestClient restClient;
 
     public String generateSigninPageUrl() {
-        String signinPageUrl = getAUTH_SERVER_URL()
+        return getAUTH_SERVER_URL()
                 + "?client_id=" + getClientId()
                 + "&redirect_uri=" + getRedirectUri()
+                + "&scope=" + getScope()
                 + "&response_type=code";
-
-        if(Objects.isNull(getScope())) {
-            return signinPageUrl;
-        }
-
-        return signinPageUrl
-                + "&scope=" + getScope();
     }
 
     public String getAccessToken(String authorizationCode) {

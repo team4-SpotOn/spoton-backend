@@ -5,7 +5,7 @@ import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
 
 public class GoogleUserInfoResponse extends OAuth2UserInfo {
 
-    public GoogleUserInfoResponse(String id, String email) {
-        super(OAuth2Platform.GOOGLE, id, email);
+    public GoogleUserInfoResponse(String id, boolean verified_email) {
+        super(OAuth2Platform.GOOGLE, id);
     }
 }
