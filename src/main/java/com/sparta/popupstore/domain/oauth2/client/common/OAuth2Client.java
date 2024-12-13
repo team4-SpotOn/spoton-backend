@@ -2,7 +2,7 @@ package com.sparta.popupstore.domain.oauth2.client.common;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.domain.oauth2.type.OAuth2Provider;
+import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
 import lombok.Getter;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -24,7 +24,7 @@ public abstract class OAuth2Client {
     private String redirectUri;
     private String scope;
 
-    private OAuth2Provider provider;
+    private OAuth2Platform platform;
     private RestClient restClient;
 
     public String generateSigninPageUrl() {
@@ -66,7 +66,7 @@ public abstract class OAuth2Client {
 
     public abstract OAuth2UserInfo getUserInfo(String accessToken);
 
-    public boolean supports(OAuth2Provider provider) {
-        return getProvider() == provider;
+    public boolean supports(OAuth2Platform platform) {
+        return getPlatform() == platform;
     }
 }

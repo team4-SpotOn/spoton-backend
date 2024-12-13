@@ -5,7 +5,7 @@ import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2Client;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
 import com.sparta.popupstore.domain.oauth2.client.kakao.dto.KakaoUserInfoResponse;
-import com.sparta.popupstore.domain.oauth2.type.OAuth2Provider;
+import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,7 @@ public class KakaoOAuth2Client extends OAuth2Client {
     @Value("${oauth2.kakao.redirect_url}")
     private String redirectUri;
 
-    private final OAuth2Provider provider = OAuth2Provider.KAKAO;
+    private final OAuth2Platform platform = OAuth2Platform.KAKAO;
 
     private final RestClient restClient;
 

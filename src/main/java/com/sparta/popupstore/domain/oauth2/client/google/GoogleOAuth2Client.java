@@ -5,7 +5,7 @@ import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2Client;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
 import com.sparta.popupstore.domain.oauth2.client.google.dto.GoogleUserInfoResponse;
-import com.sparta.popupstore.domain.oauth2.type.OAuth2Provider;
+import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,7 @@ public class GoogleOAuth2Client extends OAuth2Client {
     @Value("${oauth2.google.scope}")
     private String scope;
 
-    private final OAuth2Provider provider = OAuth2Provider.GOOGLE;
+    private final OAuth2Platform platform = OAuth2Platform.GOOGLE;
 
     private final RestClient restClient;
 
