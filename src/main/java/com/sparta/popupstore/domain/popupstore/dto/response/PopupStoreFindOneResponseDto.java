@@ -2,13 +2,12 @@ package com.sparta.popupstore.domain.popupstore.dto.response;
 
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
-import java.util.List;
-
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 public class PopupStoreFindOneResponseDto {
@@ -29,7 +28,7 @@ public class PopupStoreFindOneResponseDto {
     @Schema(description = "팝업스토어 이미지 리스트")
     private final List<PopupStoreImageResponseDto> imageList;
 
-    public PopupStoreFindOneResponseDto(PopupStore popupStore) {
+    public PopupStoreFindOneResponseDto(PopupStore popupStore, List<PopupStoreImage> imageList) {
         this.name = popupStore.getName();
         this.startDate = popupStore.getStartDate();
         this.endDate = popupStore.getEndDate();
@@ -37,6 +36,6 @@ public class PopupStoreFindOneResponseDto {
         this.price = popupStore.getPrice();
         this.contents = popupStore.getContents();
         this.address = popupStore.getAddress();
-        this.imageList = popupStore.getPopupStoreImageList().stream().map(PopupStoreImageResponseDto::new).toList();
+        this.imageList = imageList.stream().map(PopupStoreImageResponseDto::new).toList();
     }
 }

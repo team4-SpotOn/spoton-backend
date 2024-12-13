@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PopupStoreImageRepository extends JpaRepository<PopupStoreImage, Long> {
-    List<PopupStoreImage> findAllByPopupStore(PopupStore popupStore);
+    List<PopupStoreImage> findByPopupStore(PopupStore popupStore);
 }

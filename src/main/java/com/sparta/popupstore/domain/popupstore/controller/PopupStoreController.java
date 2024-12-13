@@ -49,6 +49,27 @@ public class PopupStoreController {
                 .body(popupStoreService.createPopupStore(company, requestDto));
     }
 
+    @Operation(summary = "전체 - 팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
+    @GetMapping("/popupstores/{popupStoreId}")
+    public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(
+            @PathVariable Long popupStoreId,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(popupStoreService.getPopupStoreOne(popupStoreId, request, response));
+    }
+
+    // 팝업스토어 전체목록 지도용
+    @Operation(summary = "임시 팝업 전제조회(지도용)", description = "지도 팝업스토어 전체목록")
+    @GetMapping("/popupstores")
+    public ResponseEntity<List<PopupStoreFindOneResponseDto>> getPopupStoreAll() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(popupStoreService.getPopupStoreAll());
+    }
+
     @Operation(summary = "관리자 - 팝업 스토어 수정")
     @Parameter(name = "name", description = "수정할 팝업스토어 명")
     @Parameter(name = "content", description = "수정할 팝업스토어 내용")
@@ -91,18 +112,6 @@ public class PopupStoreController {
                 .body(popupStoreService.updatePopupStore(popupStoreId, company, requestDto));
     }
 
-    @Operation(summary = "전체 - 팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
-    @GetMapping("/popupstores/{popupStoreId}")
-    public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(
-            @PathVariable Long popupStoreId,
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(popupStoreService.getPopupStoreOne(popupStoreId, request, response));
-    }
-
     @Operation(summary = "회사 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
     @Parameter(name = "company", description = "로그인한 회사")
     @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호")
@@ -129,14 +138,5 @@ public class PopupStoreController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
-    }
-
-    // 팝업스토어 전체목록 지도용
-    @Operation(summary = "임시 팝업 전제조회(지도용)", description = "지도 팝업스토어 전체목록")
-    @GetMapping("/popupstores")
-    public ResponseEntity<List<PopupStoreFindOneResponseDto>> getPopupStoreAll() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(popupStoreService.getPopupStoreAll());
     }
 }

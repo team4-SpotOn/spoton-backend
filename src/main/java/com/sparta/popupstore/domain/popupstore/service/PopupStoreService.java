@@ -6,14 +6,12 @@ import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.kakaoaddress.dto.KakaoAddressApiDto;
 import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
-import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreAttributeRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttribute;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreAttributeRepository;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreImageRepository;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreOperatingRepository;
@@ -38,7 +36,6 @@ public class PopupStoreService {
     private final PopupStoreOperatingRepository popupStoreOperatingRepository;
     private final PopupStoreAttributeRepository popupStoreAttributesRepository;
     private final PopupStoreImageRepository popupStoreImageRepository;
-    private final PopupStoreOperatingService popupStoreOperatingService;
     private final KakaoAddressService kakaoAddressService;
     private final S3ImageService s3ImageService;
 
@@ -50,6 +47,7 @@ public class PopupStoreService {
         Address address = new Address(requestDto.getAddress(), kakaoAddressApiDto);
 
         PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company, address));
+
 
         // 이미지 URL 추가
         var imageList = popupStoreImageRepository.saveAll(
@@ -73,6 +71,34 @@ public class PopupStoreService {
         );
 
         return new PopupStoreCreateResponseDto(popupStore, imageList, operatingList, attributeList);
+    }
+
+    // 팝업스토어 단건조회
+    public PopupStoreFindOneResponseDto getPopupStoreOne(Long popupId, HttpServletRequest request, HttpServletResponse response) {
+        PopupStore popupStore = popupStoreRepository.findById(popupId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+
+        String cookieName = "viewedPopup_" + popupId;
+
+        Cookie cookie = WebUtil.getCookie(request, cookieName);
+        if(cookie == null) {
+            popupStore.viewPopupStore();
+            popupStoreRepository.save(popupStore);
+            WebUtil.addCookie(response, cookieName);
+        }
+
+        var imageList = popupStoreImageRepository.findByPopupStore(popupStore);
+        return new PopupStoreFindOneResponseDto(popupStore, imageList);
+    }
+
+    // 임시 팝업 스토어 전체목록(지도용)
+    public List<PopupStoreFindOneResponseDto> getPopupStoreAll() {
+        return popupStoreRepository.findAll().stream()
+                .map(popupStore -> {
+                    var imageList = popupStoreImageRepository.findByPopupStore(popupStore);
+                    return new PopupStoreFindOneResponseDto(popupStore, imageList);
+                })
+                .toList();
     }
 
     // 회사 - 팝업 스토어 수정
@@ -106,7 +132,7 @@ public class PopupStoreService {
         popupStore.update(requestDto, address);
 
         popupStoreImageRepository
-                .findAllByPopupStore(popupStore)
+                .findByPopupStore(popupStore)
                 .forEach(image -> {
                     s3ImageService.deleteImage(image.getImageUrl());
                     popupStoreImageRepository.delete(image);
@@ -136,22 +162,6 @@ public class PopupStoreService {
         return new PopupStoreUpdateResponseDto(popupStore, imageList, operatingList, attributeList);
     }
 
-    // 팝업스토어 단건조회
-    public PopupStoreFindOneResponseDto getPopupStoreOne(Long popupId, HttpServletRequest request, HttpServletResponse response) {
-        PopupStore popupStore = popupStoreRepository.findById(popupId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-
-        String cookieName = "viewedPopup_" + popupId;
-
-        Cookie cookie = WebUtil.getCookie(request, cookieName);
-        if(cookie == null) {
-            popupStore.viewPopupStore();
-            popupStoreRepository.save(popupStore);
-            WebUtil.addCookie(response, cookieName);
-        }
-        return new PopupStoreFindOneResponseDto(popupStore);
-    }
-
     public void deletePopupStore(Company company, Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
@@ -161,35 +171,26 @@ public class PopupStoreService {
         if(isNotEditable(popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
-        popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
 
-        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
-        popupStoreAttributesRepository.deleteByPopupStore(popupStore);
-        popupStoreRepository.delete(popupStore);
+        deletePopupStore(popupStore);
     }
 
     public void deletePopupStore(Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-        popupStore.getPopupStoreImageList().forEach(image -> s3ImageService.deleteImage(image.getImageUrl()));
 
+        deletePopupStore(popupStore);
+    }
+
+    private void deletePopupStore(PopupStore popupStore) {
+        popupStoreImageRepository.findByPopupStore(popupStore)
+                .forEach(image -> {
+                    s3ImageService.deleteImage(image.getImageUrl());
+                    popupStoreImageRepository.delete(image);
+                });
         popupStoreOperatingRepository.deleteByPopupStore(popupStore);
         popupStoreAttributesRepository.deleteByPopupStore(popupStore);
         popupStoreRepository.delete(popupStore);
-    }
-
-    // 임시 팝업 스토어 전체목록(지도용)
-    public List<PopupStoreFindOneResponseDto> getPopupStoreAll() {
-        return popupStoreRepository.findAll().stream().map(PopupStoreFindOneResponseDto::new).toList();
-    }
-
-    // 속성 업데이트 메서드
-    private List<PopupStoreAttribute> updateAttributes(PopupStore popupStore, List<PopupStoreAttributeRequestDto> attributeDtos) {
-        popupStoreAttributesRepository.deleteByPopupStore(popupStore);
-        List<PopupStoreAttribute> newAttributes = attributeDtos.stream()
-                .map(dto -> new PopupStoreAttribute(popupStore, dto.getAttribute(), dto.getIsAllow()))
-                .toList();
-        return popupStoreAttributesRepository.saveAll(newAttributes);
     }
 
     // 팝업스토어 진행여부 판단
