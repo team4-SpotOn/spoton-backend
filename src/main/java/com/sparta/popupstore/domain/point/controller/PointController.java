@@ -7,9 +7,7 @@ import com.sparta.popupstore.domain.point.dto.response.PointChargeResponseDto;
 import com.sparta.popupstore.domain.point.dto.response.PointChargedLogResponseDto;
 import com.sparta.popupstore.domain.point.dto.response.PointUseResponseDto;
 import com.sparta.popupstore.domain.point.dto.response.PointUsedLogResponseDto;
-import com.sparta.popupstore.domain.point.entity.PointChargedLog;
 import com.sparta.popupstore.domain.point.service.PointService;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user/point")
+@RequestMapping("/users/point")
 @RequiredArgsConstructor
 @Tag(name = "Point", description = "포인트 관련 API")
 public class PointController {
@@ -38,15 +36,13 @@ public class PointController {
   @Parameter(name = "chargedPoint", description = "포인트충전량")
   @PostMapping("/charge")
   public ResponseEntity<PointChargeResponseDto> pointCharge(@AuthUser User user,@RequestBody PointChargeRequestDto chargeRequest) {
-    PointChargeResponseDto result = pointService.pointCharge(user, chargeRequest);
-    return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    return ResponseEntity.status(HttpStatus.CREATED).body(pointService.pointCharge(user, chargeRequest));
   }
 
   @Operation(summary = "포인트 충전내역 조회")
   @GetMapping("/charge")
   public ResponseEntity<List<PointChargedLogResponseDto>> pointChargeLogs(@AuthUser User user) {
-    List<PointChargedLogResponseDto> chargedLogs = pointService.pointChargeLogs(user);
-    return ResponseEntity.ok(chargedLogs);
+    return ResponseEntity.ok(pointService.pointChargeLogs(user));
   }
 
   @Operation(summary = "포인트 사용")
@@ -54,14 +50,12 @@ public class PointController {
   @PostMapping("/used/{popupStoreId}")
   public ResponseEntity <PointUseResponseDto> pointUsed(@AuthUser User user,@PathVariable Long popupStoreId
       ,@RequestBody PointUseRequestDto usedRequest) {
-    PointUseResponseDto usedLogs = pointService.pointUsed(user, usedRequest, popupStoreId);
-    return ResponseEntity.status(HttpStatus.CREATED).body(usedLogs);
+    return ResponseEntity.status(HttpStatus.CREATED).body(pointService.pointUsed(user, usedRequest, popupStoreId));
   }
 
   @Operation(summary = "포인트 사용내역 조회")
   @GetMapping("/used")
   public ResponseEntity<List<PointUsedLogResponseDto>> pointUsedLogs(@AuthUser User user) {
-    List<PointUsedLogResponseDto> UsedLogs = pointService.pointUsedLogs(user);
-    return ResponseEntity.ok(UsedLogs);
+    return ResponseEntity.ok(pointService.pointUsedLogs(user));
   }
 }

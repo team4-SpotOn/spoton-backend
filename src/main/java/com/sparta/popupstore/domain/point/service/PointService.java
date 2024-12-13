@@ -29,12 +29,12 @@ public class PointService {
 
     public PointChargeResponseDto pointCharge(User user, PointChargeRequestDto chargeRequest) {
       if (chargeRequest.getChargedPoint() <= 1000) {
-        throw new CustomApiException(ErrorCode.LACK_OF_POINT);
+        throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
       }
 
       PointChargedLog chargedLog = chargeRequest.toEntity(user);
-      user.ChargePoint(chargeRequest.getChargedPoint());
       chargedLog = pointChargedLogRepository.save(chargedLog);
+      user.ChargePoint(chargeRequest.getChargedPoint());
       return new PointChargeResponseDto(chargedLog);
     }
 
@@ -50,7 +50,7 @@ public class PointService {
             .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
         if (user.getPoint() < popupStore.getPrice()) {
-            throw new RuntimeException("포인트가 부족합니다.");
+            throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
         }
 
         user.ChargePoint(- popupStore.getPrice());

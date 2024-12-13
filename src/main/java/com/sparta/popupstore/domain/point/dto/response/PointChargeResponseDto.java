@@ -15,7 +15,7 @@ public class PointChargeResponseDto {
   private final int prevPoint;
   @Schema(description = "충전 포인트")
   private final int chargedPoint;
-  @Schema(description = "시리얼 넘버")
+  @Schema(description = "쿠폰 시리얼 번호")
   private final String serialNumber;
   @Schema(description = "충전 시간")
   protected LocalDateTime chargedAt;
