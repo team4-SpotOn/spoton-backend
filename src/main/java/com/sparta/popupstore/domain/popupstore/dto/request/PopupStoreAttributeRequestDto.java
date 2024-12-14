@@ -14,7 +14,7 @@ public class PopupStoreAttributeRequestDto {
         return PopupStoreAttribute.builder()
                 .popupStore(popupStore)
                 .attribute(this.attribute)
-                .isAllow(isAllow)
+                .isAllow(this.isAllow)
                 .build();
     }
 }

@@ -16,8 +16,8 @@ public class PopupStoreImageRequestDto {
     public PopupStoreImage toEntity(PopupStore popupStore) {
         return PopupStoreImage.builder()
                 .popupStore(popupStore)
-                .imageUrl(imageUrl)
-                .sort(sort)
+                .imageUrl(this.imageUrl)
+                .sort(this.sort)
                 .build();
     }
 }

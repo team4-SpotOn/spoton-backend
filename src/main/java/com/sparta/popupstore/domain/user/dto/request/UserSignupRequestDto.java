@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.user.dto.request;
 
+import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.entity.UserRole;
 import jakarta.validation.constraints.Email;
@@ -22,12 +23,12 @@ public class UserSignupRequestDto {
     @NotBlank(message = "주소를 입력해 주세요.")
     private String address;
 
-    public User toEntity(String encodedPassword) {
+    public User toEntity(String encodedPassword, Address address) {
         return User.builder()
                 .email(this.email)
                 .password(encodedPassword)
                 .name(this.name)
-                .address(this.address)
+                .address(address)
                 .userRole(UserRole.USER)
                 .point(0)
                 .build();
