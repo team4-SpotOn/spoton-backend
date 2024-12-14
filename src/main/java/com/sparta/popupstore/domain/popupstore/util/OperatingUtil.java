@@ -27,10 +27,10 @@ public class OperatingUtil {
     }
 
     public List<PopupStoreOperating> getPopupStoreOperatingList(PopupStore popupStore) {
-        return popupStoreOperatingRepository.findByPopupStore(popupStore);
+        return popupStoreOperatingRepository.findAllByPopupStore(popupStore);
     }
 
     public void deletePopupStoreOperatingList(PopupStore popupStore) {
-        popupStoreOperatingRepository.deleteByPopupStore(popupStore);
+        popupStoreOperatingRepository.deleteAllByPopupStore(popupStore);
     }
 }

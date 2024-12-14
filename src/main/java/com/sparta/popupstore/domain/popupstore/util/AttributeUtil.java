@@ -27,10 +27,10 @@ public class AttributeUtil {
     }
 
     public List<PopupStoreAttribute> getPopupStoreAttributeList(PopupStore popupStore) {
-        return popupStoreAttributeRepository.findByPopupStore(popupStore);
+        return popupStoreAttributeRepository.findAllByPopupStore(popupStore);
     }
 
     public void deletePopupAttributeList(PopupStore popupStore) {
-        popupStoreAttributeRepository.deleteByPopupStore(popupStore);
+        popupStoreAttributeRepository.deleteAllByPopupStore(popupStore);
     }
 }

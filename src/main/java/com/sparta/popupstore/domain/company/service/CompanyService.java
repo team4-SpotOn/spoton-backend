@@ -56,7 +56,7 @@ public class CompanyService {
 
     // 회사 자사 팝업스토어 조회
     public List<CompanyMyPopupStoreResponseDto> getCompanyMyPopupStore(@AuthCompany Company company) {
-        return popupStoreRepository.findByCompanyId(company.getId()).stream()
+        return popupStoreRepository.findAllByCompanyId(company.getId()).stream()
                 .map(CompanyMyPopupStoreResponseDto::new)
                 .toList();
     }

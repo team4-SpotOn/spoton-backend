@@ -67,7 +67,7 @@ public class UserService {
 
     // 유저 마이쿠폰 보기
     public List<UserMyCouponsResponseDto> getUserMyCoupons(User user){
-        return couponRepository.findByUserId(user.getId())
+        return couponRepository.findAllByUserId(user.getId())
                 .stream()
                 .map(UserMyCouponsResponseDto::new )
                 .toList();

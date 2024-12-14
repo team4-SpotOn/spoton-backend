@@ -27,10 +27,10 @@ public class ImageUtil {
     }
 
     public List<PopupStoreImage> getPopupStoreImageList(PopupStore popupStore) {
-        return popupStoreImageRepository.findByPopupStore(popupStore);
+        return popupStoreImageRepository.findAllByPopupStore(popupStore);
     }
 
     public void deletePopupStoreImageList(PopupStore popupStore) {
-        popupStoreImageRepository.deleteByPopupStore(popupStore);
+        popupStoreImageRepository.deleteAllByPopupStore(popupStore);
     }
 }

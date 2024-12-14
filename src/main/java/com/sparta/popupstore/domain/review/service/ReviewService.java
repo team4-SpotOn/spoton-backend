@@ -79,6 +79,6 @@ public class ReviewService {
     }
 
     public Page<ReviewFindAllResponseDto> findReview(Long popupStoreId, Pageable pageable) {
-        return reviewRepository.findByPopupStoreId(popupStoreId, pageable).map(ReviewFindAllResponseDto::new);
+        return reviewRepository.findAllByPopupStoreId(popupStoreId, pageable).map(ReviewFindAllResponseDto::new);
     }
 }

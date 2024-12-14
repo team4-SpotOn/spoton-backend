@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PopupStoreOperatingRepository extends JpaRepository<PopupStoreOperating, Long> {
-    List<PopupStoreOperating> findByPopupStore(PopupStore popupStore);
+    List<PopupStoreOperating> findAllByPopupStore(PopupStore popupStore);
 
-    void deleteByPopupStore(PopupStore popupStore);
+    void deleteAllByPopupStore(PopupStore popupStore);
 }

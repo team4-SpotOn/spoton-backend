@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
 
-    List<PopupStore> findByCompanyId(Long companyId);
+    List<PopupStore> findAllByCompanyId(Long companyId);
 }
