@@ -15,12 +15,12 @@ import com.sparta.popupstore.domain.review.entity.Review;
 import com.sparta.popupstore.domain.review.repository.ReviewRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.s3.service.S3ImageService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
