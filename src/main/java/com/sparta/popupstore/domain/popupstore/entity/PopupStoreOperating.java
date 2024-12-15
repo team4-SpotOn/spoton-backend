@@ -34,10 +34,4 @@ public class PopupStoreOperating {
         this.startTime = startTime;
         this.endTime = endTime;
     }
-
-    public PopupStoreOperating update(LocalTime startTime, LocalTime endTime) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        return this;
-    }
 }

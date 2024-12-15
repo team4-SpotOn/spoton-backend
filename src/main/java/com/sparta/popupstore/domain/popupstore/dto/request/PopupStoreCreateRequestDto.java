@@ -38,6 +38,7 @@ public class PopupStoreCreateRequestDto {
                 .name(this.name)
                 .contents(this.contents)
                 .price(this.price)
+                .view(0)
                 .address(address)
                 .startDate(this.startDate)
                 .endDate(this.endDate)

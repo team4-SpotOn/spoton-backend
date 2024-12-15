@@ -29,8 +29,4 @@ public class PopupStoreImage {
         this.imageUrl = imageUrl;
         this.sort = sort;
     }
-
-    public void updatePopupStore(PopupStore popupStore) {
-        this.popupStore = popupStore;
-    }
 }
