@@ -11,7 +11,6 @@ import com.sparta.popupstore.domain.reservation.entity.Reservation;
 import com.sparta.popupstore.domain.reservation.repository.ReservationRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.entity.UserRole;
-import com.sparta.popupstore.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
