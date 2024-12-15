@@ -8,11 +8,11 @@ import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetAllResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -51,31 +51,27 @@ public class PopupStoreService {
     }
 
     // 팝업스토어 단건조회
-    public PopupStoreGetResponseDto getPopupStoreOne(Long popupStoreId, boolean view) {
+    public PopupStoreGetOneResponseDto getPopupStoreOne(Long popupStoreId, boolean view) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
         if(view) {
             popupStore.viewPopupStore();
         }
-        return getPopupStore(popupStore);
-    }
-
-    // 임시 팝업 스토어 전체목록(지도용)
-    public List<PopupStoreGetResponseDto> getPopupStoreAll() {
-        return popupStoreRepository.findAll().stream()
-                .map(this::getPopupStore)
-                .toList();
-    }
-
-    private PopupStoreGetResponseDto getPopupStore(PopupStore popupStore) {
         var popupStoreBundle = popupStoreBundleService.getPopupStoreBundle(popupStore);
-        return new PopupStoreGetResponseDto(
+        return new PopupStoreGetOneResponseDto(
                 popupStore,
                 popupStoreBundle.getImageList(),
                 popupStoreBundle.getOperatingList(),
                 popupStoreBundle.getAttributeList()
         );
+    }
+
+    // 임시 팝업 스토어 전체목록(지도용)
+    public List<PopupStoreGetAllResponseDto> getPopupStoreAll() {
+        return popupStoreRepository.findAll().stream()
+                .map(PopupStoreGetAllResponseDto::new)
+                .toList();
     }
 
     // 회사 - 팝업 스토어 수정

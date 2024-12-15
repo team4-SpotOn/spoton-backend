@@ -6,7 +6,8 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetAllResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import com.sparta.popupstore.web.WebUtil;
@@ -52,7 +53,7 @@ public class PopupStoreController {
 
     @Operation(summary = "전체 - 팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
     @GetMapping("/popupstores/{popupStoreId}")
-    public ResponseEntity<PopupStoreGetResponseDto> getPopupStoreOne(
+    public ResponseEntity<PopupStoreGetOneResponseDto> getPopupStoreOne(
             @PathVariable Long popupStoreId,
             HttpServletRequest request,
             HttpServletResponse response
@@ -66,7 +67,7 @@ public class PopupStoreController {
     // 팝업스토어 전체목록 지도용
     @Operation(summary = "임시 팝업 전제조회(지도용)", description = "지도 팝업스토어 전체목록")
     @GetMapping("/popupstores")
-    public ResponseEntity<List<PopupStoreGetResponseDto>> getPopupStoreAll() {
+    public ResponseEntity<List<PopupStoreGetAllResponseDto>> getPopupStoreAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(popupStoreService.getPopupStoreAll());
