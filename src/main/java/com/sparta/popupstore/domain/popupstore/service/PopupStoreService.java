@@ -12,9 +12,6 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetRespons
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
-import com.sparta.popupstore.domain.popupstore.util.AttributeUtil;
-import com.sparta.popupstore.domain.popupstore.util.ImageUtil;
-import com.sparta.popupstore.domain.popupstore.util.OperatingUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,9 +25,7 @@ public class PopupStoreService {
 
     private final PopupStoreRepository popupStoreRepository;
     private final KakaoAddressService kakaoAddressService;
-    private final ImageUtil imageUtil;
-    private final OperatingUtil operatingUtil;
-    private final AttributeUtil attributeUtil;
+    private final PopupStoreBundleService popupStoreBundleService;
 
     // 팝업스토어 생성
     @Transactional
@@ -40,16 +35,19 @@ public class PopupStoreService {
 
         PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company, address));
 
-        // 이미지 URL 추가
-        var imageList = imageUtil.createPopupStoreImageList(popupStore, requestDto.getImageList());
+        var popupStoreBundle = popupStoreBundleService.createPopupStoreBundle(
+                popupStore,
+                requestDto.getImageList(),
+                requestDto.getOperatingList(),
+                requestDto.getAttributeList()
+        );
 
-        // 팝업스토어 운영 시간 저장
-        var operatingList = operatingUtil.createPopupStoreOperatingList(popupStore, requestDto.getOperatingList());
-
-        // 속성 설정
-        var attributeList = attributeUtil.createPopupStoreAttributeList(popupStore, requestDto.getAttributeList());
-
-        return new PopupStoreCreateResponseDto(popupStore, imageList, operatingList, attributeList);
+        return new PopupStoreCreateResponseDto(
+                popupStore,
+                popupStoreBundle.getImageList(),
+                popupStoreBundle.getOperatingList(),
+                popupStoreBundle.getAttributeList()
+        );
     }
 
     // 팝업스토어 단건조회
@@ -71,10 +69,13 @@ public class PopupStoreService {
     }
 
     private PopupStoreGetResponseDto getPopupStore(PopupStore popupStore) {
-        var imageList = imageUtil.getPopupStoreImageList(popupStore);
-        var operatingList = operatingUtil.getPopupStoreOperatingList(popupStore);
-        var attributeList = attributeUtil.getPopupStoreAttributeList(popupStore);
-        return new PopupStoreGetResponseDto(popupStore, imageList, operatingList, attributeList);
+        var popupStoreBundle = popupStoreBundleService.getPopupStoreBundle(popupStore);
+        return new PopupStoreGetResponseDto(
+                popupStore,
+                popupStoreBundle.getImageList(),
+                popupStoreBundle.getOperatingList(),
+                popupStoreBundle.getAttributeList()
+        );
     }
 
     // 회사 - 팝업 스토어 수정
@@ -108,16 +109,19 @@ public class PopupStoreService {
                 requestDto.getEndDate()
         );
 
-        imageUtil.deletePopupStoreImageList(popupStore);
-        var imageList = imageUtil.createPopupStoreImageList(popupStore, requestDto.getImageList());
+        var popupStoreBundle = popupStoreBundleService.updatePopupStoreBundle(
+                popupStore,
+                requestDto.getImageList(),
+                requestDto.getOperatingList(),
+                requestDto.getAttributeList()
+        );
 
-        operatingUtil.deletePopupStoreOperatingList(popupStore);
-        var operatingList = operatingUtil.createPopupStoreOperatingList(popupStore, requestDto.getOperatingList());
-
-        attributeUtil.deletePopupAttributeList(popupStore);
-        var attributeList = attributeUtil.createPopupStoreAttributeList(popupStore, requestDto.getAttributeList());
-
-        return new PopupStoreUpdateResponseDto(popupStore, imageList, operatingList, attributeList);
+        return new PopupStoreUpdateResponseDto(
+                popupStore,
+                popupStoreBundle.getImageList(),
+                popupStoreBundle.getOperatingList(),
+                popupStoreBundle.getAttributeList()
+        );
     }
 
     public void deletePopupStore(Company company, Long popupStoreId) {
@@ -136,9 +140,7 @@ public class PopupStoreService {
     }
 
     private void deletePopupStore(PopupStore popupStore) {
-        imageUtil.deletePopupStoreImageList(popupStore);
-        operatingUtil.deletePopupStoreOperatingList(popupStore);
-        attributeUtil.deletePopupAttributeList(popupStore);
+        popupStoreBundleService.deletePopupStoreBundle(popupStore);
         popupStoreRepository.delete(popupStore);
     }
 
