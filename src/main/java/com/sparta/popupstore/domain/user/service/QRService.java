@@ -52,10 +52,11 @@ public class QRService {
         User user = userRepository.findByQrCode(requestDto.getQrCode())
                 .orElseThrow(() -> new CustomApiException(ErrorCode.QR_NOT_FOUND_ERROR));
 
-        LocalDateTime now = LocalDateTime.now();
         LocalDateTime reservationAt = reservationRepository.findByPopupStoreAndUser(popupStore, user)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_RESERVATION))
                 .getReservationAt();
+
+        LocalDateTime now = LocalDateTime.now();
         if(reservationAt.isAfter(now.plusMinutes(30))
                 || reservationAt.isBefore(now.minusMinutes(30))
         ) {
