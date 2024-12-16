@@ -23,6 +23,10 @@ public class PopupStoreGetOneResponseDto {
     private final int view;
     @Schema(description = "팝업스토어 입장료")
     private final int price;
+    @Schema(description = "팝업스토어 최대 예약 가능 인수")
+    private final int maxReservation;
+    @Schema(description = "팝업스토어 현재 예약 인수")
+    private final int currentReservation;
     @Schema(description = "팝업스토어 내용")
     private final String contents;
     @Schema(description = "팝업스토어 주소")
@@ -45,6 +49,8 @@ public class PopupStoreGetOneResponseDto {
         this.endDate = popupStore.getEndDate();
         this.view = popupStore.getView();
         this.price = popupStore.getPrice();
+        this.maxReservation = popupStore.getMaxReservation();
+        this.currentReservation = popupStore.getCurrentReservations();
         this.contents = popupStore.getContents();
         this.address = popupStore.getAddress();
         this.imageList = imageList.stream().map(PopupStoreImageResponseDto::new).toList();

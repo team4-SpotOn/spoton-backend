@@ -100,11 +100,11 @@ public class PopupStoreService {
         popupStore.update(
                 requestDto.getName(),
                 requestDto.getContents(),
-                Integer.parseInt(requestDto.getPrice()),
+                requestDto.getPrice(),
+                requestDto.getMaxReservation(),
                 address,
                 requestDto.getStartDate(),
-                requestDto.getEndDate()
-        );
+                requestDto.getEndDate());
 
         var popupStoreBundle = popupStoreBundleService.updatePopupStoreBundle(
                 popupStore,

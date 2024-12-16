@@ -23,7 +23,8 @@ public class PopupStoreUpdateRequestDto {
     @NotNull(message = "팝업스토어 영업시간을 입력해주세요.")
     private List<PopupStoreOperatingRequestDto> operatingList;
     @Min(value = 0, message = "가격은 0이상이어야만 합니다.")
-    private String price;
+    private int price;
+    private int maxReservation;
     @NotBlank(message = "팝업스토어 내용을 입력해주세요.")
     private String contents;
     @NotBlank(message = "팝업스토어 주소를 입력해주세요.")

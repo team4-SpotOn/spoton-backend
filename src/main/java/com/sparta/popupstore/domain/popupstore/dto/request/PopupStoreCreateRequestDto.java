@@ -19,6 +19,7 @@ public class PopupStoreCreateRequestDto {
     private String contents;
     @Min(value = 0, message = "가격은 0이상이어야만 합니다.")
     private int price;
+    private int maxReservation;
     @NotNull(message = "팝업스토어 주소를 입력해주세요.")
     private String address;
     @NotNull(message = "팝업스토어 시작일을 입력해주세요.")
@@ -39,6 +40,8 @@ public class PopupStoreCreateRequestDto {
                 .contents(this.contents)
                 .price(this.price)
                 .view(0)
+                .maxReservation(maxReservation)
+                .currentReservations(0)
                 .address(address)
                 .startDate(this.startDate)
                 .endDate(this.endDate)
