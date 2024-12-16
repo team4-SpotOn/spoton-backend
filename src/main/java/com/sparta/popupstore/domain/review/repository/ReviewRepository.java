@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-  Page <Review> findByPopupStoreId(Long popupStoreId, Pageable pageable);
+  Page <Review> findAllByPopupStoreId(Long popupStoreId, Pageable pageable);
 }

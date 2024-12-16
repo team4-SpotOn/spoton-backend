@@ -4,7 +4,6 @@ import com.sparta.popupstore.config.PasswordEncoder;
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.domain.kakaoaddress.dto.KakaoAddressApiDto;
 import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
 import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
 import com.sparta.popupstore.domain.user.dto.request.UserDeleteRequestDto;
@@ -36,15 +35,10 @@ public class UserService {
         if(userRepository.existsByEmail(requestDto.getEmail())) {
             throw new CustomApiException(ErrorCode.ALREADY_EXIST_EMAIL);
         }
-
-        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
-        User user = requestDto.toEntity(encodedPassword);
-
         // 카카오 주소 API - 위도 경도 구하기
-        KakaoAddressApiDto kakaoAddressApiDto = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
-        Address address = new Address(requestDto.getAddress(), kakaoAddressApiDto);
-        user.updateAddress(address);
-
+        Address address = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
+        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+        User user = requestDto.toEntity(encodedPassword, address);
 
         return new UserSignupResponseDto(userRepository.save(user));
     }
@@ -73,14 +67,15 @@ public class UserService {
 
     // 유저 마이쿠폰 보기
     public List<UserMyCouponsResponseDto> getUserMyCoupons(User user){
-        return couponRepository.findByUserId(user.getId())
+        return couponRepository.findAllByUserId(user.getId())
                 .stream()
                 .map(UserMyCouponsResponseDto::new )
                 .toList();
     }
 
     public UserUpdateResponseDto updateUser(User user, UserUpdateRequestDto requestDto) {
-        user.update(requestDto.getAddress());
+        Address address = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
+        user.update(address);
         return new UserUpdateResponseDto(userRepository.save(user));
     }
 

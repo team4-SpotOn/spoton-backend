@@ -7,5 +7,5 @@ import com.sparta.popupstore.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PointChargedLogRepository extends JpaRepository<PointChargedLog, Long> {
-  List<PointChargedLog> findByUser(User user);
+  List<PointChargedLog> findAllByUser(User user);
 }

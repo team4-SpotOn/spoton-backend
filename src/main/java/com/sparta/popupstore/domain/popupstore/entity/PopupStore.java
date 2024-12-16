@@ -3,7 +3,6 @@ package com.sparta.popupstore.domain.popupstore.entity;
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
 import com.sparta.popupstore.domain.company.entity.Company;
-import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,8 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -27,58 +24,38 @@ public class PopupStore extends BaseEntity {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PopupStoreImage> popupStoreImageList = new ArrayList<>();
     private String name;
     private String contents;
     private int price;
-    private int view = 0;
+    private int view;
     @Embedded
     private Address address;
     private LocalDate startDate;
     private LocalDate endDate;
 
     @Builder
-    public PopupStore(Long id, Company company, String name, String contents, int price, String address, LocalDate startDate, LocalDate endDate) {
+    public PopupStore(Long id, Company company, String name, String contents, int price, int view, Address address, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.company = company;
         this.name = name;
         this.contents = contents;
         this.price = price;
-        this.address = new Address(address);
+        this.view = view;
+        this.address = address;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public void addImageList(List<PopupStoreImage> imageList) {
-        this.popupStoreImageList = imageList.stream().peek(
-                image -> image.addPopupStore(this)
-        ).toList();
-    }
-
-    public PopupStore update(PopupStoreUpdateRequestDto requestDto) {
-        this.name = requestDto.getName() != null ? requestDto.getName() : this.name;
-        this.contents = requestDto.getContents() != null ? requestDto.getContents() : this.contents;
-        this.price = requestDto.getPrice() != null ? Integer.parseInt(requestDto.getPrice()) : this.price;
-        //this.address = address update
-        this.startDate = requestDto.getStartDate() != null ? requestDto.getStartDate() : this.startDate;
-        this.endDate = requestDto.getEndDate() != null ? requestDto.getEndDate() : this.endDate;
-
-        return this;
-    }
-
-    // 위도,경도 저장을 위한 address 업데이트
-    public void updateAddress(Address address) {
+    public void update(String name, String contents, int price, Address address, LocalDate startDate, LocalDate endDate) {
+        this.name = name;
+        this.contents = contents;
+        this.price = price;
         this.address = address;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public void viewPopupStore() {
         this.view += 1;
-    }
-
-    public void updateImages(List<PopupStoreImage> imageList) {
-        this.popupStoreImageList.clear();
-        this.popupStoreImageList.addAll(imageList.stream().peek(image -> image.addPopupStore(this)
-        ).toList());
     }
 }

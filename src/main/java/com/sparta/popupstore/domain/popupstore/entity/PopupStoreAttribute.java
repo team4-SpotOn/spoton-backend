@@ -2,6 +2,7 @@ package com.sparta.popupstore.domain.popupstore.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,7 @@ public class PopupStoreAttribute {
     private PopupStoreAttributeEnum attribute;
     private Boolean isAllow;
 
+    @Builder
     public PopupStoreAttribute(PopupStore popupStore, PopupStoreAttributeEnum attribute, Boolean isAllow) {
         this.popupStore = popupStore;
         this.attribute = attribute;

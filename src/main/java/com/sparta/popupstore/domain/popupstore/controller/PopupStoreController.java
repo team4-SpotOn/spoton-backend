@@ -6,9 +6,11 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreFindOneResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetAllResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
+import com.sparta.popupstore.web.WebUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,26 +46,31 @@ public class PopupStoreController {
             @AuthCompany Company company,
             @RequestBody @Valid PopupStoreCreateRequestDto requestDto
     ) {
-        return ResponseEntity.ok(popupStoreService.createPopupStore(company, requestDto));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(popupStoreService.createPopupStore(company, requestDto));
     }
 
-    @Operation(summary = "관리자 - 팝업 스토어 수정")
-    @Parameter(name = "name", description = "수정할 팝업스토어 명")
-    @Parameter(name = "content", description = "수정할 팝업스토어 내용")
-    @Parameter(name = "price", description = "수정할 팝업스토어 가격")
-    @Parameter(name = "address", description = "수정할 팝업스토어 주소")
-    @Parameter(name = "startDate", description = "수정할 팝업스토어 시작일")
-    @Parameter(name = "endDate", description = "수정할 팝업스토어 종료일")
-    @Parameter(name = "startTime", description = "수정할 팝업스토어 개장시간")
-    @Parameter(name = "endTime", description = "수정할 팝업스토어 폐장시간")
-    @Parameter(name = "images", description = "수정할 이미지 명과 이미지 순서가 들어있는 List Dto")
-    @CheckAdmin
-    @PatchMapping("/admin/popupstores/{popupStoreId}")
-    public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
+    @Operation(summary = "전체 - 팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
+    @GetMapping("/popupstores/{popupStoreId}")
+    public ResponseEntity<PopupStoreGetOneResponseDto> getPopupStoreOne(
             @PathVariable Long popupStoreId,
-            @RequestBody @Valid PopupStoreUpdateRequestDto requestDto
+            HttpServletRequest request,
+            HttpServletResponse response
     ) {
-        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, requestDto));
+        boolean view = WebUtil.checkCookie(request, response, popupStoreId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(popupStoreService.getPopupStoreOne(popupStoreId, view));
+    }
+
+    // 팝업스토어 전체목록 지도용
+    @Operation(summary = "임시 팝업 전제조회(지도용)", description = "지도 팝업스토어 전체목록")
+    @GetMapping("/popupstores")
+    public ResponseEntity<List<PopupStoreGetAllResponseDto>> getPopupStoreAll() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(popupStoreService.getPopupStoreAll());
     }
 
     @Operation(summary = "회사 - 팝업 스토어 수정")
@@ -82,17 +89,30 @@ public class PopupStoreController {
             @AuthCompany Company company,
             @RequestBody @Valid PopupStoreUpdateRequestDto requestDto
     ) {
-        return ResponseEntity.ok(popupStoreService.updatePopupStore(popupStoreId, company, requestDto));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(popupStoreService.updatePopupStore(popupStoreId, company, requestDto));
     }
 
-    @Operation(summary = "전체 - 팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
-    @GetMapping("/popupstores/{popupStoreId}")
-    public ResponseEntity<PopupStoreFindOneResponseDto> getPopupStoreFindOne(
+    @Operation(summary = "관리자 - 팝업 스토어 수정")
+    @Parameter(name = "name", description = "수정할 팝업스토어 명")
+    @Parameter(name = "content", description = "수정할 팝업스토어 내용")
+    @Parameter(name = "price", description = "수정할 팝업스토어 가격")
+    @Parameter(name = "address", description = "수정할 팝업스토어 주소")
+    @Parameter(name = "startDate", description = "수정할 팝업스토어 시작일")
+    @Parameter(name = "endDate", description = "수정할 팝업스토어 종료일")
+    @Parameter(name = "startTime", description = "수정할 팝업스토어 개장시간")
+    @Parameter(name = "endTime", description = "수정할 팝업스토어 폐장시간")
+    @Parameter(name = "images", description = "수정할 이미지 명과 이미지 순서가 들어있는 List Dto")
+    @CheckAdmin
+    @PatchMapping("/admin/popupstores/{popupStoreId}")
+    public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStoreAdmin(
             @PathVariable Long popupStoreId,
-            HttpServletRequest request,
-            HttpServletResponse response
+            @RequestBody @Valid PopupStoreUpdateRequestDto requestDto
     ) {
-        return ResponseEntity.ok(popupStoreService.getPopupStoreOne(popupStoreId, request, response));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(popupStoreService.updatePopupStore(popupStoreId, requestDto));
     }
 
     @Operation(summary = "회사 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
@@ -121,12 +141,5 @@ public class PopupStoreController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
-    }
-
-    // 팝업스토어 전체목록 지도용
-    @Operation(summary = "임시 팝업 전제조회(지도용)", description = "지도 팝업스토어 전체목록")
-    @GetMapping("/popupstores")
-    public ResponseEntity<List<PopupStoreFindOneResponseDto>> getPopupStoreAll() {
-        return ResponseEntity.ok(popupStoreService.getPopupStoreAll());
     }
 }

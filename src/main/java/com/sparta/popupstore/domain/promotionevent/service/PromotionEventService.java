@@ -3,6 +3,7 @@ package com.sparta.popupstore.domain.promotionevent.service;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.common.util.ValidUtil;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
@@ -12,12 +13,12 @@ import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.s3.service.S3ImageService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -47,8 +48,11 @@ public class PromotionEventService {
         return promotionEventRepository.findAllPromotionalEvents(pageable).map(PromotionEventFindAllResponseDto::new);
     }
 
+    @Transactional(readOnly = true)
     public PromotionEventFindOneResponseDto findOnePromotionEvent(Long promotionEventId) {
-        return new PromotionEventFindOneResponseDto(this.getPromotionEvent(promotionEventId));
+        PromotionEvent promotionEvent = getPromotionEvent(promotionEventId);
+        PopupStore popupStore = promotionEvent.getPopupStore();
+        return new PromotionEventFindOneResponseDto(promotionEvent, popupStore);
     }
 
     @Transactional

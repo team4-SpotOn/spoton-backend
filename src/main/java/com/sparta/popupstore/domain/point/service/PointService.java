@@ -35,7 +35,7 @@ public class PointService {
     }
 
     public List<PointChargedLogResponseDto> pointChargeLogs(User user) {
-      return pointChargedLogRepository.findByUser(user)
+      return pointChargedLogRepository.findAllByUser(user)
           .stream()
           .map(PointChargedLogResponseDto::new)
           .toList();
@@ -57,7 +57,7 @@ public class PointService {
     }
 
     public List<PointUsedLogResponseDto> pointUsedLogs(User user) {
-      return pointUsedLogRepository.findByUser(user)
+      return pointUsedLogRepository.findAllByUser(user)
           .stream()
           .map(PointUsedLogResponseDto::new)
           .toList();
