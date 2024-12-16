@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>QR code page</title>
+    <!-- font-awesome(폰트어썸) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" 
+    integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="popup.css">
+    <!-- 제이쿼리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(function(){
+            // 추후 qr로 연동
+            // $.ajax({
+            //     url : "/users/mypage/qrCode",
+            //     type : "GET",
+            //     success : function(response){
+
+            //     }
+            // })
+        })
+    </script>
+</head>
+<body>
+    <div class="commonBox">
+        <div>
+            <div>
+                <div class="QRcodeWrap">
+
+                    <div class="topBox">
+                        <span class="title">팝업스토어 입장 QR코드</span>
+                        <span class="subtitle">
+                            <p>QR코드를 스캔하여 팝업스토어에 입장하세요.</p>
+                            <p>입장시간 30분후 까지 스캔이 가능하니 주의바랍니다.</p>
+                        </span>
+                    </div>
+
+                    <div class="infoBox">
+                        <div>
+                            <span>고객 성명 : 문권이장김</span>
+                            <span>팝업스토어 이름 : 스팟온 101</span>
+                        </div>
+                    </div>
+
+                    <div class="QRcodeBox">
+                        <div class="main3BorderColor">
+                            <img class="QR-code" src="QRcode.jpg" style="width:100%; height:100%;">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
