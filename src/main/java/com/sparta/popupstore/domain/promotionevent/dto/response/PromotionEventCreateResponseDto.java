@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 public class PromotionEventCreateResponseDto {
     @Schema(description = "프로모션 이벤트 고유 번호")
     private final Long id;
+    @Schema(description = "팝업스토어 고유번호")
+    private final Long popupStoreId;
     @Schema(description = "프로모션 이벤트 제목")
     private final String title;
     @Schema(description = "프로모션 이벤트 설명")
@@ -29,6 +31,7 @@ public class PromotionEventCreateResponseDto {
 
     public PromotionEventCreateResponseDto(PromotionEvent promotionEvent) {
         this.id = promotionEvent.getId();
+        this.popupStoreId = promotionEvent.getPopupStore() != null ? promotionEvent.getPopupStore().getId() : null;
         this.title = promotionEvent.getTitle();
         this.description = promotionEvent.getDescription();
         this.discountPercentage = promotionEvent.getDiscountPercentage();
