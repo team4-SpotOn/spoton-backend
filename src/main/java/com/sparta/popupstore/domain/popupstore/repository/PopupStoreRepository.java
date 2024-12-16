@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
+public interface PopupStoreRepository extends JpaRepository<PopupStore, Long>, PopupStoreQueryRepository{
 
     List<PopupStore> findAllByCompanyId(Long companyId);
 }

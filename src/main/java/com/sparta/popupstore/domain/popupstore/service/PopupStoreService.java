@@ -28,6 +28,7 @@ public class PopupStoreService {
     private final KakaoAddressService kakaoAddressService;
     private final PopupStoreBundleService popupStoreBundleService;
 
+
     // 팝업스토어 생성
     @Transactional
     public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto) {
@@ -149,5 +150,26 @@ public class PopupStoreService {
         if(popupStore.getStartDate().isBefore(LocalDate.now())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
+    }
+
+    public List<PopupStore> findStoresForLastPeriod(String period) {
+        LocalDate now = LocalDate.now();
+        LocalDate startDate;
+
+        switch (period.toLowerCase()) {
+            case "week":
+                startDate = now.minusWeeks(1);
+                break;
+            case "two-weeks":
+                startDate = now.minusWeeks(2);
+                break;
+            case "month":
+                startDate = now.minusMonths(1);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid period: " + period);
+        }
+
+        return popupStoreRepository.findByStartDateAndEndDate(startDate, now);
     }
 }

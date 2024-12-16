@@ -9,6 +9,7 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetAllResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetOneResponseDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import com.sparta.popupstore.web.WebUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "PopupStore", description = "팝업스토어 관련 api")
@@ -141,5 +143,10 @@ public class PopupStoreController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @GetMapping("/popupstores/day")
+    public List<PopupStore> findStoresForLastPeriod(@RequestParam String period) {
+        return popupStoreService.findStoresForLastPeriod(period);
     }
 }
