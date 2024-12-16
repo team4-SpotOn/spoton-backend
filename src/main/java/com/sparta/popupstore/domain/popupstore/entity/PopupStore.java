@@ -2,6 +2,8 @@ package com.sparta.popupstore.domain.popupstore.entity;
 
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.company.entity.Company;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -28,28 +30,33 @@ public class PopupStore extends BaseEntity {
     private String contents;
     private int price;
     private int view;
+    private int maxReservation;
+    private int currentReservations;
     @Embedded
     private Address address;
     private LocalDate startDate;
     private LocalDate endDate;
 
     @Builder
-    public PopupStore(Long id, Company company, String name, String contents, int price, int view, Address address, LocalDate startDate, LocalDate endDate) {
+    public PopupStore(Long id, Company company, String name, String contents, int price, int view, int maxReservation, int currentReservations, Address address, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.company = company;
         this.name = name;
         this.contents = contents;
         this.price = price;
         this.view = view;
+        this.maxReservation = maxReservation;
+        this.currentReservations = currentReservations;
         this.address = address;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public void update(String name, String contents, int price, Address address, LocalDate startDate, LocalDate endDate) {
+    public void update(String name, String contents, int price, int maxReservations, Address address, LocalDate startDate, LocalDate endDate) {
         this.name = name;
         this.contents = contents;
         this.price = price;
+        this.maxReservation = maxReservations;
         this.address = address;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -57,5 +64,16 @@ public class PopupStore extends BaseEntity {
 
     public void viewPopupStore() {
         this.view += 1;
+    }
+
+    public boolean canReserve() {
+        return currentReservations < maxReservation;
+    }
+
+    public void incrementReservation() {
+        if (!canReserve()) {
+            throw new CustomApiException(ErrorCode.POPUP_STORE_FULL);
+        }
+        this.currentReservations++;
     }
 }
