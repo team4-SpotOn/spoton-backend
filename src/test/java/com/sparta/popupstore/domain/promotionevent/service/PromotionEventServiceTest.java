@@ -50,14 +50,6 @@ class PromotionEventServiceTest {
         Long popupStoreId = null;
         PromotionEventCreateRequestDto requestDto = PromotionEventCreateRequestDto.builder().build();
         PromotionEvent promotionEvent = PromotionEvent.builder()
-                .id(3L)
-                .title("테스트 제목")
-                .totalCount(10)
-                .discountPercentage(10)
-                .startDateTime(LocalDateTime.now())
-                .endDateTime(LocalDateTime.now().plusDays(2))
-                .couponExpirationPeriod(30)
-                .couponGetCount(0)
                 .build();
         // when
         when(promotionEventRepository.save(any())).thenReturn(promotionEvent);
@@ -73,12 +65,7 @@ class PromotionEventServiceTest {
         // given
         Long popupStoreId = 1L;
         PromotionEventCreateRequestDto requestDto = PromotionEventCreateRequestDto.builder()
-                .title("테스트 제목")
-                .totalCount(10)
-                .discountPercentage(10)
-                .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusDays(2))
-                .couponExpirationPeriod(30)
                 .build();
         PopupStore popupStore = PopupStore.builder()
                 .id(popupStoreId)
@@ -86,14 +73,8 @@ class PromotionEventServiceTest {
                 .build();
         PromotionEvent promotionEvent = PromotionEvent.builder()
                 .id(3L)
-                .title("테스트 제목")
                 .popupStore(popupStore)
-                .totalCount(10)
-                .discountPercentage(10)
-                .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusDays(2))
-                .couponExpirationPeriod(30)
-                .couponGetCount(0)
                 .build();
         // when
         when(popupStoreRepository.findByIdAndEndDateAfter(popupStoreId, LocalDate.now())).thenReturn(Optional.ofNullable(popupStore));
@@ -110,16 +91,10 @@ class PromotionEventServiceTest {
         // given
         Long popupStoreId = 1L;
         PromotionEventCreateRequestDto requestDto = PromotionEventCreateRequestDto.builder()
-                .title("테스트 제목")
-                .totalCount(10)
-                .discountPercentage(10)
-                .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusDays(2))
-                .couponExpirationPeriod(30)
                 .build();
         PopupStore popupStore = PopupStore.builder()
                 .id(popupStoreId)
-                .startDate(LocalDate.now().minusDays(12))
                 .endDate(LocalDate.now())
                 .build();
         // when
