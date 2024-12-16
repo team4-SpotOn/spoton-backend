@@ -4,11 +4,7 @@ import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCreateResponseDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindAllResponseDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.CouponCreateResponseDto;
+import com.sparta.popupstore.domain.promotionevent.dto.response.*;
 import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +39,7 @@ public class PromotionEventController {
     public ResponseEntity<PromotionEventCreateResponseDto> createEvent(
             @Valid @RequestBody PromotionEventCreateRequestDto createRequestDto,
             @RequestParam(required = false, name = "popupStoreId") Long popupStoreId
-            ){
+    ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(promotionEventService.createEvent(createRequestDto, popupStoreId));
     }
 
@@ -52,9 +48,9 @@ public class PromotionEventController {
     @Parameter(name = "pageSize", description = "한 페이지에서 볼 이벤트 갯수")
     @GetMapping("/promotionEvents")
     public ResponseEntity<Page<PromotionEventFindAllResponseDto>> findAllPromotionalEvents(
-            @RequestParam(name = "page",required = false, defaultValue = "1") int page,
-            @RequestParam(name = "size",required = false, defaultValue = "10") int size
-    ){
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int size
+    ) {
         return ResponseEntity.ok(promotionEventService.findAllPromotionalEvents(page, size));
     }
 
@@ -62,7 +58,7 @@ public class PromotionEventController {
     @GetMapping("/promotionEvents/{promotionEventId}")
     public ResponseEntity<PromotionEventFindOneResponseDto> findOnePromotionalEvent(
             @PathVariable(name = "promotionEventId") Long promotionEventId
-    ){
+    ) {
         return ResponseEntity.ok(promotionEventService.findOnePromotionEvent(promotionEventId));
     }
 
@@ -80,7 +76,7 @@ public class PromotionEventController {
     public ResponseEntity<PromotionEventUpdateResponseDto> updateEvent(
             @Valid @RequestBody PromotionEventUpdateRequestDto updateRequestDto,
             @PathVariable(name = "promotionEventId") Long promotionEventId
-    ){
+    ) {
         return ResponseEntity.ok(promotionEventService.updatePromotionEvent(updateRequestDto, promotionEventId));
     }
 
@@ -89,7 +85,7 @@ public class PromotionEventController {
     @DeleteMapping("/admin/promotionEvents/{promotionEventId}")
     public ResponseEntity<Void> deleteEvent(
             @PathVariable(name = "promotionEventId") Long promotionEventId
-    ){
+    ) {
         promotionEventService.deletePromotionEvent(promotionEventId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -99,7 +95,7 @@ public class PromotionEventController {
     public ResponseEntity<CouponCreateResponseDto> couponApplyAndIssuance(
             @PathVariable(name = "promotionEventId") Long promotionEventId,
             @AuthUser User user
-    ){
+    ) {
         return ResponseEntity.ok(promotionEventService.couponApplyAndIssuance(promotionEventId, user));
     }
 }
