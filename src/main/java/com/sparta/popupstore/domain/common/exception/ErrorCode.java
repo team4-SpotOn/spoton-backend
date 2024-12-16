@@ -23,6 +23,7 @@ public enum ErrorCode {
     PROMOTION_EVENT_ALREADY(HttpStatus.BAD_REQUEST, "이미 시작한 이벤트는 수정 및 삭제 할 수 없습니다."),
     PROMOTION_EVENT_NOT_START_AND_END_TIME(HttpStatus.BAD_REQUEST, "startDateTime 과 endDateTime 이 존재하지 않습니다."),
     PROMOTION_EVENT_END(HttpStatus.BAD_REQUEST, "이미 끝난 이벤트 입니다."),
+    PROMOTION_EVENT_NOT_AFTER_POPUP_STORE_END_DATE(HttpStatus.BAD_REQUEST, "이벤트 종료일은 팝업스토어 종료일 이후로 선택할 수 없습니다."),
     // review error
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND,"수정할 리뷰가 없습니다."),
     REVIEW_NOT_UPDATE(HttpStatus.FORBIDDEN,"작성자만 수정할 수 있습니다."),

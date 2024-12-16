@@ -20,7 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Service
@@ -38,7 +40,12 @@ public class PromotionEventService {
     ) {
         PromotionEvent promotionEvent = createRequestDto.toEvent();
         if(popupStoreId != null) {
-            popupStoreRepository.findById(popupStoreId).ifPresent(promotionEvent::addPopupStore);
+           PopupStore popupStore = popupStoreRepository.findByIdAndEndDateAfter(popupStoreId, LocalDate.now())
+                    .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+           if(promotionEvent.getEndDateTime().isAfter(LocalDateTime.of(popupStore.getEndDate(), LocalTime.MAX))){
+               throw new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_AFTER_POPUP_STORE_END_DATE);
+           }
+           promotionEvent.addPopupStore(popupStore);
         }
         return new PromotionEventCreateResponseDto(promotionEventRepository.save(promotionEvent));
     }
