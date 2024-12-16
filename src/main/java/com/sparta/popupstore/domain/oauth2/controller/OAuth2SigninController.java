@@ -23,12 +23,15 @@ public class OAuth2SigninController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/oauth2/signin/{platform}")
-    public void redirectSigninPage(
+    public ResponseEntity<Void> redirectSigninPage(
             @PathVariable OAuth2Platform platform,
             HttpServletResponse response
     ) throws IOException {
         String signinPageUrl = oAuth2SigninService.generateSigninPageUrl(platform);
         response.sendRedirect(signinPageUrl);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @GetMapping("/oauth2/callback/{platform}")
@@ -38,7 +41,7 @@ public class OAuth2SigninController {
             HttpServletResponse response
     ) {
         SocialUser socialUser = oAuth2SigninService.signin(platform, authorizationCode);
-        jwtUtil.addJwtToCookie(socialUser.getPhoneNumber(), response);
+        jwtUtil.addJwtToCookie(socialUser.getPlatformId(), socialUser.getPlatform(), response);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
