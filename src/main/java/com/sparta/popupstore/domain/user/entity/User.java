@@ -50,4 +50,8 @@ public class User extends BaseEntity {
     public void ChargePoint(int chargedPoint) {
         this.point += chargedPoint;
     }
+
+    public void decreasePoint(int amount) {
+        this.point -= amount;
+    }
 }

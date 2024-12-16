@@ -1,12 +1,64 @@
 package com.sparta.popupstore.domain.reservation.service;
 
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttribute;
+import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttributeEnum;
+import com.sparta.popupstore.domain.popupstore.repository.PopupStoreAttributeRepository;
+import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.domain.reservation.dto.request.ReservationCreateRequestDto;
+import com.sparta.popupstore.domain.reservation.entity.Reservation;
 import com.sparta.popupstore.domain.reservation.repository.ReservationRepository;
+import com.sparta.popupstore.domain.user.entity.User;
+import com.sparta.popupstore.domain.user.entity.UserRole;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final PopupStoreRepository popupStoreRepository;
+    private final PopupStoreAttributeRepository popupStoreAttributeRepository;
+
+    @Transactional
+    public Reservation createReservation(Long popupStoreId, User user, ReservationCreateRequestDto requestDto) {
+
+        if (user.getUserRole() != UserRole.USER) throw new CustomApiException(ErrorCode.NOT_USER);
+
+        PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+
+        /*
+        최대 예약 가능 인원을 초과할 경우 예약 불가하게 로직 변경 예정
+            if (!popupStore.canReserve()) throw new CustomApiException(ErrorCode.POPUP_STORE_FULL);
+         */
+
+        PopupStoreAttribute popupStoreAttribute = popupStoreAttributeRepository.findAllByPopupStore(popupStore).stream()
+                .filter(attribute -> attribute.getAttribute().equals(PopupStoreAttributeEnum.RESERVATION))
+                .findFirst()
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_CAN_NOT_RESERVATION));
+
+        if(!popupStoreAttribute.getIsAllow()) throw new CustomApiException(ErrorCode.POPUP_STORE_CAN_NOT_RESERVATION);
+
+        if (user.getPoint() < popupStore.getPrice()) throw new CustomApiException(ErrorCode.INSUFFICIENT_POINTS);
+
+        user.decreasePoint(popupStore.getPrice());
+
+        Reservation reservation = Reservation.builder()
+                .user(user)
+                .popupStore(popupStore)
+                .reservationAt(requestDto.getReservationAt())
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        return reservationRepository.save(reservation);
+    }
 }
