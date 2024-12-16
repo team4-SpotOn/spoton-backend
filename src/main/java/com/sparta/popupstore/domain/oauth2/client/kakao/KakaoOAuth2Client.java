@@ -13,8 +13,8 @@ public class KakaoOAuth2Client extends OAuth2Client {
 
     @Value("${oauth2.kakao.client_id}")
     private String clientId;
-    @Value("${oauth2.kakao.client_secret}")
-    private String clientSecret;
+//    @Value("${oauth2.kakao.client_secret}")
+//    private String clientSecret;
     @Value("${oauth2.kakao.redirect_url}")
     private String redirectUri;
     @Value("")

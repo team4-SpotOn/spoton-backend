@@ -46,6 +46,12 @@ public class PromotionEventService {
                throw new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_AFTER_POPUP_STORE_END_DATE);
            }
            promotionEvent.addPopupStore(popupStore);
+           PopupStore popupStore = popupStoreRepository.findByIdAndEndDateAfter(popupStoreId, LocalDate.now())
+                    .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+           if(promotionEvent.getEndDateTime().isAfter(LocalDateTime.of(popupStore.getEndDate(), LocalTime.now()))){
+               throw new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_AFTER_POPUP_STORE_END_DATE);
+           }
+           promotionEvent.addPopupStore(popupStore);
         }
         return new PromotionEventCreateResponseDto(promotionEventRepository.save(promotionEvent));
     }
