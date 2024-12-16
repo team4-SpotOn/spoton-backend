@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class KakaoAddressService {
-    private final static String KAKAO_ADDRESS_API_URL = "https://kapi.kakao.com/v2/address/.json?query=";
+    private final static String KAKAO_ADDRESS_API_URL = "https://dapi.kakao.com/v2/local/search/address.json?query=";
     private final RestClient restClient;
     // 카카오 주소 api service
     @Value("${kakao.api.restful.key}")
