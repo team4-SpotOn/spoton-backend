@@ -25,9 +25,10 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
     private int point;
+    private String qrCode;
 
     @Builder
-    public User(Long id, String email, String password, String name, Address address, UserRole userRole, int point) {
+    public User(Long id, String email, String password, String name, Address address, UserRole userRole, int point, String qrCode) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -35,6 +36,7 @@ public class User extends BaseEntity {
         this.address = address;
         this.userRole = userRole;
         this.point = point;
+        this.qrCode = qrCode;
     }
 
     public void update(Address address) {
