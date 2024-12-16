@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,8 @@ public class UserService {
         // 카카오 주소 API - 위도 경도 구하기
         Address address = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
-        User user = requestDto.toEntity(encodedPassword, address);
+        String qr = UUID.randomUUID().toString();
+        User user = requestDto.toEntity(encodedPassword, address, qr);
 
         return new UserSignupResponseDto(userRepository.save(user));
     }

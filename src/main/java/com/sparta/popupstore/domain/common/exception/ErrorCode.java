@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     // user error
+    QR_ENCODE_ERROR(HttpStatus.BAD_REQUEST, "QR_ENCODE_ERROR"),
+    WRITE_STREAM_ERROR(HttpStatus.BAD_REQUEST, "WRITE_STREAM_ERROR"),
+    QR_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "QR_NOT_FOUND_ERROR"),
 
     // company error
 
@@ -14,7 +17,6 @@ public enum ErrorCode {
     POPUP_STORE_NOT_BY_THIS_COMPANY(HttpStatus.FORBIDDEN, "팝업스토어가 이 회사에서 만들어지지 않았습니다."),
     POPUP_STORE_ALREADY_START(HttpStatus.FORBIDDEN, "진행 전인 팝업스토어만 수정 가능합니다."),
     POPUP_STORE_NOT_FOUND(HttpStatus.BAD_REQUEST,"해당 팝업스토어가 없습니다."),
-    POPUP_STORE_NOT_RESERVATION(HttpStatus.INTERNAL_SERVER_ERROR,"예약한 팝업스토어가 아닙니다."),
     POPUP_STORE_OPERATING_BAD_REQUEST(HttpStatus.BAD_REQUEST, "운영시간이 올바르지 않습니다."),
     // event error
     PROMOTION_EVENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이벤트가 없습니다."),
@@ -50,6 +52,11 @@ public enum ErrorCode {
 
     //point
     NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST,"결제가능한 포인트가 아닙니다." ),
+
+    //reservation
+    POPUP_STORE_NOT_RESERVATION(HttpStatus.INTERNAL_SERVER_ERROR,"예약한 팝업스토어가 아닙니다."),
+    DOESNT_RESERVATION_AT(HttpStatus.BAD_REQUEST, "예약한 시간대가 아닙니다."),
+    RESERVATION_LATE(HttpStatus.BAD_REQUEST, "예약한 시간이 지났습니다."),
 
     // address error
     KAKAO_ADDRESS_API_ERROR(HttpStatus.BAD_REQUEST, "카카오 지도 에러"),
