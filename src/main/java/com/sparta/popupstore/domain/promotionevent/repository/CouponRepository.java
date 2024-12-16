@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
-    List<Coupon> findByUserId(Long userId);
+    List<Coupon> findAllByUserId(Long userId);
 
     boolean existsByPromotionEventIdAndUserId(
             @Param("promotionEventId") Long promotionEventId,

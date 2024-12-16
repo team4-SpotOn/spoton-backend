@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.promotionevent.dto.response;
 
+import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -29,11 +30,11 @@ public class PromotionEventFindOneResponseDto {
     @Schema(description = "프로모션 이벤트 이미지 저장된 경로")
     private final String imageUrl;
 
-    public PromotionEventFindOneResponseDto(PromotionEvent promotionEvent) {
+    public PromotionEventFindOneResponseDto(PromotionEvent promotionEvent, PopupStore popupStore) {
         this.id = promotionEvent.getId();
         this.title = promotionEvent.getTitle();
         this.description = promotionEvent.getDescription();
-        this.promotionEventFindPopupStoreResponseDto = promotionEvent.getPopupStore() != null ? new PromotionEventFindOnePopupStoreResponseDto(promotionEvent.getPopupStore()) : null;
+        this.promotionEventFindPopupStoreResponseDto = popupStore != null ? new PromotionEventFindOnePopupStoreResponseDto(popupStore) : null;
         this.discountPercentage = promotionEvent.getDiscountPercentage();
         this.totalCount = promotionEvent.getTotalCount();
         this.couponExpirationPeriod = promotionEvent.getCouponExpirationPeriod();

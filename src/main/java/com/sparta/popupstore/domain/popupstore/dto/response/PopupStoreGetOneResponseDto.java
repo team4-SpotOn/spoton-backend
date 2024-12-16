@@ -12,27 +12,29 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-public class PopupStoreUpdateResponseDto {
-    @Schema(description = "수정된 팝업스토어 명")
+public class PopupStoreGetOneResponseDto {
+    @Schema(description = "팝업스토어 이름")
     private final String name;
-    @Schema(description = "수정된 팝업스토어 시작일")
+    @Schema(description = "팝업스토어 시작일")
     private final LocalDate startDate;
-    @Schema(description = "수정된 팝업스토어 종료일")
+    @Schema(description = "팝업스토어 종료일")
     private final LocalDate endDate;
-    @Schema(description = "수정된 팝업스토어 가격")
+    @Schema(description = "팝업스토어 조회수")
+    private final int view;
+    @Schema(description = "팝업스토어 입장료")
     private final int price;
-    @Schema(description = "수정된 팝업스토어 내용")
+    @Schema(description = "팝업스토어 내용")
     private final String contents;
-    @Schema(description = "수정된 팝업스토어 주소")
+    @Schema(description = "팝업스토어 주소")
     private final Address address;
-    @Schema(description = "수정된 팝업스토어 이미지 리스트")
+    @Schema(description = "팝업스토어 이미지 리스트")
     private final List<PopupStoreImageResponseDto> imageList;
-    @Schema(description = "생성된 팝업스토어 운영시간")
+    @Schema(description = "팝업스토어 운영시간")
     private final List<PopupStoreOperatingResponseDto> operatingList;
-    @Schema(description = "생성된 팝업스토어 속성 리스트")
+    @Schema(description = "팝업스토어 속성 리스트")
     private final List<PopupStoreAttributeResponseDto> attributeList;
 
-    public PopupStoreUpdateResponseDto(
+    public PopupStoreGetOneResponseDto(
             PopupStore popupStore,
             List<PopupStoreImage> imageList,
             List<PopupStoreOperating> operatingList,
@@ -41,6 +43,7 @@ public class PopupStoreUpdateResponseDto {
         this.name = popupStore.getName();
         this.startDate = popupStore.getStartDate();
         this.endDate = popupStore.getEndDate();
+        this.view = popupStore.getView();
         this.price = popupStore.getPrice();
         this.contents = popupStore.getContents();
         this.address = popupStore.getAddress();

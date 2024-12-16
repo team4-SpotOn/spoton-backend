@@ -27,18 +27,18 @@ public class User extends BaseEntity {
     private int point;
 
     @Builder
-    public User(Long id, String email, String password, String name, String address, UserRole userRole, int point) {
+    public User(Long id, String email, String password, String name, Address address, UserRole userRole, int point) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
-        this.address = new Address(address);
+        this.address = address;
         this.userRole = userRole;
         this.point = point;
     }
 
-    public void update(String address) {
-        // this.address = address update
+    public void update(Address address) {
+         this.address = address;
     }
 
     public void delete(LocalDateTime deletedAt) {

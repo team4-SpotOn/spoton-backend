@@ -5,17 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class KakaoAddressApiDto {
-
-    @JsonProperty("documents")
-    private List<Document> documents;
-
-    @JsonProperty("meta")
-    private Object meta;
-
+public class Document {
+    // road_address 필드
+    @JsonProperty("road_address")
+    private RoadAddress roadAddress;
 }

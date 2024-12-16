@@ -1,6 +1,5 @@
 package com.sparta.popupstore.domain.popupstore.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,23 +9,24 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "popupstore_images")
-public class PopupStoreImage {
+@Table(name = "popupstore_attributes")
+public class PopupStoreAttribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "popupstore_id")
     private PopupStore popupStore;
-    private String imageUrl;
-    private int sort;
+
+    @Enumerated(EnumType.STRING)
+    private PopupStoreAttributeEnum attribute;
+    private Boolean isAllow;
 
     @Builder
-    public PopupStoreImage(Long id, PopupStore popupStore, String imageUrl, int sort) {
-        this.id = id;
+    public PopupStoreAttribute(PopupStore popupStore, PopupStoreAttributeEnum attribute, Boolean isAllow) {
         this.popupStore = popupStore;
-        this.imageUrl = imageUrl;
-        this.sort = sort;
+        this.attribute = attribute;
+        this.isAllow = isAllow;
     }
 }

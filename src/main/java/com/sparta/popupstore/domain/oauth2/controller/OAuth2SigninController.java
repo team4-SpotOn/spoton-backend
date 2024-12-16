@@ -2,7 +2,7 @@ package com.sparta.popupstore.domain.oauth2.controller;
 
 import com.sparta.popupstore.domain.oauth2.entity.SocialUser;
 import com.sparta.popupstore.domain.oauth2.service.OAuth2SigninService;
-import com.sparta.popupstore.domain.oauth2.type.OAuth2Provider;
+import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
 import com.sparta.popupstore.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,35 +22,35 @@ public class OAuth2SigninController {
     private final OAuth2SigninService oAuth2SigninService;
     private final JwtUtil jwtUtil;
 
-    @GetMapping("/oauth2/signin/{provider}")
+    @GetMapping("/oauth2/signin/{platform}")
     public void redirectSigninPage(
-            @PathVariable OAuth2Provider provider,
+            @PathVariable OAuth2Platform platform,
             HttpServletResponse response
     ) throws IOException {
-        String signinPageUrl = oAuth2SigninService.generateSigninPageUrl(provider);
+        String signinPageUrl = oAuth2SigninService.generateSigninPageUrl(platform);
         response.sendRedirect(signinPageUrl);
     }
 
-    @GetMapping("/oauth2/callback/{provider}")
+    @GetMapping("/oauth2/callback/{platform}")
     public ResponseEntity<Void> callback(
-            @PathVariable OAuth2Provider provider,
+            @PathVariable OAuth2Platform platform,
             @RequestParam(name = "code") String authorizationCode,
             HttpServletResponse response
     ) {
-        SocialUser socialUser = oAuth2SigninService.signin(provider, authorizationCode);
-        jwtUtil.addJwtToCookie(socialUser.getEmail(), response);
+        SocialUser socialUser = oAuth2SigninService.signin(platform, authorizationCode);
+        jwtUtil.addJwtToCookie(socialUser.getPhoneNumber(), response);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
 
-    @GetMapping("/oauth2/callback/{provider}/token")
+    @GetMapping("/oauth2/callback/{platform}/token")
     public ResponseEntity<String> getAccessToken(
-            @PathVariable OAuth2Provider provider,
+            @PathVariable OAuth2Platform platform,
             @RequestParam(name = "code") String authorizationCode
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(oAuth2SigninService.getAccessToken(provider, authorizationCode));
+                .body(oAuth2SigninService.getAccessToken(platform, authorizationCode));
     }
 }
