@@ -28,7 +28,6 @@ public class PopupStoreService {
     private final KakaoAddressService kakaoAddressService;
     private final PopupStoreBundleService popupStoreBundleService;
 
-
     // 팝업스토어 생성
     @Transactional
     public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto) {
@@ -150,6 +149,11 @@ public class PopupStoreService {
         if(popupStore.getStartDate().isBefore(LocalDate.now())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
+    }
+
+    public PopupStoreSearchResponseDto getPopupStoreByDate(int page, int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        return popupStoreRepository.findByDate(pageable);
     }
 
     public List<PopupStore> findStoresForLastPeriod(String period) {

@@ -34,7 +34,7 @@ public class Reservation {
 
     @CreatedDate
     @Column(updatable = false)
-    protected LocalDateTime createdAt;
+    private LocalDateTime createdAt; // 생성일이 예약일이므로 Response 때 보여줘야 함
 
     @Builder
     public Reservation(Long id, User user, PopupStore popupStore, LocalDateTime reservationAt, LocalDateTime createdAt) {

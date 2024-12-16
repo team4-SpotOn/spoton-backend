@@ -54,6 +54,10 @@ dependencies {
 
     //Bcrypt
     implementation 'at.favre.lib:bcrypt:0.10.2'
+
+    // QR Code - zxing
+    implementation group: 'com.google.zxing', name: 'javase', version: '3.5.0'
+    implementation group: 'com.google.zxing', name: 'core', version: '3.5.0'
 }
 
 tasks.named('test') {

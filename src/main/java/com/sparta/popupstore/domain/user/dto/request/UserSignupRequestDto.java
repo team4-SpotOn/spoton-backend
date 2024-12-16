@@ -23,7 +23,7 @@ public class UserSignupRequestDto {
     @NotBlank(message = "주소를 입력해 주세요.")
     private String address;
 
-    public User toEntity(String encodedPassword, Address address) {
+    public User toEntity(String encodedPassword, Address address, String qrCode) {
         return User.builder()
                 .email(this.email)
                 .password(encodedPassword)
@@ -31,6 +31,7 @@ public class UserSignupRequestDto {
                 .address(address)
                 .userRole(UserRole.USER)
                 .point(0)
+                .qrCode(qrCode)
                 .build();
     }
 }
