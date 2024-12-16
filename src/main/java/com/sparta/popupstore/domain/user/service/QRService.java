@@ -13,6 +13,7 @@ import com.sparta.popupstore.domain.reservation.repository.ReservationRepository
 import com.sparta.popupstore.domain.user.dto.request.UserValidReservationRequestDto;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -20,17 +21,12 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class QRService {
 
     private final UserRepository userRepository;
     private final PopupStoreRepository popupStoreRepository;
     private final ReservationRepository reservationRepository;
-
-    public QRService(UserRepository userRepository, PopupStoreRepository popupStoreRepository, ReservationRepository reservationRepository) {
-        this.userRepository = userRepository;
-        this.popupStoreRepository = popupStoreRepository;
-        this.reservationRepository = reservationRepository;
-    }
 
     public byte[] getUseQrCode(User user) {
         int width = 400;
