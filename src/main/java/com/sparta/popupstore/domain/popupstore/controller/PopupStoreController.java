@@ -5,10 +5,7 @@ import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetAllResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetOneResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.*;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import com.sparta.popupstore.web.WebUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,7 +41,7 @@ public class PopupStoreController {
     @PostMapping("/popupstores")
     public ResponseEntity<PopupStoreCreateResponseDto> createPopupStore(
             @AuthCompany Company company,
-            @RequestBody @Valid PopupStoreCreateRequestDto requestDto
+            @RequestBody PopupStoreCreateRequestDto requestDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -71,6 +68,17 @@ public class PopupStoreController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(popupStoreService.getPopupStoreAll());
+    }
+
+    @Operation(summary = "팝업스토어 종료 임박 or 시작 임박 조회", description = "팝업스토어 종료 임박 or 시작 임박 조회")
+    @GetMapping("/popupstores/search")
+    public ResponseEntity<PopupStoreSearchResponseDto> getPopupStoreByDate(
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int size
+    ){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(popupStoreService.getPopupStoreByDate(page, size));
     }
 
     @Operation(summary = "회사 - 팝업 스토어 수정")

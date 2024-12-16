@@ -7,13 +7,12 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetAllResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetOneResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.*;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +31,8 @@ public class PopupStoreService {
     @Transactional
     public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto) {
         // 카카오 주소 API - 위도 경도 구하기
-        Address address = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
-
+        //Address address = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
+        Address address = null;
         PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company, address));
 
         var popupStoreBundle = popupStoreBundleService.createPopupStoreBundle(
@@ -149,5 +148,10 @@ public class PopupStoreService {
         if(popupStore.getStartDate().isBefore(LocalDate.now())) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_ALREADY_START);
         }
+    }
+
+    public PopupStoreSearchResponseDto getPopupStoreByDate(int page, int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        return popupStoreRepository.findByDate(pageable);
     }
 }
