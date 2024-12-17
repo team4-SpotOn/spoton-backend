@@ -24,7 +24,7 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.createReservation(popupStoreId, user, requestDto));
     }
 
-    @DeleteMapping("/popupstores/{reservationId}/reservation")
+    @DeleteMapping("/popupstores/reservation/{reservationId}")
     public ResponseEntity<Void> cancelReservation(
             @PathVariable Long reservationId,
             @RequestParam User user) {
