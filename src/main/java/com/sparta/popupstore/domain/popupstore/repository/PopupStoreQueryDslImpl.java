@@ -15,8 +15,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.sparta.popupstore.domain.popupstore.entity.QPopupStore.popupStore;
-
 @Repository
 @RequiredArgsConstructor
 public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {

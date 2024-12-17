@@ -6,7 +6,6 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.*;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import com.sparta.popupstore.web.WebUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -154,9 +153,11 @@ public class PopupStoreController {
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
-
-    @GetMapping("/popupstores/day")
-    public List<PopupStore> findStoresForLastPeriod(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
-        return popupStoreService.findStoresForLastPeriod(startDate, endDate);
+    @Operation(summary = "팝업스토어 날짜별로 조회", description = "팝업스토어를 1주, 2주, 한달 간격으로 조회합니다.")
+    @Parameter(name = "startDate", description = "팝업스토어 시작일")
+    @Parameter(name = "endDate", description = "팝업스토어 종료일")
+    @GetMapping("/popupstores/period")
+    public List<PopupStoreGetAllResponseDto> findStorePeriod(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
+        return popupStoreService.findStorePeriod(startDate, endDate);
     }
 }

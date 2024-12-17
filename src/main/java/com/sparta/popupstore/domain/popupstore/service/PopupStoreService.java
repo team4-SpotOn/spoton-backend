@@ -11,7 +11,6 @@ import com.sparta.popupstore.domain.popupstore.dto.response.*;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import lombok.RequiredArgsConstructor;
-import org.joda.time.Weeks;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -155,7 +155,7 @@ public class PopupStoreService {
         return popupStoreRepository.findByDate(pageable);
     }
 
-    public List<PopupStore> findStoresForLastPeriod(LocalDate startDate, LocalDate endDate) {
-        return popupStoreRepository.findByStartDateAndEndDate(startDate, endDate);
+    public List<PopupStoreGetAllResponseDto> findStorePeriod(LocalDate startDate, LocalDate endDate) {
+        return popupStoreRepository.findByStartDateAndEndDate(startDate, endDate).stream().map(PopupStoreGetAllResponseDto::new).collect(Collectors.toList());
     }
 }
