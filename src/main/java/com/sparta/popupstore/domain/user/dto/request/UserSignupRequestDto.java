@@ -22,9 +22,16 @@ public class UserSignupRequestDto {
     private String name;
     @NotBlank(message = "주소를 입력해 주세요.")
     private String address;
+    @NotBlank
+    @Pattern(
+            regexp = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$",
+            message = "알맞은 핸드폰 번호를 입력하세요."
+    )
+    private String phone;
 
-    public User toEntity(String encodedPassword, Address address, String qrCode) {
+    public User toEntity(Long userId, String encodedPassword, Address address, String qrCode) {
         return User.builder()
+                .id(userId)
                 .email(this.email)
                 .password(encodedPassword)
                 .name(this.name)
@@ -32,6 +39,7 @@ public class UserSignupRequestDto {
                 .userRole(UserRole.USER)
                 .point(0)
                 .qrCode(qrCode)
+                .phone(this.phone)
                 .build();
     }
 }

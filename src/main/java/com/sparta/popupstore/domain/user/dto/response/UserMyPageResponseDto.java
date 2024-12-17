@@ -13,17 +13,14 @@ public class UserMyPageResponseDto {
     private final String name;
     @Schema(description = "유저 주소")
     private final Address address;
+    @Schema(description = "유저 전화번호")
+    private final String phone;
 
     public UserMyPageResponseDto(User user) {
         this.email = user.getEmail();
         this.name = user.getName();
         this.address = user.getAddress();
-    }
-
-    public UserMyPageResponseDto(String email, String name, Address address) {
-        this.email = email;
-        this.name = name;
-        this.address = address;
+        this.phone = user.getPhone();
     }
 
 }
