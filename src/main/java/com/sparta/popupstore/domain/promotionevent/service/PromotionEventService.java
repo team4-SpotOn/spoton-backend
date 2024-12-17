@@ -105,7 +105,10 @@ public class PromotionEventService {
             throw new CustomApiException(ErrorCode.COUPON_SOLD_OUT);
         }
         Coupon coupon = couponService.createCoupon(promotionEvent, user);
-        promotionEvent.couponGetCountUp();
+
+        // couponGetCount 업데이트
+        promotionEventRepository.couponGetCountUp(promotionEventId);
+
         return new CouponCreateResponseDto(coupon);
     }
 

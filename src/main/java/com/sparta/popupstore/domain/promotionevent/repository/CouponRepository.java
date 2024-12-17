@@ -20,4 +20,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
     @Modifying
     @Query("update Coupon c set c.couponStatus = 'EXPIRATION' where c.couponExpirationPeriod < now() and c.couponStatus = 'ISSUED'")
     void softDeleteCouponByExpiration();
+
+    // 쿠폰 개수 구하기
+    Long countByPromotionEventId(Long promotionEventId);
 }
