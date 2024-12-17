@@ -5,7 +5,11 @@ import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.*;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetOneResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreSearchResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
+import com.sparta.popupstore.domain.popupstore.enums.PopupStoreStatus;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import com.sparta.popupstore.web.WebUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,21 +72,25 @@ public class PopupStoreController {
     // 팝업스토어 전체목록 지도용
     @Operation(summary = "임시 팝업 전제조회(지도용)", description = "지도 팝업스토어 전체목록")
     @GetMapping("/popupstores")
-    public ResponseEntity<List<PopupStoreGetAllResponseDto>> getPopupStoreAll() {
+    public ResponseEntity<List<PopupStoreSearchResponseDto>> getPopupStoreAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(popupStoreService.getPopupStoreAll());
     }
 
-    @Operation(summary = "팝업스토어 종료 임박 or 시작 임박 조회", description = "팝업스토어 종료 임박 or 시작 임박 조회")
-    @GetMapping("/popupstores/search")
-    public ResponseEntity<PopupStoreSearchResponseDto> getPopupStoreByDate(
+    @Operation(summary = "현재 날짜 기준 진행중, 시작예정, 종료된 팝업스토어 조회", description = "현재 날짜 기준 진행중, 시작예정, 종료된 팝업스토어 조회")
+    @Parameter(name = "page", description = "현재 페이지 번호")
+    @Parameter(name = "size", description = "페이지 사이즈")
+    @Parameter(name = "popupStoreStatus", description = "ALL, OPEN, CLOSE, SCHEDULE / 전체, 진행중, 종료된, 시작 예정")
+    @GetMapping("/popupstores/search/{popupStoreStatus}")
+    public ResponseEntity<Page<PopupStoreSearchResponseDto>> getPopupStoreByStatus(
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(name = "size", required = false, defaultValue = "10") int size
-    ){
+            @RequestParam(name = "size", required = false, defaultValue = "10") int size,
+            @PathVariable PopupStoreStatus popupStoreStatus
+            ){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(popupStoreService.getPopupStoreByDate(page, size));
+                .body(popupStoreService.getPopupStoreByStatus(page, size, popupStoreStatus));
     }
 
     @Operation(summary = "회사 - 팝업 스토어 수정")
@@ -157,8 +166,13 @@ public class PopupStoreController {
     @Parameter(name = "startDate", description = "팝업스토어 시작일")
     @Parameter(name = "endDate", description = "팝업스토어 종료일")
     @GetMapping("/popupstores/period")
-    public List<PopupStoreGetAllResponseDto> findStorePeriod(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate,
-        @RequestParam(name = "page", required = false, defaultValue = "1") Long page, @RequestParam(name = "size", required = false, defaultValue = "10") Long size) {
-        return popupStoreService.findStorePeriod(startDate, endDate, page, size);
+    public ResponseEntity<List<PopupStoreSearchResponseDto>> findStorePeriod(
+            @RequestParam LocalDate startDate, @RequestParam LocalDate endDate,
+            @RequestParam(name = "page", required = false, defaultValue = "1") Long page,
+            @RequestParam(name = "size", required = false, defaultValue = "10") Long size)
+    {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(popupStoreService.findStorePeriod(startDate, endDate, page, size));
     }
 }

@@ -10,7 +10,9 @@ import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateReque
 import com.sparta.popupstore.domain.popupstore.dto.response.*;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.domain.popupstore.enums.PopupStoreStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -67,9 +69,9 @@ public class PopupStoreService {
     }
 
     // 임시 팝업 스토어 전체목록(지도용)
-    public List<PopupStoreGetAllResponseDto> getPopupStoreAll() {
+    public List<PopupStoreSearchResponseDto> getPopupStoreAll() {
         return popupStoreRepository.findAll().stream()
-                .map(PopupStoreGetAllResponseDto::new)
+                .map(PopupStoreSearchResponseDto::new)
                 .toList();
     }
 
@@ -149,13 +151,13 @@ public class PopupStoreService {
         }
     }
 
-    public PopupStoreSearchResponseDto getPopupStoreByDate(int page, int size) {
+    public Page<PopupStoreSearchResponseDto> getPopupStoreByStatus(int page, int size, PopupStoreStatus popupStoreStatus) {
         Pageable pageable = PageRequest.of(page-1, size);
-        return popupStoreRepository.findByDate(pageable);
+        return popupStoreRepository.findByStatus(pageable, popupStoreStatus).map(PopupStoreSearchResponseDto::new);
     }
 
-    public List<PopupStoreGetAllResponseDto> findStorePeriod(LocalDate startDate, LocalDate endDate, Long page, Long size) {
+    public List<PopupStoreSearchResponseDto> findStorePeriod(LocalDate startDate, LocalDate endDate, Long page, Long size) {
         return popupStoreRepository.findByStartDateAndEndDate(startDate, endDate, page, size)
-                .stream().map(PopupStoreGetAllResponseDto::new).toList();
+                .stream().map(PopupStoreSearchResponseDto::new).toList();
     }
 }
