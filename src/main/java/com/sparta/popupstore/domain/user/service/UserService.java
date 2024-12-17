@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,14 +37,22 @@ public class UserService {
         if(userRepository.existsByEmail(requestDto.getEmail())) {
             throw new CustomApiException(ErrorCode.ALREADY_EXIST_EMAIL);
         }
-        if(userRepository.existsByPhone(requestDto.getPhone())) {
-            throw new CustomApiException(ErrorCode.ALREADY_EXIST_PHONE_NUMBER);
+
+        // 핸드폰 번호 중복 검사
+        Long userId = null;
+        Optional<User> socialSignupUser = userRepository.findByPhone(requestDto.getPhone());
+        if(socialSignupUser.isPresent()) {
+            if(socialSignupUser.get().getEmail() != null) {
+                throw new CustomApiException(ErrorCode.ALREADY_EXIST_PHONE_NUMBER);
+            }
+            userId = socialSignupUser.get().getId();
         }
+
         // 카카오 주소 API - 위도 경도 구하기
         Address address = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
         String qr = UUID.randomUUID().toString();
-        User user = requestDto.toEntity(encodedPassword, address, qr);
+        User user = requestDto.toEntity(userId, encodedPassword, address, qr);
 
         return new UserSignupResponseDto(userRepository.save(user));
     }

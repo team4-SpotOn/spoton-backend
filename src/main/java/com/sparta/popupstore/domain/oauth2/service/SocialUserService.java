@@ -21,4 +21,9 @@ public class SocialUserService {
                                 .build()
                 ));
     }
+
+    public void addUserAndPhone(SocialUser socialUser, Long id, String phone) {
+        socialUser.addUserAndPhone(id, phone);
+        socialUserRepository.save(socialUser);
+    }
 }

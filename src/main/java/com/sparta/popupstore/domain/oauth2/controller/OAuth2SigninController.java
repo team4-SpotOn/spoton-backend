@@ -8,6 +8,7 @@ import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class OAuth2SigninController {
 
     private final OAuth2SigninService oAuth2SigninService;
     private final JwtUtil jwtUtil;
-    private final String VALID_PHONE_URL = "http://localhost:8080/oAuth2CallbackPhoneNumber.html";
+    private static final String VALID_PHONE_URL = "http://localhost:8080/oAuth2CallbackPhoneNumber.html";
 
     @GetMapping("/oauth2/signin/{platform}")
     public ResponseEntity<Void> redirectSigninPage(
@@ -54,7 +55,7 @@ public class OAuth2SigninController {
     @PostMapping("/oAuth2/phone-number")
     public ResponseEntity<Void> validPhone(
             @AuthSocialUser SocialUser socialUser,
-            @RequestBody ValidPhoneRequestDto requestDto,
+            @Valid @RequestBody ValidPhoneRequestDto requestDto,
             HttpServletResponse response
     ) {
         User user = oAuth2SigninService.validPhone(socialUser, requestDto);

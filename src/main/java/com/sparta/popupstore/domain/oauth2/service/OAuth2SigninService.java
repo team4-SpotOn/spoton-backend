@@ -40,8 +40,11 @@ public class OAuth2SigninService {
     }
 
     public User validPhone(SocialUser socialUser, ValidPhoneRequestDto requestDto) {
+        if(socialUser.getPhone() != null) {
+            throw new CustomApiException(ErrorCode.ALREADY_EXIST_EMAIL);
+        }
         User user = userService.signupIfAbsent(requestDto.getPhone());
-        socialUser.addUserAndPhone(user.getId(), requestDto.getPhone());
+        socialUserService.addUserAndPhone(socialUser, user.getId(), requestDto.getPhone());
         return user;
     }
 

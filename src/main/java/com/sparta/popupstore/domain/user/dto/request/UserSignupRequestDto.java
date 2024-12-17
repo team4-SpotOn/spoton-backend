@@ -29,8 +29,9 @@ public class UserSignupRequestDto {
     )
     private String phone;
 
-    public User toEntity(String encodedPassword, Address address, String qrCode) {
+    public User toEntity(Long userId, String encodedPassword, Address address, String qrCode) {
         return User.builder()
+                .id(userId)
                 .email(this.email)
                 .password(encodedPassword)
                 .name(this.name)
