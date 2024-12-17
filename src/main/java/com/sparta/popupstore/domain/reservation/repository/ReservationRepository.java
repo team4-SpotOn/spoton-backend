@@ -9,6 +9,5 @@ import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
   boolean existsByUserAndPopupStore(User user, PopupStore popupStore);
-
   Optional<Reservation> findByPopupStoreAndUser(PopupStore popupStore, User user);
 }
