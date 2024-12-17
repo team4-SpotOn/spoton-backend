@@ -24,7 +24,7 @@
           }
 
           $.ajax({
-            url : "/oAuth2CallbackPhoneNumber",
+            url : "/oAuth2/phone-number",
             type : "POST",
             data : { "phone" : phoneNumber },
             success : function(response){

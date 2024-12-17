@@ -51,7 +51,7 @@ public class OAuth2SigninController {
                 .build();
     }
 
-    @PostMapping("oAuth2CallbackPhoneNumber")
+    @PostMapping("/oAuth2/phone-number")
     public ResponseEntity<Void> validPhone(
             @AuthSocialUser SocialUser socialUser,
             @RequestBody ValidPhoneRequestDto requestDto,
