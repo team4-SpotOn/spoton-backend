@@ -61,6 +61,9 @@ public enum ErrorCode {
     POPUP_STORE_NOT_RESERVATION(HttpStatus.INTERNAL_SERVER_ERROR,"예약한 팝업스토어가 아닙니다."),
     DOESNT_RESERVATION_AT(HttpStatus.BAD_REQUEST, "예약한 시간대가 아닙니다."),
     RESERVATION_LATE(HttpStatus.BAD_REQUEST, "예약한 시간이 지났습니다."),
+    RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 내역이 존재하지 않습니다."),
+    FORBIDDEN(HttpStatus.FORBIDDEN, "자신의 예약 기록이 아닙니다."),
+    RESERVATION_CANCELLATION_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "예약 취소는 최소 1일 전에 가능합니다."),
 
     // address error
     KAKAO_ADDRESS_API_ERROR(HttpStatus.BAD_REQUEST, "카카오 지도 에러"),
