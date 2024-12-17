@@ -2,8 +2,6 @@ package com.sparta.popupstore.domain.popupstore.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetAllResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreSearchResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.entity.QPopupStore;
 import com.sparta.popupstore.domain.popupstore.enums.PopupStoreStatus;
@@ -23,15 +21,11 @@ public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
     private final QPopupStore popupStore = QPopupStore.popupStore;
 
     @Override
-    public PopupStoreSearchResponseDto findByStatus(Pageable pageable, PopupStoreStatus popupStoreStatus) {
+    public Page<PopupStore> findByStatus(Pageable pageable, PopupStoreStatus popupStoreStatus) {
         LocalDate fromDate = LocalDate.now();
         LocalDate toDate = fromDate;
 
-        Page<PopupStore> popupStoreList = this.getPopupStores(pageable, fromDate, toDate, popupStoreStatus);
-
-        return PopupStoreSearchResponseDto.builder()
-                .popupStores(popupStoreList.map(PopupStoreGetAllResponseDto::new))
-                .build();
+       return this.getPopupStores(pageable, fromDate, toDate, popupStoreStatus);
     }
 
     @Override
@@ -51,11 +45,8 @@ public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
         List<PopupStore> startingSoon = query.select(popupStore)
                 .from(popupStore)
                 .leftJoin(popupStore.company)
-                .fetchJoin()
                 .where(
-                        startingSoon(toDate, popupStoreStatus),
-                        openPopupStore(fromDate, toDate, popupStoreStatus),
-                        closePopupStore(fromDate, popupStoreStatus)
+                        findByStatus(fromDate, toDate, popupStoreStatus)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -63,33 +54,19 @@ public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
 
         long total = query.selectFrom(popupStore)
                 .where(
-                        startingSoon(toDate, popupStoreStatus),
-                        openPopupStore(fromDate, toDate, popupStoreStatus),
-                        closePopupStore(fromDate, popupStoreStatus)
+                        findByStatus(fromDate, toDate, popupStoreStatus)
                 )
                 .stream()
                 .count();
         return new PageImpl<>(startingSoon, pageable, total);
     }
 
-    private BooleanExpression startingSoon(LocalDate toDate, PopupStoreStatus popupStoreStatus){
-        if(popupStoreStatus == PopupStoreStatus.SCHEDULE){
-            return popupStore.startDate.between(toDate.plusDays(1), toDate.plusWeeks(1));
-        }
-        return null;
-    }
-
-    private BooleanExpression openPopupStore(LocalDate fromDate, LocalDate toDate,PopupStoreStatus popupStoreStatus){
-        if(popupStoreStatus == PopupStoreStatus.OPEN){
-            return popupStore.startDate.before(toDate).and(popupStore.endDate.after(fromDate.minusDays(1)));
-        }
-        return null;
-    }
-
-    private BooleanExpression closePopupStore(LocalDate fromDate, PopupStoreStatus popupStoreStatus){
-        if(popupStoreStatus == PopupStoreStatus.CLOSE){
-            return popupStore.endDate.before(fromDate);
-        }
-        return null;
+    private BooleanExpression findByStatus(LocalDate fromDate, LocalDate toDate, PopupStoreStatus popupStoreStatus) {
+        return switch (popupStoreStatus) {
+            case ALL -> null;
+            case SCHEDULE -> popupStore.startDate.between(toDate.plusDays(1), toDate.plusWeeks(1));
+            case OPEN -> popupStore.startDate.before(toDate).and(popupStore.endDate.after(fromDate.minusDays(1)));
+            case CLOSE -> popupStore.endDate.before(fromDate);
+        };
     }
 }

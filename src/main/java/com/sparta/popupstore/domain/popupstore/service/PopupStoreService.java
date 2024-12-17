@@ -12,6 +12,7 @@ import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.popupstore.enums.PopupStoreStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -152,7 +153,13 @@ public class PopupStoreService {
 
     public PopupStoreSearchResponseDto getPopupStoreByStatus(int page, int size, PopupStoreStatus popupStoreStatus) {
         Pageable pageable = PageRequest.of(page-1, size);
-        return popupStoreRepository.findByStatus(pageable, popupStoreStatus);
+        Page<PopupStore> popupStores = popupStoreRepository.findByStatus(pageable, popupStoreStatus);
+        return PopupStoreSearchResponseDto.builder()
+                .popupStores(
+                        popupStores.map(PopupStoreGetAllResponseDto::new)
+                                .toList()
+                )
+                .build();
     }
 
     public List<PopupStoreGetAllResponseDto> findStorePeriod(LocalDate startDate, LocalDate endDate, Long page, Long size) {
