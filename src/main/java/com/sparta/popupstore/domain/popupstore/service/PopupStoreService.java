@@ -7,13 +7,13 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetAllResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreGetOneResponseDto;
-import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.*;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import lombok.RequiredArgsConstructor;
+import org.joda.time.Weeks;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -156,24 +156,7 @@ public class PopupStoreService {
         return popupStoreRepository.findByDate(pageable);
     }
 
-    public List<PopupStore> findStoresForLastPeriod(String period) {
-        LocalDate now = LocalDate.now();
-        LocalDate startDate;
-
-        switch (period.toLowerCase()) {
-            case "week":
-                startDate = now.minusWeeks(1);
-                break;
-            case "two-weeks":
-                startDate = now.minusWeeks(2);
-                break;
-            case "month":
-                startDate = now.minusMonths(1);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid period: " + period);
-        }
-
-        return popupStoreRepository.findByStartDateAndEndDate(startDate, now);
+    public List<PopupStore> findStoresForLastPeriod(LocalDate startDate, LocalDate endDate) {
+        return popupStoreRepository.findByStartDateAndEndDate(startDate, endDate);
     }
 }

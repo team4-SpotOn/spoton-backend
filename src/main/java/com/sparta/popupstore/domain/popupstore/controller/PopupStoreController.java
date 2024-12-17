@@ -154,7 +154,7 @@ public class PopupStoreController {
     }
 
     @GetMapping("/popupstores/day")
-    public List<PopupStore> findStoresForLastPeriod(@RequestParam String period) {
-        return popupStoreService.findStoresForLastPeriod(period);
+    public List<PopupStore> findStoresForLastPeriod(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
+        return popupStoreService.findStoresForLastPeriod(startDate, endDate);
     }
 }

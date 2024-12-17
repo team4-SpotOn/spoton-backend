@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.sparta.popupstore.domain.popupstore.entity.QPopupStore.popupStore;
+
 @Repository
 @RequiredArgsConstructor
 public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
@@ -72,6 +74,16 @@ public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
         return new PageImpl<>(endingSoon, pageable, total);
     }
 
+    @Override
+    public List<PopupStore> findByStartDateAndEndDate(LocalDate startDate, LocalDate endDate) {
+        return query
+                .selectFrom(popupStore)
+                .where(
+                        popupStore.startDate.loe(endDate),
+                        popupStore.endDate.goe(startDate)
+                )
+                .fetch();
+    }
     private BooleanExpression startingSoon(){
         return popupStore.startDate.between(LocalDate.now(), LocalDate.now().plusDays(3));
     }
