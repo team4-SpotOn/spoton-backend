@@ -74,7 +74,7 @@ public class ReservationService {
                 .orElseThrow(() -> new CustomApiException(ErrorCode.RESERVATION_NOT_FOUND));
 
         if (!reservation.getUser().equals(user)) {
-            throw new CustomApiException(ErrorCode.FORBIDDEN);
+            throw new CustomApiException(ErrorCode.RESERVATION_FORBIDDEN);
         }
 
         if (reservation.getReservationAt().isBefore(LocalDate.now().plusDays(1).atStartOfDay())) {

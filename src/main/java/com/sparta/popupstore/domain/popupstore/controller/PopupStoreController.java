@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -151,5 +152,13 @@ public class PopupStoreController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+    @Operation(summary = "팝업스토어 날짜별로 조회", description = "팝업스토어를 1주, 2주, 한달 간격으로 조회합니다.")
+    @Parameter(name = "startDate", description = "팝업스토어 시작일")
+    @Parameter(name = "endDate", description = "팝업스토어 종료일")
+    @GetMapping("/popupstores/period")
+    public List<PopupStoreGetAllResponseDto> findStorePeriod(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate,
+        @RequestParam(name = "page", required = false, defaultValue = "1") Long page, @RequestParam(name = "size", required = false, defaultValue = "10") Long size) {
+        return popupStoreService.findStorePeriod(startDate, endDate, page, size);
     }
 }

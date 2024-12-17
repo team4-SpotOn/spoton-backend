@@ -153,4 +153,9 @@ public class PopupStoreService {
         Pageable pageable = PageRequest.of(page-1, size);
         return popupStoreRepository.findByDate(pageable);
     }
+
+    public List<PopupStoreGetAllResponseDto> findStorePeriod(LocalDate startDate, LocalDate endDate, Long page, Long size) {
+        return popupStoreRepository.findByStartDateAndEndDate(startDate, endDate, page, size)
+                .stream().map(PopupStoreGetAllResponseDto::new).toList();
+    }
 }

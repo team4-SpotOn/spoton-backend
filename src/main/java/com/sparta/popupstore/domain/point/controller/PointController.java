@@ -8,7 +8,6 @@ import com.sparta.popupstore.domain.point.dto.response.PointChargedLogResponseDt
 import com.sparta.popupstore.domain.point.dto.response.PointUseResponseDto;
 import com.sparta.popupstore.domain.point.dto.response.PointUsedLogResponseDto;
 import com.sparta.popupstore.domain.point.service.PointService;
-import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
