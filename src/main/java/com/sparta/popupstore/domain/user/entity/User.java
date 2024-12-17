@@ -26,9 +26,20 @@ public class User extends BaseEntity {
     private UserRole userRole;
     private int point;
     private String qrCode;
+    private String phone;
 
     @Builder
-    public User(Long id, String email, String password, String name, Address address, UserRole userRole, int point, String qrCode) {
+    public User(
+            Long id,
+            String email,
+            String password,
+            String name,
+            Address address,
+            UserRole userRole,
+            int point,
+            String qrCode,
+            String phone
+    ) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -37,10 +48,11 @@ public class User extends BaseEntity {
         this.userRole = userRole;
         this.point = point;
         this.qrCode = qrCode;
+        this.phone = phone;
     }
 
     public void update(Address address) {
-         this.address = address;
+        this.address = address;
     }
 
     public void delete(LocalDateTime deletedAt) {
