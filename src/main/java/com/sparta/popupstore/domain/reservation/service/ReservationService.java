@@ -30,7 +30,9 @@ public class ReservationService {
     @Transactional
     public Reservation createReservation(Long popupStoreId, User user, ReservationCreateRequestDto requestDto) {
 
-        if (user.getUserRole() != UserRole.USER) throw new CustomApiException(ErrorCode.NOT_USER);
+        if (user.getUserRole() != UserRole.USER) {
+            throw new CustomApiException(ErrorCode.NOT_USER);
+        }
 
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
@@ -45,9 +47,13 @@ public class ReservationService {
                 .findFirst()
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_CAN_NOT_RESERVATION));
 
-        if(!popupStoreAttribute.getIsAllow()) throw new CustomApiException(ErrorCode.POPUP_STORE_CAN_NOT_RESERVATION);
+        if(!popupStoreAttribute.getIsAllow()) {
+            throw new CustomApiException(ErrorCode.POPUP_STORE_CAN_NOT_RESERVATION);
+        }
 
-        if (user.getPoint() < popupStore.getPrice()) throw new CustomApiException(ErrorCode.INSUFFICIENT_POINTS);
+        if (user.getPoint() < popupStore.getPrice()) {
+            throw new CustomApiException(ErrorCode.INSUFFICIENT_POINTS);
+        }
 
         user.decreasePoint(popupStore.getPrice());
 
@@ -67,10 +73,13 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.RESERVATION_NOT_FOUND));
 
-        if (!reservation.getUser().equals(user)) throw new CustomApiException(ErrorCode.FORBIDDEN);
+        if (!reservation.getUser().equals(user)) {
+            throw new CustomApiException(ErrorCode.FORBIDDEN);
+        }
 
-        if (reservation.getReservationAt().isBefore(LocalDate.now().plusDays(1).atStartOfDay()))
+        if (reservation.getReservationAt().isBefore(LocalDate.now().plusDays(1).atStartOfDay())) {
             throw new CustomApiException(ErrorCode.RESERVATION_CANCELLATION_NOT_ALLOWED);
+        }
 
         reservationRepository.delete(reservation);
     }
