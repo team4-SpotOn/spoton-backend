@@ -11,7 +11,7 @@ public class PopupStoreSearchTypeConverter implements Converter<String, SearchSt
     @Override
     public SearchStandard convert(String searchType) {
         try {
-            return SearchStandard.valueOf(searchType.toUpperCase());
+            return SearchStandard.valueOf(searchType.toUpperCase().replace("-", "_"));
         }
         catch (RuntimeException e) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_SEARCH_TYPE);
