@@ -1,6 +1,9 @@
 package com.sparta.popupstore.domain.admin.controller;
 
+import com.sparta.popupstore.domain.admin.dto.request.AdminSigninRequestDto;
+import com.sparta.popupstore.domain.admin.entity.Admin;
 import com.sparta.popupstore.domain.admin.service.AdminService;
+import com.sparta.popupstore.domain.admin.type.AdminRole;
 import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
@@ -11,8 +14,10 @@ import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCr
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
+import com.sparta.popupstore.jwt.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +32,22 @@ public class AdminController {
     private final AdminService adminService;
     private final PopupStoreService popupStoreService;
     private final PromotionEventService promotionEventService;
+    private final JwtUtil jwtUtil;
+
+    @Operation(summary = "관리자 로그인", description = "관리자 계정 로그인")
+    @Parameter(name = "signinId", description = "로그인 아이디")
+    @Parameter(name = "password", description = "로그인 비밀번호")
+    @PostMapping
+    public ResponseEntity<Void> signin(
+            @RequestBody AdminSigninRequestDto requestDto,
+            HttpServletResponse response
+    ) {
+        Admin admin = adminService.signin(requestDto);
+        jwtUtil.addJwtToCookie(admin.getSigninId(), AdminRole.ADMIN, response);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 
     @Operation(summary = "관리자 - 팝업 스토어 수정")
     @Parameter(name = "name", description = "수정할 팝업스토어 명")
