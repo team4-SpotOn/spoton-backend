@@ -4,8 +4,10 @@ import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2Client;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
+import com.sparta.popupstore.domain.oauth2.dto.SigninUserRequestDto;
 import com.sparta.popupstore.domain.oauth2.entity.SocialUser;
 import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
+import com.sparta.popupstore.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,11 @@ public class OAuth2SigninService {
         return client.getAccessToken(authorizationCode);
     }
 
-    public OAuth2Client getClient(OAuth2Platform platform) {
+    public User signinUser(SocialUser socialUser, SigninUserRequestDto requestDto) {
+        return null;
+    }
+
+    private OAuth2Client getClient(OAuth2Platform platform) {
         return clientList.stream()
                 .filter(client -> client.supports(platform))
                 .findFirst()
