@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -70,9 +69,6 @@ public class PromotionEventService {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
         if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())){
             throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
-        }
-        if(ValidUtil.isValidNullAndEmpty(promotionEvent.getImageUrl()) && !Objects.equals(updateRequestDto.getImageUrl(), promotionEvent.getImageUrl())){
-            s3ImageService.deleteImage(promotionEvent.getImageUrl());
         }
         promotionEvent.updatePromotionEvent(
                 updateRequestDto.getTitle(),
