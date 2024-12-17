@@ -32,4 +32,9 @@ public class SocialUser extends BaseEntity {
         this.platformId = platformId;
         this.phone = phone;
     }
+
+    public void addUserAndPhone(Long userId, String phone) {
+        this.userId = userId;
+        this.phone = phone;
+    }
 }

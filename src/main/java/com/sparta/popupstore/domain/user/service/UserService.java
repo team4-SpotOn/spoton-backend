@@ -92,4 +92,13 @@ public class UserService {
         user.delete(LocalDateTime.now());
         userRepository.save(user);
     }
+
+    public User signupIfAbsent(String phone) {
+        return userRepository.findByPhone(phone)
+                .orElseGet(() -> userRepository.save(
+                        User.builder()
+                                .phone(phone)
+                                .build()
+                ));
+    }
 }

@@ -18,7 +18,7 @@
         $(".submitBtn").click(function(){
           const phoneNumber = $(".phoneNumber").val();
           console.log(phoneNumber);
-          if(phoneNumber.length != 11){
+          if(phoneNumber.length !== 11){
             alert("숫자 11자리를 입력해주세요.");
             return false;
           }
@@ -26,7 +26,7 @@
           $.ajax({
             url : "/oAuth2CallbackPhoneNumber",
             type : "POST",
-            data : { "phoneNumber" : phoneNumber },
+            data : { "phone" : phoneNumber },
             success : function(response){
               console.log(response);
               alert("전화번호 등록이 완료되었습니다.");

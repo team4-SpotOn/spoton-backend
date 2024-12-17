@@ -14,12 +14,11 @@ public class SocialUserService {
 
     public SocialUser signupIfAbsent(OAuth2UserInfo userInfo) {
         return socialUserRepository.findByPlatformAndPlatformId(userInfo.getPlatform(), userInfo.getPlatformId())
-                .orElseGet(() -> {
-                    SocialUser newSocialUser = SocialUser.builder()
-                            .platform(userInfo.getPlatform())
-                            .platformId(userInfo.getPlatformId())
-                            .build();
-                    return socialUserRepository.save(newSocialUser);
-                });
+                .orElseGet(() -> socialUserRepository.save(
+                        SocialUser.builder()
+                                .platform(userInfo.getPlatform())
+                                .platformId(userInfo.getPlatformId())
+                                .build()
+                ));
     }
 }

@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final AuthUserResolver authUserResolver;
     private final AuthCompanyResolver authCompanyResolver;
+    private final AuthSocialUserResolver authSocialUserResolver;
     private final CheckAdminInterceptor checkAdminInterceptor;
     private final OAuth2PlatformConverter oAuth2PlatformConverter;
     private final PopupStoreSearchTypeConverter popupStoreSearchTypeConverter;
@@ -27,6 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(authUserResolver);
         resolvers.add(authCompanyResolver);
+        resolvers.add(authSocialUserResolver);
     }
 
     @Override

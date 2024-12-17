@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmailAndDeletedAtIsNull(String email);
 
     Optional<User> findByQrCode(String qrCode);
+
+    Optional<User> findByPhone(String phone);
 }

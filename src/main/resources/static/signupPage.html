@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>대충 회원가입 페이지</title>
+    <link rel="stylesheet" href="css/popup.css">
+    <!-- font-awesome(폰트어썸) -->
+    <link crossorigin="anonymous"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+          integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+          referrerpolicy="no-referrer" rel="stylesheet"/>
+    <script src="apikey.js" type="text/javascript"></script>
+    <!-- 제이쿼리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="commonBox">
+    <div>
+        <div>
+
+            <div style="width:100%; float:left; text-align:center;">
+                <h1>대충 회원가입 페이지</h1>
+                <input type="hidden" class="my-latitude">
+                <input type="hidden" class="my-longitude">
+                <div id="myMap" style="width:1000px; height:750px;"></div>
+            </div>
+
+
+            <div style="width:100%; float:left; margin-top:600px;">
+                <h1>팝업 전체목록</h1>
+                <div id="AllMap" style="width:900px; height:750px; top:50%; transform: translate(50%, -50%); overflow:hidden; position:absolute;"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 package com.sparta.popupstore.domain.oauth2.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthSocialUser;
-import com.sparta.popupstore.domain.oauth2.dto.SigninUserRequestDto;
+import com.sparta.popupstore.domain.oauth2.dto.ValidPhoneRequestDto;
 import com.sparta.popupstore.domain.oauth2.entity.SocialUser;
 import com.sparta.popupstore.domain.oauth2.service.OAuth2SigninService;
 import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
@@ -21,7 +21,7 @@ public class OAuth2SigninController {
 
     private final OAuth2SigninService oAuth2SigninService;
     private final JwtUtil jwtUtil;
-    private final String signinUserUrl = "http://localhost:8080/oAuth2CallbackPhoneNumber.html";
+    private final String VALID_PHONE_URL = "http://localhost:8080/oAuth2CallbackPhoneNumber.html";
 
     @GetMapping("/oauth2/signin/{platform}")
     public ResponseEntity<Void> redirectSigninPage(
@@ -44,20 +44,20 @@ public class OAuth2SigninController {
         SocialUser socialUser = oAuth2SigninService.signin(platform, authorizationCode);
         jwtUtil.addJwtToCookie(socialUser.getPlatformId(), socialUser.getPlatform(), response);
         if(socialUser.getUserId() == null) {
-            response.sendRedirect(signinUserUrl);
+            response.sendRedirect(VALID_PHONE_URL);
         }
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
 
-    @PostMapping(signinUserUrl)
-    public ResponseEntity<Void> signinUser(
+    @PostMapping("oAuth2CallbackPhoneNumber")
+    public ResponseEntity<Void> validPhone(
             @AuthSocialUser SocialUser socialUser,
-            @RequestBody SigninUserRequestDto requestDto,
+            @RequestBody ValidPhoneRequestDto requestDto,
             HttpServletResponse response
     ) {
-        User user = oAuth2SigninService.signinUser(socialUser, requestDto);
+        User user = oAuth2SigninService.validPhone(socialUser, requestDto);
         jwtUtil.addJwtToCookie(user.getEmail(), response);
         return ResponseEntity
                 .status(HttpStatus.OK)

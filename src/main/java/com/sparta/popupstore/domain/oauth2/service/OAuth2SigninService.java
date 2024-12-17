@@ -4,10 +4,11 @@ import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2Client;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
-import com.sparta.popupstore.domain.oauth2.dto.SigninUserRequestDto;
+import com.sparta.popupstore.domain.oauth2.dto.ValidPhoneRequestDto;
 import com.sparta.popupstore.domain.oauth2.entity.SocialUser;
 import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
 import com.sparta.popupstore.domain.user.entity.User;
+import com.sparta.popupstore.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class OAuth2SigninService {
 
     private final List<OAuth2Client> clientList;
     private final SocialUserService socialUserService;
+    private final UserService userService;
 
     public String generateSigninPageUrl(OAuth2Platform platform) {
         OAuth2Client client = getClient(platform);
@@ -37,8 +39,10 @@ public class OAuth2SigninService {
         return client.getAccessToken(authorizationCode);
     }
 
-    public User signinUser(SocialUser socialUser, SigninUserRequestDto requestDto) {
-        return null;
+    public User validPhone(SocialUser socialUser, ValidPhoneRequestDto requestDto) {
+        User user = userService.signupIfAbsent(requestDto.getPhone());
+        socialUser.addUserAndPhone(user.getId(), requestDto.getPhone());
+        return user;
     }
 
     private OAuth2Client getClient(OAuth2Platform platform) {

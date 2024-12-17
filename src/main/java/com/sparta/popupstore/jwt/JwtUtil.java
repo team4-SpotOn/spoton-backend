@@ -12,10 +12,12 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -23,6 +25,7 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JwtUtil {
 
@@ -31,11 +34,12 @@ public class JwtUtil {
     public static final String USER_ROLE_KEY = "userRole";
     public static final String OAUTH2_PLATFORM_KEY = "oauth2Platform";
     public static final long TOKEN_LIFETIME = 1000 * 60 * 60 * 24 * 7; // 원활한 테스트를 위해 일주일로 설정.
+    private static final String USER_SIGNUP_URL = "http://localhost:8080/signupPage.html";
+    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
-    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
     @PostConstruct
     public void init() {
@@ -55,7 +59,21 @@ public class JwtUtil {
         addJwtToCookie(email, null, platform, response);
     }
 
-    public void addJwtToCookie(String email, UserRole userRole, OAuth2Platform platform, HttpServletResponse response) {
+    public void addJwtToCookie(
+            String email,
+            UserRole userRole,
+            OAuth2Platform platform,
+            HttpServletResponse response
+    ) {
+        if(email == null || email.isEmpty()) {
+            try {
+                response.sendRedirect(USER_SIGNUP_URL);
+            } catch(IOException e) {
+                log.error(e.getMessage());
+            }
+            return;
+        }
+
         Date now = new Date();
 
         String token = BEARER_PREFIX +
@@ -91,7 +109,7 @@ public class JwtUtil {
         if(!StringUtils.hasText(token) || !token.startsWith(BEARER_PREFIX)) {
             throw new CustomApiException(ErrorCode.TOKEN_NOT_FOUND);
         }
-        token = token.substring(7);
+        token = token.substring(BEARER_PREFIX.length());
         validateToken(token);
 
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
