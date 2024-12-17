@@ -1,9 +1,9 @@
 package com.sparta.popupstore.config;
 
+import com.sparta.popupstore.domain.admin.type.AdminRole;
 import com.sparta.popupstore.domain.common.annotation.CheckAdmin;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.domain.user.entity.UserRole;
 import com.sparta.popupstore.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,13 +34,13 @@ public class CheckAdminInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        Claims userInfo = jwtUtil.getInfoFromRequest(request);
-        if (userInfo == null) {
+        Claims adminInfo = jwtUtil.getInfoFromRequest(request);
+        if (adminInfo == null) {
             throw new CustomApiException(ErrorCode.NEED_LOGIN);
         }
 
-        String userRole = userInfo.get(JwtUtil.USER_ROLE_KEY, String.class);
-        if (userRole == null || !UserRole.valueOf(userRole).equals(UserRole.ADMIN)) {
+        String adminRole = adminInfo.get(JwtUtil.ADMIN_ROLE_KEY, String.class);
+        if (adminRole == null || !AdminRole.valueOf(adminRole).equals(AdminRole.ADMIN)) {
             throw new CustomApiException(ErrorCode.NOT_ADMIN);
         }
 

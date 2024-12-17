@@ -2,7 +2,6 @@ package com.sparta.popupstore.domain.user.dto.request;
 
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.user.entity.User;
-import com.sparta.popupstore.domain.user.entity.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -36,7 +35,6 @@ public class UserSignupRequestDto {
                 .password(encodedPassword)
                 .name(this.name)
                 .address(address)
-                .userRole(UserRole.USER)
                 .point(0)
                 .qrCode(qrCode)
                 .phone(this.phone)
