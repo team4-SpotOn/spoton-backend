@@ -10,6 +10,7 @@ import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateReque
 import com.sparta.popupstore.domain.popupstore.dto.response.*;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.domain.popupstore.enums.PopupStoreStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -149,9 +150,9 @@ public class PopupStoreService {
         }
     }
 
-    public PopupStoreSearchResponseDto getPopupStoreByDate(int page, int size) {
+    public PopupStoreSearchResponseDto getPopupStoreByStatus(int page, int size, PopupStoreStatus popupStoreStatus) {
         Pageable pageable = PageRequest.of(page-1, size);
-        return popupStoreRepository.findByDate(pageable);
+        return popupStoreRepository.findByStatus(pageable, popupStoreStatus);
     }
 
     public List<PopupStoreGetAllResponseDto> findStorePeriod(LocalDate startDate, LocalDate endDate, Long page, Long size) {

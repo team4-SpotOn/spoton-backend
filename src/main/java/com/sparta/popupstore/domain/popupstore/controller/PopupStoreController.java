@@ -6,6 +6,7 @@ import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.*;
+import com.sparta.popupstore.domain.popupstore.enums.PopupStoreStatus;
 import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import com.sparta.popupstore.web.WebUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -73,15 +74,16 @@ public class PopupStoreController {
                 .body(popupStoreService.getPopupStoreAll());
     }
 
-    @Operation(summary = "팝업스토어 종료 임박 or 시작 임박 조회", description = "팝업스토어 종료 임박 or 시작 임박 조회")
-    @GetMapping("/popupstores/search")
-    public ResponseEntity<PopupStoreSearchResponseDto> getPopupStoreByDate(
+    @Operation(summary = "현재 날짜 기준 진행중, 시작예정, 종료된 팝업스토어 조회", description = "현재 날짜 기준 진행중, 시작예정, 종료된 팝업스토어 조회")
+    @GetMapping("/popupstores/search/{popupStoreStatus}")
+    public ResponseEntity<PopupStoreSearchResponseDto> getPopupStoreByStatus(
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(name = "size", required = false, defaultValue = "10") int size
-    ){
+            @RequestParam(name = "size", required = false, defaultValue = "10") int size,
+            @PathVariable PopupStoreStatus popupStoreStatus
+            ){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(popupStoreService.getPopupStoreByDate(page, size));
+                .body(popupStoreService.getPopupStoreByStatus(page, size, popupStoreStatus));
     }
 
     @Operation(summary = "회사 - 팝업 스토어 수정")
