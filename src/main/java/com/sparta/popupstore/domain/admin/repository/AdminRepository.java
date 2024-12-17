@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface AdminRepository extends JpaRepository<Admin, Long> {
     Optional<Admin> findBySigninId(String signinId);
+
+    boolean existsBySigninId(String signinId);
 }
