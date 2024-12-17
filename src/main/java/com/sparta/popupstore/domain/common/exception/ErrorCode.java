@@ -62,7 +62,7 @@ public enum ErrorCode {
     DOESNT_RESERVATION_AT(HttpStatus.BAD_REQUEST, "예약한 시간대가 아닙니다."),
     RESERVATION_LATE(HttpStatus.BAD_REQUEST, "예약한 시간이 지났습니다."),
     RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 내역이 존재하지 않습니다."),
-    FORBIDDEN(HttpStatus.FORBIDDEN, "자신의 예약 기록이 아닙니다."),
+    RESERVATION_FORBIDDEN(HttpStatus.FORBIDDEN, "자신의 예약 기록이 아닙니다."),
     RESERVATION_CANCELLATION_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "예약 취소는 최소 1일 전에 가능합니다."),
 
     // address error
