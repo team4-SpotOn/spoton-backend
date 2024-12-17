@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>admin 메인 페이지</title>
+    <!-- font-awesome(폰트어썸) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" 
+    integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="popup.css">
+    <!-- 제이쿼리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(function(){
+            // 추후 그래프 통신
+            // $.ajax({
+            //     url : "/users/mypage/qrCode",
+            //     type : "GET",
+            //     success : function(response){
+
+            //     }
+            // })
+        })
+    </script>
+</head>
+<body>
+
+
+    <div class="adminWrap">
+        <div class="topWrap">
+            <div class="mainTextColor logoBox">SpotOn</div>
+            <div class="topMenuBox"></div>
+        </div>
+
+        <div class="contentsWrap">
+
+            <div class="leftMenuWrap">
+                <div class="mainBackColor menuBox">
+
+                    <div class="mainBox">
+                        <div class="menuTitle">
+                            <i class="fas fa-building"></i> <span>회사 목록</span>
+                        </div>
+                        <div class="menuTitle">
+                            <i class="fas fa-users"></i> <span>회원 목록</span>
+                        </div>
+                        <div class="menuTitle">
+                            <i class="fas fa-ticket-alt"></i><span>팝업 예약 내역</span>
+                        </div>
+                        <div class="menuTitle">
+                            <i class="fas fa-coins"></i><span>포인트 충전 내역</span>
+                        </div>
+                        <div class="menuTitle">
+                            <i class="fas fa-coins"></i><span>포인트 사용 내역</span>
+                        </div>
+                        <div class="menuTitle">
+                            <i class="fas fa-calendar-check"></i> <span>이벤트 목록</span>
+                        </div>
+                        <div class="menuTitle">
+                            <i class="fas fa-calendar-check"></i> <span>이벤트 등록</span>
+                        </div>
+                    </div>
+
+                    <div class="etcBox">
+                        <div class="menuTitle">
+                            <i class="fas fa-calendar-check"></i> <span>설정(임시)</span>
+                        </div>
+                        <div class="menuTitle">
+                            <i class="fas fa-calendar-check"></i> <span>문의 하기(임시)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rightMenuWrap">
+                <div class="dashboardWrap">
+                    그래프 영역~!!!!!!!!!!!!!!!
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>
