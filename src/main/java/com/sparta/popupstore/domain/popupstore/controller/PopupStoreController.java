@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -157,7 +159,8 @@ public class PopupStoreController {
     @Parameter(name = "startDate", description = "팝업스토어 시작일")
     @Parameter(name = "endDate", description = "팝업스토어 종료일")
     @GetMapping("/popupstores/period")
-    public List<PopupStoreGetAllResponseDto> findStorePeriod(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
-        return popupStoreService.findStorePeriod(startDate, endDate);
+    public List<PopupStoreGetAllResponseDto> findStorePeriod(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate,
+        @RequestParam(name = "page", required = false, defaultValue = "1") Long page, @RequestParam(name = "size", required = false, defaultValue = "10") Long size) {
+        return popupStoreService.findStorePeriod(startDate, endDate, page, size);
     }
 }

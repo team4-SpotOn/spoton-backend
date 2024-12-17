@@ -75,13 +75,15 @@ public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
     }
 
     @Override
-    public List<PopupStore> findByStartDateAndEndDate(LocalDate startDate, LocalDate endDate) {
+    public List<PopupStore> findByStartDateAndEndDate(LocalDate startDate, LocalDate endDate, Long page, Long size) {
         return query
                 .selectFrom(popupStore)
                 .where(
                         popupStore.startDate.loe(endDate),
                         popupStore.endDate.goe(startDate)
                 )
+                .offset((page-1)*size)
+                .limit(size)
                 .fetch();
     }
     private BooleanExpression startingSoon(){
