@@ -156,6 +156,7 @@ public class PopupStoreService {
     }
 
     public List<PopupStore> findStoresForLastPeriod(LocalDate startDate, LocalDate endDate) {
+
         return popupStoreRepository.findByStartDateAndEndDate(startDate, endDate);
     }
 }
