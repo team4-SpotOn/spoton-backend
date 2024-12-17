@@ -38,6 +38,7 @@ public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
         List<PopupStore> startingSoon = query.select(popupStore)
                 .from(popupStore)
                 .leftJoin(popupStore.company)
+                .fetchJoin()
                 .where(
                         startingSoon()
                 )
@@ -56,6 +57,7 @@ public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
         List<PopupStore> endingSoon = query.select(popupStore)
                 .from(popupStore)
                 .leftJoin(popupStore.company)
+                .fetchJoin()
                 .where(
                         endingSoon()
                                 .and(endPopupStore())

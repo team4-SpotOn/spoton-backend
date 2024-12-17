@@ -6,10 +6,9 @@ import com.sparta.popupstore.domain.reservation.entity.Reservation;
 import com.sparta.popupstore.domain.reservation.service.ReservationService;
 import com.sparta.popupstore.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +22,15 @@ public class ReservationController {
             @AuthUser User user,
             @RequestBody ReservationCreateRequestDto requestDto) {
         return ResponseEntity.ok(reservationService.createReservation(popupStoreId, user, requestDto));
+    }
+
+    @DeleteMapping("/popupstores/reservation/{reservationId}")
+    public ResponseEntity<Void> cancelReservation(
+            @PathVariable Long reservationId,
+            @AuthUser User user) {
+        reservationService.cancelReservation(reservationId, user);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }

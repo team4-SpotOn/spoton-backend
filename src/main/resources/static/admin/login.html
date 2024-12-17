@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SpotOn admin 로그인</title>
+    <!-- font-awesome(폰트어썸) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" 
+    integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="popup.css">
+    <!-- 제이쿼리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(function(){
+            // 추후 관리자 로그인
+            // $.ajax({
+            //     url : "/users/mypage/qrCode",
+            //     type : "GET",
+            //     success : function(response){
+
+            //     }
+            // })
+        })
+    </script>
+</head>
+<body>
+    <div id="SpotOnAdminWrap">
+        <div>
+            <div id="SpotOnAdminBox" class="login">
+                <div>
+                    <div class="titWrap">
+                        <span class="big">SpotOn Admin 전산</span>
+                        <!-- <span class="small">LOGIN</span> -->
+                    </div>
+
+                    <div class="inputWrap">
+                        <input type="text" name="id" id="username" placeholder="아이디 입력">
+                        <input type="password" name="pw" id="userpassword" placeholder="비밀번호 입력">
+                    </div>
+    <!-- 
+                    <div class="saveWrap drag">
+                        <input type="checkbox" id="saveUserInfo">
+                        <label for="saveUserInfo" class="ch">
+                            <i class="fas fa-check-circle on"></i>
+                            <i class="far fa-circle off"></i>
+                            <span>로그인정보 저장</span>
+                        </label>
+                        <div id="message">Caps Lock이 켜져 있습니다.</div>
+                    </div> -->
+
+                    <div class="btnWrap">
+                        <button type="button" id="loginBtn" style="background-color: #81D4FA;border: none;">LOGIN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -22,8 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -40,7 +38,6 @@ public class ReviewService {
         if(!reservationRepository.existsByUserAndPopupStore(user, popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_RESERVATION);
         }
-
         Review review = requestDto.toEntity(user, popupStore);
         review = reviewRepository.save(review);
         return new ReviewCreateResponseDto(review);
@@ -52,10 +49,6 @@ public class ReviewService {
                 .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
         if(!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_NOT_UPDATE);
-        }
-
-        if(ValidUtil.isValidNullAndEmpty(review.getImageUrl()) && !Objects.equals(review.getImageUrl(), updateRequestDto.getImageUrl())) {
-            s3ImageService.deleteImage(review.getImageUrl());
         }
         review.update(
                 updateRequestDto.getContents(),
@@ -71,7 +64,6 @@ public class ReviewService {
         if(!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_CANT_DELETE);
         }
-
         if(ValidUtil.isValidNullAndEmpty(review.getImageUrl())) {
             s3ImageService.deleteImage(review.getImageUrl());
         }

@@ -33,7 +33,6 @@ public class PopupStoreService {
     public PopupStoreCreateResponseDto createPopupStore(Company company, PopupStoreCreateRequestDto requestDto) {
         // 카카오 주소 API - 위도 경도 구하기
         Address address = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
-
         PopupStore popupStore = popupStoreRepository.save(requestDto.toEntity(company, address));
 
         var popupStoreBundle = popupStoreBundleService.createPopupStoreBundle(

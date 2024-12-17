@@ -252,3 +252,80 @@ a, button {
   text-align: center;
   font-weight: bold;
 }
+
+
+
+/* ------------ 팝업스토어 입장 QR code  ------------- */
+
+.QRcodeWrap { width:100%; float:left;  text-align:center; }
+.QRcodeWrap > div { width:100%; float:left; }
+
+/* 상단 제목 및 상세설명  */
+.QRcodeWrap .topBox > span { width:100%; float:left; }
+.QRcodeWrap .topBox .title { font-size:30px; font-weight:bold; }
+.QRcodeWrap .topBox .subtitle { font-size:13px; padding:15px 0px; color:#666; }
+
+/* 고객명, 팝업스토어 명 */
+.QRcodeWrap .infoBox > div { display:inline-block; text-align:left; }
+.QRcodeWrap .infoBox > div > span { width:100%; float:left; font-size:15px; }
+
+/* QR코드 */
+.QRcodeBox { padding:30px 0px; }
+.QRcodeBox > div { width:350px; height:350px; text-align:center; display:inline-block; padding:35px; }
+.QRcodeBox > div > img { width:100%; height:100%; }
+
+/* ------------ 팝업스토어 입장 QR code  ------------- */
+
+/* ------------ SpotOn Admin Login  ------------- */
+
+#SpotOnAdminWrap { width: 100%; height: 100%; float: left; display: table; background-color: #F5F5F8; }
+#SpotOnAdminWrap > div { display: table-cell; vertical-align: top; overflow-y: auto; padding: 309px; }
+
+#SpotOnAdminBox { width: 400px; left: 50%; margin-left: -200px; }
+#SpotOnAdminBox > div { width: 100%; float: left; background-color: #FFF; border: 1px solid #E6E6E8; padding: 40px; }
+
+#SpotOnAdminBox .titWrap { width: 100%; float: left; margin-bottom: 30px; }
+#SpotOnAdminBox .titWrap > span { width: 100%; float: left; text-align: center; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; color: #2A3042; }
+#SpotOnAdminBox .titWrap > .small { font-size: 16px; font-weight: 500; }
+
+#SpotOnAdminBox .inputWrap { width: 100%; float: left; margin-bottom: 5px; }
+#SpotOnAdminBox .inputWrap > input { width: 100%; height: 45px; float: left; border-radius: 5px; border: 1px solid #EEE; background-color: #FFF; transition: border 0.5s; background-color: #FCFCFC; margin: 5px 0; font-size: 14px; font-weight: 500; letter-spacing: -0.5px; color: #666; padding: 0 15px; }
+#SpotOnAdminBox .inputWrap > input::placeholder { color: #CCC; }
+#SpotOnAdminBox .inputWrap > input:focus { border: 1px solid #CCC; }
+
+#SpotOnAdminBox .saveWrap { width: 100%; float: left; margin-bottom: 40px; }
+#SpotOnAdminBox .saveWrap > label { float: left; font-size: 13px; font-weight: 400; color: #333; padding: 0 5px; }
+#SpotOnAdminBox .saveWrap > label > i { margin-right: 5px; font-size: 16px; top: 1px; }
+#SpotOnAdminBox .saveWrap > label > span { letter-spacing: -0.5px; }
+
+#SpotOnAdminBox .btnWrap { width: 100%; float: left; }
+#SpotOnAdminBox .btnWrap > button { width: 100%; height: 50px; float: left; border-radius: 5px; color: #FFF; font-size: 15px; font-weight: bold; letter-spacing: -0.5px; }
+
+/* ------------ SpotOn Admin Login  ------------- */
+
+/* ------------ SpotOn Admin Dashboard  ------------- */
+
+.adminWrap { width:100%; float:left; margin-top:50px; padding:0px 25px; }
+.adminWrap > div { width:100%; float:left; }
+
+/* 플랫폼 상단 영역 로고 등 */
+.adminWrap .topWrap { padding:25px 0px; }
+.adminWrap .topWrap .logoBox { width:20%; float:left; font-size:30px; font-weight:bold; }
+.adminWrap .topWrap .topMenuBox { width:80%; float:left; }
+
+/* 플랫폼 메인 컨텐츠 공통 */
+.adminWrap .contentsWrap .leftMenuWrap { width:20%; float:left; }
+.adminWrap .contentsWrap .rightMenuWrap { width:80%; float:left; }
+
+/* 좌측메뉴 - 통계 및 관리영역 */
+.contentsWrap .leftMenuWrap .menuBox { width:100%; float:left; height:100%; border-radius: 15px; color:#fff; padding:20px; font-size:17px; }
+.contentsWrap .leftMenuWrap .menuBox > div { width:100%; float:left; }
+.contentsWrap .leftMenuWrap .menuBox .etcBox { margin-top:250px; }
+.contentsWrap .leftMenuWrap .menuBox > div > div { width:100%; float:left; padding:15px 0px; } /* .menuTitle */
+.contentsWrap .leftMenuWrap .menuBox > div > .menuTitle > i { margin-right:5px; }
+.contentsWrap .leftMenuWrap .menuBox > div > .menuTitle > span { cursor:pointer; }
+
+/* 우측메뉴 - 그래프 영역(임시) */
+.adminWrap .contentsWrap .rightMenuWrap .dashboardWrap { text-align:center; font-size:70px; font-weight:bold; }
+
+/* ------------ SpotOn Admin Dashboard  ------------- */
