@@ -154,8 +154,7 @@ public class PopupStoreService {
         Pageable pageable = PageRequest.of(page-1, size);
         return  PopupStoreSearchResponseDto.builder()
                 .popupStores(popupStoreRepository.findByStatus(pageable, popupStoreStatus)
-                .map(PopupStoreGetAllResponseDto::new)
-                        .toList())
+                .map(PopupStoreGetAllResponseDto::new))
                 .build();
     }
 

@@ -2,16 +2,14 @@ package com.sparta.popupstore.domain.popupstore.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 
 @Getter
 public class PopupStoreSearchResponseDto {
-    private final List<PopupStoreGetAllResponseDto> popupStores;
+    private final Page<PopupStoreGetAllResponseDto> popupStores;
 
     @Builder
-    public PopupStoreSearchResponseDto(List<PopupStoreGetAllResponseDto> popupStores) {
+    public PopupStoreSearchResponseDto(Page<PopupStoreGetAllResponseDto> popupStores) {
         this.popupStores = popupStores;
     }
 }
