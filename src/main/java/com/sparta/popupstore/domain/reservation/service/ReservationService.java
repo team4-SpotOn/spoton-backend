@@ -16,9 +16,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -60,5 +59,19 @@ public class ReservationService {
                 .build();
 
         return reservationRepository.save(reservation);
+    }
+
+    @Transactional
+    public void cancelReservation(Long reservationId, User user) {
+
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.RESERVATION_NOT_FOUND));
+
+        if (!reservation.getUser().equals(user)) throw new CustomApiException(ErrorCode.FORBIDDEN);
+
+        if (reservation.getReservationAt().isBefore(LocalDate.now().plusDays(1).atStartOfDay()))
+            throw new CustomApiException(ErrorCode.RESERVATION_CANCELLATION_NOT_ALLOWED);
+
+        reservationRepository.delete(reservation);
     }
 }
