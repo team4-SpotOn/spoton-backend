@@ -22,8 +22,6 @@ public class User extends BaseEntity {
     private String password;
     private String name;
     private Address address;
-    @Enumerated(EnumType.STRING)
-    private UserRole userRole;
     private int point;
     private String qrCode;
     private String phone;
@@ -35,7 +33,6 @@ public class User extends BaseEntity {
             String password,
             String name,
             Address address,
-            UserRole userRole,
             int point,
             String qrCode,
             String phone
@@ -45,7 +42,6 @@ public class User extends BaseEntity {
         this.password = password;
         this.name = name;
         this.address = address;
-        this.userRole = userRole;
         this.point = point;
         this.qrCode = qrCode;
         this.phone = phone;

@@ -1,9 +1,9 @@
 package com.sparta.popupstore.jwt;
 
+import com.sparta.popupstore.domain.admin.type.AdminRole;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
-import com.sparta.popupstore.domain.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -31,7 +31,7 @@ public class JwtUtil {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
-    public static final String USER_ROLE_KEY = "userRole";
+    public static final String ADMIN_ROLE_KEY = "adminRole";
     public static final String OAUTH2_PLATFORM_KEY = "oauth2Platform";
     public static final long TOKEN_LIFETIME = 1000 * 60 * 60 * 24 * 7; // 원활한 테스트를 위해 일주일로 설정.
     private static final String USER_SIGNUP_URL = "http://localhost:8080/signupPage.html";
@@ -51,8 +51,8 @@ public class JwtUtil {
         addJwtToCookie(email, null, null, response);
     }
 
-    public void addJwtToCookie(String email, UserRole userRole, HttpServletResponse response) {
-        addJwtToCookie(email, userRole, null, response);
+    public void addJwtToCookie(String email, AdminRole adminRole, HttpServletResponse response) {
+        addJwtToCookie(email, adminRole, null, response);
     }
 
     public void addJwtToCookie(String email, OAuth2Platform platform, HttpServletResponse response) {
@@ -61,7 +61,7 @@ public class JwtUtil {
 
     public void addJwtToCookie(
             String email,
-            UserRole userRole,
+            AdminRole adminRole,
             OAuth2Platform platform,
             HttpServletResponse response
     ) {
@@ -79,7 +79,7 @@ public class JwtUtil {
         String token = BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(email)
-                        .claim(USER_ROLE_KEY, userRole)
+                        .claim(ADMIN_ROLE_KEY, adminRole)
                         .claim(OAUTH2_PLATFORM_KEY, platform)
                         .setExpiration(new Date(now.getTime() + TOKEN_LIFETIME))
                         .setIssuedAt(now)

@@ -11,7 +11,6 @@ import com.sparta.popupstore.domain.reservation.dto.request.ReservationCreateReq
 import com.sparta.popupstore.domain.reservation.entity.Reservation;
 import com.sparta.popupstore.domain.reservation.repository.ReservationRepository;
 import com.sparta.popupstore.domain.user.entity.User;
-import com.sparta.popupstore.domain.user.entity.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,11 +28,6 @@ public class ReservationService {
 
     @Transactional
     public Reservation createReservation(Long popupStoreId, User user, ReservationCreateRequestDto requestDto) {
-
-        if (user.getUserRole() != UserRole.USER) {
-            throw new CustomApiException(ErrorCode.NOT_USER);
-        }
-
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
