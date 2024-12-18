@@ -97,7 +97,7 @@ public class PromotionEventService {
 
     @Transactional
     public CouponCreateResponseDto couponApplyAndIssuance(Long promotionEventId, User user) {
-        PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
+        PromotionEvent promotionEvent = promotionEventRepository.findByIdWithPessimisticLock(promotionEventId);
         if(promotionEvent.getEndDateTime().isBefore(LocalDateTime.now())){
             throw new CustomApiException(ErrorCode.PROMOTION_EVENT_END);
         }
@@ -106,8 +106,12 @@ public class PromotionEventService {
         }
         Coupon coupon = couponService.createCoupon(promotionEvent, user);
 
-        // couponGetCount 업데이트
-        promotionEventRepository.couponGetCountUp(promotionEventId);
+        // 선착순 개수 +
+        promotionEvent.couponGetCountUp();
+        System.out.println("선착순 개수 확인 :"+promotionEvent.getCouponGetCount());
+
+//        // couponGetCount 업데이트
+//        promotionEventRepository.couponGetCountUp(promotionEventId);
 
         return new CouponCreateResponseDto(coupon);
     }

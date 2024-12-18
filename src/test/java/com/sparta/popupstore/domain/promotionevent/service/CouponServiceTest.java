@@ -2,6 +2,7 @@ package com.sparta.popupstore.domain.promotionevent.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
@@ -11,6 +12,8 @@ import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -63,9 +66,17 @@ public class CouponServiceTest {
     public void testCouponConcurrency() throws InterruptedException {
         Long promotionEventId = 2L;
         ExecutorService executorService = Executors.newFixedThreadPool(100);
-        when(user.getId()).thenReturn(1L);
+//        when(user.getId()).thenReturn(1L);
+        // 객체 여러명 생성 반복문
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            User user = mock(User.class);
+            when(user.getId()).thenReturn((long)(i + 1));
+            users.add(user);
+        }
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 1; i <= 100; i++) {
+            final User user = users.get(i % 10);
             executorService.submit(() -> {
                 try {
                     promotionEventService.couponApplyAndIssuance(promotionEventId, user);
