@@ -1,257 +1,93 @@
 /* 전체 공통css */
-* {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  position: relative;
-  font-family: "Noto Sans KR", sans-serif;
-}
-
-a, button {
-  cursor: pointer;
-}
+* { list-style:none; margin:0; padding:0; box-sizing: border-box; position: relative;  font-family: "Noto Sans KR", sans-serif;}
+a, button { cursor:pointer; }
 
 /* 공통 색상 잡기  */
-.mainBackColor {
-  background-color: #81D4FA;
-}
+.mainBackColor { background-color: #81D4FA; } /* 배경색 메인 */
+.mainTextColor { color:#81D4FA; } /* 글자색 메인 */
+.mainBorderColor { border:1px solid#81D4FA; color:#81D4FA;  } /* 글자와 선 메인 */
+.main3BorderColor { border:3px solid#81D4FA; color:#81D4FA;  } /* 글자와 선 메인 */
 
-/* 배경색 메인 */
-.mainTextColor {
-  color: #81D4FA;
-}
-
-/* 글자색 메인 */
-.mainBorderColor {
-  border: 1px solid #81D4FA;
-  color: #81D4FA;
-}
-
-/* 글자와 선 메인 */
-.mainBtn {
-  border: none;
-  color: #fff;
-}
-
-.subBtn {
-  background: none;
-}
+.mainBtn { border:none; color:#fff; }
+.subBtn { background:none; }
 
 /* 기본 레이아웃  */
-.commonBox {
-  width: 100%;
-  float: left;
-  min-width: 1200px;
-  margin-top: 50px;
-}
+.commonBox { width:100%; float:left; min-width:1200px; margin-top:50px; }
+.commonBox > div { width:1200px; margin:0 auto; }
+.commonBox > div > div { width:100%; float:left; }
 
-.commonBox > div {
-  width: 1200px;
-  margin: 0 auto;
-}
 
-.commonBox > div > div {
-  width: 100%;
-  float: left;
-}
+/* table style  */
+
+table { width:100%; float:left; }
+table, tbody, tr, td, th, thead { border-collapse: collapse; table-layout: fixed; }
+.top { margin-bottom:30px; }
+/* tr:hover { cursor:pointer; } */
+table > thead > tr > th { font-size: 15px; font-weight: bold; color: #fff; border-right: 1px solid #FFF; padding: 10px 0; text-align: center; vertical-align: middle; }
+table > thead > tr > th:last-of-type { border-right: 0; }
+table > thead > tr:nth-of-type(1) > th { background-color: #81D4FA; }
+table > thead > tr:nth-of-type(2) > th { background-color: #EAEAEA; border-top: 1px solid #FFF; }
+
+table > tbody > tr:hover > td { background-color: #FBFBFB; }
+table > tbody > tr > td { font-size: 15px; font-weight: 500; color: #333; border-bottom: 1px solid #EFEFEF; border-right: 1px solid #EEE; text-align: center; padding: 7px; word-break: break-all; }
+table > tbody > tr:last-of-type > * { border-bottom: 1px solid #E3E3E3; }
+table > tbody > tr > td.no { color: #CCC; }
+table > tbody > tr > td.tl { text-align: left; }
+table > tbody > tr > td:last-of-type { border-right: 0; }
+
+/* table style  */
+
+/* ------------ 팝업 스토어 단건 조회 ------------- */
 
 /* 팝업이미지 영역  */
-.popupOneStoreBox {
-  width: 100%;
-  float: left;
-  margin: 30px 0px;
-}
-
-.popupOneStoreBox > div {
-  width: 100%;
-  float: left;
-}
-
-.popupOneStoreBox .popupImageBox > img {
-  width: 100%;
-  float: left;
-}
+.popupOneStoreBox { width:100%; float:left; margin:30px 0px; }
+.popupOneStoreBox > div { width:100%; float:left; }
+.popupOneStoreBox .popupImageBox > img { width:100%; float:left;}
 
 /* 팝업이름, 입장료, 기간 등  */
-.popupOneStoreBox .popupContentBox > div {
-  width: 100%;
-  float: left;
-}
-
-.popupOneStoreBox .popupContentBox .count {
-  text-align: right;
-  color: #888;
-  margin-top: 10px;
-}
-
-.popupOneStoreBox .popupContentBox .count > span {
-  margin-right: 5px;
-}
-
-.popupOneStoreBox .popupContentBox .popupName {
-  font-size: 30px;
-  font-weight: bold;
-}
-
-.popupOneStoreBox .popupContentBox .popupPrice {
-  font-size: 20px;
-  font-weight: bold;
-  padding: 5px 0px;
-}
-
-.popupOneStoreBox .popupContentBox .popupDate {
-  font-size: 14px;
-}
-
-.popupOneStoreBox .popupContentBox .popupAddress {
-  color: #888;
-  margin: 10px 0px;
-}
-
-.popupOneStoreBox .popupContentBox .popupAddress > i {
-  margin-right: 5px;
-}
+.popupOneStoreBox .popupContentBox > div { width:100%; float:left; }
+.popupOneStoreBox .popupContentBox .count { text-align:right; color:#888; margin-top:10px; }
+.popupOneStoreBox .popupContentBox .count > span { margin-right:5px; }
+.popupOneStoreBox .popupContentBox .popupName { font-size:30px; font-weight:bold; }
+.popupOneStoreBox .popupContentBox .popupPrice { font-size:20px; font-weight:bold; padding:5px 0px; }
+.popupOneStoreBox .popupContentBox .popupDate { font-size:14px; }
+.popupOneStoreBox .popupContentBox .popupAddress { color:#888; margin:10px 0px; }
+.popupOneStoreBox .popupContentBox .popupAddress > i { margin-right:5px; }
 
 /* 기타사항 영역  */
-.popupOneStoreBox .popupEtcBox {
-  margin: 20px 0px;
-  padding: 30px 0px;
-  border-top: 1px solid;
-  border-bottom: 1px solid;
-  text-align: center;
-}
-
-.popupOneStoreBox .popupEtcBox > div {
-  width: 25%;
-  float: left;
-}
-
-.popupOneStoreBox .popupEtcBox > div > div {
-  width: 100%;
-  float: left;
-}
-
-.popupOneStoreBox .popupEtcBox > div > .etcTop {
-  margin-bottom: 5px;
-}
-
-.popupOneStoreBox .popupEtcBox > div > div > span {
-  font-size: 15px;
-}
-
-.popupOneStoreBox .popupEtcBox > div > div > i {
-  font-size: 25px;
-}
+.popupOneStoreBox .popupEtcBox { margin:20px 0px; padding:30px 0px; border-top:1px solid; border-bottom:1px solid; text-align:center; }
+.popupOneStoreBox .popupEtcBox > div { width:25%; float:left; }
+.popupOneStoreBox .popupEtcBox > div > div { width:100%; float:left; }
+.popupOneStoreBox .popupEtcBox > div > .etcTop { margin-bottom:5px; }
+.popupOneStoreBox .popupEtcBox > div > div > span { font-size:15px; }
+.popupOneStoreBox .popupEtcBox > div > div > i { font-size:25px; }
 
 /* 운영시간, 팝업 설명 영역  */
-.popupOneStoreBox .popupOperatingBox > div {
-  width: 100%;
-  float: left;
-}
-
-.popupOneStoreBox .popupOperatingBox > div > div {
-  width: 100%;
-  float: left;
-}
-
-.popupOneStoreBox .popupOperatingBox .titleBox {
-  font-weight: 600;
-}
-
-.popupOneStoreBox .popupOperatingBox .operatingTime {
-  padding-left: 10px;
-}
-
-.popupOneStoreBox .popupOperatingBox .popupContentTitle {
-  font-size: 20px;
-  margin-top: 15px;
-  font-weight: bold;
-}
-
-.popupOneStoreBox .popupOperatingBox .popupTextArea {
-  margin: 15px 0px;
-  padding: 15px;
-  background-color: #ccc;
-}
+.popupOneStoreBox .popupOperatingBox > div { width:100%; float:left; }
+.popupOneStoreBox .popupOperatingBox > div > div { width:100%; float:left; }
+.popupOneStoreBox .popupOperatingBox .titleBox { font-weight:600; }
+.popupOneStoreBox .popupOperatingBox .operatingTime { padding-left:10px; }
+.popupOneStoreBox .popupOperatingBox .popupContentTitle { font-size:20px; margin-top:15px; font-weight:bold;}
+.popupOneStoreBox .popupOperatingBox .popupTextArea { margin:15px 0px; padding:15px; background-color:#ccc; }
 
 /* 지도 영역  */
-.popupOneStoreBox .popupMapBox .resevationBox {
-  width: 100%;
-  float: left;
-  margin-bottom: 15px;
-}
-
-.popupOneStoreBox .popupMapBox .resevationBox > button {
-  width: 100px;
-  float: right;
-  height: 35px;
-  text-align: center;
-  border: none;
-  color: #fff;
-  font-weight: bold;
-}
-
-#OneMap {
-  width: 1200px;
-  height: 500px;
-}
+.popupOneStoreBox .popupMapBox .resevationBox { width:100%; float:left; margin-bottom:15px; }
+.popupOneStoreBox .popupMapBox .resevationBox > button {width:100px; float:right; height:35px; text-align:center; border:none; color:#fff; font-weight:bold;}
+#OneMap { width:1200px; height:500px; }
 
 /* 리뷰영역  */
-.popupOneStoreBox .popupReviewBox {
-  margin-top: 30px;
-}
+.popupOneStoreBox .popupReviewBox { margin-top:30px; }
+.popupOneStoreBox .popupReviewBox > div { width:100%; float:left; }
+.popupOneStoreBox .popupReviewBox .reviewForm > div { width:100%; float:left; }
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewTitle { border-bottom:1px solid; margin-bottom:10px; padding-bottom:10px; }
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewTitle > span { font-size:25px; font-weight:bold; }
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewRating { text-align:center; font-size:40px; font-weight:bold; }
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewContent { margin:15px 0px; }
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewContent > textarea { width:100%; float:left; padding:10px; height:250px; resize:none; border-color:#ccc; }
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewButtonBox { text-align:right; }
+.popupOneStoreBox .popupReviewBox .reviewForm .reviewButtonBox > button { width:100px; height:35px; text-align:center; font-weight:bold; }
 
-.popupOneStoreBox .popupReviewBox > div {
-  width: 100%;
-  float: left;
-}
-
-.popupOneStoreBox .popupReviewBox .reviewForm > div {
-  width: 100%;
-  float: left;
-}
-
-.popupOneStoreBox .popupReviewBox .reviewForm .reviewTitle {
-  border-bottom: 1px solid;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-}
-
-.popupOneStoreBox .popupReviewBox .reviewForm .reviewTitle > span {
-  font-size: 25px;
-  font-weight: bold;
-}
-
-.popupOneStoreBox .popupReviewBox .reviewForm .reviewRating {
-  text-align: center;
-  font-size: 40px;
-  font-weight: bold;
-}
-
-.popupOneStoreBox .popupReviewBox .reviewForm .reviewContent {
-  margin: 15px 0px;
-}
-
-.popupOneStoreBox .popupReviewBox .reviewForm .reviewContent > textarea {
-  width: 100%;
-  float: left;
-  padding: 10px;
-  height: 250px;
-  resize: none;
-  border-color: #ccc;
-}
-
-.popupOneStoreBox .popupReviewBox .reviewForm .reviewButtonBox {
-  text-align: right;
-}
-
-.popupOneStoreBox .popupReviewBox .reviewForm .reviewButtonBox > button {
-  width: 100px;
-  height: 35px;
-  text-align: center;
-  font-weight: bold;
-}
+/* ------------ 팝업 스토어 단건 조회 ------------- */
 
 
 
@@ -275,6 +111,9 @@ a, button {
 .QRcodeBox > div > img { width:100%; height:100%; }
 
 /* ------------ 팝업스토어 입장 QR code  ------------- */
+
+
+
 
 /* ------------ SpotOn Admin Login  ------------- */
 
@@ -303,6 +142,8 @@ a, button {
 
 /* ------------ SpotOn Admin Login  ------------- */
 
+
+
 /* ------------ SpotOn Admin Dashboard  ------------- */
 
 .adminWrap { width:100%; float:left; margin-top:50px; padding:0px 25px; }
@@ -313,9 +154,11 @@ a, button {
 .adminWrap .topWrap .logoBox { width:20%; float:left; font-size:30px; font-weight:bold; }
 .adminWrap .topWrap .topMenuBox { width:80%; float:left; }
 
+
 /* 플랫폼 메인 컨텐츠 공통 */
 .adminWrap .contentsWrap .leftMenuWrap { width:20%; float:left; }
-.adminWrap .contentsWrap .rightMenuWrap { width:80%; float:left; }
+.adminWrap .contentsWrap .rightMenuWrap { width:80%; float:left; padding:0px 50px; }
+
 
 /* 좌측메뉴 - 통계 및 관리영역 */
 .contentsWrap .leftMenuWrap .menuBox { width:100%; float:left; height:100%; border-radius: 15px; color:#fff; padding:20px; font-size:17px; }
@@ -325,7 +168,20 @@ a, button {
 .contentsWrap .leftMenuWrap .menuBox > div > .menuTitle > i { margin-right:5px; }
 .contentsWrap .leftMenuWrap .menuBox > div > .menuTitle > span { cursor:pointer; }
 
+
+/* 우측메뉴 - 리스트 영역 */
+.adminWrap .contentsWrap .rightMenuWrap .listWrap { width:100%; float:left; }
+.adminWrap .contentsWrap .rightMenuWrap .listWrap > div { width:100%; float:left; }
+.adminWrap .contentsWrap .rightMenuWrap .listWrap .title > span { font-size:30px; font-weight:bold; }
+.adminWrap .contentsWrap .rightMenuWrap .listWrap .contentList { padding-top:25px; }
+
+
 /* 우측메뉴 - 그래프 영역(임시) */
 .adminWrap .contentsWrap .rightMenuWrap .dashboardWrap { text-align:center; font-size:70px; font-weight:bold; }
 
 /* ------------ SpotOn Admin Dashboard  ------------- */
+
+
+
+
+
