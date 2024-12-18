@@ -23,7 +23,7 @@ public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
     @Override
     public Page<PopupStore> findByStatus(Pageable pageable, PopupStoreStatus popupStoreStatus) {
         LocalDate fromDate = LocalDate.now();
-        LocalDate toDate = fromDate;
+        LocalDate toDate = fromDate.plusDays(1);
 
        return this.getPopupStores(pageable, fromDate, toDate, popupStoreStatus);
     }
@@ -64,7 +64,7 @@ public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
     private BooleanExpression findByStatus(LocalDate fromDate, LocalDate toDate, PopupStoreStatus popupStoreStatus) {
         return switch (popupStoreStatus) {
             case ALL -> null;
-            case SCHEDULE -> popupStore.startDate.between(toDate.plusDays(1), toDate.plusWeeks(1));
+            case SCHEDULE -> popupStore.startDate.between(toDate, toDate.plusWeeks(1));
             case OPEN -> popupStore.startDate.before(toDate).and(popupStore.endDate.after(fromDate.minusDays(1)));
             case CLOSE -> popupStore.endDate.before(fromDate);
         };
