@@ -40,6 +40,8 @@ public class CouponServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+//    PromotionEvent promotionEvent;
+//
 //    @BeforeEach
 //    public void setup() {
 //        // 이벤트 초기화 (couponGetCount 초기값을 0으로 설정)
@@ -58,7 +60,7 @@ public class CouponServiceTest {
 
     @Test
     @Transactional
-    @DisplayName("이벤트 쿠폰 선착순 5명 - 10명이 경쟁 / 100개 스레드(user DB 10명용)")
+    @DisplayName("이벤트 쿠폰 선착순 5명 - 10명이 경쟁 (user DB 10명용)")
     public void testCouponConcurrency10() throws InterruptedException {
         final int threads = 100;
         final int usersCount = 10;
@@ -75,8 +77,7 @@ public class CouponServiceTest {
             users.add(user);
         }
 
-        for (int i = 1; i <= threads; i++) {
-            final User user = users.get(i % usersCount);
+        for (User user : users) {
             executorService.submit(() -> {
                 try {
                     promotionEventService.couponApplyAndIssuance(promotionEventId, user);
@@ -99,7 +100,7 @@ public class CouponServiceTest {
 
     @Test
     @Transactional
-    @DisplayName("이벤트 쿠폰 선착순 10명 - 스레드 100(user DB 100명용)")
+    @DisplayName("이벤트 쿠폰 선착순 10명 - 100명이 경쟁 (user DB 100명용)")
     public void testCouponConcurrency100() throws InterruptedException {
         final int threads = 100;
         final int count = 10;
