@@ -11,6 +11,7 @@ import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
 import com.sparta.popupstore.domain.user.entity.User;
+import com.sparta.popupstore.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,9 @@ public class CouponServiceTest {
 
     @Autowired
     private CouponRepository couponRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private CouponService couponService;
@@ -63,20 +67,24 @@ public class CouponServiceTest {
 
     @Test
     @DisplayName("이벤트 쿠폰 선착순 10명 - 100명 동시성 제어 테스트")
-    public void testCouponConcurrency() throws InterruptedException {
+    public void testCouponConcurrency10() throws InterruptedException {
+        final int threads = 1000;
+        final int usersCount = 10;
+
+
         Long promotionEventId = 2L;
-        ExecutorService executorService = Executors.newFixedThreadPool(100);
+        ExecutorService executorService = Executors.newFixedThreadPool(threads);
 //        when(user.getId()).thenReturn(1L);
         // 객체 여러명 생성 반복문
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < usersCount; i++) {
             User user = mock(User.class);
             when(user.getId()).thenReturn((long)(i + 1));
             users.add(user);
         }
 
-        for (int i = 1; i <= 100; i++) {
-            final User user = users.get(i % 10);
+        for (int i = 1; i <= threads; i++) {
+            final User user = users.get(i % usersCount);
             executorService.submit(() -> {
                 try {
                     promotionEventService.couponApplyAndIssuance(promotionEventId, user);
@@ -91,9 +99,40 @@ public class CouponServiceTest {
 
         PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId)
             .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
-        assertTrue(promotionEvent.getCouponGetCount() <= 10);
+        assertTrue(promotionEvent.getCouponGetCount() <= usersCount);
 
         long couponCount = couponRepository.countByPromotionEventId(promotionEventId);
-        assertEquals(10, couponCount);
+        assertEquals(usersCount, couponCount);
+    }
+
+    @Test
+    @DisplayName("이벤트 쿠폰 선착순 100명 - 스레드 1000")
+    public void testCouponConcurrency100() throws InterruptedException {
+        final int threads = 1000;
+        final int usersCount = 100;
+
+        Long promotionEventId = 2L;
+        ExecutorService executorService = Executors.newFixedThreadPool(threads);
+
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            executorService.submit(() -> {
+                try {
+                    promotionEventService.couponApplyAndIssuance(promotionEventId, user);
+                } catch (CustomApiException e) {
+                    System.out.println("쿠폰 지급 한도 초과");
+                }
+            });
+        }
+
+        executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.MINUTES);
+
+        PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId)
+            .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
+        assertTrue(promotionEvent.getCouponGetCount() <= usersCount);
+
+        long couponCount = couponRepository.countByPromotionEventId(promotionEventId);
+        assertEquals(usersCount, couponCount);
     }
 }
