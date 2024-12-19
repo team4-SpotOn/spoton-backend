@@ -18,10 +18,6 @@ public interface PromotionEventRepository extends JpaRepository<PromotionEvent, 
     @Query("update PromotionEvent p set p.deletedAt = now() where p.id = :promotionEventId")
     void deletePromotionEvent(@Param("promotionEventId") Long promotionEventId);
 
-    @Modifying
-    @Query("delete from PromotionEvent p where p in :promotionEvents")
-    void deleteAllByQuery(List<PromotionEvent> promotionEvents);
-
     @Query(value = "select * from events e where timestampdiff(month , e.end_date_time, now()) >= 6", nativeQuery = true)
     List<PromotionEvent> findAllByEndDateTimeAfterSixMonths();
 

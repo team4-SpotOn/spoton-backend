@@ -32,7 +32,7 @@ public class PromotionEventEndCouponDeleteScheduler {
                 s3ImageService.deleteImage(event.getImageUrl());
             }
         }
-        promotionEventRepository.deleteAllByQuery(eventList);
+        promotionEventRepository.deleteAllInBatch(eventList);
     }
 
     @Transactional
