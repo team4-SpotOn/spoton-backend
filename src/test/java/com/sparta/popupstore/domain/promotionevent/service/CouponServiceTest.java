@@ -23,7 +23,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 public class CouponServiceTest {
@@ -57,12 +57,12 @@ public class CouponServiceTest {
 //    }
 
     @Test
+    @Transactional
     @DisplayName("이벤트 쿠폰 선착순 5명 - 10명이 경쟁 / 100개 스레드(user DB 10명용)")
     public void testCouponConcurrency10() throws InterruptedException {
         final int threads = 100;
         final int usersCount = 10;
         final int count = 5;
-
 
         Long promotionEventId = 2L;
         ExecutorService executorService = Executors.newFixedThreadPool(threads);
@@ -98,6 +98,7 @@ public class CouponServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("이벤트 쿠폰 선착순 10명 - 스레드 100(user DB 100명용)")
     public void testCouponConcurrency100() throws InterruptedException {
         final int threads = 100;
