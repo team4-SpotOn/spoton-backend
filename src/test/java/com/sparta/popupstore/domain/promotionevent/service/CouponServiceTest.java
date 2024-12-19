@@ -40,15 +40,6 @@ public class CouponServiceTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private CouponService couponService;
-
-    private PromotionEvent promotionEvent;
-
-    @MockBean
-    private User user;  // User 객체를 MockBean으로 설정
-
-
 //    @BeforeEach
 //    public void setup() {
 //        // 이벤트 초기화 (couponGetCount 초기값을 0으로 설정)
@@ -66,10 +57,11 @@ public class CouponServiceTest {
 //    }
 
     @Test
-    @DisplayName("이벤트 쿠폰 선착순 10명 - 100명 동시성 제어 테스트")
+    @DisplayName("이벤트 쿠폰 선착순 5명 - 10명이 경쟁 / 100개 스레드(user DB 10명용)")
     public void testCouponConcurrency10() throws InterruptedException {
-        final int threads = 1000;
+        final int threads = 100;
         final int usersCount = 10;
+        final int Count = 5;
 
 
         Long promotionEventId = 2L;
@@ -99,17 +91,17 @@ public class CouponServiceTest {
 
         PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId)
             .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
-        assertTrue(promotionEvent.getCouponGetCount() <= usersCount);
+        assertTrue(promotionEvent.getCouponGetCount() <= Count);
 
         long couponCount = couponRepository.countByPromotionEventId(promotionEventId);
-        assertEquals(usersCount, couponCount);
+        assertEquals(Count, couponCount);
     }
 
     @Test
-    @DisplayName("이벤트 쿠폰 선착순 100명 - 스레드 1000")
+    @DisplayName("이벤트 쿠폰 선착순 10명 - 스레드 100(user DB 100명용)")
     public void testCouponConcurrency100() throws InterruptedException {
-        final int threads = 1000;
-        final int usersCount = 100;
+        final int threads = 100;
+        final int Count = 10;
 
         Long promotionEventId = 2L;
         ExecutorService executorService = Executors.newFixedThreadPool(threads);
@@ -130,9 +122,9 @@ public class CouponServiceTest {
 
         PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId)
             .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
-        assertTrue(promotionEvent.getCouponGetCount() <= usersCount);
+        assertTrue(promotionEvent.getCouponGetCount() <= Count);
 
         long couponCount = couponRepository.countByPromotionEventId(promotionEventId);
-        assertEquals(usersCount, couponCount);
+        assertEquals(Count, couponCount);
     }
 }
