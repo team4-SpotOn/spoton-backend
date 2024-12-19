@@ -61,7 +61,7 @@ public class CouponServiceTest {
     public void testCouponConcurrency10() throws InterruptedException {
         final int threads = 100;
         final int usersCount = 10;
-        final int Count = 5;
+        final int count = 5;
 
 
         Long promotionEventId = 2L;
@@ -91,17 +91,17 @@ public class CouponServiceTest {
 
         PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId)
             .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
-        assertTrue(promotionEvent.getCouponGetCount() <= Count);
+        assertTrue(promotionEvent.getCouponGetCount() <= count);
 
         long couponCount = couponRepository.countByPromotionEventId(promotionEventId);
-        assertEquals(Count, couponCount);
+        assertEquals(count, couponCount);
     }
 
     @Test
     @DisplayName("이벤트 쿠폰 선착순 10명 - 스레드 100(user DB 100명용)")
     public void testCouponConcurrency100() throws InterruptedException {
         final int threads = 100;
-        final int Count = 10;
+        final int count = 10;
 
         Long promotionEventId = 2L;
         ExecutorService executorService = Executors.newFixedThreadPool(threads);
@@ -122,9 +122,9 @@ public class CouponServiceTest {
 
         PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId)
             .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
-        assertTrue(promotionEvent.getCouponGetCount() <= Count);
+        assertTrue(promotionEvent.getCouponGetCount() <= count);
 
         long couponCount = couponRepository.countByPromotionEventId(promotionEventId);
-        assertEquals(Count, couponCount);
+        assertEquals(count, couponCount);
     }
 }
