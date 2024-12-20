@@ -27,7 +27,7 @@ public class S3ImageController {
     @Parameter(name = "fileName", description = "파일명")
     @GetMapping("/{directory}/images/preassigned")
     public ResponseEntity<S3UrlResponseDto> getReviewAndPromotionEventImagePreSignedUrl(
-            @PathVariable String directory,
+            @PathVariable Directory directory,
             @RequestBody @Valid ImageRequestDto imageRequestDto
     ){
         return ResponseEntity
@@ -43,7 +43,7 @@ public class S3ImageController {
     ){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(imageService.getPreSignedUrls(Directory.POPUP_STORES.getDomain(), imageRequestDtoList));
+                .body(imageService.getPreSignedUrls(Directory.POPUP_STORES, imageRequestDtoList));
     }
 
     @Operation(summary = "s3에 저장된 이미지 삭제")

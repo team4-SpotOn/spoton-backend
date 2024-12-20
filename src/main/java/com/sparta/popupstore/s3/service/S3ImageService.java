@@ -11,6 +11,7 @@ import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.s3.dto.request.ImageRequestDto;
 import com.sparta.popupstore.s3.dto.response.S3UrlResponseDto;
+import com.sparta.popupstore.s3.enums.Directory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,9 +33,9 @@ public class S3ImageService {
     private String baseUrl;
 
 
-    public S3UrlResponseDto getPreSignedUrl(String prefix, String fileName){
+    public S3UrlResponseDto getPreSignedUrl(Directory prefix, String fileName){
         this.validFileName(fileName);
-        String createFileName = String.format("%s/%s", prefix, this.createUuid() + fileName);
+        String createFileName = String.format("%s/%s", prefix.getDomain(), this.createUuid() + fileName);
         String preSignedUrl = generateResignedUrlRequest(createFileName);
         return S3UrlResponseDto.builder()
                 .preSignedUrl(preSignedUrl)
@@ -42,7 +43,7 @@ public class S3ImageService {
                 .build();
     }
 
-    public List<S3UrlResponseDto> getPreSignedUrls(String prefix, List<ImageRequestDto> imageRequestDtoList) {
+    public List<S3UrlResponseDto> getPreSignedUrls(Directory prefix, List<ImageRequestDto> imageRequestDtoList) {
         return imageRequestDtoList
                 .stream()
                 .map(image ->

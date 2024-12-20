@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class S3DirectoryConverter implements Converter<String, String> {
+public class S3DirectoryConverter implements Converter<String, Directory> {
 
     @Override
-    public String convert(String directory) {
+    public Directory convert(String directory) {
         try{
             log.info(directory);
-            return Directory.valueOf(directory.toUpperCase().replace("-","_")).getDomain();
+            return Directory.valueOf(directory.toUpperCase().replace("-","_"));
         }
         catch (IllegalArgumentException e){
             throw new CustomApiException(ErrorCode.S3_NOT_DIRECTORY);
