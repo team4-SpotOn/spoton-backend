@@ -27,11 +27,11 @@ public class Review extends BaseEntity {
     private User user;
 
     private String contents;
-    private int star;
+    private Integer star;
     private String imageUrl;
 
     @Builder
-    public Review(Long id, PopupStore popupStore, User user, String contents, int star, String imageUrl) {
+    public Review(Long id, PopupStore popupStore, User user, String contents, Integer star, String imageUrl) {
         this.id = id;
         this.popupStore = popupStore;
         this.user = user;
@@ -40,7 +40,7 @@ public class Review extends BaseEntity {
         this.imageUrl = imageUrl;
     }
 
-    public void update(String contents, int star, String imageUrl) {
+    public void update(String contents, Integer star, String imageUrl) {
         this.contents = contents;
         this.star = star;
         this.imageUrl = imageUrl;

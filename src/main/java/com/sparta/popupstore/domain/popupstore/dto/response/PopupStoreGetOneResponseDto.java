@@ -20,9 +20,9 @@ public class PopupStoreGetOneResponseDto {
     @Schema(description = "팝업스토어 종료일")
     private final LocalDate endDate;
     @Schema(description = "팝업스토어 조회수")
-    private final int view;
+    private final Integer view;
     @Schema(description = "팝업스토어 입장료")
-    private final int price;
+    private final Integer price;
     @Schema(description = "팝업스토어 내용")
     private final String contents;
     @Schema(description = "팝업스토어 주소")

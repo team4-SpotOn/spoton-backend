@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class PointChargeRequestDto {
-  private int chargedPoint;
+  private Integer chargedPoint;
   private String serialNumber;
 
   public PointChargedLog toEntity(User user) {

@@ -7,7 +7,7 @@ import lombok.Getter;
 public class PopupStoreImageResponseDto {
     private final Long id;
     private final String imageUrl;
-    private final int sort;
+    private final Integer sort;
 
     public PopupStoreImageResponseDto(PopupStoreImage popupStoreImage) {
         this.id = popupStoreImage.getId();

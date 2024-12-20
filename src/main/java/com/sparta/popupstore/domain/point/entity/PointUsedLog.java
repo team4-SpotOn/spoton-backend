@@ -25,9 +25,9 @@ public class PointUsedLog {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Long popupstoreId;
-    private int prevPoint;
-    private int usedPoint;
+    private Long popupStoreId;
+    private Integer prevPoint;
+    private Integer usedPoint;
     private String serialNumber;
 
     @CreatedDate
@@ -35,10 +35,10 @@ public class PointUsedLog {
     protected LocalDateTime usedAt;
 
     @Builder
-    public PointUsedLog(Long id, User user, Long popupstoreId, int prevPoint, int usedPoint, LocalDateTime usedAt, String serialNumber) {
+    public PointUsedLog(Long id, User user, Long popupStoreId, Integer prevPoint, Integer usedPoint, LocalDateTime usedAt, String serialNumber) {
         this.id = id;
         this.user = user;
-        this.popupstoreId = popupstoreId;
+        this.popupStoreId = popupStoreId;
         this.prevPoint = prevPoint;
         this.usedPoint = usedPoint;
         this.usedAt = usedAt;

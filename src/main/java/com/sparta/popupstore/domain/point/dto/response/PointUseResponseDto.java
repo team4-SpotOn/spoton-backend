@@ -12,19 +12,19 @@ public class PointUseResponseDto {
   @Schema(description = "유저이름")
   private final String name;
   @Schema(description = "충전전 소지하고있던 포인트")
-  private final int prevPoint;
+  private final Integer prevPoint;
   @Schema(description = "사용한 포인트")
-  private final int usedPoint;
+  private final Integer usedPoint;
   @Schema(description = "쿠폰 시리얼 번호")
   private final String serialNumber;
   @Schema(description = "팝업스토어 아이디")
-  private final Long popupstoreId;
+  private final Long popupStoreId;
   @Schema(description = "사용시간")
   protected LocalDateTime usedAt;
 
   public PointUseResponseDto(PointUsedLog usedLog) {
     this.id = usedLog.getId();
-    this.popupstoreId = usedLog.getPopupstoreId();
+    this.popupStoreId = usedLog.getPopupStoreId();
     this.name = usedLog.getUser().getName();
     this.serialNumber = usedLog.getSerialNumber();
     this.prevPoint = usedLog.getPrevPoint();

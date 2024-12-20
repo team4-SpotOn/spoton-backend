@@ -17,11 +17,11 @@ public class PromotionEventFindAllResponseDto {
     @Schema(description = "팝업스토어 객체")
     private final PromotionEventFindAllPopupStoreResponseDto promotionEventFindAllPopupStoreResponseDto;
     @Schema(description = "할인 율")
-    private final int discountPercentage;
+    private final Integer discountPercentage;
     @Schema(description = "총 쿠폰 갯수")
-    private final int totalCount;
+    private final Integer totalCount;
     @Schema(description = "쿠폰 만료 기간")
-    private final int couponExpirationPeriod;
+    private final Integer couponExpirationPeriod;
     @Schema(description = "프로모션 이벤트 시작일")
     private final LocalDateTime startDateTime;
     @Schema(description = "프로모션 이벤트 종료일")

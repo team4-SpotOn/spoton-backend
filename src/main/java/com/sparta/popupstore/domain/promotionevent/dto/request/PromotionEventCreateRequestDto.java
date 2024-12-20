@@ -18,12 +18,12 @@ public class PromotionEventCreateRequestDto {
     private String description;
     @Positive(message = "1 이상의 수만 입력해주세요.")
     @Max(value = 100, message = "할인율은 100을 초과할 수 없습니다.")
-    private int discountPercentage;
+    private Integer discountPercentage;
     @Positive(message = "1 이상의 수만 입력해주세요.")
-    private int totalCount;
+    private Integer totalCount;
     @Positive(message = "쿠폰 만료기간은 하루 미만일 수 없습니다.")
     @Max(value = 30, message = "쿠폰 만료기간은 30일을 초과할 수 없습니다.")
-    private int couponExpirationPeriod;
+    private Integer couponExpirationPeriod;
     @NotNull(message = "이벤트 시작 시각은 공백일 수 없습니다.")
     private LocalDateTime startDateTime;
     @NotNull(message = "이벤트 종료 시각은 공백일 수 없습니다.")

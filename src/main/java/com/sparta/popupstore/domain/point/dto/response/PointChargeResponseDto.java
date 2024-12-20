@@ -12,9 +12,9 @@ public class PointChargeResponseDto {
   @Schema(description = "유저이름")
   private final String name;
   @Schema(description = "충전전 소지하고있던 포인트")
-  private final int prevPoint;
+  private final Integer prevPoint;
   @Schema(description = "충전 포인트")
-  private final int chargedPoint;
+  private final Integer chargedPoint;
   @Schema(description = "쿠폰 시리얼 번호")
   private final String serialNumber;
   @Schema(description = "충전 시간")

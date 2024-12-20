@@ -26,15 +26,15 @@ public class PopupStore extends BaseEntity {
 
     private String name;
     private String contents;
-    private int price;
-    private int view;
+    private Integer price;
+    private Integer view;
     @Embedded
     private Address address;
     private LocalDate startDate;
     private LocalDate endDate;
 
     @Builder
-    public PopupStore(Long id, Company company, String name, String contents, int price, int view, Address address, LocalDate startDate, LocalDate endDate) {
+    public PopupStore(Long id, Company company, String name, String contents, Integer price, Integer view, Address address, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.company = company;
         this.name = name;
@@ -46,7 +46,7 @@ public class PopupStore extends BaseEntity {
         this.endDate = endDate;
     }
 
-    public void update(String name, String contents, int price, Address address, LocalDate startDate, LocalDate endDate) {
+    public void update(String name, String contents, Integer price, Address address, LocalDate startDate, LocalDate endDate) {
         this.name = name;
         this.contents = contents;
         this.price = price;

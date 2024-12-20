@@ -18,7 +18,7 @@ public class PopupStoreCreateRequestDto {
     @NotNull(message = "팝업스토어 내용을 입력해주세요.")
     private String contents;
     @Min(value = 0, message = "가격은 0이상이어야만 합니다.")
-    private int price;
+    private Integer price;
     @NotNull(message = "팝업스토어 주소를 입력해주세요.")
     private String address;
     @NotNull(message = "팝업스토어 시작일을 입력해주세요.")

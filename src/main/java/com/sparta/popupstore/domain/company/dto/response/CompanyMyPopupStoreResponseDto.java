@@ -9,25 +9,25 @@ import lombok.Getter;
 @Getter
 public class CompanyMyPopupStoreResponseDto {
     @Schema(description = "자사 팝업스토어 고유 번호")
-    private Long id;
+    private final Long id;
 
     @Schema(description = "자사 팝업스토어 이름")
-    private String name;
+    private final String name;
 
     @Schema(description = "자사 팝업스토어 시작일")
-    private LocalDate startDate;
+    private final LocalDate startDate;
 
     @Schema(description = "자사 팝업스토어 종료일")
-    private LocalDate endDate;
+    private final LocalDate endDate;
 
     @Schema(description = "자사 팝업스토어 입장료")
-    private int price;
-    
+    private final Integer price;
+
     @Schema(description = "자사 팝업스토어 내용")
-    private String contents;
+    private final String contents;
 
     @Schema(description = "자사 팝업스토어 주소")
-    private Address address;
+    private final Address address;
 
     public CompanyMyPopupStoreResponseDto(PopupStore popupStore) {
         this.id = popupStore.getId();

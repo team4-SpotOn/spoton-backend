@@ -18,7 +18,7 @@ public class PopupStoreCreateResponseDto {
     @Schema(description = "생성된 팝업스토어 내용")
     private final String contents;
     @Schema(description = "생성된 팝업스토어 가격")
-    private final int price;
+    private final Integer price;
     @Schema(description = "생성된 팝업스토어 주소")
     private final Address address;
     @Schema(description = "생성된 팝업스토어 시작일")
