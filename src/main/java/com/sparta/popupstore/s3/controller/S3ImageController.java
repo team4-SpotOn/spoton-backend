@@ -26,7 +26,7 @@ public class S3ImageController {
     @Operation(summary = "리뷰 & 프로모션 이벤트 이미지 preSignedUrl 발급")
     @Parameter(name = "fileName", description = "파일명")
     @GetMapping("/{directory}/images/preassigned")
-    public ResponseEntity<Object> getReviewAndPromotionEventImagePreSignedUrl(
+    public ResponseEntity<S3UrlResponseDto> getReviewAndPromotionEventImagePreSignedUrl(
             @PathVariable String directory,
             @RequestBody @Valid ImageRequestDto imageRequestDto
     ){
