@@ -35,9 +35,10 @@ public class ReservationController {
                 .body(reservationService.createReservation(popupStoreId, user, requestDto));
     }
 
-    @DeleteMapping("/popupstores/reservation/{reservationId}")
+    @Operation(summary = "팝업스토어 예약 취소")
     @Parameter(name = "reservationId", description = "삭제할 예약의 기본키")
     @Parameter(name = "user", description = "로그인한 유저")
+    @DeleteMapping("/popupstores/reservation/{reservationId}")
     public ResponseEntity<Void> cancelReservation(
             @PathVariable Long reservationId,
             @AuthUser User user
