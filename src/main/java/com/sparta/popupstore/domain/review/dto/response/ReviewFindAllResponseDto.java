@@ -13,7 +13,7 @@ public class ReviewFindAllResponseDto {
   private final String contents;
 
   @Schema(description = "별점")
-  private final int star;
+  private final Integer star;
 
   @Schema(description = "유저이름")
   private final String name;

@@ -20,10 +20,10 @@ public class PopupStoreImage {
     @JoinColumn(name = "popupstore_id")
     private PopupStore popupStore;
     private String imageUrl;
-    private int sort;
+    private Integer sort;
 
     @Builder
-    public PopupStoreImage(Long id, PopupStore popupStore, String imageUrl, int sort) {
+    public PopupStoreImage(Long id, PopupStore popupStore, String imageUrl, Integer sort) {
         this.id = id;
         this.popupStore = popupStore;
         this.imageUrl = imageUrl;

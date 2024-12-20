@@ -15,7 +15,7 @@ public class ReviewUpdateResponseDto {
   private final String contents;
 
   @Schema(description = "수정된 별점")
-  private final int star;
+  private final Integer star;
 
   @Schema(description = "유저이름")
   private final String name;

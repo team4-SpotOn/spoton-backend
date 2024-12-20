@@ -15,11 +15,11 @@ public class PromotionEventUpdateResponseDto {
     @Schema(description = "수정된 프로모션 이벤트 설명")
     private final String description;
     @Schema(description = "수정된 할인 율")
-    private final int discountPercentage;
+    private final Integer discountPercentage;
     @Schema(description = "수정된 총 쿠폰 갯수")
-    private final int totalCount;
+    private final Integer totalCount;
     @Schema(description = "수정된 쿠폰 만료 기간")
-    private final int couponExpirationPeriod;
+    private final Integer couponExpirationPeriod;
     @Schema(description = "수정된 프로모션 이벤트 시작일")
     private final LocalDateTime startDateTime;
     @Schema(description = "수정된 프로모션 이벤트 종료일")

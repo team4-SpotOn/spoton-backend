@@ -25,8 +25,8 @@ public class PointChargedLog {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private int prevPoint;
-    private int chargedPoint;
+    private Integer prevPoint;
+    private Integer chargedPoint;
     private String serialNumber;
 
     @CreatedDate
@@ -34,7 +34,7 @@ public class PointChargedLog {
     protected LocalDateTime chargedAt;
 
     @Builder
-    public PointChargedLog(Long id, User user, int prevPoint, int chargedPoint, LocalDateTime chargedAt, String serialNumber) {
+    public PointChargedLog(Long id, User user, Integer prevPoint, Integer chargedPoint, LocalDateTime chargedAt, String serialNumber) {
         this.id = id;
         this.user = user;
         this.prevPoint = prevPoint;

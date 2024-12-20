@@ -11,7 +11,7 @@ public class PromotionEventFindAllPopupStoreResponseDto {
     @Schema(description = "팝업스토어 명")
     private final String name;
     @Schema(description = "팝업스토어 가격")
-    private final int price;
+    private final Integer price;
 
     public PromotionEventFindAllPopupStoreResponseDto(PopupStore popupStore) {
         this.id = popupStore.getId();

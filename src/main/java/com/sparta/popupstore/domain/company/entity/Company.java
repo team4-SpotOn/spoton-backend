@@ -37,7 +37,8 @@ public class Company extends BaseEntity {
         this.businessLicense = businessLicense;
     }
 
-    public void update(String phone, String website) {
+    public void update(String ceoName, String phone, String website) {
+        this.ceoName = ceoName;
         this.phone = phone;
         this.website = website;
     }

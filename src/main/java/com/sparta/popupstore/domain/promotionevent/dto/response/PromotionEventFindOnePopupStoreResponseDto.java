@@ -13,7 +13,7 @@ public class PromotionEventFindOnePopupStoreResponseDto {
     @Schema(description = "팝업스토어 명")
     private final String name;
     @Schema(description = "팝업스토어 가격")
-    private final int price;
+    private final Integer price;
     @Schema(description = "팝업스토어 시작일")
     private final LocalDate startDate;
     @Schema(description = "팝업스토어 종료일")

@@ -100,7 +100,7 @@ public class PopupStoreService {
         popupStore.update(
                 requestDto.getName(),
                 requestDto.getContents(),
-                Integer.parseInt(requestDto.getPrice()),
+                requestDto.getPrice(),
                 address,
                 requestDto.getStartDate(),
                 requestDto.getEndDate()

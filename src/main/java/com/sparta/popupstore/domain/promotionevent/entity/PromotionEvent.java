@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -25,11 +24,10 @@ public class PromotionEvent extends BaseEntity {
     private PopupStore popupStore;
     private String title;
     private String description;
-    private int discountPercentage;
-    @ColumnDefault("0")
-    private int couponGetCount;
-    private int totalCount;
-    private int couponExpirationPeriod;
+    private Integer discountPercentage;
+    private Integer couponGetCount;
+    private Integer totalCount;
+    private Integer couponExpirationPeriod;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String imageUrl;
@@ -40,10 +38,10 @@ public class PromotionEvent extends BaseEntity {
             PopupStore popupStore,
             String title,
             String description,
-            int discountPercentage,
-            int couponGetCount,
-            int totalCount,
-            int couponExpirationPeriod,
+            Integer discountPercentage,
+            Integer couponGetCount,
+            Integer totalCount,
+            Integer couponExpirationPeriod,
             LocalDateTime startDateTime,
             LocalDateTime endDateTime,
             String imageUrl
@@ -68,9 +66,9 @@ public class PromotionEvent extends BaseEntity {
     public void updatePromotionEvent(
             String title,
             String description,
-            int discountPercentage,
-            int totalCount,
-            int couponExpirationPeriod,
+            Integer discountPercentage,
+            Integer totalCount,
+            Integer couponExpirationPeriod,
             LocalDateTime startDateTime,
             LocalDateTime endDateTime,
             String imageUrl

@@ -30,7 +30,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "유저 API", description = "관리자, 고객에 대한 회원가입 로그인, 마이페이지 등의 API 입니다.")
+@Tag(name = "유저 API", description = "고객에 대한 회원가입 로그인, 마이페이지 등의 API 입니다.")
 @RequestMapping("/users")
 public class UserController {
 
@@ -41,6 +41,8 @@ public class UserController {
     @Parameter(name = "email", description = "계정 이메일")
     @Parameter(name = "password", description = "계정 비밀번호")
     @Parameter(name = "name", description = "본인 이름")
+    @Parameter(name = "address", description = "주소명")
+    @Parameter(name = "phone", description = "전화번호")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "유저 회원 가입 성공",
                     content = @Content(schema = @Schema(implementation = UserSignupResponseDto.class))),
@@ -89,6 +91,7 @@ public class UserController {
     }
 
     @Operation(summary = "유저 마이페이지", description = "고객이 로그인 호 확인하는 마이페이지")
+    @Parameter(name = "user", description = "로그인한 유저")
     @GetMapping("/mypage")
     public ResponseEntity<UserMyPageResponseDto> getUserMyPage(@AuthUser User user) {
         return ResponseEntity
@@ -97,6 +100,7 @@ public class UserController {
     }
 
     @Operation(summary = "유저 내 쿠폰보기", description = "마이페이지에 본인이 가지고 있는 쿠폰 목록 확인")
+    @Parameter(name = "user", description = "로그인한 유저")
     @GetMapping("/coupons")
     public ResponseEntity<List<UserMyCouponsResponseDto>> getUserMyCoupons(@AuthUser User user) {
         return ResponseEntity
@@ -105,6 +109,8 @@ public class UserController {
     }
 
     @Operation(summary = "유저 정보 수정", description = "유저 본인의 정보 수정")
+    @Parameter(name = "user", description = "로그인한 유저")
+    @Parameter(name = "address", description = "주소명")
     @PatchMapping
     public ResponseEntity<UserUpdateResponseDto> updateUser(
             @AuthUser User user,
@@ -116,6 +122,8 @@ public class UserController {
     }
 
     @Operation(summary = "유저 회원 탈퇴", description = "유저 회원 탈퇴")
+    @Parameter(name = "user", description = "로그인한 유저")
+    @Parameter(name = "password", description = "계정 비밀번호")
     @DeleteMapping
     public ResponseEntity<Void> deleteUser(
             @AuthUser User user,

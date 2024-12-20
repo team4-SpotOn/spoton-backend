@@ -20,7 +20,7 @@ public class PopupStoreUpdateResponseDto {
     @Schema(description = "수정된 팝업스토어 종료일")
     private final LocalDate endDate;
     @Schema(description = "수정된 팝업스토어 가격")
-    private final int price;
+    private final Integer price;
     @Schema(description = "수정된 팝업스토어 내용")
     private final String contents;
     @Schema(description = "수정된 팝업스토어 주소")

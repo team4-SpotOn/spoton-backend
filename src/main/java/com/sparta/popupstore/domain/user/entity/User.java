@@ -22,7 +22,7 @@ public class User extends BaseEntity {
     private String password;
     private String name;
     private Address address;
-    private int point;
+    private Integer point;
     private String qrCode;
     private String phone;
 
@@ -33,7 +33,7 @@ public class User extends BaseEntity {
             String password,
             String name,
             Address address,
-            int point,
+            Integer point,
             String qrCode,
             String phone
     ) {
@@ -55,11 +55,11 @@ public class User extends BaseEntity {
         this.deletedAt = deletedAt;
     }
 
-    public void ChargePoint(int chargedPoint) {
+    public void ChargePoint(Integer chargedPoint) {
         this.point += chargedPoint;
     }
 
-    public void decreasePoint(int amount) {
+    public void decreasePoint(Integer amount) {
         this.point -= amount;
     }
 }
