@@ -68,6 +68,9 @@ public enum ErrorCode {
 
     // address error
     KAKAO_ADDRESS_API_ERROR(HttpStatus.BAD_REQUEST, "카카오 지도 에러"),
+
+    // s3 error
+    S3_NOT_DIRECTORY(HttpStatus.BAD_REQUEST, "올바른 폴더명이 아닙니다."),
     ;
     private final HttpStatus status;
     private final String message;

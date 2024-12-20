@@ -1,19 +1,18 @@
 package com.sparta.popupstore.s3.controller;
 
-import com.sparta.popupstore.s3.service.S3ImageService;
 import com.sparta.popupstore.s3.dto.request.ImageRequestDto;
 import com.sparta.popupstore.s3.dto.response.S3UrlResponseDto;
+import com.sparta.popupstore.s3.enums.Directory;
+import com.sparta.popupstore.s3.service.S3ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,38 +23,27 @@ public class S3ImageController {
 
     private final S3ImageService imageService;
 
-    @Operation(summary = "리뷰 이미지 preSignedUrl 발급")
+    @Operation(summary = "리뷰 & 프로모션 이벤트 이미지 preSignedUrl 발급")
     @Parameter(name = "fileName", description = "파일명")
-    @GetMapping("/reviews/images/preassigned")
-    public ResponseEntity<S3UrlResponseDto> getReviewImagePreSignedUrl(
-            @RequestBody ImageRequestDto imageRequestDto
+    @GetMapping("/{directory}/images/preassigned")
+    public ResponseEntity<S3UrlResponseDto> getReviewAndPromotionEventImagePreSignedUrl(
+            @PathVariable Directory directory,
+            @RequestBody @Valid ImageRequestDto imageRequestDto
     ){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(imageService.getPreSignedUrl("review", imageRequestDto.getFileName()));
+                .body(imageService.getPreSignedUrl(directory, imageRequestDto.getFileName()));
     }
 
-    @Operation(summary = "프로모션 이벤트 이미지 preSignedUrl 발급")
+    @Operation(summary = "팝업스토어 이미지 preSignedUrl 발급")
     @Parameter(name = "fileName", description = "파일명")
-    @GetMapping("/promotion-events/images/preassigned")
-    public ResponseEntity<S3UrlResponseDto> getPromotionEventImagePreSignedUrl(
-            @RequestBody ImageRequestDto imageRequestDto
-    ){
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(imageService.getPreSignedUrl("promotionevent", imageRequestDto.getFileName()));
-    }
-
-    @Operation(summary = "프로모션 이벤트 이미지 preSignedUrl 발급")
-    @Parameter(name = "fileName", description = "파일명")
-    @Parameter(name = "sort", description = "이미지 순서")
     @GetMapping("/popup-stores/images/preassigned")
     public ResponseEntity<List<S3UrlResponseDto>> getPopupStoreImagePreSignedUrl(
             @RequestBody @NotEmpty(message = "이미지를 하나이상 올려주세요") List<ImageRequestDto> imageRequestDtoList
     ){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(imageService.getPreSignedUrls("popupstore",imageRequestDtoList));
+                .body(imageService.getPreSignedUrls(Directory.POPUP_STORES, imageRequestDtoList));
     }
 
     @Operation(summary = "s3에 저장된 이미지 삭제")

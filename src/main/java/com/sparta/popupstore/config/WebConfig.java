@@ -2,6 +2,7 @@ package com.sparta.popupstore.config;
 
 import com.sparta.popupstore.domain.oauth2.controller.converter.OAuth2PlatformConverter;
 import com.sparta.popupstore.domain.popupstore.controller.converter.PopupStoreSearchTypeConverter;
+import com.sparta.popupstore.s3.controller.converter.S3DirectoryConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final CheckAdminInterceptor checkAdminInterceptor;
     private final OAuth2PlatformConverter oAuth2PlatformConverter;
     private final PopupStoreSearchTypeConverter popupStoreSearchTypeConverter;
+    private final S3DirectoryConverter s3DirectoryConverter;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -40,6 +42,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(oAuth2PlatformConverter);
         registry.addConverter(popupStoreSearchTypeConverter);
+        registry.addConverter(s3DirectoryConverter);
     }
 
     @Bean
