@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,10 +19,13 @@ public class CouponService {
 
     private final CouponRepository couponRepository;
 
+    @Transactional
     public Coupon createCoupon(PromotionEvent promotionEvent, User user) {
-        if (couponRepository.existsByPromotionEventIdAndUserId(promotionEvent.getId(), user.getId())) {
+        Coupon existingCoupon = couponRepository.findByIdWithPessimisticLock(promotionEvent.getId(), user.getId());
+        if (existingCoupon != null) {
             throw new CustomApiException(ErrorCode.COUPON_DUPLICATE_ISSUANCE);
         }
+
         String uuid = UUID.randomUUID().toString();
         Coupon coupon = Coupon.builder()
                 .userId(user.getId())
