@@ -35,7 +35,7 @@ public class S3ImageService {
 
     public S3UrlResponseDto getPreSignedUrl(Directory prefix, String fileName){
         this.validFileName(fileName);
-        String createFileName = String.format("%s/%s", prefix.getDomain(), this.createUuid() + fileName);
+        String createFileName = String.format("%s/%s", prefix.getPrefix(), this.createUuid() + fileName);
         String preSignedUrl = generateResignedUrlRequest(createFileName);
         return S3UrlResponseDto.builder()
                 .preSignedUrl(preSignedUrl)

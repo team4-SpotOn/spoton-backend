@@ -9,9 +9,9 @@ public enum Directory {
     POPUP_STORES("popup-store")
     ;
 
-    private final String domain;
+    private final String prefix;
 
-    Directory(String domain) {
-        this.domain = domain;
+    Directory(String prefix) {
+        this.prefix = prefix;
     }
 }
