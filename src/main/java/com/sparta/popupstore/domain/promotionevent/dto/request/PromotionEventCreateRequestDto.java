@@ -24,9 +24,9 @@ public class PromotionEventCreateRequestDto {
     @Positive(message = "쿠폰 만료기간은 하루 미만일 수 없습니다.")
     @Max(value = 30, message = "쿠폰 만료기간은 30일을 초과할 수 없습니다.")
     private int couponExpirationPeriod;
-    @NotNull(message = "이벤트 시작일은 공백일 수 없습니다.")
+    @NotNull(message = "이벤트 시작 시각은 공백일 수 없습니다.")
     private LocalDateTime startDateTime;
-    @NotNull(message = "이벤트 종료일은 공백일 수 없습니다.")
+    @NotNull(message = "이벤트 종료 시각은 공백일 수 없습니다.")
     private LocalDateTime endDateTime;
     private String imageUrl;
 

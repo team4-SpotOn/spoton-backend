@@ -28,24 +28,25 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
-@Tag(name = "PopupStore", description = "팝업스토어 관련 api")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "팝업스토어 API", description = "팝업스토어 CRUD API")
 @RequestMapping("/popupstores")
 public class PopupStoreController {
 
     private final PopupStoreService popupStoreService;
 
-    @Operation(summary = "회사 - 팝업스토어 생성")
+    @Operation(summary = "팝업스토어 생성")
     @Parameter(name = "name", description = "팝업스토어 명")
-    @Parameter(name = "content", description = "팝업스토어 내용")
-    @Parameter(name = "price", description = "팝업스토어 가격")
-    @Parameter(name = "address", description = "팝업스토어 주소")
     @Parameter(name = "startDate", description = "팝업스토어 시작일")
     @Parameter(name = "endDate", description = "팝업스토어 종료일")
-    @Parameter(name = "startTime", description = "팝업스토어 개장시간")
-    @Parameter(name = "endTime", description = "팝업스토어 폐장시간")
-    @Parameter(name = "images", description = "이미지 명과 이미지 순서가 들어있는 List Dto")
+    @Parameter(name = "contents", description = "팝업스토어 내용")
+    @Parameter(name = "price", description = "팝업스토어 가격")
+    @Parameter(name = "address", description = "팝업스토어 주소")
+    @Parameter(name = "imageList", description = "이미지 저장된 경로와 이미지 순서 List Dto")
+    @Parameter(name = "operatingList", description = "팝업스토어 운영 시간 List Dto")
+    @Parameter(name = "attributeList", description = "팝업스토어 특성 List Dto")
+    @Parameter(name = "company", description = "로그인한 회사")
     @PostMapping
     public ResponseEntity<PopupStoreCreateResponseDto> createPopupStore(
             @AuthCompany Company company,
@@ -56,7 +57,8 @@ public class PopupStoreController {
                 .body(popupStoreService.createPopupStore(company, requestDto));
     }
 
-    @Operation(summary = "전체 - 팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
+    @Operation(summary = "팝업 스토어 단건 조회", description = "팝업스토어 단건조회(상세보기)")
+    @Parameter(name = "popupStoreId", description = "조회할 팝업스토어 기본키")
     @GetMapping("/{popupStoreId}")
     public ResponseEntity<PopupStoreGetOneResponseDto> getPopupStoreOne(
             @PathVariable Long popupStoreId,
@@ -70,7 +72,7 @@ public class PopupStoreController {
     }
 
     // 팝업스토어 전체목록 지도용
-    @Operation(summary = "임시 팝업 전제조회(지도용)", description = "지도 팝업스토어 전체목록")
+    @Operation(summary = "임시 팝업 전체조회(지도용)", description = "지도 팝업스토어 전체목록")
     @GetMapping
     public ResponseEntity<List<PopupStoreSearchResponseDto>> getPopupStoreAll() {
         return ResponseEntity
@@ -79,7 +81,7 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "현재 날짜 기준 진행중, 시작예정, 종료된 팝업스토어 조회", description = "현재 날짜 기준 진행중, 시작예정, 종료된 팝업스토어 조회")
-    @Parameter(name = "page", description = "현재 페이지 번호")
+    @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 사이즈")
     @Parameter(name = "popupStoreStatus", description = "ALL, OPEN, CLOSE, SCHEDULE / 전체, 진행중, 종료된, 시작 예정")
     @GetMapping("/search/{popupStoreStatus}")
@@ -87,22 +89,24 @@ public class PopupStoreController {
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
             @PathVariable PopupStoreStatus popupStoreStatus
-            ){
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(popupStoreService.getPopupStoreByStatus(page, size, popupStoreStatus));
     }
 
-    @Operation(summary = "회사 - 팝업 스토어 수정")
+    @Operation(summary = "팝업 스토어 수정")
     @Parameter(name = "name", description = "수정할 팝업스토어 명")
-    @Parameter(name = "content", description = "수정할 팝업스토어 내용")
-    @Parameter(name = "price", description = "수정할 팝업스토어 가격")
-    @Parameter(name = "address", description = "수정할 팝업스토어 주소")
     @Parameter(name = "startDate", description = "수정할 팝업스토어 시작일")
     @Parameter(name = "endDate", description = "수정할 팝업스토어 종료일")
-    @Parameter(name = "startTime", description = "수정할 팝업스토어 개장시간")
-    @Parameter(name = "endTime", description = "수정할 팝업스토어 폐장시간")
-    @Parameter(name = "images", description = "수정할 이미지 명과 이미지 순서가 들어있는 List Dto")
+    @Parameter(name = "contents", description = "수정할 팝업스토어 내용")
+    @Parameter(name = "price", description = "수정할 팝업스토어 가격")
+    @Parameter(name = "address", description = "수정할 팝업스토어 주소")
+    @Parameter(name = "imageList", description = "수정할 이미지 저장된 경로와 이미지 순서 List Dto")
+    @Parameter(name = "operatingList", description = "수정할 팝업스토어 운영 시간 List Dto")
+    @Parameter(name = "attributeList", description = "수정할 팝업스토어 특성 List Dto")
+    @Parameter(name = "popupStoreId", description = "수정할 팝업 스토어 기본키")
+    @Parameter(name = "company", description = "로그인한 회사")
     @PatchMapping("/{popupStoreId}")
     public ResponseEntity<PopupStoreUpdateResponseDto> updatePopupStore(
             @PathVariable Long popupStoreId,
@@ -114,9 +118,9 @@ public class PopupStoreController {
                 .body(popupStoreService.updatePopupStore(popupStoreId, company, requestDto));
     }
 
-    @Operation(summary = "회사 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
+    @Operation(summary = "팝업스토어 삭제")
     @Parameter(name = "company", description = "로그인한 회사")
-    @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호")
+    @Parameter(name = "popupStoreId", description = "삭제할 팝업 스토어 기본키")
     @DeleteMapping("/{popupStoreId}")
     public ResponseEntity<Void> deletePopupStore(
             @AuthCompany Company company,
@@ -128,15 +132,17 @@ public class PopupStoreController {
                 .build();
     }
 
-    @Operation(summary = "팝업스토어 날짜별로 조회", description = "팝업스토어를 1주, 2주, 한달 간격으로 조회합니다.")
-    @Parameter(name = "startDate", description = "팝업스토어 시작일")
-    @Parameter(name = "endDate", description = "팝업스토어 종료일")
+    @Operation(summary = "팝업스토어 날짜별 조회", description = "시작일과 종료일 사이에 운영하는 팝업스토어를 조회합니다.")
+    @Parameter(name = "startDate", description = "시작일")
+    @Parameter(name = "endDate", description = "종료일")
+    @Parameter(name = "page", description = "페이지 번호")
+    @Parameter(name = "size", description = "페이지 사이즈")
     @GetMapping("/period")
     public ResponseEntity<List<PopupStoreSearchResponseDto>> findStorePeriod(
-            @RequestParam LocalDate startDate, @RequestParam LocalDate endDate,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate,
             @RequestParam(name = "page", required = false, defaultValue = "1") Long page,
-            @RequestParam(name = "size", required = false, defaultValue = "10") Long size)
-    {
+            @RequestParam(name = "size", required = false, defaultValue = "10") Long size) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(popupStoreService.findStorePeriod(startDate, endDate, page, size));

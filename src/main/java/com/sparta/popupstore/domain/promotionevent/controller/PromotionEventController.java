@@ -14,16 +14,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Tag(name = "PromotionEvents", description = "프로모션 이벤트 관련 API")
 @RequiredArgsConstructor
+@Tag(name = "PromotionEvents", description = "프로모션 이벤트 관련 API")
 @RequestMapping("/promotionEvents")
 public class PromotionEventController {
 
     private final PromotionEventService promotionEventService;
 
-    @Operation(summary = "프로모션 이벤트 다건 조회", description = "현재 등록되어 있는 이벤트들을 보여줍니다. pageNum 과 pageSize 는 default 값이 각각 1과 10입니다.")
-    @Parameter(name = "pageNum", description = "현재 페이지 번호")
-    @Parameter(name = "pageSize", description = "한 페이지에서 볼 이벤트 갯수")
+    @Operation(summary = "프로모션 이벤트 다건 조회", description = "현재 등록되어 있는 이벤트들을 보여줍니다.")
+    @Parameter(name = "page", description = "페이지 번호")
+    @Parameter(name = "size", description = "페이지 사이즈")
     @GetMapping
     public ResponseEntity<Page<PromotionEventFindAllResponseDto>> findAllPromotionalEvents(
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
@@ -33,6 +33,8 @@ public class PromotionEventController {
     }
 
     @Operation(summary = "프로모션 이벤트 쿠폰 신청 및 발급")
+    @Parameter(name = "promotionEventId", description = "쿠폰을 발급할 프로모션 이벤트의 기본키")
+    @Parameter(name = "user", description = "로그인한 유저")
     @PostMapping("/{promotionEventId}/coupons")
     public ResponseEntity<CouponCreateResponseDto> couponApplyAndIssuance(
             @PathVariable(name = "promotionEventId") Long promotionEventId,

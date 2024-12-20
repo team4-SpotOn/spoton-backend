@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "회사 API", description = "회사 계정의 회원 가입 로그인 및 마이페이지 등의 API.")
 @RequestMapping("/companies")
 public class CompanyController {
 
@@ -41,7 +43,6 @@ public class CompanyController {
     @Parameter(name = "password", description = "계정 비밀번호")
     @Parameter(name = "ceoName", description = "ceo 이름")
     @Parameter(name = "name", description = "회사명")
-    @Parameter(name = "address", description = "회사 주소")
     @Parameter(name = "phone", description = "회사 전화번호")
     @Parameter(name = "website", description = "회사 사이트")
     @Parameter(name = "businessLicense", description = "사업자 등록 번호")
@@ -100,6 +101,9 @@ public class CompanyController {
 
 
     @Operation(summary = "회사 정보 수정", description = "회사 정보 수정")
+    @Parameter(name = "ceoName", description = "ceo 이름")
+    @Parameter(name = "phone", description = "회사 전화번호")
+    @Parameter(name = "website", description = "회사 사이트")
     @PatchMapping
     public ResponseEntity<CompanyUpdateResponseDto> updateCompany(
             @AuthCompany Company company,
@@ -111,6 +115,7 @@ public class CompanyController {
     }
 
     @Operation(summary = "회사 회원 탈퇴", description = "회사 회원 탈퇴")
+    @Parameter(name = "password", description = "계정 비밀번호")
     @DeleteMapping
     public ResponseEntity<Void> deleteCompany(
             @AuthCompany Company company,

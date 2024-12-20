@@ -63,6 +63,7 @@ public class CompanyService {
 
     public CompanyUpdateResponseDto updateCompany(Company company, CompanyUpdateRequestDto requestDto) {
         company.update(
+                requestDto.getCeoName(),
                 requestDto.getPhone(),
                 requestDto.getWebsite()
         );

@@ -7,6 +7,7 @@ import com.sparta.popupstore.domain.oauth2.service.OAuth2SigninService;
 import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.jwt.JwtUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +19,15 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "소셜 로그인 API", description = "소셜 로그인과 유저 정보 요청을 위한 API")
+@RequestMapping("/oauth2")
 public class OAuth2SigninController {
 
     private final OAuth2SigninService oAuth2SigninService;
     private final JwtUtil jwtUtil;
     private static final String VALID_PHONE_URL = "http://localhost:8080/oAuth2CallbackPhoneNumber.html";
 
-    @GetMapping("/oauth2/signin/{platform}")
+    @GetMapping("/signin/{platform}")
     public ResponseEntity<Void> redirectSigninPage(
             @PathVariable OAuth2Platform platform,
             HttpServletResponse response
@@ -36,7 +39,7 @@ public class OAuth2SigninController {
                 .build();
     }
 
-    @GetMapping("/oauth2/callback/{platform}")
+    @GetMapping("/callback/{platform}")
     public ResponseEntity<Void> callback(
             @PathVariable OAuth2Platform platform,
             @RequestParam(name = "code") String authorizationCode,
@@ -52,7 +55,7 @@ public class OAuth2SigninController {
                 .build();
     }
 
-    @PostMapping("/oAuth2/phone-number")
+    @PostMapping("/phone-number")
     public ResponseEntity<Void> validPhone(
             @AuthSocialUser SocialUser socialUser,
             @Valid @RequestBody ValidPhoneRequestDto requestDto,
@@ -65,7 +68,7 @@ public class OAuth2SigninController {
                 .build();
     }
 
-    @GetMapping("/oauth2/callback/{platform}/token")
+    @GetMapping("/callback/{platform}/token")
     public ResponseEntity<String> getAccessToken(
             @PathVariable OAuth2Platform platform,
             @RequestParam(name = "code") String authorizationCode

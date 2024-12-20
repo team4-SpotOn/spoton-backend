@@ -19,6 +19,7 @@ import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService
 import com.sparta.popupstore.jwt.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "관리자 API", description = "관리자 계정의 회원가입 로그인 및 관리자 권한이 필요한 API.")
 @RequestMapping("/admins")
 public class AdminController {
 
@@ -68,15 +70,15 @@ public class AdminController {
     }
 
     @Operation(summary = "관리자 - 팝업 스토어 수정")
-    @Parameter(name = "name", description = "수정할 팝업스토어 명")
-    @Parameter(name = "content", description = "수정할 팝업스토어 내용")
-    @Parameter(name = "price", description = "수정할 팝업스토어 가격")
-    @Parameter(name = "address", description = "수정할 팝업스토어 주소")
-    @Parameter(name = "startDate", description = "수정할 팝업스토어 시작일")
-    @Parameter(name = "endDate", description = "수정할 팝업스토어 종료일")
-    @Parameter(name = "startTime", description = "수정할 팝업스토어 개장시간")
-    @Parameter(name = "endTime", description = "수정할 팝업스토어 폐장시간")
-    @Parameter(name = "images", description = "수정할 이미지 명과 이미지 순서가 들어있는 List Dto")
+    @Parameter(name = "name", description = "팝업스토어 명")
+    @Parameter(name = "startDate", description = "팝업스토어 시작일")
+    @Parameter(name = "endDate", description = "팝업스토어 종료일")
+    @Parameter(name = "contents", description = "팝업스토어 내용")
+    @Parameter(name = "price", description = "팝업스토어 가격")
+    @Parameter(name = "address", description = "팝업스토어 주소")
+    @Parameter(name = "imageList", description = "이미지 저장된 경로와 이미지 순서 List Dto")
+    @Parameter(name = "operatingList", description = "팝업스토어 운영 시간 List Dto")
+    @Parameter(name = "attributeList", description = "팝업스토어 특성 List Dto")
     @CheckAdmin
     @PatchMapping("/popupstores/{popupStoreId}")
     public ResponseEntity<PopupStoreUpdateResponseDto> adminUpdatePopupStore(
@@ -89,7 +91,6 @@ public class AdminController {
     }
 
     @Operation(summary = "관리자 - 팝업스토어 삭제", description = "popupStoreId에 해당하는 팝업스토어를 삭제합니다.")
-    @Parameter(name = "user", description = "로그인한 관리자")
     @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호")
     @CheckAdmin
     @DeleteMapping("/popupstores/{popupStoreId}")
@@ -108,10 +109,10 @@ public class AdminController {
     @Parameter(name = "discountPercentage", description = "할인 율")
     @Parameter(name = "totalCount", description = "총 쿠폰의 갯수")
     @Parameter(name = "couponExpirationPeriod", description = "쿠폰 만료 기간")
-    @Parameter(name = "startTime", description = "시작일")
-    @Parameter(name = "endTime", description = "종료일")
+    @Parameter(name = "startDateTime", description = "시작 시각")
+    @Parameter(name = "endDateTime", description = "종료 시각")
     @Parameter(name = "imageUrl", description = "이미지 저장된 경로")
-    @Parameter(name = "popupStoreId", description = "팝업 스토어 고유번호 / 만약 전체를 대상으로 진행하는 이벤트 일 시 팝업스토어 고유번호는 생략")
+    @Parameter(name = "popupStoreId", description = "이벤트 대상 팝업 스토어 고유번호 / 전체를 대상으로 진행하는 이벤트 일 시 null")
     @CheckAdmin
     @PostMapping("/promotionEvents")
     public ResponseEntity<PromotionEventCreateResponseDto> createEvent(
@@ -124,6 +125,7 @@ public class AdminController {
     }
 
     @Operation(summary = "프로모션 이벤트 단건 조회")
+    @Parameter(name = "promotionEventId", description = "조회 할 프로모션 이벤트의 기본키")
     @GetMapping("/promotionEvents/{promotionEventId}")
     public ResponseEntity<PromotionEventFindOneResponseDto> findOnePromotionalEvent(
             @PathVariable(name = "promotionEventId") Long promotionEventId
@@ -139,9 +141,10 @@ public class AdminController {
     @Parameter(name = "discountPercentage", description = "할인 율")
     @Parameter(name = "totalCount", description = "총 쿠폰의 갯수")
     @Parameter(name = "couponExpirationPeriod", description = "쿠폰 만료 기간")
-    @Parameter(name = "startTime", description = "시작일")
-    @Parameter(name = "endTime", description = "종료일")
+    @Parameter(name = "startDateTime", description = "시작 시각")
+    @Parameter(name = "endDateTime", description = "종료 시각")
     @Parameter(name = "imageUrl", description = "이미지 저장된 경로")
+    @Parameter(name = "promotionEventId", description = "수정할 프로모션 이벤트의 기본키")
     @CheckAdmin
     @PatchMapping("/promotionEvents/{promotionEventId}")
     public ResponseEntity<PromotionEventUpdateResponseDto> updateEvent(
@@ -155,6 +158,7 @@ public class AdminController {
 
     @Operation(summary = "프로모션 이벤트 삭제")
     @CheckAdmin
+    @Parameter(name = "promotionEventId", description = "삭제할 프로모션 이벤트의 기본키")
     @DeleteMapping("/promotionEvents/{promotionEventId}")
     public ResponseEntity<Void> deleteEvent(
             @PathVariable(name = "promotionEventId") Long promotionEventId

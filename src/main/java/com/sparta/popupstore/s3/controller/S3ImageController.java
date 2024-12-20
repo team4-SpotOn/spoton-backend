@@ -24,12 +24,13 @@ public class S3ImageController {
     private final S3ImageService imageService;
 
     @Operation(summary = "리뷰 & 프로모션 이벤트 이미지 preSignedUrl 발급")
+    @Parameter(name = "directory", description = "이미지 저장 경로")
     @Parameter(name = "fileName", description = "파일명")
     @GetMapping("/{directory}/images/preassigned")
     public ResponseEntity<S3UrlResponseDto> getReviewAndPromotionEventImagePreSignedUrl(
             @PathVariable Directory directory,
             @RequestBody @Valid ImageRequestDto imageRequestDto
-    ){
+    ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(imageService.getPreSignedUrl(directory, imageRequestDto.getFileName()));
@@ -40,7 +41,7 @@ public class S3ImageController {
     @GetMapping("/popup-stores/images/preassigned")
     public ResponseEntity<List<S3UrlResponseDto>> getPopupStoreImagePreSignedUrl(
             @RequestBody @NotEmpty(message = "이미지를 하나이상 올려주세요") List<ImageRequestDto> imageRequestDtoList
-    ){
+    ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(imageService.getPreSignedUrls(Directory.POPUP_STORES, imageRequestDtoList));
@@ -51,8 +52,10 @@ public class S3ImageController {
     @DeleteMapping("/images")
     public ResponseEntity<Void> deleteImage(
             @RequestBody ImageRequestDto imageRequestDto
-    ){
+    ) {
         imageService.deleteImage(imageRequestDto.getFileName());
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }
