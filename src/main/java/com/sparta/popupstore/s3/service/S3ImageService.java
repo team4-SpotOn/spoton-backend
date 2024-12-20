@@ -31,6 +31,7 @@ public class S3ImageService {
     @Value("${cloud.aws.url}")
     private String baseUrl;
 
+
     public S3UrlResponseDto getPreSignedUrl(String prefix, String fileName){
         this.validFileName(fileName);
         String createFileName = String.format("%s/%s", prefix, this.createUuid() + fileName);
