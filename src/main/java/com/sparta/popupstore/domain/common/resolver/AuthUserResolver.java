@@ -1,4 +1,4 @@
-package com.sparta.popupstore.config;
+package com.sparta.popupstore.domain.common.resolver;
 
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;

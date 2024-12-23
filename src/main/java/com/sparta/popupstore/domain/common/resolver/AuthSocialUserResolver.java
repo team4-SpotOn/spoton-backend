@@ -1,10 +1,12 @@
-package com.sparta.popupstore.config;
+package com.sparta.popupstore.domain.common.resolver;
 
-import com.sparta.popupstore.domain.common.annotation.AuthCompany;
+import com.sparta.popupstore.domain.common.annotation.AuthSocialUser;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.domain.company.entity.Company;
-import com.sparta.popupstore.domain.company.repository.CompanyRepository;
+import com.sparta.popupstore.domain.common.converter.OAuth2PlatformConverter;
+import com.sparta.popupstore.domain.oauth2.entity.SocialUser;
+import com.sparta.popupstore.domain.oauth2.repository.SocialUserRepository;
+import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
 import com.sparta.popupstore.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
@@ -18,15 +20,16 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 @RequiredArgsConstructor
-public class AuthCompanyResolver implements HandlerMethodArgumentResolver {
+public class AuthSocialUserResolver implements HandlerMethodArgumentResolver {
 
-    private final CompanyRepository companyRepository;
+    private final SocialUserRepository socialUserRepository;
+    private final OAuth2PlatformConverter oAuth2PlatformConverter;
     private final JwtUtil jwtUtil;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(AuthCompany.class)
-                && parameter.getParameterType().equals(Company.class);
+        return parameter.hasParameterAnnotation(AuthSocialUser.class)
+                && parameter.getParameterType().equals(SocialUser.class);
     }
 
     @Override
@@ -36,9 +39,13 @@ public class AuthCompanyResolver implements HandlerMethodArgumentResolver {
             @NonNull NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
     ) {
-        Claims companyInfo = jwtUtil.getInfoFromWebRequest(webRequest);
+        Claims socialUserInfo = jwtUtil.getInfoFromWebRequest(webRequest);
 
-        return companyRepository.findByEmailAndDeletedAtIsNull(companyInfo.getSubject())
+        String providerId = socialUserInfo.getSubject();
+        OAuth2Platform platform = oAuth2PlatformConverter.convert(
+                (String) socialUserInfo.get(JwtUtil.OAUTH2_PLATFORM_KEY)
+        );
+        return socialUserRepository.findByPlatformAndPlatformId(platform, providerId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.NEED_LOGIN));
     }
 }

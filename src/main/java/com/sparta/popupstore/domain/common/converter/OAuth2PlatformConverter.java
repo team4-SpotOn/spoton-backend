@@ -1,4 +1,4 @@
-package com.sparta.popupstore.domain.oauth2.controller.converter;
+package com.sparta.popupstore.domain.common.converter;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;

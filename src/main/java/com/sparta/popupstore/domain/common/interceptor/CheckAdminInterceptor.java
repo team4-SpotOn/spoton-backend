@@ -1,4 +1,4 @@
-package com.sparta.popupstore.config;
+package com.sparta.popupstore.domain.common.interceptor;
 
 import com.sparta.popupstore.domain.admin.type.AdminRole;
 import com.sparta.popupstore.domain.common.annotation.CheckAdmin;

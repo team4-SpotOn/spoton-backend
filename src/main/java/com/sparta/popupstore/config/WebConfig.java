@@ -1,7 +1,11 @@
 package com.sparta.popupstore.config;
 
-import com.sparta.popupstore.domain.oauth2.controller.converter.OAuth2PlatformConverter;
-import com.sparta.popupstore.domain.popupstore.controller.converter.PopupStoreSearchTypeConverter;
+import com.sparta.popupstore.domain.common.interceptor.CheckAdminInterceptor;
+import com.sparta.popupstore.domain.common.resolver.AuthCompanyResolver;
+import com.sparta.popupstore.domain.common.resolver.AuthSocialUserResolver;
+import com.sparta.popupstore.domain.common.resolver.AuthUserResolver;
+import com.sparta.popupstore.domain.common.converter.OAuth2PlatformConverter;
+import com.sparta.popupstore.domain.common.converter.PopupStoreSearchTypeConverter;
 import com.sparta.popupstore.s3.controller.converter.S3DirectoryConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
