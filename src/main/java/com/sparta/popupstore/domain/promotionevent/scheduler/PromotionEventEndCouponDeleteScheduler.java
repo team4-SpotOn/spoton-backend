@@ -2,7 +2,7 @@ package com.sparta.popupstore.domain.promotionevent.scheduler;
 
 import com.sparta.popupstore.domain.common.util.ValidUtil;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
-import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
+import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
 import com.sparta.popupstore.s3.service.S3ImageService;
 import lombok.RequiredArgsConstructor;

@@ -1,11 +1,11 @@
-package com.sparta.popupstore.domain.promotionevent.service;
+package com.sparta.popupstore.domain.coupon.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
-import com.sparta.popupstore.domain.promotionevent.entity.CouponStatus;
+import com.sparta.popupstore.domain.coupon.entity.Coupon;
+import com.sparta.popupstore.domain.coupon.enums.CouponStatus;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
-import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
+import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

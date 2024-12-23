@@ -1,7 +1,7 @@
 package com.sparta.popupstore.domain.promotionevent.controller;
 
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
-import com.sparta.popupstore.domain.promotionevent.dto.response.CouponCreateResponseDto;
+import com.sparta.popupstore.domain.coupon.dto.response.CouponCreateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindAllResponseDto;
 import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.domain.user.entity.User;

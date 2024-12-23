@@ -1,4 +1,4 @@
-package com.sparta.popupstore.domain.promotionevent.entity;
+package com.sparta.popupstore.domain.coupon.enums;
 
 public enum CouponStatus {
     ISSUED, // 발급

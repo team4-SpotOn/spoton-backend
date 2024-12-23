@@ -3,12 +3,14 @@ package com.sparta.popupstore.domain.promotionevent.service;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.common.util.ValidUtil;
+import com.sparta.popupstore.domain.coupon.dto.response.CouponCreateResponseDto;
+import com.sparta.popupstore.domain.coupon.service.CouponService;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.*;
-import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
+import com.sparta.popupstore.domain.coupon.entity.Coupon;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
 import com.sparta.popupstore.domain.user.entity.User;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -101,7 +104,7 @@ public class PromotionEventService {
         if(promotionEvent.getEndDateTime().isBefore(LocalDateTime.now())){
             throw new CustomApiException(ErrorCode.PROMOTION_EVENT_END);
         }
-        if(promotionEvent.getCouponGetCount() == promotionEvent.getTotalCount()){
+        if(Objects.equals(promotionEvent.getCouponGetCount(), promotionEvent.getTotalCount())){
             throw new CustomApiException(ErrorCode.COUPON_SOLD_OUT);
         }
         Coupon coupon = couponService.createCoupon(promotionEvent, user);

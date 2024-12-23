@@ -1,5 +1,7 @@
-package com.sparta.popupstore.domain.promotionevent.entity;
+package com.sparta.popupstore.domain.coupon.entity;
 
+import com.sparta.popupstore.domain.coupon.enums.CouponStatus;
+import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

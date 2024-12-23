@@ -1,6 +1,6 @@
-package com.sparta.popupstore.domain.promotionevent.repository;
+package com.sparta.popupstore.domain.coupon.repository;
 
-import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
+import com.sparta.popupstore.domain.coupon.entity.Coupon;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
