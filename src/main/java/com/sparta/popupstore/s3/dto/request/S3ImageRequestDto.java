@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class ImageRequestDto {
+public class S3ImageRequestDto {
     @NotBlank(message = "업로드할 파일 명을 제대로 입력해주세요.")
     private String fileName;
 }

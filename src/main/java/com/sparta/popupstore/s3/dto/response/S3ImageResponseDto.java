@@ -5,14 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class S3UrlResponseDto {
+public class S3ImageResponseDto {
     @Schema(description = "preSignedUrl")
     private final String preSignedUrl;
     @Schema(description = "preSignedUrl 을 통해 이미지가 저장될 경로")
     private final String imageUrl;
 
     @Builder
-    public S3UrlResponseDto(String preSignedUrl, String imageUrl) {
+    public S3ImageResponseDto(String preSignedUrl, String imageUrl) {
         this.preSignedUrl = preSignedUrl;
         this.imageUrl = imageUrl;
     }
