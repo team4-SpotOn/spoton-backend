@@ -1,13 +1,13 @@
 package com.sparta.popupstore.domain.promotionevent.dto.request;
 
-import com.sparta.popupstore.domain.common.annotation.StartAndDateTimeCheck;
+import com.sparta.popupstore.domain.common.annotation.StartAndEndDateTimeCheck;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-@StartAndDateTimeCheck(startDateTime = "startDateTime", endDateTime = "endDateTime")
+@StartAndEndDateTimeCheck(startDateTime = "startDateTime", endDateTime = "endDateTime")
 public class PromotionEventUpdateRequestDto {
     @NotBlank(message = "제목을 입력해주세요")
     private String title;
