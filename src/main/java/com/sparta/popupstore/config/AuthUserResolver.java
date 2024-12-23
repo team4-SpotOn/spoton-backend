@@ -7,7 +7,6 @@ import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
 import com.sparta.popupstore.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -34,15 +33,11 @@ public class AuthUserResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(
             @NonNull MethodParameter parameter,
             ModelAndViewContainer mavContainer,
-            NativeWebRequest webRequest,
+            @NonNull NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
     ) {
-        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-        if(request == null) {
-            throw new CustomApiException(ErrorCode.NEED_LOGIN);
-        }
+        Claims userInfo = jwtUtil.getInfoFromWebRequest(webRequest);
 
-        Claims userInfo = jwtUtil.getInfoFromRequest(request);
         return userRepository.findByEmailAndDeletedAtIsNull(userInfo.getSubject())
                 .orElseThrow(() -> new CustomApiException(ErrorCode.NEED_LOGIN));
     }
