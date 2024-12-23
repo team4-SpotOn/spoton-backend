@@ -1,7 +1,7 @@
-package com.sparta.popupstore.domain.popupstore.dto.response;
+package com.sparta.popupstore.domain.popupstore.bundle.dto.response;
 
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttribute;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttributeEnum;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreAttribute;
+import com.sparta.popupstore.domain.popupstore.bundle.enums.PopupStoreAttributeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 

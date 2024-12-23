@@ -1,8 +1,8 @@
-package com.sparta.popupstore.domain.popupstore.dto.request;
+package com.sparta.popupstore.domain.popupstore.bundle.dto.request;
 
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttribute;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttributeEnum;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreAttribute;
+import com.sparta.popupstore.domain.popupstore.bundle.enums.PopupStoreAttributeEnum;
 import lombok.Getter;
 
 @Getter

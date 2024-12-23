@@ -1,13 +1,13 @@
-package com.sparta.popupstore.domain.popupstore.service;
+package com.sparta.popupstore.domain.popupstore.bundle.service;
 
-import com.sparta.popupstore.domain.popupstore.dto.PopupStoreBundle;
-import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreAttributeRequestDto;
-import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreImageRequestDto;
-import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreOperatingRequestDto;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreBundle;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreAttributeRequestDto;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreImageRequestDto;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreOperatingRequestDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
-import com.sparta.popupstore.domain.popupstore.repository.PopupStoreAttributeRepository;
-import com.sparta.popupstore.domain.popupstore.repository.PopupStoreImageRepository;
-import com.sparta.popupstore.domain.popupstore.repository.PopupStoreOperatingRepository;
+import com.sparta.popupstore.domain.popupstore.bundle.repository.PopupStoreAttributeRepository;
+import com.sparta.popupstore.domain.popupstore.bundle.repository.PopupStoreImageRepository;
+import com.sparta.popupstore.domain.popupstore.bundle.repository.PopupStoreOperatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

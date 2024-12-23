@@ -1,6 +1,6 @@
-package com.sparta.popupstore.domain.popupstore.dto.response;
+package com.sparta.popupstore.domain.popupstore.bundle.dto.response;
 
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreImage;
 import lombok.Getter;
 
 @Getter

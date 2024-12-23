@@ -1,5 +1,7 @@
-package com.sparta.popupstore.domain.popupstore.entity;
+package com.sparta.popupstore.domain.popupstore.bundle.entity;
 
+import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.bundle.enums.PopupStoreAttributeEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,7 +26,8 @@ public class PopupStoreAttribute {
     private Boolean isAllow;
 
     @Builder
-    public PopupStoreAttribute(PopupStore popupStore, PopupStoreAttributeEnum attribute, Boolean isAllow) {
+    public PopupStoreAttribute(Long id, PopupStore popupStore, PopupStoreAttributeEnum attribute, Boolean isAllow) {
+        this.id = id;
         this.popupStore = popupStore;
         this.attribute = attribute;
         this.isAllow = isAllow;

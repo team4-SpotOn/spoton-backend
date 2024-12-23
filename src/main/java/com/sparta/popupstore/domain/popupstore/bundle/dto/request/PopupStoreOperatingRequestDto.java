@@ -1,7 +1,7 @@
-package com.sparta.popupstore.domain.popupstore.dto.request;
+package com.sparta.popupstore.domain.popupstore.bundle.dto.request;
 
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreOperating;
 import lombok.Getter;
 
 import java.time.DayOfWeek;

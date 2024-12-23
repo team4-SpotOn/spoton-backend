@@ -1,8 +1,5 @@
-package com.sparta.popupstore.domain.popupstore.dto;
+package com.sparta.popupstore.domain.popupstore.bundle.entity;
 
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttribute;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

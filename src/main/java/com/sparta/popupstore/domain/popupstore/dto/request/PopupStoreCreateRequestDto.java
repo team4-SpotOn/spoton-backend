@@ -2,6 +2,9 @@ package com.sparta.popupstore.domain.popupstore.dto.request;
 
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.company.entity.Company;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreAttributeRequestDto;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreImageRequestDto;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreOperatingRequestDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;

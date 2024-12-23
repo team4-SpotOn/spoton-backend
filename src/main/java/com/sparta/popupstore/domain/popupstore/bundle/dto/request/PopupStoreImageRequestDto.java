@@ -1,7 +1,7 @@
-package com.sparta.popupstore.domain.popupstore.dto.request;
+package com.sparta.popupstore.domain.popupstore.bundle.dto.request;
 
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreImage;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

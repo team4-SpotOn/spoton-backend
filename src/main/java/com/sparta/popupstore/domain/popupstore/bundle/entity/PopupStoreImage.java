@@ -1,6 +1,7 @@
-package com.sparta.popupstore.domain.popupstore.entity;
+package com.sparta.popupstore.domain.popupstore.bundle.entity;
 
 
+import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
