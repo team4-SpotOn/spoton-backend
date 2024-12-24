@@ -1,10 +1,13 @@
 package com.sparta.popupstore.domain.popupstore.dto.response;
 
 import com.sparta.popupstore.domain.common.entity.Address;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.response.PopupStoreAttributeResponseDto;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.response.PopupStoreImageResponseDto;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.response.PopupStoreOperatingResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreAttribute;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreImage;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStoreOperating;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreAttribute;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreImage;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreOperating;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 

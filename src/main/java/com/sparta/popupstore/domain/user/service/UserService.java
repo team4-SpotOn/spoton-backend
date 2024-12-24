@@ -5,7 +5,7 @@ import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
-import com.sparta.popupstore.domain.promotionevent.repository.CouponRepository;
+import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
 import com.sparta.popupstore.domain.user.dto.request.UserDeleteRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;

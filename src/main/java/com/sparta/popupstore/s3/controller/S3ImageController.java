@@ -1,7 +1,7 @@
 package com.sparta.popupstore.s3.controller;
 
-import com.sparta.popupstore.s3.dto.request.ImageRequestDto;
-import com.sparta.popupstore.s3.dto.response.S3UrlResponseDto;
+import com.sparta.popupstore.s3.dto.request.S3ImageRequestDto;
+import com.sparta.popupstore.s3.dto.response.S3ImageResponseDto;
 import com.sparta.popupstore.s3.enums.Directory;
 import com.sparta.popupstore.s3.service.S3ImageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,9 +27,9 @@ public class S3ImageController {
     @Parameter(name = "directory", description = "이미지 저장 경로")
     @Parameter(name = "fileName", description = "파일명")
     @GetMapping("/{directory}/images/preassigned")
-    public ResponseEntity<S3UrlResponseDto> getReviewAndPromotionEventImagePreSignedUrl(
+    public ResponseEntity<S3ImageResponseDto> getReviewAndPromotionEventImagePreSignedUrl(
             @PathVariable Directory directory,
-            @RequestBody @Valid ImageRequestDto imageRequestDto
+            @RequestBody @Valid S3ImageRequestDto imageRequestDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -39,8 +39,8 @@ public class S3ImageController {
     @Operation(summary = "팝업스토어 이미지 preSignedUrl 발급")
     @Parameter(name = "fileName", description = "파일명")
     @GetMapping("/popup-stores/images/preassigned")
-    public ResponseEntity<List<S3UrlResponseDto>> getPopupStoreImagePreSignedUrl(
-            @RequestBody @NotEmpty(message = "이미지를 하나이상 올려주세요") List<ImageRequestDto> imageRequestDtoList
+    public ResponseEntity<List<S3ImageResponseDto>> getPopupStoreImagePreSignedUrl(
+            @RequestBody @NotEmpty(message = "이미지를 하나이상 올려주세요") List<S3ImageRequestDto> imageRequestDtoList
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -51,7 +51,7 @@ public class S3ImageController {
     @Parameter(name = "fileName", description = "파일명")
     @DeleteMapping("/images")
     public ResponseEntity<Void> deleteImage(
-            @RequestBody ImageRequestDto imageRequestDto
+            @RequestBody S3ImageRequestDto imageRequestDto
     ) {
         imageService.deleteImage(imageRequestDto.getFileName());
         return ResponseEntity

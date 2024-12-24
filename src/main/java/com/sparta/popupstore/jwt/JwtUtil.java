@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.NativeWebRequest;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -91,6 +92,15 @@ public class JwtUtil {
         Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token);
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+    public Claims getInfoFromWebRequest(NativeWebRequest webRequest) {
+        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+        if(request == null) {
+            throw new CustomApiException(ErrorCode.NEED_LOGIN);
+        }
+
+        return getInfoFromRequest(request);
     }
 
     public Claims getInfoFromRequest(HttpServletRequest request) {

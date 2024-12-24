@@ -1,7 +1,7 @@
 package com.sparta.popupstore.domain.user.dto.response;
 
 
-import com.sparta.popupstore.domain.promotionevent.entity.Coupon;
+import com.sparta.popupstore.domain.coupon.entity.Coupon;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 

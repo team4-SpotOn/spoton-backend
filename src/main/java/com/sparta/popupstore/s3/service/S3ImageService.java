@@ -9,8 +9,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.s3.dto.request.ImageRequestDto;
-import com.sparta.popupstore.s3.dto.response.S3UrlResponseDto;
+import com.sparta.popupstore.s3.dto.request.S3ImageRequestDto;
+import com.sparta.popupstore.s3.dto.response.S3ImageResponseDto;
 import com.sparta.popupstore.s3.enums.Directory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,17 +33,17 @@ public class S3ImageService {
     private String baseUrl;
 
 
-    public S3UrlResponseDto getPreSignedUrl(Directory prefix, String fileName){
+    public S3ImageResponseDto getPreSignedUrl(Directory prefix, String fileName){
         this.validFileName(fileName);
         String createFileName = String.format("%s/%s", prefix.getPrefix(), this.createUuid() + fileName);
         String preSignedUrl = generateResignedUrlRequest(createFileName);
-        return S3UrlResponseDto.builder()
+        return S3ImageResponseDto.builder()
                 .preSignedUrl(preSignedUrl)
                 .imageUrl(baseUrl +createFileName)
                 .build();
     }
 
-    public List<S3UrlResponseDto> getPreSignedUrls(Directory prefix, List<ImageRequestDto> imageRequestDtoList) {
+    public List<S3ImageResponseDto> getPreSignedUrls(Directory prefix, List<S3ImageRequestDto> imageRequestDtoList) {
         return imageRequestDtoList
                 .stream()
                 .map(image ->
