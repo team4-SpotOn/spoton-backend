@@ -15,8 +15,6 @@ public class PointChargeResponseDto {
   private final Integer prevPoint;
   @Schema(description = "충전 포인트")
   private final Integer chargedPoint;
-  @Schema(description = "쿠폰 시리얼 번호")
-  private final String serialNumber;
   @Schema(description = "충전 시간")
   protected LocalDateTime chargedAt;
 
@@ -25,7 +23,6 @@ public class PointChargeResponseDto {
     this.name = chargedLog.getUser().getName();
     this.prevPoint = chargedLog.getPrevPoint();
     this.chargedPoint = chargedLog.getChargedPoint();
-    this.serialNumber = chargedLog.getSerialNumber();
     this.chargedAt = chargedLog.getChargedAt();
   }
 }
