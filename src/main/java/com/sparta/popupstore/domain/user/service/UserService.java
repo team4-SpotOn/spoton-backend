@@ -4,8 +4,8 @@ import com.sparta.popupstore.config.PasswordEncoder;
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
 import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
+import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
 import com.sparta.popupstore.domain.user.dto.request.UserDeleteRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSigninRequestDto;
 import com.sparta.popupstore.domain.user.dto.request.UserSignupRequestDto;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -39,14 +38,12 @@ public class UserService {
         }
 
         // 핸드폰 번호 중복 검사
-        Long userId = null;
-        Optional<User> socialSignupUser = userRepository.findByPhone(requestDto.getPhone());
-        if(socialSignupUser.isPresent()) {
-            if(socialSignupUser.get().getEmail() != null) {
-                throw new CustomApiException(ErrorCode.ALREADY_EXIST_PHONE_NUMBER);
-            }
-            userId = socialSignupUser.get().getId();
+        User socialSignupUser = userRepository.findByPhone(requestDto.getPhone())
+                .orElseGet(() -> User.builder().build());
+        if(socialSignupUser.getEmail() != null) {
+            throw new CustomApiException(ErrorCode.ALREADY_EXIST_PHONE_NUMBER);
         }
+        Long userId = socialSignupUser.getId();
 
         // 카카오 주소 API - 위도 경도 구하기
         Address address = kakaoAddressService.getKakaoAddress(requestDto.getAddress());
