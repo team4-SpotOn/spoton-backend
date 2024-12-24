@@ -29,17 +29,20 @@ public class PromotionEventCreateRequestDto {
     @NotNull(message = "이벤트 종료 시각은 공백일 수 없습니다.")
     private LocalDateTime endDateTime;
     private String imageUrl;
+    private Long popupStoreId;
 
-    public PromotionEvent toEvent() {
+    public PromotionEvent toEntity() {
         return PromotionEvent.builder()
                 .title(this.title)
                 .description(this.description)
                 .discountPercentage(this.discountPercentage)
                 .totalCount(this.totalCount)
+                .couponGetCount(0)
                 .couponExpirationPeriod(this.couponExpirationPeriod)
                 .startDateTime(this.startDateTime)
                 .endDateTime(this.endDateTime)
                 .imageUrl(this.imageUrl)
+                .popupStoreId(this.popupStoreId)
                 .build();
     }
 }

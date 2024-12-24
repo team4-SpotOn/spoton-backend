@@ -10,6 +10,7 @@ import com.sparta.popupstore.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,7 @@ public class CouponService {
                 .promotionEvent(promotionEvent)
                 .serialNumber(uuid)
                 .couponStatus(CouponStatus.ISSUED)
+                .couponExpirationPeriod(LocalDate.now().plusDays(promotionEvent.getCouponExpirationPeriod()))
                 .build();
         return couponRepository.save(coupon);
     }

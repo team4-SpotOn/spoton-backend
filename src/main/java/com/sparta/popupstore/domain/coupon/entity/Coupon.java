@@ -34,13 +34,13 @@ public class Coupon {
     protected LocalDateTime createdAt;
 
     @Builder
-    public Coupon(Long userId, PromotionEvent promotionEvent, String serialNumber, Long couponId, CouponStatus couponStatus) {
-        this.id = couponId;
+    public Coupon(Long id, Long userId, PromotionEvent promotionEvent, String serialNumber, CouponStatus couponStatus, LocalDate couponExpirationPeriod) {
+        this.id = id;
         this.userId = userId;
         this.promotionEventId = promotionEvent.getId();
-        this.popupStoreId = promotionEvent.getPopupStore() != null ? promotionEvent.getPopupStore().getId() : null;
+        this.popupStoreId = promotionEvent.getPopupStoreId();
         this.serialNumber = serialNumber;
         this.couponStatus = couponStatus;
-        this.couponExpirationPeriod = LocalDate.now().plusDays(promotionEvent.getCouponExpirationPeriod());
+        this.couponExpirationPeriod = couponExpirationPeriod;
     }
 }

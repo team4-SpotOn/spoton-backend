@@ -2,8 +2,6 @@ package com.sparta.popupstore.domain.promotionevent.repository;
 
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import jakarta.persistence.LockModeType;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,9 +11,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PromotionEventRepository extends JpaRepository<PromotionEvent, Long> {
-    @Query("select p from PromotionEvent p left join fetch p.popupStore")
-    Page<PromotionEvent> findAllPromotionalEvents(Pageable pageable);
-
     @Modifying
     @Query("update PromotionEvent p set p.deletedAt = now() where p.id = :promotionEventId")
     void deletePromotionEvent(@Param("promotionEventId") Long promotionEventId);

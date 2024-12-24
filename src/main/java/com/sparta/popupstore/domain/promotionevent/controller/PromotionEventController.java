@@ -3,6 +3,7 @@ package com.sparta.popupstore.domain.promotionevent.controller;
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.coupon.dto.response.CouponCreateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindAllResponseDto;
+import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
 import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +43,16 @@ public class PromotionEventController {
             @AuthUser User user
     ) {
         return ResponseEntity.ok(promotionEventService.couponApplyAndIssuance(promotionEventId, user));
+    }
+
+    @Operation(summary = "프로모션 이벤트 단건 조회")
+    @Parameter(name = "promotionEventId", description = "조회 할 프로모션 이벤트의 기본키")
+    @GetMapping("/{promotionEventId}")
+    public ResponseEntity<PromotionEventFindOneResponseDto> findOnePromotionalEvent(
+            @PathVariable(name = "promotionEventId") Long promotionEventId
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(promotionEventService.findOnePromotionEvent(promotionEventId));
     }
 }
