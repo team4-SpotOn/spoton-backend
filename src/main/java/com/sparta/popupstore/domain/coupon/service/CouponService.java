@@ -31,6 +31,7 @@ public class CouponService {
         Coupon coupon = Coupon.builder()
                 .userId(user.getId())
                 .promotionEvent(promotionEvent)
+                .discountPercentage(promotionEvent.getDiscountPercentage())
                 .serialNumber(uuid)
                 .couponStatus(CouponStatus.ISSUED)
                 .couponExpirationPeriod(LocalDate.now().plusDays(promotionEvent.getCouponExpirationPeriod()))

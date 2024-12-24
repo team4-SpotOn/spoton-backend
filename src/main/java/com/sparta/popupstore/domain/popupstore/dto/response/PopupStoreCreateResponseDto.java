@@ -22,6 +22,8 @@ public class PopupStoreCreateResponseDto {
     private final String contents;
     @Schema(description = "생성된 팝업스토어 가격")
     private final Integer price;
+    @Schema(description = "생성된 팝업스토어 예약 가능 인원 수")
+    private final Integer reservationLimit;
     @Schema(description = "생성된 팝업스토어 썸네일")
     private final String thumbnail;
     @Schema(description = "생성된 팝업스토어 주소")
@@ -46,6 +48,7 @@ public class PopupStoreCreateResponseDto {
         this.name = popupStore.getName();
         this.contents = popupStore.getContents();
         this.price = popupStore.getPrice();
+        this.reservationLimit = popupStore.getReservationLimit();
         this.thumbnail = popupStore.getThumbnail();
         this.address = popupStore.getAddress();
         this.startDate = popupStore.getStartDate();

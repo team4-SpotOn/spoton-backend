@@ -16,7 +16,7 @@ public class PointUsedLogResponseDto {
   @Schema(description = "사용한 포인트")
   private final Integer usedPoint;
   @Schema(description = "쿠폰 시리얼 번호")
-  private final String serialNumber;
+  private final String couponSerialNumber;
   @Schema(description = "팝업스토어 아이디")
   private final Long popupStoreId;
   @Schema(description = "사용시간")
@@ -27,7 +27,7 @@ public class PointUsedLogResponseDto {
     this.name = usedLog.getUser().getName();
     this.prevPoint = usedLog.getPrevPoint();
     this.usedPoint = usedLog.getUsedPoint();
-    this.serialNumber = usedLog.getSerialNumber();
+    this.couponSerialNumber = usedLog.getCouponSerialNumber();
     this.usedAt = usedLog.getUsedAt();
     this.popupStoreId = usedLog.getPopupStoreId();
   }
