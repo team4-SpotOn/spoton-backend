@@ -38,10 +38,11 @@ public class ReservationService {
             throw new CustomApiException(ErrorCode.POPUP_STORE_CAN_NOT_RESERVATION);
         }
 
-        if(user.getPoint() < popupStore.getPrice()) {
+        int amount = popupStore.getPrice() * requestDto.getNumber();
+        if(user.getPoint() < amount) {
             throw new CustomApiException(ErrorCode.INSUFFICIENT_POINTS);
         }
-        user.decreasePoint(popupStore.getPrice());
+        user.decreasePoint(amount);
 
         Reservation reservation = reservationRepository.save(requestDto.toEntity(user, popupStore));
         return new ReservationCreateResponseDto(reservation);

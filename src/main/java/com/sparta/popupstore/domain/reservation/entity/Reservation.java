@@ -31,17 +31,18 @@ public class Reservation {
     private PopupStore popupStore;
 
     private LocalDateTime reservationAt;
+    private Integer number;
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdAt; // 생성일이 예약일이므로 Response 때 보여줘야 함
+    private LocalDateTime createdAt;
 
     @Builder
-    public Reservation(Long id, User user, PopupStore popupStore, LocalDateTime reservationAt, LocalDateTime createdAt) {
+    public Reservation(Long id, User user, PopupStore popupStore, LocalDateTime reservationAt, Integer number) {
         this.id = id;
         this.user = user;
         this.popupStore = popupStore;
         this.reservationAt = reservationAt;
-        this.createdAt = createdAt;
+        this.number = number;
     }
 }

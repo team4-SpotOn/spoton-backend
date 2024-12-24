@@ -19,6 +19,8 @@ public class PopupStoreSearchResponseDto {
     private final Integer view;
     @Schema(description = "팝업스토어 입장료")
     private final Integer price;
+    @Schema(description = "예약 가능 인원 수")
+    private final Integer reservationLimit;
     @Schema(description = "팝업스토어 내용")
     private final String contents;
     @Schema(description = "팝업스토어 주소")
@@ -34,6 +36,7 @@ public class PopupStoreSearchResponseDto {
         this.endDate = popupStore.getEndDate();
         this.view = popupStore.getView();
         this.price = popupStore.getPrice();
+        this.reservationLimit = popupStore.getReservationLimit();
         this.contents = popupStore.getContents();
         this.address = popupStore.getAddress();
         this.thumbnail = popupStore.getThumbnail();

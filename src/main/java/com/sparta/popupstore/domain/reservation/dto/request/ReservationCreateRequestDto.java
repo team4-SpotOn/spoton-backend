@@ -14,12 +14,15 @@ public class ReservationCreateRequestDto {
     @NotNull(message = "예약 시간을 입력해주세요.")
     private LocalDateTime reservationAt;
     @NotNull(message = "예약 인원 수를 입력해주세요.")
+    @Positive(message = "예약 인원 수는 자연수 여야 합니다.")
+    private Integer number;
 
     public Reservation toEntity(User user, PopupStore popupStore) {
         return Reservation.builder()
                 .user(user)
                 .popupStore(popupStore)
                 .reservationAt(reservationAt)
+                .number(number)
                 .build();
     }
 }

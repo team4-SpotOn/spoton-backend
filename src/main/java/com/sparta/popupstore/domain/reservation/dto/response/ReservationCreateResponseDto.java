@@ -11,6 +11,7 @@ public class ReservationCreateResponseDto {
     private final String userName;
     private final String popupStoreName;
     private final LocalDateTime reservationAt;
+    private final Integer number;
     private final LocalDateTime createAt;
 
     public ReservationCreateResponseDto(
@@ -20,6 +21,7 @@ public class ReservationCreateResponseDto {
         this.userName = reservation.getUser().getName();
         this.popupStoreName = reservation.getPopupStore().getName();
         this.reservationAt = reservation.getReservationAt();
+        this.number = reservation.getNumber();
         this.createAt = reservation.getCreatedAt();
     }
 }

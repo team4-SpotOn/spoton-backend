@@ -101,6 +101,7 @@ public class PopupStoreService {
                 requestDto.getName(),
                 requestDto.getContents(),
                 requestDto.getPrice(),
+                requestDto.getReservationLimit(),
                 requestDto.getImageList().get(0).getImageUrl(),
                 address,
                 requestDto.getStartDate(),
