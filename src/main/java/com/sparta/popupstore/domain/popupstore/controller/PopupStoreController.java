@@ -149,8 +149,6 @@ public class PopupStoreController {
     }
 
     @Operation(summary = "팝업스토어 이번달 조회", description = "조회하는달에 진행중인 팝업스토어를 조회합니다.")
-    @Parameter(name = "startDate", description = "시작일")
-    @Parameter(name = "endDate", description = "종료일")
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 사이즈")
     @GetMapping("/month")
