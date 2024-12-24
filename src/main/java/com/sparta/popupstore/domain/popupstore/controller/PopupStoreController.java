@@ -148,7 +148,7 @@ public class PopupStoreController {
                 .body(popupStoreService.findStorePeriod(startDate, endDate, page, size));
     }
 
-    @Operation(summary = "팝업스토어 이번달 조회", description = "조회하는달에 진행중인 팝업스토어를 조회합니다.")
+    @Operation(summary = "팝업스토어 이번달 조회", description = "이번달에 진행중인 팝업스토어를 조회합니다.")
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 사이즈")
     @GetMapping("/month")
