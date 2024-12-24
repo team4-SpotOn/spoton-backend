@@ -8,15 +8,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PromotionEventRepository extends JpaRepository<PromotionEvent, Long> {
-    @Modifying
-    @Query("update PromotionEvent p set p.deletedAt = now() where p.id = :promotionEventId")
-    void deletePromotionEvent(@Param("promotionEventId") Long promotionEventId);
+//    @Modifying
+//    @Query("update PromotionEvent p set p.deletedAt = now() where p.id = :promotionEventId")
+//    void deletePromotionEvent(@Param("promotionEventId") Long promotionEventId);
 
-    @Query(value = "select * from events e where timestampdiff(month , e.end_date_time, now()) >= 6", nativeQuery = true)
-    List<PromotionEvent> findAllByEndDateTimeAfterSixMonths();
+//    @Query(value = "select * from events e where timestampdiff(month , e.end_date_time, now()) >= 6", nativeQuery = true)
+//    List<PromotionEvent> findAllByEndDateTimeAfterSixMonths();
 
     // 추후 스케줄러에 사용될 수 있음.
     @Modifying
@@ -28,4 +29,5 @@ public interface PromotionEventRepository extends JpaRepository<PromotionEvent, 
     @Query("select p from PromotionEvent p where p.id = :promotionEventId")
     PromotionEvent findByIdWithPessimisticLock(Long promotionEventId);
 
+    List<PromotionEvent> findAllByEndDateTimeAfter(LocalDateTime sixMonthBefore);
 }

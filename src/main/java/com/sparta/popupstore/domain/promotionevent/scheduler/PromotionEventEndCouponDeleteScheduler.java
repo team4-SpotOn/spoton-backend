@@ -1,8 +1,8 @@
 package com.sparta.popupstore.domain.promotionevent.scheduler;
 
 import com.sparta.popupstore.domain.common.util.ValidUtil;
-import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
+import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
 import com.sparta.popupstore.s3.service.S3ImageService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -26,7 +27,9 @@ public class PromotionEventEndCouponDeleteScheduler {
     @Scheduled(cron = "0 0 0 * * *") // 매일 00시 00분
     public void hardDeletePromotionEvent() {
         log.info("hardDeletePromotionEvent 스케줄러");
-        List<PromotionEvent> eventList = promotionEventRepository.findAllByEndDateTimeAfterSixMonths();
+
+        LocalDateTime sixMonthBefore = LocalDateTime.now().minusMonths(6);
+        List<PromotionEvent> eventList = promotionEventRepository.findAllByEndDateTimeAfter(sixMonthBefore);
         for(PromotionEvent event : eventList) {
             if(ValidUtil.isValidNullAndEmpty(event.getImageUrl())) {
                 s3ImageService.deleteImage(event.getImageUrl());

@@ -114,12 +114,12 @@ public class AdminController {
     @Parameter(name = "popupStoreId", description = "이벤트 대상 팝업 스토어 고유번호 / 전체를 대상으로 진행하는 이벤트 일 시 null")
     @CheckAdmin
     @PostMapping("/promotionEvents")
-    public ResponseEntity<PromotionEventCreateResponseDto> createEvent(
-            @Valid @RequestBody PromotionEventCreateRequestDto createRequestDto
+    public ResponseEntity<PromotionEventCreateResponseDto> createPromotionEvent(
+            @Valid @RequestBody PromotionEventCreateRequestDto requestDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(promotionEventService.createEvent(createRequestDto));
+                .body(promotionEventService.createPromotionEvent(requestDto));
     }
 
     @Operation(summary = "프로모션 이벤트 수정")
@@ -134,20 +134,20 @@ public class AdminController {
     @Parameter(name = "promotionEventId", description = "수정할 프로모션 이벤트의 기본키")
     @CheckAdmin
     @PatchMapping("/promotionEvents/{promotionEventId}")
-    public ResponseEntity<PromotionEventUpdateResponseDto> updateEvent(
-            @Valid @RequestBody PromotionEventUpdateRequestDto updateRequestDto,
+    public ResponseEntity<PromotionEventUpdateResponseDto> updatePromotionEvent(
+            @Valid @RequestBody PromotionEventUpdateRequestDto requestDto,
             @PathVariable(name = "promotionEventId") Long promotionEventId
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(promotionEventService.updatePromotionEvent(updateRequestDto, promotionEventId));
+                .body(promotionEventService.updatePromotionEvent(requestDto, promotionEventId));
     }
 
     @Operation(summary = "프로모션 이벤트 삭제")
     @CheckAdmin
     @Parameter(name = "promotionEventId", description = "삭제할 프로모션 이벤트의 기본키")
     @DeleteMapping("/promotionEvents/{promotionEventId}")
-    public ResponseEntity<Void> deleteEvent(
+    public ResponseEntity<Void> deletePromotionEvent(
             @PathVariable(name = "promotionEventId") Long promotionEventId
     ) {
         promotionEventService.deletePromotionEvent(promotionEventId);
