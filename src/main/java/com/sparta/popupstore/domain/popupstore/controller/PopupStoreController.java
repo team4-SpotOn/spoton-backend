@@ -147,4 +147,16 @@ public class PopupStoreController {
                 .status(HttpStatus.OK)
                 .body(popupStoreService.findStorePeriod(startDate, endDate, page, size));
     }
+
+    @Operation(summary = "팝업스토어 이번달 조회", description = "이번달에 진행중인 팝업스토어를 조회합니다.")
+    @Parameter(name = "page", description = "페이지 번호")
+    @Parameter(name = "size", description = "페이지 사이즈")
+    @GetMapping("/month")
+    public ResponseEntity<List<PopupStoreSearchResponseDto>> findStoreMonth(
+            @RequestParam(name = "page", required = false, defaultValue = "1") Long page,
+            @RequestParam(name = "size", required = false, defaultValue = "10") Long size) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(popupStoreService.findStoreMonth(page, size));
+    }
 }

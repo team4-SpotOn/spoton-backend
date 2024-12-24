@@ -161,4 +161,8 @@ public class PopupStoreService {
         return popupStoreRepository.findByStartDateAndEndDate(startDate, endDate, page, size)
                 .stream().map(PopupStoreSearchResponseDto::new).toList();
     }
+
+    public List<PopupStoreSearchResponseDto> findStoreMonth(Long page, Long size) {
+        return popupStoreRepository.findByMonth(page, size).stream().map(PopupStoreSearchResponseDto::new).toList();
+    }
 }
