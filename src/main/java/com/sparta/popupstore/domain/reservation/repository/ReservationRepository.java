@@ -14,5 +14,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Optional<Reservation> findByPopupStoreAndUser(PopupStore popupStore, User user);
 
-    List<Reservation> findByPopupStoreAndReservationAtBetween(PopupStore popupStore, LocalDateTime startTime, LocalDateTime endTime);
+    List<Reservation> findAllByPopupStoreAndReservationAtBetween(PopupStore popupStore, LocalDateTime startTime, LocalDateTime endTime);
 }
