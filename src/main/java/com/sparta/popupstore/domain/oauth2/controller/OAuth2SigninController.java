@@ -70,9 +70,9 @@ public class OAuth2SigninController {
             @AuthSocialUser SocialUser socialUser,
             @Valid @RequestBody ValidPhoneRequestDto requestDto,
             HttpServletResponse response
-    ) {
+    ) throws IOException {
         User user = oAuth2SigninService.validPhone(socialUser, requestDto);
-        jwtUtil.addJwtToCookie(user.getEmail(), response);
+        jwtUtil.addJwtToCookieWithValid(user.getEmail(), response);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

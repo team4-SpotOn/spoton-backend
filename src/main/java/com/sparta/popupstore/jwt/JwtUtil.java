@@ -48,6 +48,14 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
+    public void addJwtToCookieWithValid(String email, HttpServletResponse response) throws IOException {
+        if(email == null || email.isEmpty()) {
+            response.sendRedirect(USER_SIGNUP_URL);
+            return;
+        }
+        addJwtToCookie(email, response);
+    }
+
     public void addJwtToCookie(String email, HttpServletResponse response) {
         addJwtToCookie(email, null, null, response);
     }
