@@ -29,28 +29,28 @@ public class PointService {
     private final PopupStoreRepository popupStoreRepository;
 
     public PointChargeResponseDto pointCharge(User user, PointChargeRequestDto chargeRequest) {
-      PointChargedLog chargedLog = chargeRequest.toEntity(user);
-      chargedLog = pointChargedLogRepository.save(chargedLog);
-      user.ChargePoint(chargeRequest.getChargedPoint());
-      return new PointChargeResponseDto(chargedLog);
+        PointChargedLog chargedLog = chargeRequest.toEntity(user);
+        chargedLog = pointChargedLogRepository.save(chargedLog);
+        user.chargePoint(chargeRequest.getChargedPoint());
+        return new PointChargeResponseDto(chargedLog);
     }
 
     public List<PointChargedLogResponseDto> pointChargeLogs(User user) {
-      return pointChargedLogRepository.findAllByUser(user)
-          .stream()
-          .map(PointChargedLogResponseDto::new)
-          .toList();
+        return pointChargedLogRepository.findAllByUser(user)
+                .stream()
+                .map(PointChargedLogResponseDto::new)
+                .toList();
     }
 
     public PointUseResponseDto pointUsed(User user, PointUseRequestDto usedRequest, Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-            .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
-        if (user.getPoint() < popupStore.getPrice()) {
+        if(user.getPoint() < popupStore.getPrice()) {
             throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
         }
 
-        user.ChargePoint(- popupStore.getPrice());
+        user.decreasePoint(popupStore.getPrice());
         PointUsedLog usedLog = usedRequest.toEntity(user, popupStore);
         usedLog = pointUsedLogRepository.save(usedLog);
 
@@ -58,9 +58,9 @@ public class PointService {
     }
 
     public List<PointUsedLogResponseDto> pointUsedLogs(User user) {
-      return pointUsedLogRepository.findAllByUser(user)
-          .stream()
-          .map(PointUsedLogResponseDto::new)
-          .toList();
+        return pointUsedLogRepository.findAllByUser(user)
+                .stream()
+                .map(PointUsedLogResponseDto::new)
+                .toList();
     }
 }
