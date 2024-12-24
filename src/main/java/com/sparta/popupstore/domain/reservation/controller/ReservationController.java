@@ -25,6 +25,8 @@ public class ReservationController {
     @Parameter(name = "popupStoreId", description = "예약할 팝업스토어의 기본키")
     @Parameter(name = "user", description = "로그인한 유저")
     @Parameter(name = "reservationAt", description = "예약할 시각")
+    @Parameter(name = "number", description = "예약할 인원 수")
+    @Parameter(name = "couponSerialNumber", description = "쿠폰 일련 번호")
     @PostMapping("/popupstores/{popupStoreId}")
     public ResponseEntity<ReservationCreateResponseDto> reservePopupStore(
             @AuthUser User user,
