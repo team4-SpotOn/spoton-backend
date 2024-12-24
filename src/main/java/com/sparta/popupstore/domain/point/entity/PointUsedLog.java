@@ -28,20 +28,20 @@ public class PointUsedLog {
     private Long popupStoreId;
     private Integer prevPoint;
     private Integer usedPoint;
-    private String serialNumber;
+    private String couponSerialNumber;
 
     @CreatedDate
     @Column(updatable = false)
     protected LocalDateTime usedAt;
 
     @Builder
-    public PointUsedLog(Long id, User user, Long popupStoreId, Integer prevPoint, Integer usedPoint, LocalDateTime usedAt, String serialNumber) {
+    public PointUsedLog(Long id, User user, Long popupStoreId, Integer prevPoint, Integer usedPoint, LocalDateTime usedAt, String couponSerialNumber) {
         this.id = id;
         this.user = user;
         this.popupStoreId = popupStoreId;
         this.prevPoint = prevPoint;
         this.usedPoint = usedPoint;
         this.usedAt = usedAt;
-        this.serialNumber = serialNumber;
+        this.couponSerialNumber = couponSerialNumber;
     }
 }

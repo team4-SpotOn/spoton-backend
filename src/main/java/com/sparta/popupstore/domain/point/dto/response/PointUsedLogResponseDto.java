@@ -27,7 +27,7 @@ public class PointUsedLogResponseDto {
     this.name = usedLog.getUser().getName();
     this.prevPoint = usedLog.getPrevPoint();
     this.usedPoint = usedLog.getUsedPoint();
-    this.serialNumber = usedLog.getSerialNumber();
+    this.serialNumber = usedLog.getCouponSerialNumber();
     this.usedAt = usedLog.getUsedAt();
     this.popupStoreId = usedLog.getPopupStoreId();
   }

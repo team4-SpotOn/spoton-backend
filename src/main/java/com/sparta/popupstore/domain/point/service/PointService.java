@@ -50,10 +50,11 @@ public class PointService {
             throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
         }
 
-        return new PointUseResponseDto(pointUsed(user, popupStore, requestDto.getUsedPoint()));
+        var pointUsedLog = pointUsed(user, popupStore, requestDto.getUsedPoint(), requestDto.getCouponSerialNumber());
+        return new PointUseResponseDto(pointUsedLog);
     }
 
-    public PointUsedLog pointUsed(User user, PopupStore popupStore, Integer usedPoint) {
+    public PointUsedLog pointUsed(User user, PopupStore popupStore, Integer usedPoint, String couponSerialNumber) {
         user.decreasePoint(popupStore.getPrice());
 
         PointUsedLog usedLog = PointUsedLog.builder()
@@ -61,6 +62,7 @@ public class PointService {
                 .popupStoreId(popupStore.getId())
                 .prevPoint(user.getPoint())
                 .usedPoint(usedPoint)
+                .couponSerialNumber(couponSerialNumber)
                 .build();
 
         return pointUsedLogRepository.save(usedLog);

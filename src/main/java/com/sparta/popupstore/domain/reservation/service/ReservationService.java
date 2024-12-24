@@ -2,6 +2,8 @@ package com.sparta.popupstore.domain.reservation.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
+import com.sparta.popupstore.domain.coupon.entity.Coupon;
+import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
 import com.sparta.popupstore.domain.point.service.PointService;
 import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreAttribute;
 import com.sparta.popupstore.domain.popupstore.bundle.enums.PopupStoreAttributeEnum;
@@ -28,6 +30,7 @@ public class ReservationService {
     private final PopupStoreRepository popupStoreRepository;
     private final PopupStoreAttributeRepository popupStoreAttributeRepository;
     private final PointService pointService;
+    private final CouponRepository couponRepository;
 
     @Transactional
     public ReservationCreateResponseDto createReservation(User user, Long popupStoreId, ReservationCreateRequestDto requestDto) {
@@ -51,11 +54,13 @@ public class ReservationService {
             throw new RuntimeException("Reservation limit exceeded");
         }
 
-        int amount = popupStore.getPrice() * requestDto.getNumber();
+        Coupon coupon = couponRepository.findBySerialNumber(requestDto.getCouponSerialNumber())
+                .orElseGet(() -> Coupon.builder().discountPercentage(0).build());
+        int amount = popupStore.getPrice() * requestDto.getNumber() * (100 - coupon.getDiscountPercentage()) / 100;
         if(user.getPoint() < amount) {
             throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
         }
-        pointService.pointUsed(user, popupStore, amount);
+        pointService.pointUsed(user, popupStore, amount, coupon.getSerialNumber());
 
         Reservation reservation = reservationRepository.save(requestDto.toEntity(user, popupStore));
         return new ReservationCreateResponseDto(reservation);

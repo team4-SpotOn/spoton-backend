@@ -9,5 +9,5 @@ public class PointUseRequestDto {
     @NotNull(message = "사용할 포인트를 입력해주세요.")
     @Positive(message = "0 이상의 값을 입력해주세요.")
     private Integer usedPoint;
-    private String serialNumber;
+    private String couponSerialNumber;
 }

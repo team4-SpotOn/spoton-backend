@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
@@ -30,5 +31,5 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
     @Query("SELECT c FROM Coupon c WHERE c.promotionEventId = :promotionEventId AND c.userId = :userId")
     Coupon findByIdWithPessimisticLock(@Param("promotionEventId") Long promotionEventId, @Param("userId") Long userId);
 
-
+    Optional<Coupon> findBySerialNumber(String couponSerialNumber);
 }

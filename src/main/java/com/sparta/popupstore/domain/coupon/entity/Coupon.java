@@ -25,6 +25,7 @@ public class Coupon {
     private Long userId;
     private Long promotionEventId;
     private Long popupStoreId;
+    private Integer discountPercentage;
     private String serialNumber;
     private LocalDate couponExpirationPeriod;
     @Enumerated(EnumType.STRING)
@@ -34,11 +35,20 @@ public class Coupon {
     protected LocalDateTime createdAt;
 
     @Builder
-    public Coupon(Long id, Long userId, PromotionEvent promotionEvent, String serialNumber, CouponStatus couponStatus, LocalDate couponExpirationPeriod) {
+    public Coupon(
+            Long id,
+            Long userId,
+            PromotionEvent promotionEvent,
+            Integer discountPercentage,
+            String serialNumber,
+            CouponStatus couponStatus,
+            LocalDate couponExpirationPeriod
+    ) {
         this.id = id;
         this.userId = userId;
         this.promotionEventId = promotionEvent.getId();
         this.popupStoreId = promotionEvent.getPopupStoreId();
+        this.discountPercentage = discountPercentage;
         this.serialNumber = serialNumber;
         this.couponStatus = couponStatus;
         this.couponExpirationPeriod = couponExpirationPeriod;

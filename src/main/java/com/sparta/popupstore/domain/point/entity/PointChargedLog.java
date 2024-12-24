@@ -27,19 +27,17 @@ public class PointChargedLog {
 
     private Integer prevPoint;
     private Integer chargedPoint;
-    private String serialNumber;
 
     @CreatedDate
     @Column(updatable = false)
     protected LocalDateTime chargedAt;
 
     @Builder
-    public PointChargedLog(Long id, User user, Integer prevPoint, Integer chargedPoint, LocalDateTime chargedAt, String serialNumber) {
+    public PointChargedLog(Long id, User user, Integer prevPoint, Integer chargedPoint, LocalDateTime chargedAt) {
         this.id = id;
         this.user = user;
         this.prevPoint = prevPoint;
         this.chargedPoint = chargedPoint;
         this.chargedAt = chargedAt;
-        this.serialNumber = serialNumber;
     }
 }
