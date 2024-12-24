@@ -23,6 +23,8 @@ public class PopupStoreSearchResponseDto {
     private final String contents;
     @Schema(description = "팝업스토어 주소")
     private final Address address;
+    @Schema(description = "팝업스토어 썸네일")
+    private final String thumbnail;
 
     public PopupStoreSearchResponseDto(
             PopupStore popupStore
@@ -34,5 +36,6 @@ public class PopupStoreSearchResponseDto {
         this.price = popupStore.getPrice();
         this.contents = popupStore.getContents();
         this.address = popupStore.getAddress();
+        this.thumbnail = popupStore.getThumbnail();
     }
 }

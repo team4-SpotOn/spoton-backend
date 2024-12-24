@@ -38,6 +38,7 @@ public class PopupStoreCreateRequestDto {
     public PopupStore toEntity(Company company, Address address) {
         return PopupStore.builder()
                 .company(company)
+                .thumbnail(this.imageList.get(0).getImageUrl())
                 .name(this.name)
                 .contents(this.contents)
                 .price(this.price)
