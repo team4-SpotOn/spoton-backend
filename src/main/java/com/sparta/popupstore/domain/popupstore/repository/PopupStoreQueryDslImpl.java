@@ -43,10 +43,10 @@ public class PopupStoreQueryDslImpl implements PopupStoreQueryDsl {
     }
 
     @Override
-    public List<PopupStore> findByMonth(LocalDate startDate, LocalDate endDate, Long page, Long size) {
+    public List<PopupStore> findByMonth(Long page, Long size) {
         YearMonth MontDate = YearMonth.now();
-        startDate = MontDate.atDay(1);
-        endDate = MontDate.atEndOfMonth();
+        LocalDate startDate = MontDate.atDay(1);
+        LocalDate endDate = MontDate.atEndOfMonth();
 
         return query.selectFrom(popupStore)
                 .where(

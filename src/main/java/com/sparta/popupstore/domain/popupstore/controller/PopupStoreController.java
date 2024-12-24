@@ -155,11 +155,10 @@ public class PopupStoreController {
     @Parameter(name = "size", description = "페이지 사이즈")
     @GetMapping("/month")
     public ResponseEntity<List<PopupStoreSearchResponseDto>> findStoreMonth(
-            LocalDate startDate, LocalDate endDate,
             @RequestParam(name = "page", required = false, defaultValue = "1") Long page,
             @RequestParam(name = "size", required = false, defaultValue = "10") Long size) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(popupStoreService.findStoreMonth(startDate, endDate, page, size));
+                .body(popupStoreService.findStoreMonth(page, size));
     }
 }
