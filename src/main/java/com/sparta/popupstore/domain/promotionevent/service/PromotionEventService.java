@@ -16,6 +16,7 @@ import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepo
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.s3.service.S3ImageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PromotionEventService {
@@ -37,30 +39,38 @@ public class PromotionEventService {
     private final S3ImageService s3ImageService;
 
     public PromotionEventCreateResponseDto createEvent(
-            PromotionEventCreateRequestDto createRequestDto,
-            Long popupStoreId
+            PromotionEventCreateRequestDto createRequestDto
     ) {
-        PromotionEvent promotionEvent = createRequestDto.toEvent();
-        if(popupStoreId != null) {
-           PopupStore popupStore = popupStoreRepository.findByIdAndEndDateAfter(popupStoreId, LocalDate.now())
+        PromotionEvent promotionEvent = createRequestDto.toEntity();
+        if(promotionEvent.getPopupStoreId() != null) {
+           PopupStore popupStore = popupStoreRepository.findByIdAndEndDateAfter(promotionEvent.getPopupStoreId(), LocalDate.now())
                     .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
            if(promotionEvent.getEndDateTime().isAfter(LocalDateTime.of(popupStore.getEndDate(), LocalTime.MAX))){
                throw new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_AFTER_POPUP_STORE_END_DATE);
            }
-           promotionEvent.addPopupStore(popupStore);
         }
         return new PromotionEventCreateResponseDto(promotionEventRepository.save(promotionEvent));
     }
 
     public Page<PromotionEventFindAllResponseDto> findAllPromotionalEvents(int page, int size) {
         Pageable pageable = PageRequest.of(page-1, size);
-        return promotionEventRepository.findAllPromotionalEvents(pageable).map(PromotionEventFindAllResponseDto::new);
+        return promotionEventRepository.findAll(pageable)
+                .map(event -> {
+                if(event.getPopupStoreId() == null) {
+                    return new PromotionEventFindAllResponseDto(event, null);
+                }
+                PopupStore popupStore = popupStoreRepository.findById(event.getPopupStoreId()).orElse(null);
+                return new PromotionEventFindAllResponseDto(event, popupStore);
+        });
     }
 
     @Transactional(readOnly = true)
     public PromotionEventFindOneResponseDto findOnePromotionEvent(Long promotionEventId) {
         PromotionEvent promotionEvent = getPromotionEvent(promotionEventId);
-        PopupStore popupStore = promotionEvent.getPopupStore();
+        if(promotionEvent.getPopupStoreId() == null) {
+            return new PromotionEventFindOneResponseDto(promotionEvent, null);
+        }
+        PopupStore popupStore = popupStoreRepository.findById(promotionEvent.getPopupStoreId()).orElse(null);
         return new PromotionEventFindOneResponseDto(promotionEvent, popupStore);
     }
 
@@ -111,7 +121,7 @@ public class PromotionEventService {
 
         // 선착순 개수 +
         promotionEvent.couponGetCountUp();
-        System.out.println("선착순 개수 확인 :"+promotionEvent.getCouponGetCount());
+        log.info("선착순 개수 확인 :"+promotionEvent.getCouponGetCount());
 
 //        // couponGetCount 업데이트
 //        promotionEventRepository.couponGetCountUp(promotionEventId);

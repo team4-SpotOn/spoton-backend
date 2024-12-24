@@ -31,7 +31,7 @@ public class PromotionEventCreateResponseDto {
 
     public PromotionEventCreateResponseDto(PromotionEvent promotionEvent) {
         this.id = promotionEvent.getId();
-        this.popupStoreId = promotionEvent.getPopupStore() != null ? promotionEvent.getPopupStore().getId() : null;
+        this.popupStoreId = promotionEvent.getPopupStoreId();
         this.title = promotionEvent.getTitle();
         this.description = promotionEvent.getDescription();
         this.discountPercentage = promotionEvent.getDiscountPercentage();
