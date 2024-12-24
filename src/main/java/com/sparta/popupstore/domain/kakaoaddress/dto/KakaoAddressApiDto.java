@@ -14,8 +14,4 @@ public class KakaoAddressApiDto {
 
     @JsonProperty("documents")
     private List<Document> documents;
-
-    @JsonProperty("meta")
-    private Object meta;
-
 }

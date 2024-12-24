@@ -33,6 +33,6 @@ public class KakaoAddressService {
                 ).orElseThrow(() -> new CustomApiException(ErrorCode.KAKAO_ADDRESS_API_ERROR))
                 .getDocuments().get(0).getRoadAddress();
 
-        return new Address(address, roadAddress);
+        return new Address(roadAddress);
     }
 }
