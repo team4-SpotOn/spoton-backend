@@ -2,6 +2,8 @@ package com.sparta.popupstore.domain.point.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
+import com.sparta.popupstore.domain.coupon.entity.Coupon;
+import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
 import com.sparta.popupstore.domain.point.dto.request.PointChargeRequestDto;
 import com.sparta.popupstore.domain.point.dto.response.PointChargeResponseDto;
 import com.sparta.popupstore.domain.point.dto.response.PointChargedLogResponseDto;
@@ -11,7 +13,6 @@ import com.sparta.popupstore.domain.point.entity.PointUsedLog;
 import com.sparta.popupstore.domain.point.repository.PointChargedLogRepository;
 import com.sparta.popupstore.domain.point.repository.PointUsedLogRepository;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
-import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class PointService {
 
     private final PointChargedLogRepository pointChargedLogRepository;
     private final PointUsedLogRepository pointUsedLogRepository;
-    private final PopupStoreRepository popupStoreRepository;
+    private final CouponRepository couponRepository;
 
     public PointChargeResponseDto pointCharge(User user, PointChargeRequestDto chargeRequest) {
         PointChargedLog chargedLog = chargeRequest.toEntity(user);
@@ -51,18 +52,25 @@ public class PointService {
 //        return new PointUseResponseDto(pointUsedLog);
 //    }
 
-    public PointUsedLog pointUsed(User user, PopupStore popupStore, Integer usedPoint, String couponSerialNumber) {
-        user.decreasePoint(popupStore.getPrice());
+    public void pointUsed(User user, PopupStore popupStore, Integer number, String couponSerialNumber) {
+        int discountPercentage = couponRepository.findBySerialNumber(couponSerialNumber)
+                .orElseGet(() -> Coupon.builder().discountPercentage(0).build())
+                .getDiscountPercentage();
+        int amount = popupStore.getPrice() * number * (100 - discountPercentage) / 100;
+        if(user.getPoint() < amount) {
+            throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
+        }
 
-        PointUsedLog usedLog = PointUsedLog.builder()
-                .user(user)
-                .popupStoreId(popupStore.getId())
-                .prevPoint(user.getPoint())
-                .usedPoint(usedPoint)
-                .couponSerialNumber(couponSerialNumber)
-                .build();
-
-        return pointUsedLogRepository.save(usedLog);
+        pointUsedLogRepository.save(
+                PointUsedLog.builder()
+                        .user(user)
+                        .popupStoreId(popupStore.getId())
+                        .prevPoint(user.getPoint())
+                        .usedPoint(amount)
+                        .couponSerialNumber(couponSerialNumber)
+                        .build()
+        );
+        user.decreasePoint(amount);
     }
 
     public List<PointUsedLogResponseDto> pointUsedLogs(User user) {

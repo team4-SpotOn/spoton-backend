@@ -2,8 +2,6 @@ package com.sparta.popupstore.domain.reservation.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.domain.coupon.entity.Coupon;
-import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
 import com.sparta.popupstore.domain.point.service.PointService;
 import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreAttribute;
 import com.sparta.popupstore.domain.popupstore.bundle.enums.PopupStoreAttributeEnum;
@@ -30,7 +28,6 @@ public class ReservationService {
     private final PopupStoreRepository popupStoreRepository;
     private final PopupStoreAttributeRepository popupStoreAttributeRepository;
     private final PointService pointService;
-    private final CouponRepository couponRepository;
 
     @Transactional
     public ReservationCreateResponseDto createReservation(User user, Long popupStoreId, ReservationCreateRequestDto requestDto) {
@@ -51,16 +48,10 @@ public class ReservationService {
                 reservationAt.withMinute(30)
         );
         if(countReservation + requestDto.getNumber() > popupStore.getReservationLimit()) {
-            throw new RuntimeException("Reservation limit exceeded");
+            throw new CustomApiException(ErrorCode.RESERVATION_LIMIT_OVER);
         }
 
-        Coupon coupon = couponRepository.findBySerialNumber(requestDto.getCouponSerialNumber())
-                .orElseGet(() -> Coupon.builder().discountPercentage(0).build());
-        int amount = popupStore.getPrice() * requestDto.getNumber() * (100 - coupon.getDiscountPercentage()) / 100;
-        if(user.getPoint() < amount) {
-            throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
-        }
-        pointService.pointUsed(user, popupStore, amount, coupon.getSerialNumber());
+        pointService.pointUsed(user, popupStore, requestDto.getNumber(), requestDto.getCouponSerialNumber());
 
         Reservation reservation = reservationRepository.save(requestDto.toEntity(user, popupStore));
         return new ReservationCreateResponseDto(reservation);
