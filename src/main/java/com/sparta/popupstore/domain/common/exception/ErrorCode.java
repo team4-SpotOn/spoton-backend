@@ -18,7 +18,6 @@ public enum ErrorCode {
     POPUP_STORE_ALREADY_START(HttpStatus.FORBIDDEN, "진행 전인 팝업스토어만 수정 가능합니다."),
     POPUP_STORE_NOT_FOUND(HttpStatus.BAD_REQUEST,"해당 팝업스토어가 없습니다."),
     POPUP_STORE_OPERATING_BAD_REQUEST(HttpStatus.BAD_REQUEST, "운영시간이 올바르지 않습니다."),
-    INSUFFICIENT_POINTS(HttpStatus.BAD_REQUEST, "포인트가 부족합니다."),
     POPUP_STORE_NOT_SEARCH_TYPE(HttpStatus.BAD_REQUEST, "제대로 된 검색 타입을 입력해주세요."),
     // event error
     PROMOTION_EVENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이벤트가 없습니다."),
@@ -55,7 +54,7 @@ public enum ErrorCode {
     NOT_CORRECT_URL_FORMAT(HttpStatus.BAD_REQUEST, "올바른 파일 이름이 아닙니다."),
 
     //point
-    NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST,"결제가능한 포인트가 아닙니다." ),
+    NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST,"포인트가 부족합니다." ),
 
     //reservation
     POPUP_STORE_CAN_NOT_RESERVATION(HttpStatus.BAD_REQUEST, "예약할 수 없는 팝업스토어 입니다."),
@@ -65,6 +64,7 @@ public enum ErrorCode {
     RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 내역이 존재하지 않습니다."),
     RESERVATION_FORBIDDEN(HttpStatus.FORBIDDEN, "자신의 예약 기록이 아닙니다."),
     RESERVATION_CANCELLATION_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "예약 취소는 최소 1일 전에 가능합니다."),
+    RESERVATION_LIMIT_OVER(HttpStatus.BAD_REQUEST, "예약 가능 인원을 초과합니다."),
 
     // address error
     KAKAO_ADDRESS_API_ERROR(HttpStatus.BAD_REQUEST, "카카오 지도 에러"),

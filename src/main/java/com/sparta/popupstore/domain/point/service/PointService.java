@@ -42,7 +42,7 @@ public class PointService {
                 .toList();
     }
 
-    public PointUseResponseDto pointUsed(User user, PointUseRequestDto usedRequest, Long popupStoreId) {
+    public PointUseResponseDto pointUsed(User user, PointUseRequestDto requestDto, Long popupStoreId) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
@@ -50,11 +50,20 @@ public class PointService {
             throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
         }
 
-        user.decreasePoint(popupStore.getPrice());
-        PointUsedLog usedLog = usedRequest.toEntity(user, popupStore);
-        usedLog = pointUsedLogRepository.save(usedLog);
+        return new PointUseResponseDto(pointUsed(user, popupStore, requestDto.getUsedPoint()));
+    }
 
-        return new PointUseResponseDto(usedLog);
+    public PointUsedLog pointUsed(User user, PopupStore popupStore, Integer usedPoint) {
+        user.decreasePoint(popupStore.getPrice());
+
+        PointUsedLog usedLog = PointUsedLog.builder()
+                .user(user)
+                .popupStoreId(popupStore.getId())
+                .prevPoint(user.getPoint())
+                .usedPoint(usedPoint)
+                .build();
+
+        return pointUsedLogRepository.save(usedLog);
     }
 
     public List<PointUsedLogResponseDto> pointUsedLogs(User user) {

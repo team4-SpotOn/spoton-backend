@@ -2,6 +2,7 @@ package com.sparta.popupstore.domain.reservation.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
+import com.sparta.popupstore.domain.point.service.PointService;
 import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreAttribute;
 import com.sparta.popupstore.domain.popupstore.bundle.enums.PopupStoreAttributeEnum;
 import com.sparta.popupstore.domain.popupstore.bundle.repository.PopupStoreAttributeRepository;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final PopupStoreRepository popupStoreRepository;
     private final PopupStoreAttributeRepository popupStoreAttributeRepository;
+    private final PointService pointService;
 
     @Transactional
     public ReservationCreateResponseDto createReservation(User user, Long popupStoreId, ReservationCreateRequestDto requestDto) {
@@ -38,11 +41,21 @@ public class ReservationService {
             throw new CustomApiException(ErrorCode.POPUP_STORE_CAN_NOT_RESERVATION);
         }
 
+        LocalDateTime reservationAt = requestDto.getReservationAt();
+        int countReservation = reservationRepository.countByPopupStoreAndReservationAtBetween(
+                popupStore,
+                reservationAt.withMinute(0),
+                reservationAt.withMinute(30)
+        );
+        if(countReservation + requestDto.getNumber() > popupStore.getReservationLimit()) {
+            throw new RuntimeException("Reservation limit exceeded");
+        }
+
         int amount = popupStore.getPrice() * requestDto.getNumber();
         if(user.getPoint() < amount) {
-            throw new CustomApiException(ErrorCode.INSUFFICIENT_POINTS);
+            throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
         }
-        user.decreasePoint(amount);
+        pointService.pointUsed(user, popupStore, amount);
 
         Reservation reservation = reservationRepository.save(requestDto.toEntity(user, popupStore));
         return new ReservationCreateResponseDto(reservation);
