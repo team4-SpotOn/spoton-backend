@@ -115,12 +115,11 @@ public class AdminController {
     @CheckAdmin
     @PostMapping("/promotionEvents")
     public ResponseEntity<PromotionEventCreateResponseDto> createEvent(
-            @Valid @RequestBody PromotionEventCreateRequestDto createRequestDto,
-            @RequestParam(required = false, name = "popupStoreId") Long popupStoreId
+            @Valid @RequestBody PromotionEventCreateRequestDto createRequestDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(promotionEventService.createEvent(createRequestDto, popupStoreId));
+                .body(promotionEventService.createEvent(createRequestDto));
     }
 
     @Operation(summary = "프로모션 이벤트 수정")

@@ -39,17 +39,15 @@ public class PromotionEventService {
     private final S3ImageService s3ImageService;
 
     public PromotionEventCreateResponseDto createEvent(
-            PromotionEventCreateRequestDto createRequestDto,
-            Long popupStoreId
+            PromotionEventCreateRequestDto createRequestDto
     ) {
-        PromotionEvent promotionEvent = createRequestDto.toEvent();
-        if(popupStoreId != null) {
-           PopupStore popupStore = popupStoreRepository.findByIdAndEndDateAfter(popupStoreId, LocalDate.now())
+        PromotionEvent promotionEvent = createRequestDto.toEntity();
+        if(promotionEvent.getPopupStoreId() != null) {
+           PopupStore popupStore = popupStoreRepository.findByIdAndEndDateAfter(promotionEvent.getPopupStoreId(), LocalDate.now())
                     .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
            if(promotionEvent.getEndDateTime().isAfter(LocalDateTime.of(popupStore.getEndDate(), LocalTime.MAX))){
                throw new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_AFTER_POPUP_STORE_END_DATE);
            }
-           promotionEvent.addPopupStore(popupStoreId);
         }
         return new PromotionEventCreateResponseDto(promotionEventRepository.save(promotionEvent));
     }
@@ -58,21 +56,21 @@ public class PromotionEventService {
         Pageable pageable = PageRequest.of(page-1, size);
         return promotionEventRepository.findAll(pageable)
                 .map(event -> {
-            PopupStore popupStore = null;
-             if(event.getPopupStoreId() != null) {
-                 popupStore = popupStoreRepository.findById(event.getPopupStoreId()).orElse(null);
-             }
-             return new PromotionEventFindAllResponseDto(event, popupStore);
+                if(event.getPopupStoreId() == null) {
+                    return new PromotionEventFindAllResponseDto(event, null);
+                }
+                PopupStore popupStore = popupStoreRepository.findById(event.getPopupStoreId()).orElse(null);
+                return new PromotionEventFindAllResponseDto(event, popupStore);
         });
     }
 
     @Transactional(readOnly = true)
     public PromotionEventFindOneResponseDto findOnePromotionEvent(Long promotionEventId) {
         PromotionEvent promotionEvent = getPromotionEvent(promotionEventId);
-        PopupStore popupStore = null;
-        if(promotionEvent.getPopupStoreId() != null) {
-            popupStore = popupStoreRepository.findById(promotionEvent.getPopupStoreId()).orElse(null);
+        if(promotionEvent.getPopupStoreId() == null) {
+            return new PromotionEventFindOneResponseDto(promotionEvent, null);
         }
+        PopupStore popupStore = popupStoreRepository.findById(promotionEvent.getPopupStoreId()).orElse(null);
         return new PromotionEventFindOneResponseDto(promotionEvent, popupStore);
     }
 

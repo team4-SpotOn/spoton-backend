@@ -36,9 +36,11 @@ class PromotionEventServiceTest {
     void createEventTest1() {
         // given
         Long popupStoreId = 1L;
-        PromotionEventCreateRequestDto requestDto = PromotionEventCreateRequestDto.builder().build();
+        PromotionEventCreateRequestDto requestDto = PromotionEventCreateRequestDto.builder()
+                .popupStoreId(popupStoreId)
+                .build();
         // when
-        String exception = assertThrows(CustomApiException.class , () -> promotionEventService.createEvent(requestDto, popupStoreId)).getMessage();
+        String exception = assertThrows(CustomApiException.class , () -> promotionEventService.createEvent(requestDto)).getMessage();
         // then
         assertEquals("해당 팝업스토어가 없습니다." , exception);
     }
@@ -47,13 +49,12 @@ class PromotionEventServiceTest {
     @DisplayName("팝업스토어 고유번호가 null 이라면 이벤트의 팝업스토어 컬럼 null 로 저장")
     void createEventTest2() {
         // given
-        Long popupStoreId = null;
-        PromotionEventCreateRequestDto requestDto = PromotionEventCreateRequestDto.builder().build();
+        PromotionEventCreateRequestDto requestDto = PromotionEventCreateRequestDto.builder().popupStoreId(null).build();
         PromotionEvent promotionEvent = PromotionEvent.builder()
                 .build();
         // when
         when(promotionEventRepository.save(any())).thenReturn(promotionEvent);
-        PromotionEventCreateResponseDto responseDto = promotionEventService.createEvent(requestDto, popupStoreId);
+        PromotionEventCreateResponseDto responseDto = promotionEventService.createEvent(requestDto);
 
         // then
         assertNull(responseDto.getPopupStoreId());
@@ -65,6 +66,7 @@ class PromotionEventServiceTest {
         // given
         Long popupStoreId = 1L;
         PromotionEventCreateRequestDto requestDto = PromotionEventCreateRequestDto.builder()
+                .popupStoreId(popupStoreId)
                 .endDateTime(LocalDateTime.now().plusDays(2))
                 .build();
         PopupStore popupStore = PopupStore.builder()
@@ -73,13 +75,13 @@ class PromotionEventServiceTest {
                 .build();
         PromotionEvent promotionEvent = PromotionEvent.builder()
                 .id(3L)
-                .popupStore(popupStore)
+                .popupStoreId(popupStoreId)
                 .endDateTime(LocalDateTime.now().plusDays(2))
                 .build();
         // when
         when(popupStoreRepository.findByIdAndEndDateAfter(popupStoreId, LocalDate.now())).thenReturn(Optional.ofNullable(popupStore));
         when(promotionEventRepository.save(any())).thenReturn(promotionEvent);
-        PromotionEventCreateResponseDto responseDto = promotionEventService.createEvent(requestDto, popupStoreId);
+        PromotionEventCreateResponseDto responseDto = promotionEventService.createEvent(requestDto);
 
         // then
         assertEquals(popupStoreId, responseDto.getPopupStoreId());
@@ -91,6 +93,7 @@ class PromotionEventServiceTest {
         // given
         Long popupStoreId = 1L;
         PromotionEventCreateRequestDto requestDto = PromotionEventCreateRequestDto.builder()
+                .popupStoreId(popupStoreId)
                 .endDateTime(LocalDateTime.now().plusDays(2))
                 .build();
         PopupStore popupStore = PopupStore.builder()
@@ -100,7 +103,7 @@ class PromotionEventServiceTest {
         // when
         when(popupStoreRepository.findByIdAndEndDateAfter(popupStoreId, LocalDate.now())).thenReturn(Optional.ofNullable(popupStore));
         Throwable exception = assertThrows(CustomApiException.class, ()->
-                promotionEventService.createEvent(requestDto, popupStoreId));
+                promotionEventService.createEvent(requestDto));
         // then
         assertEquals("이벤트 종료일은 팝업스토어 종료일 이후로 선택할 수 없습니다.", exception.getMessage());
     }

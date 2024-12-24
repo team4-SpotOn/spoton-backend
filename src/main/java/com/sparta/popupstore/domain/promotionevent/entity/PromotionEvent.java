@@ -48,16 +48,12 @@ public class PromotionEvent extends BaseEntity {
         this.title = title;
         this.description = description;
         this.discountPercentage = discountPercentage;
-        this.couponGetCount = 0;
+        this.couponGetCount = couponGetCount;
         this.totalCount = totalCount;
         this.couponExpirationPeriod = couponExpirationPeriod;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.imageUrl = imageUrl;
-    }
-
-    public void addPopupStore(Long popupStoreId){
-        this.popupStoreId = popupStoreId;
     }
 
     public void updatePromotionEvent(
