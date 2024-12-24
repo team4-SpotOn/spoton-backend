@@ -24,6 +24,8 @@ public class PopupStoreUpdateResponseDto {
     private final LocalDate endDate;
     @Schema(description = "수정된 팝업스토어 가격")
     private final Integer price;
+    @Schema(description = "수정된 팝업스토어 썸네일")
+    private final String thumbnail;
     @Schema(description = "수정된 팝업스토어 내용")
     private final String contents;
     @Schema(description = "수정된 팝업스토어 주소")
@@ -45,6 +47,7 @@ public class PopupStoreUpdateResponseDto {
         this.startDate = popupStore.getStartDate();
         this.endDate = popupStore.getEndDate();
         this.price = popupStore.getPrice();
+        this.thumbnail = popupStore.getThumbnail();
         this.contents = popupStore.getContents();
         this.address = popupStore.getAddress();
         this.imageList = imageList.stream().map(PopupStoreImageResponseDto::new).toList();

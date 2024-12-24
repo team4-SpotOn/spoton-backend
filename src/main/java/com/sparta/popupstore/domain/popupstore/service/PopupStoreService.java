@@ -56,7 +56,6 @@ public class PopupStoreService {
     public PopupStoreGetOneResponseDto getPopupStoreOne(Long popupStoreId, boolean view) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-
         if(view) {
             popupStore.viewPopupStore();
         }
@@ -102,6 +101,7 @@ public class PopupStoreService {
                 requestDto.getName(),
                 requestDto.getContents(),
                 requestDto.getPrice(),
+                requestDto.getImageList().get(0).getImageUrl(),
                 address,
                 requestDto.getStartDate(),
                 requestDto.getEndDate()
