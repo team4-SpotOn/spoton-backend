@@ -42,11 +42,13 @@ public class ReservationService {
         }
 
         LocalDateTime reservationAt = requestDto.getReservationAt();
-        int countReservation = reservationRepository.countByPopupStoreAndReservationAtBetween(
-                popupStore,
-                reservationAt.withMinute(0),
-                reservationAt.withMinute(30)
-        );
+        int countReservation = reservationRepository.findByPopupStoreAndReservationAtBetween(
+                        popupStore,
+                        reservationAt.withMinute(0),
+                        reservationAt.withMinute(30)
+                ).stream()
+                .map(Reservation::getNumber)
+                .reduce(0, Integer::sum);
         if(countReservation + requestDto.getNumber() > popupStore.getReservationLimit()) {
             throw new CustomApiException(ErrorCode.RESERVATION_LIMIT_OVER);
         }

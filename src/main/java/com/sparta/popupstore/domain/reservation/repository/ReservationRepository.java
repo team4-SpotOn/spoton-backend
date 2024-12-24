@@ -6,6 +6,7 @@ import com.sparta.popupstore.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -13,5 +14,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Optional<Reservation> findByPopupStoreAndUser(PopupStore popupStore, User user);
 
-    int countByPopupStoreAndReservationAtBetween(PopupStore popupStore, LocalDateTime startTime, LocalDateTime endTime);
+    List<Reservation> findByPopupStoreAndReservationAtBetween(PopupStore popupStore, LocalDateTime startTime, LocalDateTime endTime);
 }
