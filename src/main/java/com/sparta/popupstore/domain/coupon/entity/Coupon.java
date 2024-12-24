@@ -38,7 +38,7 @@ public class Coupon {
         this.id = couponId;
         this.userId = userId;
         this.promotionEventId = promotionEvent.getId();
-        this.popupStoreId = promotionEvent.getPopupStore() != null ? promotionEvent.getPopupStore().getId() : null;
+        this.popupStoreId = promotionEvent.getPopupStoreId();
         this.serialNumber = serialNumber;
         this.couponStatus = couponStatus;
         this.couponExpirationPeriod = LocalDate.now().plusDays(promotionEvent.getCouponExpirationPeriod());

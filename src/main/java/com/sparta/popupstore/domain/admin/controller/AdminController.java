@@ -13,7 +13,6 @@ import com.sparta.popupstore.domain.popupstore.service.PopupStoreService;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCreateResponseDto;
-import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.jwt.JwtUtil;
@@ -122,17 +121,6 @@ public class AdminController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(promotionEventService.createEvent(createRequestDto, popupStoreId));
-    }
-
-    @Operation(summary = "프로모션 이벤트 단건 조회")
-    @Parameter(name = "promotionEventId", description = "조회 할 프로모션 이벤트의 기본키")
-    @GetMapping("/promotionEvents/{promotionEventId}")
-    public ResponseEntity<PromotionEventFindOneResponseDto> findOnePromotionalEvent(
-            @PathVariable(name = "promotionEventId") Long promotionEventId
-    ) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(promotionEventService.findOnePromotionEvent(promotionEventId));
     }
 
     @Operation(summary = "프로모션 이벤트 수정")

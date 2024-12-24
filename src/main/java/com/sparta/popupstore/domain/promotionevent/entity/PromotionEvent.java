@@ -1,7 +1,6 @@
 package com.sparta.popupstore.domain.promotionevent.entity;
 
 import com.sparta.popupstore.domain.common.entity.BaseEntity;
-import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,9 +18,7 @@ public class PromotionEvent extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "popupstore_id")
-    private PopupStore popupStore;
+    private Long popupStoreId;
     private String title;
     private String description;
     private Integer discountPercentage;
@@ -35,7 +32,7 @@ public class PromotionEvent extends BaseEntity {
     @Builder
     public PromotionEvent(
             Long id,
-            PopupStore popupStore,
+            Long popupStoreId,
             String title,
             String description,
             Integer discountPercentage,
@@ -47,11 +44,11 @@ public class PromotionEvent extends BaseEntity {
             String imageUrl
     ) {
         this.id = id;
-        this.popupStore = popupStore;
+        this.popupStoreId = popupStoreId;
         this.title = title;
         this.description = description;
         this.discountPercentage = discountPercentage;
-        this.couponGetCount = couponGetCount;
+        this.couponGetCount = 0;
         this.totalCount = totalCount;
         this.couponExpirationPeriod = couponExpirationPeriod;
         this.startDateTime = startDateTime;
@@ -59,8 +56,8 @@ public class PromotionEvent extends BaseEntity {
         this.imageUrl = imageUrl;
     }
 
-    public void addPopupStore(PopupStore popupStore){
-        this.popupStore = popupStore;
+    public void addPopupStore(Long popupStoreId){
+        this.popupStoreId = popupStoreId;
     }
 
     public void updatePromotionEvent(
