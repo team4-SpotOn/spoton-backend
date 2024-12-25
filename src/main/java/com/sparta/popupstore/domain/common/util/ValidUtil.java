@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ValidUtil {
 
-    public static boolean isValidNullAndEmpty(Object obj) {
+    public static boolean isNotNullAndEmpty(Object obj) {
         return obj != null && !obj.toString().isEmpty();
     }
 }

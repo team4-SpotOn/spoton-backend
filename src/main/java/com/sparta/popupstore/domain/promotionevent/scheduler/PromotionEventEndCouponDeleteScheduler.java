@@ -1,6 +1,5 @@
 package com.sparta.popupstore.domain.promotionevent.scheduler;
 
-import com.sparta.popupstore.domain.common.util.ValidUtil;
 import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
@@ -31,9 +30,7 @@ public class PromotionEventEndCouponDeleteScheduler {
         LocalDateTime sixMonthBefore = LocalDateTime.now().minusMonths(6);
         List<PromotionEvent> eventList = promotionEventRepository.findAllByEndDateTimeAfter(sixMonthBefore);
         for(PromotionEvent event : eventList) {
-            if(ValidUtil.isValidNullAndEmpty(event.getImageUrl())) {
-                s3ImageService.deleteImage(event.getImageUrl());
-            }
+            s3ImageService.deleteImage(event.getImageUrl());
         }
         promotionEventRepository.deleteAllInBatch(eventList);
     }

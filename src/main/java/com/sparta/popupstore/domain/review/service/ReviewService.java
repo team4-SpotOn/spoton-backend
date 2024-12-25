@@ -2,7 +2,6 @@ package com.sparta.popupstore.domain.review.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.domain.common.util.ValidUtil;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.reservation.repository.ReservationRepository;
@@ -64,9 +63,7 @@ public class ReviewService {
         if(!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_CANT_DELETE);
         }
-        if(ValidUtil.isValidNullAndEmpty(review.getImageUrl())) {
-            s3ImageService.deleteImage(review.getImageUrl());
-        }
+        s3ImageService.deleteImage(review.getImageUrl());
         reviewRepository.delete(review);
     }
 

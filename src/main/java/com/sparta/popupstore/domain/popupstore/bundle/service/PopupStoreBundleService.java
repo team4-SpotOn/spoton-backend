@@ -8,6 +8,7 @@ import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.bundle.repository.PopupStoreAttributeRepository;
 import com.sparta.popupstore.domain.popupstore.bundle.repository.PopupStoreImageRepository;
 import com.sparta.popupstore.domain.popupstore.bundle.repository.PopupStoreOperatingRepository;
+import com.sparta.popupstore.s3.service.S3ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class PopupStoreBundleService {
     private final PopupStoreImageRepository popupStoreImageRepository;
     private final PopupStoreOperatingRepository popupStoreOperatingRepository;
     private final PopupStoreAttributeRepository popupStoreAttributeRepository;
+    private final S3ImageService s3ImageService;
 
     public PopupStoreBundle createPopupStoreBundle(
             PopupStore popupStore,
@@ -68,7 +70,14 @@ public class PopupStoreBundleService {
     public void deletePopupStoreBundle(
             PopupStore popupStore
     ) {
-        popupStoreImageRepository.deleteAllByPopupStore(popupStore);
+        popupStoreImageRepository.findAllByPopupStore(popupStore)
+                        .forEach(popupStoreImage -> {
+                            String imageUrl = popupStoreImage.getImageUrl();
+                            s3ImageService.deleteImage(imageUrl);
+                            popupStoreImageRepository.delete(popupStoreImage);
+                        });
+        // 하는 김에 일단 넣어봄.
+        // popupStoreImageRepository.deleteAllByPopupStore(popupStore);
         popupStoreOperatingRepository.deleteAllByPopupStore(popupStore);
         popupStoreAttributeRepository.deleteAllByPopupStore(popupStore);
     }
