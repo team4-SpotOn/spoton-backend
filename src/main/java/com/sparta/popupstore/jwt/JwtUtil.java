@@ -74,15 +74,6 @@ public class JwtUtil {
             OAuth2Platform platform,
             HttpServletResponse response
     ) {
-        if(email == null || email.isEmpty()) {
-            try {
-                response.sendRedirect(USER_SIGNUP_URL);
-            } catch(IOException e) {
-                log.error(e.getMessage());
-            }
-            return;
-        }
-
         Date now = new Date();
 
         String token = BEARER_PREFIX +
