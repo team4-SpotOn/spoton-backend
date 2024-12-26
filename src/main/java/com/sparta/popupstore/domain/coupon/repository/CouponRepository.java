@@ -15,10 +15,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     List<Coupon> findAllByUserId(Long userId);
 
-    boolean existsByPromotionEventIdAndUserId(
-            @Param("promotionEventId") Long promotionEventId,
-            @Param("userId") Long userId
-    );
+    boolean existsByPromotionEventIdAndUserId(Long promotionEventId, Long userId);
 
     @Modifying
     @Query("update Coupon c set c.couponStatus = 'EXPIRATION' where c.couponExpirationPeriod < now() and c.couponStatus = 'ISSUED'")

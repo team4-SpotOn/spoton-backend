@@ -1,4 +1,4 @@
-package com.sparta.popupstore.domain.promotionevent.service;
+package com.sparta.popupstore.domain.coupon.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 public class CouponServiceTest {
 
     @Autowired
-    private PromotionEventService promotionEventService;
+    private CouponService couponService;
 
     @Autowired
     private PromotionEventRepository promotionEventRepository;
@@ -79,7 +79,7 @@ public class CouponServiceTest {
         for (User user : users) {
             executorService.submit(() -> {
                 try {
-                    promotionEventService.couponApplyAndIssuance(promotionEventId, user);
+                    couponService.couponApplyAndIssuance(user, promotionEventId);
                 } catch (CustomApiException e) {
                     System.out.println("쿠폰 지급 한도 초과");
                 }
@@ -111,7 +111,7 @@ public class CouponServiceTest {
         for (User user : users) {
             executorService.submit(() -> {
                 try {
-                    promotionEventService.couponApplyAndIssuance(promotionEventId, user);
+                    couponService.couponApplyAndIssuance(user, promotionEventId);
                 } catch (CustomApiException e) {
                     System.out.println("쿠폰 지급 한도 초과");
                 }

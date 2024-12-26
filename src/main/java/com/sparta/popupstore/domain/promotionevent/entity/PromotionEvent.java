@@ -79,4 +79,8 @@ public class PromotionEvent extends BaseEntity {
     public void couponGetCountUp() {
         this.couponGetCount++;
     }
+
+    public void delete(LocalDateTime now) {
+        this.deletedAt = now;
+    }
 }
