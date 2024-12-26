@@ -12,7 +12,6 @@ import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFi
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
-import com.sparta.popupstore.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -97,7 +96,7 @@ public class PromotionEventService {
         if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())) {
             throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
         }
-        promotionEventRepository.deletePromotionEvent(promotionEventId);
+        promotionEvent.delete(LocalDateTime.now());
     }
 
     private PromotionEvent getPromotionEvent(Long promotionEventId) {
