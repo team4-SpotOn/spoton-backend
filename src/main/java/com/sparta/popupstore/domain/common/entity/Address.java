@@ -11,16 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
     private String address;
+    private String city;
     private Double latitude;
     private Double longitude;
 
-    public Address(String address, RoadAddress roadAddress) {
-        this.address = address;
+    public Address(RoadAddress roadAddress) {
+        this.address = roadAddress.getAddressName();
+        this.city = roadAddress.getRegionName();
         this.latitude = roadAddress.getLatitude();
         this.longitude = roadAddress.getLongitude();
-    }
-
-    public Address(String address) {
-        this.address = address;
     }
 }

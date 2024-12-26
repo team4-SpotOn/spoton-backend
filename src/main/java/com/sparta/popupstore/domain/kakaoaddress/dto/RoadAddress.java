@@ -13,6 +13,9 @@ public class RoadAddress {
     @JsonProperty("address_name")
     private String addressName; // 도로명 주소
 
+    @JsonProperty("region_1depth_name")
+    private String regionName; // 지역명
+
     @JsonProperty("x")
     private Double longitude;   // 경도
 
