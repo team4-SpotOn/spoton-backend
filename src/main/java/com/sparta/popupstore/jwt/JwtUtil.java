@@ -48,6 +48,14 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
+    public void addJwtToCookieWithValid(String email, HttpServletResponse response) throws IOException {
+        if(email == null || email.isEmpty()) {
+            response.sendRedirect(USER_SIGNUP_URL);
+            return;
+        }
+        addJwtToCookie(email, response);
+    }
+
     public void addJwtToCookie(String email, HttpServletResponse response) {
         addJwtToCookie(email, null, null, response);
     }
@@ -66,15 +74,6 @@ public class JwtUtil {
             OAuth2Platform platform,
             HttpServletResponse response
     ) {
-        if(email == null || email.isEmpty()) {
-            try {
-                response.sendRedirect(USER_SIGNUP_URL);
-            } catch(IOException e) {
-                log.error(e.getMessage());
-            }
-            return;
-        }
-
         Date now = new Date();
 
         String token = BEARER_PREFIX +
