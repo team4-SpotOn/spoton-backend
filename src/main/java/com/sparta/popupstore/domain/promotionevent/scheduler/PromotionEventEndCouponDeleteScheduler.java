@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.promotionevent.scheduler;
 
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
@@ -30,7 +31,11 @@ public class PromotionEventEndCouponDeleteScheduler {
         LocalDateTime sixMonthBefore = LocalDateTime.now().minusMonths(6);
         List<PromotionEvent> eventList = promotionEventRepository.findAllByEndDateTimeAfter(sixMonthBefore);
         for(PromotionEvent event : eventList) {
-            s3ImageService.deleteImage(event.getImageUrl());
+            try {
+                s3ImageService.deleteImage(event.getImageUrl());
+            } catch (CustomApiException e) {
+                log.error("msg : {}, status : {}", e.getMessage(), e.getErrorCode());
+            }
         }
         promotionEventRepository.deleteAllInBatch(eventList);
     }

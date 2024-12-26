@@ -13,7 +13,6 @@ import com.sparta.popupstore.domain.review.dto.response.ReviewUpdateResponseDto;
 import com.sparta.popupstore.domain.review.entity.Review;
 import com.sparta.popupstore.domain.review.repository.ReviewRepository;
 import com.sparta.popupstore.domain.user.entity.User;
-import com.sparta.popupstore.s3.service.S3ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,7 +28,6 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final PopupStoreRepository popupStoreRepository;
     private final ReservationRepository reservationRepository;
-    private final S3ImageService s3ImageService;
 
     public ReviewCreateResponseDto createReview(User user, Long popupStoreId, ReviewCreateRequestDto requestDto) {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
@@ -63,7 +61,6 @@ public class ReviewService {
         if(!review.getUser().getId().equals(user.getId())) {
             throw new CustomApiException(ErrorCode.REVIEW_CANT_DELETE);
         }
-        s3ImageService.deleteImage(review.getImageUrl());
         reviewRepository.delete(review);
     }
 

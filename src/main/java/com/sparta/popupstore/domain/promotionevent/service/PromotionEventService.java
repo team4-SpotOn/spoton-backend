@@ -12,7 +12,7 @@ import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFi
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
-import com.sparta.popupstore.s3.service.S3ImageService;
+import com.sparta.popupstore.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,7 +31,6 @@ public class PromotionEventService {
 
     private final PromotionEventRepository promotionEventRepository;
     private final PopupStoreRepository popupStoreRepository;
-    private final S3ImageService s3ImageService;
 
     public PromotionEventCreateResponseDto createPromotionEvent(
             PromotionEventCreateRequestDto requestDto
@@ -98,8 +97,7 @@ public class PromotionEventService {
         if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())) {
             throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
         }
-        s3ImageService.deleteImage(promotionEvent.getImageUrl());
-        promotionEvent.delete(LocalDateTime.now());
+        promotionEventRepository.deletePromotionEvent(promotionEventId);
     }
 
     private PromotionEvent getPromotionEvent(Long promotionEventId) {
