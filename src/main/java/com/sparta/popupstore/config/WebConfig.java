@@ -6,7 +6,7 @@ import com.sparta.popupstore.domain.common.resolver.AuthSocialUserResolver;
 import com.sparta.popupstore.domain.common.resolver.AuthUserResolver;
 import com.sparta.popupstore.domain.common.converter.OAuth2PlatformConverter;
 import com.sparta.popupstore.domain.common.converter.PopupStoreSearchTypeConverter;
-import com.sparta.popupstore.s3.controller.converter.S3DirectoryConverter;
+import com.sparta.popupstore.domain.common.converter.S3DirectoryConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
