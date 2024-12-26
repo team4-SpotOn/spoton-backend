@@ -9,8 +9,9 @@ public enum ErrorCode {
     QR_ENCODE_ERROR(HttpStatus.BAD_REQUEST, "QR_ENCODE_ERROR"),
     WRITE_STREAM_ERROR(HttpStatus.BAD_REQUEST, "WRITE_STREAM_ERROR"),
     QR_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "QR_NOT_FOUND_ERROR"),
-    NOT_USER(HttpStatus.FORBIDDEN, "일반 유저가 아닙니다."),
+
     // company error
+    POPUP_STORE_NOT_END(HttpStatus.BAD_REQUEST, "팝업스토어가 종료되지 않았습니다."),
 
     // popupStore error
     IMAGE_SAVE_FAILURE(HttpStatus.NOT_FOUND, "이미지 저장에 실패했습니다."),

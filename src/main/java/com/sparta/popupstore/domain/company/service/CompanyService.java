@@ -1,7 +1,6 @@
 package com.sparta.popupstore.domain.company.service;
 
 import com.sparta.popupstore.config.PasswordEncoder;
-import com.sparta.popupstore.domain.common.annotation.AuthCompany;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.company.dto.request.CompanyDeleteRequestDto;
@@ -18,6 +17,7 @@ import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -55,8 +55,8 @@ public class CompanyService {
     }
 
     // 회사 자사 팝업스토어 조회
-    public List<CompanyMyPopupStoreResponseDto> getCompanyMyPopupStore(@AuthCompany Company company) {
-        return popupStoreRepository.findAllByCompanyId(company.getId()).stream()
+    public List<CompanyMyPopupStoreResponseDto> getCompanyMyPopupStore(Company company) {
+        return popupStoreRepository.findAllByCompany(company).stream()
                 .map(CompanyMyPopupStoreResponseDto::new)
                 .toList();
     }
@@ -73,6 +73,11 @@ public class CompanyService {
     public void deleteCompany(Company company, CompanyDeleteRequestDto requestDto) {
         if(!passwordEncoder.matches(requestDto.getPassword(), company.getPassword())) {
             throw new CustomApiException(ErrorCode.PASSWORD_MISS_MATCH);
+        }
+
+        LocalDate now = LocalDate.now();
+        if(popupStoreRepository.existsByCompanyAndEndDateGreaterThanEqual(company, now)) {
+            throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_END);
         }
 
         company.delete(LocalDateTime.now());
