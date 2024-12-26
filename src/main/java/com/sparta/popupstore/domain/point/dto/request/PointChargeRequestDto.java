@@ -8,15 +8,15 @@ import lombok.Getter;
 
 @Getter
 public class PointChargeRequestDto {
-  @NotNull(message = "충전할 포인트를 입력해주세요.")
-  @Positive(message = "0 이상의 값을 입력해주세요.")
-  private Integer chargedPoint;
+    @NotNull(message = "충전할 포인트를 입력해주세요.")
+    @Positive(message = "0 이상의 값을 입력해주세요.")
+    private Integer chargedPoint;
 
-  public PointChargedLog toEntity(User user) {
-    return PointChargedLog.builder()
-        .user(user)
-        .chargedPoint(this.chargedPoint)
-        .prevPoint(user.getPoint())
-        .build();
-  }
+    public PointChargedLog toEntity(User user) {
+        return PointChargedLog.builder()
+                .user(user)
+                .chargedPoint(this.chargedPoint)
+                .prevPoint(user.getPoint())
+                .build();
+    }
 }

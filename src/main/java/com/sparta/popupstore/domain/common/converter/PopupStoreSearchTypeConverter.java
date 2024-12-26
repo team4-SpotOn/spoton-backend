@@ -12,8 +12,7 @@ public class PopupStoreSearchTypeConverter implements Converter<String, PopupSto
     public PopupStoreStatus convert(String searchType) {
         try {
             return PopupStoreStatus.valueOf(searchType.toUpperCase());
-        }
-        catch (IllegalArgumentException e) {
+        } catch(IllegalArgumentException e) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_SEARCH_TYPE);
         }
     }

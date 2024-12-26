@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum Directory {
     REVIEWS("review"),
     PROMOTION_EVENTS("promotion-event"),
-    POPUP_STORES("popup-store")
+    POPUP_STORES("popup-store"),
     ;
 
     private final String prefix;

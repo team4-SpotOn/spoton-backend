@@ -2,7 +2,6 @@ package com.sparta.popupstore.domain.promotionevent.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
-import com.sparta.popupstore.domain.common.util.ValidUtil;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
@@ -13,7 +12,6 @@ import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFi
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
-import com.sparta.popupstore.s3.service.S3ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,7 +30,6 @@ public class PromotionEventService {
 
     private final PromotionEventRepository promotionEventRepository;
     private final PopupStoreRepository popupStoreRepository;
-    private final S3ImageService s3ImageService;
 
     public PromotionEventCreateResponseDto createPromotionEvent(
             PromotionEventCreateRequestDto requestDto
@@ -98,9 +95,6 @@ public class PromotionEventService {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
         if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())) {
             throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
-        }
-        if(ValidUtil.isValidNullAndEmpty(promotionEvent.getImageUrl())){
-            s3ImageService.deleteImage(promotionEvent.getImageUrl());
         }
         promotionEvent.delete(LocalDateTime.now());
     }

@@ -17,7 +17,7 @@ public enum ErrorCode {
     IMAGE_SAVE_FAILURE(HttpStatus.NOT_FOUND, "이미지 저장에 실패했습니다."),
     POPUP_STORE_NOT_BY_THIS_COMPANY(HttpStatus.FORBIDDEN, "팝업스토어가 이 회사에서 만들어지지 않았습니다."),
     POPUP_STORE_ALREADY_START(HttpStatus.FORBIDDEN, "진행 전인 팝업스토어만 수정 가능합니다."),
-    POPUP_STORE_NOT_FOUND(HttpStatus.BAD_REQUEST,"해당 팝업스토어가 없습니다."),
+    POPUP_STORE_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 팝업스토어가 없습니다."),
     POPUP_STORE_OPERATING_BAD_REQUEST(HttpStatus.BAD_REQUEST, "운영시간이 올바르지 않습니다."),
     POPUP_STORE_NOT_SEARCH_TYPE(HttpStatus.BAD_REQUEST, "제대로 된 검색 타입을 입력해주세요."),
     // event error
@@ -27,12 +27,12 @@ public enum ErrorCode {
     PROMOTION_EVENT_END(HttpStatus.BAD_REQUEST, "이미 끝난 이벤트 입니다."),
     PROMOTION_EVENT_NOT_AFTER_POPUP_STORE_END_DATE(HttpStatus.BAD_REQUEST, "이벤트 종료일은 팝업스토어 종료일 이후로 선택할 수 없습니다."),
     // review error
-    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND,"수정할 리뷰가 없습니다."),
-    REVIEW_NOT_UPDATE(HttpStatus.FORBIDDEN,"작성자만 수정할 수 있습니다."),
-    REVIEW_ALREADY_DELETED(HttpStatus.NOT_FOUND,"이미 삭제된 리뷰입니다."),
-    REVIEW_CANT_DELETE(HttpStatus.BAD_REQUEST,"삭제권한이 없습니다."),
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "수정할 리뷰가 없습니다."),
+    REVIEW_NOT_UPDATE(HttpStatus.FORBIDDEN, "작성자만 수정할 수 있습니다."),
+    REVIEW_ALREADY_DELETED(HttpStatus.NOT_FOUND, "이미 삭제된 리뷰입니다."),
+    REVIEW_CANT_DELETE(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다."),
     // coupon error
-    COUPON_SOLD_OUT(HttpStatus.BAD_REQUEST,"쿠폰이 모두 소진되었습니다."),
+    COUPON_SOLD_OUT(HttpStatus.BAD_REQUEST, "쿠폰이 모두 소진되었습니다."),
     COUPON_DUPLICATE_ISSUANCE(HttpStatus.BAD_REQUEST, "이미 발급 받으신 쿠폰입니다."),
 
     //auth error
@@ -55,11 +55,11 @@ public enum ErrorCode {
     NOT_CORRECT_URL_FORMAT(HttpStatus.BAD_REQUEST, "올바른 파일 이름이 아닙니다."),
 
     //point
-    NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST,"포인트가 부족합니다." ),
+    NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "포인트가 부족합니다."),
 
     //reservation
     POPUP_STORE_CAN_NOT_RESERVATION(HttpStatus.BAD_REQUEST, "예약할 수 없는 팝업스토어 입니다."),
-    POPUP_STORE_NOT_RESERVATION(HttpStatus.INTERNAL_SERVER_ERROR,"예약한 팝업스토어가 아닙니다."),
+    POPUP_STORE_NOT_RESERVATION(HttpStatus.INTERNAL_SERVER_ERROR, "예약한 팝업스토어가 아닙니다."),
     DOESNT_RESERVATION_AT(HttpStatus.BAD_REQUEST, "예약한 시간대가 아닙니다."),
     RESERVATION_LATE(HttpStatus.BAD_REQUEST, "예약한 시간이 지났습니다."),
     RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 내역이 존재하지 않습니다."),

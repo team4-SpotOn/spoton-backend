@@ -7,11 +7,11 @@ import org.hibernate.validator.constraints.Range;
 @Getter
 public class ReviewUpdateRequestDto {
 
-  @Range(min = 1, max = 5, message = "1~5사이의 별점을 입력해주세요.")
-  private Integer star;
+    @Range(min = 1, max = 5, message = "1~5사이의 별점을 입력해주세요.")
+    private Integer star;
 
-  @NotBlank(message = "내용을 입력하세요")
-  private String contents;
+    @NotBlank(message = "내용을 입력하세요")
+    private String contents;
 
-  private String imageUrl;
+    private String imageUrl;
 }

@@ -10,21 +10,21 @@ import org.hibernate.validator.constraints.Range;
 @Getter
 public class ReviewCreateRequestDto {
 
-  @Range(min = 1, max = 5, message = "1~5사이의 별점을 입력해주세요.")
-  private Integer star;
+    @Range(min = 1, max = 5, message = "1~5사이의 별점을 입력해주세요.")
+    private Integer star;
 
-  @NotBlank(message = "내용을 입력하세요")
-  private String contents;
+    @NotBlank(message = "내용을 입력하세요")
+    private String contents;
 
-  private String imageUrl;
+    private String imageUrl;
 
-  public Review toEntity(User user, PopupStore popupStore) {
-    return Review.builder()
-        .user(user)
-        .popupStore(popupStore)
-        .star(this.star)
-        .contents(this.contents)
-        .imageUrl(this.imageUrl)
-        .build();
-  }
+    public Review toEntity(User user, PopupStore popupStore) {
+        return Review.builder()
+                .user(user)
+                .popupStore(popupStore)
+                .star(star)
+                .contents(contents)
+                .imageUrl(imageUrl)
+                .build();
+    }
 }

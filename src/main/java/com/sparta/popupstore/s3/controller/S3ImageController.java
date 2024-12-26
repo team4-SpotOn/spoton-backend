@@ -1,5 +1,6 @@
 package com.sparta.popupstore.s3.controller;
 
+import com.sparta.popupstore.s3.dto.request.S3ImageListRequestDto;
 import com.sparta.popupstore.s3.dto.request.S3ImageRequestDto;
 import com.sparta.popupstore.s3.dto.response.S3ImageResponseDto;
 import com.sparta.popupstore.s3.enums.Directory;
@@ -8,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,22 +29,22 @@ public class S3ImageController {
     @GetMapping("/{directory}/images/preassigned")
     public ResponseEntity<S3ImageResponseDto> getReviewAndPromotionEventImagePreSignedUrl(
             @PathVariable Directory directory,
-            @RequestBody @Valid S3ImageRequestDto imageRequestDto
+            @RequestBody @Valid S3ImageRequestDto requestDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(imageService.getPreSignedUrl(directory, imageRequestDto.getFileName()));
+                .body(imageService.getPreSignedUrl(directory, requestDto));
     }
 
     @Operation(summary = "팝업스토어 이미지 preSignedUrl 발급")
     @Parameter(name = "fileName", description = "파일명")
     @GetMapping("/popup-stores/images/preassigned")
     public ResponseEntity<List<S3ImageResponseDto>> getPopupStoreImagePreSignedUrl(
-            @RequestBody @NotEmpty(message = "이미지를 하나이상 올려주세요") List<S3ImageRequestDto> imageRequestDtoList
+            @RequestBody @Valid S3ImageListRequestDto requestDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(imageService.getPreSignedUrls(Directory.POPUP_STORES, imageRequestDtoList));
+                .body(imageService.getPreSignedUrls(Directory.POPUP_STORES, requestDto));
     }
 
     @Operation(summary = "s3에 저장된 이미지 삭제")

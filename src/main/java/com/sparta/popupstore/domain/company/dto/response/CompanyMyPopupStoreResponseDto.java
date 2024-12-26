@@ -3,7 +3,9 @@ package com.sparta.popupstore.domain.company.dto.response;
 import com.sparta.popupstore.domain.common.entity.Address;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDate;
+
 import lombok.Getter;
 
 @Getter

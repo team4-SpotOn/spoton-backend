@@ -82,12 +82,12 @@ public class ReviewController {
     @Parameter(name = "page", description = "페이지 번호")
     @Parameter(name = "size", description = "페이지 사이즈")
     @GetMapping("/popupstores/{popupStoreId}")
-    public ResponseEntity<Page<ReviewFindAllResponseDto>> findReviews(
+    public ResponseEntity<Page<ReviewFindAllResponseDto>> findAllReviews(
             @PathVariable Long popupStoreId,
             @PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(reviewService.findReview(popupStoreId, pageable));
+                .body(reviewService.findAllReviews(popupStoreId, pageable));
     }
 }
