@@ -11,6 +11,7 @@ public class UserMyCouponsResponseDto {
     private final Long id;
     @Schema(description = "쿠폰 시리얼번호")
     private final String serialNumber;
+
     public UserMyCouponsResponseDto(Coupon coupon) {
         this.id = coupon.getId();
         this.serialNumber = coupon.getSerialNumber();

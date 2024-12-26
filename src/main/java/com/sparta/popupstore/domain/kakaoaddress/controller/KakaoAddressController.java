@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class KakaoAddressController {
 
     private final KakaoAddressService kakaoAddressService;
+
     @Operation(summary = "카카오 주소 API", description = "주소 기준 위도/경도 구하기")
     @GetMapping("/kakaoapi")
     public Address getKakaoAddress(@RequestParam String address) {

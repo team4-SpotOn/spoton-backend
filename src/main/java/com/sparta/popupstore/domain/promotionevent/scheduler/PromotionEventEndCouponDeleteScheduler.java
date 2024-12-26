@@ -33,7 +33,7 @@ public class PromotionEventEndCouponDeleteScheduler {
         for(PromotionEvent event : eventList) {
             try {
                 s3ImageService.deleteImage(event.getImageUrl());
-            } catch (CustomApiException e) {
+            } catch(CustomApiException e) {
                 log.error("msg : {}, status : {}", e.getMessage(), e.getErrorCode());
             }
         }

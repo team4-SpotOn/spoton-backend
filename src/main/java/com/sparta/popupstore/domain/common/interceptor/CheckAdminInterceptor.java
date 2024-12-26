@@ -26,21 +26,21 @@ public class CheckAdminInterceptor implements HandlerInterceptor {
             @NonNull HttpServletResponse response,
             @NonNull Object handler
     ) {
-        if (!(handler instanceof HandlerMethod handlerMethod)) {
+        if(!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
         CheckAdmin checkAdmin = handlerMethod.getMethodAnnotation(CheckAdmin.class);
-        if (checkAdmin == null) {
+        if(checkAdmin == null) {
             return true;
         }
 
         Claims adminInfo = jwtUtil.getInfoFromRequest(request);
-        if (adminInfo == null) {
+        if(adminInfo == null) {
             throw new CustomApiException(ErrorCode.NEED_LOGIN);
         }
 
         String adminRole = adminInfo.get(JwtUtil.ADMIN_ROLE_KEY, String.class);
-        if (adminRole == null || !AdminRole.valueOf(adminRole).equals(AdminRole.ADMIN)) {
+        if(adminRole == null || !AdminRole.valueOf(adminRole).equals(AdminRole.ADMIN)) {
             throw new CustomApiException(ErrorCode.NOT_ADMIN);
         }
 

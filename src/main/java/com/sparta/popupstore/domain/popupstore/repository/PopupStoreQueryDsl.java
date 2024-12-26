@@ -9,8 +9,10 @@ import java.time.LocalDate;
 
 import java.util.List;
 
-public interface PopupStoreQueryDsl{
+public interface PopupStoreQueryDsl {
     Page<PopupStore> findByStatus(Pageable pageable, PopupStoreStatus popupStoreStatus);
+
     List<PopupStore> findByStartDateAndEndDate(LocalDate startDate, LocalDate endDate, Long page, Long size);
+
     List<PopupStore> findByMonth(Long page, Long size);
 }
