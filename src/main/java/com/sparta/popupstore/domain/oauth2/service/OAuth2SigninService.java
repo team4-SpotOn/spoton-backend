@@ -3,7 +3,7 @@ package com.sparta.popupstore.domain.oauth2.service;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.oauth2.client.common.OAuth2Client;
-import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfo;
+import com.sparta.popupstore.domain.oauth2.client.common.OAuth2UserInfoDto;
 import com.sparta.popupstore.domain.oauth2.dto.ValidPhoneRequestDto;
 import com.sparta.popupstore.domain.oauth2.entity.SocialUser;
 import com.sparta.popupstore.domain.oauth2.type.OAuth2Platform;
@@ -30,7 +30,7 @@ public class OAuth2SigninService {
     public SocialUser signin(OAuth2Platform platform, String authorizationCode) {
         OAuth2Client client = getClient(platform);
         String accessToken = client.getAccessToken(authorizationCode);
-        OAuth2UserInfo userInfo = client.getUserInfo(accessToken);
+        OAuth2UserInfoDto userInfo = client.getUserInfo(accessToken);
         return socialUserService.signupIfAbsent(userInfo);
     }
 

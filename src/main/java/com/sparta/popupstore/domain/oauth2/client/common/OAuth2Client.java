@@ -58,7 +58,7 @@ public abstract class OAuth2Client {
                 .accessToken();
     }
 
-    public OAuth2UserInfo getUserInfo(String accessToken) {
+    public OAuth2UserInfoDto getUserInfo(String accessToken) {
         return Optional.ofNullable(
                 restClient.get()
                         .uri(RESOURCE_SERVER_URL)
