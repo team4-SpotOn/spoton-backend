@@ -14,6 +14,19 @@ services: # 아래에서 설정한 컨테이너들을 하나로 묶어줌
       - app-network
     restart: always # 종료되어도 자동으로 재실행
 
+    backend:
+    image: your-backend-image  # 애플리케이션 이미지 명시
+    container_name: spoton-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: test  # Spring Boot 프로파일 설정 (test 프로파일 사용)
+    depends_on:
+      - mysql  # mysql 서비스가 준비된 후에 backend가 실행되도록 보장
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    restart: always
+
 networks:
   app-network:
     driver: bridge
