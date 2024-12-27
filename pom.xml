@@ -25,6 +25,18 @@
     </repository>
   </repositories>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>3.3.5</version> <!-- Spring Boot 버전 -->
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <!-- 의존성 설정 -->
   <dependencies>
     <!-- Spring Boot 관련 의존성 -->
