@@ -8,7 +8,6 @@
         dev 개발환경
         prod 운영환경
     -->
-    <property resource="application.properties"/>
 
     <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
     <springProperty scope="context" name="LOG_PATH" source="logging.file.path"/>
