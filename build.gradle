@@ -58,8 +58,17 @@ dependencies {
     // QR Code - zxing
     implementation group: 'com.google.zxing', name: 'javase', version: '3.5.0'
     implementation group: 'com.google.zxing', name: 'core', version: '3.5.0'
+
+    // prometheus 모니터링
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+bootRun{
+    String activeProfile = System.properties['spring.profiles.active']
+    systemProperty "spring.profiles.active", activeProfile
 }

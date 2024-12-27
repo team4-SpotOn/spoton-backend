@@ -37,9 +37,14 @@ out/
 .vscode/
 
 ### application ###
-application.properties
 application.yml
-
-
+application.properties
+application-dev.properties
 ### js ###
 apikey.js
+
+### 환경변수 ###
+.env
+
+### log ###
+*.log
