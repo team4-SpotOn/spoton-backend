@@ -27,8 +27,8 @@ jobs:
           echo "PR Title: $PR_TITLE"
         fi
 
-        # 커밋 메시지나 PR 제목이 "citest"로 시작하는지 확인
-        if [[ "$COMMIT_MESSAGE" == citest* || "$PR_TITLE" == citest* ]]; then
+        # 커밋 메시지나 PR 제목이 "[#"로 시작하는지 확인
+        if [[ "$COMMIT_MESSAGE" == [#* || "$PR_TITLE" == [#* ]]; then
           echo "CI triggered because commit message or PR title starts with 'citest'"
         else
           echo "Skipping CI because commit message and PR title do not start with 'citest'"
