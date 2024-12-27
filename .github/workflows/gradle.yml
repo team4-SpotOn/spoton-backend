@@ -46,6 +46,9 @@ jobs:
       with:
         gradle-version: '8.0'  # 원하는 Gradle 버전으로 설정
 
+    - name: Give execute permission to gradlew
+      run: chmod +x ./gradlew  # 실행 권한 부여
+
     - name: Build with Gradle
       run: ./gradlew build  # Gradle을 사용하여 빌드 실행
 
