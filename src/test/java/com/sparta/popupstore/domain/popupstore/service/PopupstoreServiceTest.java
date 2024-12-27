@@ -12,6 +12,7 @@ import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResp
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -45,6 +46,7 @@ class PopupstoreServiceTest {
     }
 
     @Test
+    @DisplayName("팝업스토어 생성")
     void createPopupStore_success() throws Exception {
         // Given
         Company company = Company.builder()
