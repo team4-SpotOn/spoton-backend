@@ -58,7 +58,7 @@ jobs:
         run: |
           until docker exec test-db mysqladmin ping --silent; do
           echo "Waiting for database..."
-          sleep 10
+          sleep 40
           done
 
       - name: Create application.properties
