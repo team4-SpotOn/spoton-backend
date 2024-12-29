@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,19 +30,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@DataJpaTest
+@ExtendWith(MockitoExtension.class)
 public class CouponServiceTest {
 
-    @Autowired
+    @Mock
     private CouponService couponService;
 
-    @Autowired
+    @Mock
     private PromotionEventRepository promotionEventRepository;
 
-    @Autowired
+    @Mock
     private CouponRepository couponRepository;
 
-    @Autowired
+    @Mock
     private UserRepository userRepository;
 
     PromotionEvent promotionEvent;
