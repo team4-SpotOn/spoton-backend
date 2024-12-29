@@ -58,7 +58,7 @@ public class CouponServiceTest {
             .couponExpirationPeriod(30)
             .title("선착순테스트")
             .description("설명설명")
-            .endDateTime(LocalDateTime.now().plusDays(7))
+            .endDateTime(LocalDateTime.now().plusDays(30))
             .build();
         promotionEventRepository.save(promotionEvent);
     }

@@ -57,6 +57,7 @@ jobs:
           echo "spring.datasource.username=${DB_USER}" >> src/main/resources/application.properties
           echo "spring.datasource.password=${DB_PASSWORD}" >> src/main/resources/application.properties
           echo "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver" >> src/main/resources/application.properties
+          echo "spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect" >> src/main/resources/application.properties
 
       - name: Set permissions for application.properties
         run: |
