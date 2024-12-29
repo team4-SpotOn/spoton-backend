@@ -44,6 +44,17 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build  # Gradle을 사용하여 빌드 실행
+        env:
+          DB_HOST: test-db
+          DB_PORT: 3308
+          DB_NAME: spoton-backend
+          DB_USER: root
+          DB_PASSWORD: 1234
+
+      - name: Verify application.properties exists
+        run: |
+          ls -l src/main/resources/
+          cat src/main/resources/application.properties || echo "application.properties not found"
 
 
       - name: Set up Docker Compose
