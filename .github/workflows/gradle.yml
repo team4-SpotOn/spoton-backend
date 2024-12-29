@@ -19,10 +19,6 @@ jobs:
           TZ: Asia/Seoul
         ports:
           - "3307:3306"
-        volumes:
-          - db-data:/var/lib/mysql
-        networks:
-          - app-network
         restart: always
         options: --health-cmd="mysqladmin ping --silent" --health-timeout=10s --health-start-period=30s --health-retries=5
 
@@ -41,7 +37,8 @@ jobs:
             echo "PR Title: $PR_TITLE"
           fi
           
-          if [[ "$COMMIT_MESSAGE" == [#* || "$PR_TITLE" == [#* ]]; then
+          # 커밋 메시지 또는 PR 제목이 '[#'로 시작하는지 확인
+          if [[ "$COMMIT_MESSAGE" == \[#* || "$PR_TITLE" == \[#* ]]; then
             echo "CI triggered because commit message or PR title starts with '[#'"
           else
             echo "Skipping CI because commit message and PR title do not start with '[#'"
