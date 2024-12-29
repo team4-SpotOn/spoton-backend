@@ -10,17 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: 1234
-          MYSQL_DATABASE: spoton-backend
-          TZ: Asia/Seoul
-        ports:
-          - "3307:3306"
-        options: --health-cmd="mysqladmin ping --silent" --health-timeout=10s --health-start-period=30s --health-retries=5
-
     steps:
       - uses: actions/checkout@v4
 
@@ -55,10 +44,23 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build  # Gradle을 사용하여 빌드 실행
-
-      - name: Wait for MySQL to be ready
+      # 2. Docker Compose 설치 (필요 시)
+      - name: Set up Docker Compose
         run: |
-          docker exec spot-on-mysql mysqladmin --user=root --password=1234 --wait-for-server 30
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
+      # 3. Docker Compose 실행
+      - name: Start Database with Docker Compose
+        run: docker-compose up -d
+
+      # 4. 데이터베이스가 준비될 때까지 대기
+      - name: Wait for Database to be Ready
+        run: |
+          until docker exec test-db mysqladmin ping --silent; do
+          echo "Waiting for database..."
+          sleep 10
+          done
 
       - name: Run tests with Gradle
         env:
