@@ -82,10 +82,3 @@ jobs:
         with:
           name: gradle-dependency-report
           path: dependencies.txt
-
-volumes:
-  db-data:
-
-networks:
-  app-network:
-    driver: bridge
