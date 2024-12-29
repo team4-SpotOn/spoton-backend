@@ -72,6 +72,7 @@ jobs:
       - name: Verify application.properties creation
         run: |
           cat src/main/resources/application.properties
+          ls -l src/main/resources/ 
 
       - name: Run tests with Gradle
         env:
