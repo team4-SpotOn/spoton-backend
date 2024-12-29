@@ -60,7 +60,6 @@ public class CouponServiceTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("이벤트 쿠폰 선착순 5명 - 10명이 경쟁 (user DB 10명용)")
     public void testCouponConcurrency10() throws InterruptedException {
         final int threads = 100;
@@ -100,7 +99,6 @@ public class CouponServiceTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("이벤트 쿠폰 선착순 10명 - 100명이 경쟁 (user DB 100명용)")
     public void testCouponConcurrency100() throws InterruptedException {
         final int threads = 100;
