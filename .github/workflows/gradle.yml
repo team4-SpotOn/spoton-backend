@@ -45,6 +45,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build  # Gradle을 사용하여 빌드 실행
 
+
       - name: Set up Docker Compose
         run: |
           sudo apt-get update
