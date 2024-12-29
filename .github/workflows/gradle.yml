@@ -67,6 +67,8 @@ jobs:
           echo "spring.datasource.username=${DB_USER}" >> src/main/resources/application.properties
           echo "spring.datasource.password=${DB_PASSWORD}" >> src/main/resources/application.properties
           echo "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver" >> src/main/resources/application.properties
+          
+          chmod 644 src/main/resources/application.properties
 
       # application.properties 파일 정상적으로 생성되었는지 로그 출력
       - name: Verify application.properties creation
