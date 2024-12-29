@@ -19,7 +19,6 @@ jobs:
           TZ: Asia/Seoul
         ports:
           - "3307:3306"
-        restart: always
         options: --health-cmd="mysqladmin ping --silent" --health-timeout=10s --health-start-period=30s --health-retries=5
 
     steps:
