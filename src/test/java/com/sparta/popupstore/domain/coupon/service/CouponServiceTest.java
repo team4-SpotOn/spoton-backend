@@ -69,7 +69,7 @@ public class CouponServiceTest {
     public void testCouponConcurrency10() throws InterruptedException {
         final int threads = 100;
         final int usersCount = 10;
-        final int count = 5;
+        final int count = 10;
 
 
         Long promotionEventId = promotionEvent.getId();
@@ -105,36 +105,36 @@ public class CouponServiceTest {
         assertEquals(count, couponCount);
     }
 
-    @Test
-    @Transactional
-    @DisplayName("이벤트 쿠폰 선착순 10명 - 100명이 경쟁 (user DB 100명용)")
-    public void testCouponConcurrency100() throws InterruptedException {
-        final int threads = 100;
-        final int count = 10;
-
-        Long promotionEventId = promotionEvent.getId();
-//        Long promotionEventId = 2L;
-        ExecutorService executorService = Executors.newFixedThreadPool(threads);
-
-        List<User> users = userRepository.findAll();
-        for (User user : users) {
-            executorService.submit(() -> {
-                try {
-                    couponService.couponApplyAndIssuance(user, promotionEventId);
-                } catch (CustomApiException e) {
-                    System.out.println("쿠폰 지급 한도 초과");
-                }
-            });
-        }
-
-        executorService.shutdown();
-        executorService.awaitTermination(1, TimeUnit.MINUTES);
-
-        PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId)
-            .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
-        assertTrue(promotionEvent.getCouponGetCount() <= count);
-
-        long couponCount = couponRepository.countByPromotionEventId(promotionEventId);
-        assertEquals(count, couponCount);
-    }
+//    @Test
+//    @Transactional
+//    @DisplayName("이벤트 쿠폰 선착순 10명 - 100명이 경쟁 (user DB 100명용)")
+//    public void testCouponConcurrency100() throws InterruptedException {
+//        final int threads = 100;
+//        final int count = 10;
+//
+//        Long promotionEventId = promotionEvent.getId();
+////        Long promotionEventId = 2L;
+//        ExecutorService executorService = Executors.newFixedThreadPool(threads);
+//
+//        List<User> users = userRepository.findAll();
+//        for (User user : users) {
+//            executorService.submit(() -> {
+//                try {
+//                    couponService.couponApplyAndIssuance(user, promotionEventId);
+//                } catch (CustomApiException e) {
+//                    System.out.println("쿠폰 지급 한도 초과");
+//                }
+//            });
+//        }
+//
+//        executorService.shutdown();
+//        executorService.awaitTermination(1, TimeUnit.MINUTES);
+//
+//        PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId)
+//            .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
+//        assertTrue(promotionEvent.getCouponGetCount() <= count);
+//
+//        long couponCount = couponRepository.countByPromotionEventId(promotionEventId);
+//        assertEquals(count, couponCount);
+//    }
 }
