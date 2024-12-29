@@ -14,6 +14,19 @@ services: # 아래에서 설정한 컨테이너들을 하나로 묶어줌
       - app-network
     restart: always # 종료되어도 자동으로 재실행
 
+  test-db:
+      image: mysql:8.0
+      container_name: test-db
+      environment:
+        MYSQL_ROOT_PASSWORD: 1234
+        MYSQL_DATABASE: spoton-backend
+        TZ: Asia/Seoul
+      ports:
+        - "3308:3306"  # 다른 포트 사용 (3307이 이미 사용 중이라면)
+      networks:
+        - app-network
+      restart: always
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
