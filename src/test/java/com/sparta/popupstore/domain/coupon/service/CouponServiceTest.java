@@ -71,7 +71,9 @@ public class CouponServiceTest {
         final int usersCount = 10;
         final int count = 5;
 
-        Long promotionEventId = 2L;
+
+        Long promotionEventId = promotionEvent.getId();
+//        Long promotionEventId = 2L;
         ExecutorService executorService = Executors.newFixedThreadPool(threads);
 //        when(user.getId()).thenReturn(1L);
         // 객체 여러명 생성 반복문
@@ -110,7 +112,8 @@ public class CouponServiceTest {
         final int threads = 100;
         final int count = 10;
 
-        Long promotionEventId = 2L;
+        Long promotionEventId = promotionEvent.getId();
+//        Long promotionEventId = 2L;
         ExecutorService executorService = Executors.newFixedThreadPool(threads);
 
         List<User> users = userRepository.findAll();
