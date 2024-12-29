@@ -42,36 +42,6 @@ jobs:
       - name: Give execute permission to gradlew
         run: chmod +x ./gradlew  # 실행 권한 부여
 
-      - name: Build with Gradle
-        run: ./gradlew build  # Gradle을 사용하여 빌드 실행
-        env:
-          DB_HOST: test-db
-          DB_PORT: 3308
-          DB_NAME: spoton-backend
-          DB_USER: root
-          DB_PASSWORD: 1234
-
-      - name: Verify application.properties exists
-        run: |
-          ls -l src/main/resources/
-          cat src/main/resources/application.properties || echo "application.properties not found"
-
-
-      - name: Set up Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install docker-compose -y
-
-      - name: Start Database with Docker Compose
-        run: docker-compose up -d
-
-      - name: Wait for Database to be Ready
-        run: |
-          until docker exec test-db mysqladmin ping --silent; do
-          echo "Waiting for database..."
-          sleep 40
-          done
-
       - name: Create application.properties with relative path
         run: |
           echo "spring.datasource.url=jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}" > src/main/resources/application.properties
@@ -88,6 +58,30 @@ jobs:
         run: |
           ls -l src/main/resources/
           cat src/main/resources/application.properties || echo "application.properties not found"
+
+      - name: Build with Gradle
+        run: ./gradlew build  # Gradle을 사용하여 빌드 실행
+        env:
+          DB_HOST: test-db
+          DB_PORT: 3308
+          DB_NAME: spoton-backend
+          DB_USER: root
+          DB_PASSWORD: 1234
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
+      - name: Start Database with Docker Compose
+        run: docker-compose up -d
+
+      - name: Wait for Database to be Ready
+        run: |
+          until docker exec test-db mysqladmin ping --silent; do
+          echo "Waiting for database..."
+          sleep 40
+          done
 
       - name: Run tests with Gradle
         env:
