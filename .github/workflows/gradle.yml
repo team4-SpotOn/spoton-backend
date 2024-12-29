@@ -44,17 +44,15 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build  # Gradle을 사용하여 빌드 실행
-      # 2. Docker Compose 설치 (필요 시)
+
       - name: Set up Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install docker-compose -y
 
-      # 3. Docker Compose 실행
       - name: Start Database with Docker Compose
         run: docker-compose up -d
 
-      # 4. 데이터베이스가 준비될 때까지 대기
       - name: Wait for Database to be Ready
         run: |
           until docker exec test-db mysqladmin ping --silent; do
@@ -64,7 +62,7 @@ jobs:
 
       - name: Run tests with Gradle
         env:
-          DB_HOST: mysql
+          DB_HOST: test-db
           DB_PORT: 3306
           DB_NAME: spoton-backend
           DB_USER: root
