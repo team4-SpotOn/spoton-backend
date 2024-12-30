@@ -37,13 +37,9 @@ public class ReviewServiceTest {
     @Test
     void createReviewTest() {
         // given
-        Integer star = 5;
-        String contents = "최고";
         Long popupStoreId = popupStore.getId();
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
                 .popupStore(popupStore)
-                .star(star)
-                .contents(contents)
                 .build();
 
         // when
@@ -51,5 +47,8 @@ public class ReviewServiceTest {
                 CustomApiException.class,
                 () -> reviewService.createReview(user, popupStoreId, requestDto)
         );
+
+        // then
+        assertEquals(ErrorCode.POPUP_STORE_NOT_FOUND.getMessage(), exception.getMessage());
     }
 }
