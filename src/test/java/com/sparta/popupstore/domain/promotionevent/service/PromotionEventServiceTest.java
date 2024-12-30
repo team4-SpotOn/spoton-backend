@@ -6,6 +6,7 @@ import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCreateResponseDto;
+import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -110,18 +111,36 @@ class PromotionEventServiceTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 이벤트 수정 요청 시 예외 처리")
+    @DisplayName("존재하지 않거나 시작일이 지난 이벤트 수정 요청 시 예외 처리")
     void updatePromotionEventTest1() {
         // given
         Long promotionEventId = 1L;
         PromotionEventUpdateRequestDto requestDto = PromotionEventUpdateRequestDto.builder()
-                .endDateTime(LocalDateTime.now().plusDays(2))
                 .build();
         // when
-        when(promotionEventRepository.findById(any())).thenReturn(Optional.empty());
+        when(promotionEventRepository.findByIdAndStartDateTimeAfter(any(), any())).thenReturn(Optional.empty());
         Throwable exception = assertThrows(CustomApiException.class, ()->
                 promotionEventService.updatePromotionEvent(requestDto, promotionEventId));
         // then
-        assertEquals("해당 이벤트가 없습니다.", exception.getMessage());
+        assertEquals("수정하거나 삭제할 수 없는 이벤트입니다.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("이벤트 수정 성공")
+    void updatePromotionEventTest2() {
+        // given
+        Long promotionEventId = 1L;
+        PromotionEvent promotionEvent = PromotionEvent.builder()
+                .id(promotionEventId)
+                .title("수정 전 제목")
+                .build();
+        PromotionEventUpdateRequestDto requestDto = PromotionEventUpdateRequestDto.builder()
+                .title("수정 후 제목")
+                .build();
+        // when
+        when(promotionEventRepository.findByIdAndStartDateTimeAfter(any(), any())).thenReturn(Optional.of(promotionEvent));
+        PromotionEventUpdateResponseDto responseDto = promotionEventService.updatePromotionEvent(requestDto, promotionEventId);
+        // then
+        assertEquals("수정 후 제목", responseDto.getTitle());
     }
 }

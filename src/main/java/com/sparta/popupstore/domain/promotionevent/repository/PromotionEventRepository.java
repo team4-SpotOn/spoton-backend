@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PromotionEventRepository extends JpaRepository<PromotionEvent, Long> {
 //    @Modifying
@@ -29,5 +30,7 @@ public interface PromotionEventRepository extends JpaRepository<PromotionEvent, 
     @Query("select p from PromotionEvent p where p.id = :promotionEventId")
     PromotionEvent findByIdWithPessimisticLock(Long promotionEventId);
 
-    List<PromotionEvent> findAllByEndDateTimeAfter(LocalDateTime sixMonthBefore);
+    List<PromotionEvent> findAllByEndDateTimeBefore(LocalDateTime sixMonthBefore);
+
+    Optional<PromotionEvent> findByIdAndStartDateTimeAfter(Long id, LocalDateTime now);
 }
