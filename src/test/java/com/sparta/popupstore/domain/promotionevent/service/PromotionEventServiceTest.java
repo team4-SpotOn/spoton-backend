@@ -1,6 +1,7 @@
 package com.sparta.popupstore.domain.promotionevent.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
@@ -38,8 +39,6 @@ class PromotionEventServiceTest {
     private PromotionEventRepository promotionEventRepository;
     @Mock
     private PopupStoreRepository popupStoreRepository;
-    @Mock
-    private PromotionEvent mockPromotionEvent;
     @InjectMocks
     private PromotionEventService promotionEventService;
 
@@ -54,7 +53,7 @@ class PromotionEventServiceTest {
         // when
         String exception = assertThrows(CustomApiException.class , () -> promotionEventService.createPromotionEvent(requestDto)).getMessage();
         // then
-        assertEquals("해당 팝업스토어가 없습니다." , exception);
+        assertEquals(ErrorCode.POPUP_STORE_NOT_FOUND.getMessage() , exception);
     }
 
     @Test
@@ -121,63 +120,112 @@ class PromotionEventServiceTest {
     }
 
     @Test
-    @DisplayName("존재하지 않거나 시작일이 지났거나 종료일이 지나지 않은 이벤트 수정 요청 시 예외 처리")
+    @DisplayName("존재하지 않는 이벤트 수정 요청 시 예외 처리")
     void updatePromotionEventTest1() {
         // given
         Long promotionEventId = 1L;
         PromotionEventUpdateRequestDto requestDto = PromotionEventUpdateRequestDto.builder()
                 .build();
         // when
-        when(promotionEventRepository.findByIdAndStartDateTimeAfterOrEndDateTimeBefore(any(), any(), any())).thenReturn(Optional.empty());
+        when(promotionEventRepository.findById(promotionEventId)).thenReturn(Optional.empty());
         Throwable exception = assertThrows(CustomApiException.class, ()->
                 promotionEventService.updatePromotionEvent(requestDto, promotionEventId));
         // then
-        assertEquals("수정하거나 삭제할 수 없는 이벤트입니다.", exception.getMessage());
+        assertEquals(ErrorCode.PROMOTION_EVENT_NOT_FOUND.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("이미 진행중인 이벤트 수정 요청 시 예외 처리")
+    void updatePromotionEventTest2() {
+        // given
+        Long promotionEventId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        PromotionEvent promotionEvent = PromotionEvent.builder()
+                .id(promotionEventId)
+                .startDateTime(now.minusDays(2))
+                .endDateTime(now.plusDays(2))
+                .build();
+        PromotionEventUpdateRequestDto requestDto = PromotionEventUpdateRequestDto.builder()
+                .build();
+        // when
+        when(promotionEventRepository.findById(promotionEventId)).thenReturn(Optional.of(promotionEvent));
+        Throwable exception = assertThrows(CustomApiException.class, ()->
+                promotionEventService.updatePromotionEvent(requestDto, promotionEventId));
+        // then
+        assertEquals(ErrorCode.PROMOTION_EVENT_IN_PROGRESS.getMessage(), exception.getMessage());
     }
 
     @Test
     @DisplayName("이벤트 수정 성공")
-    void updatePromotionEventTest2() {
+    void updatePromotionEventTest3() {
         // given
         Long promotionEventId = 1L;
+        LocalDateTime now = LocalDateTime.now();
         PromotionEvent promotionEvent = PromotionEvent.builder()
                 .id(promotionEventId)
+                .startDateTime(now.plusDays(2))
+                .endDateTime(now.plusDays(2))
                 .title("수정 전 제목")
                 .build();
         PromotionEventUpdateRequestDto requestDto = PromotionEventUpdateRequestDto.builder()
                 .title("수정 후 제목")
                 .build();
         // when
-        when(promotionEventRepository.findByIdAndStartDateTimeAfterOrEndDateTimeBefore(any(), any(), any())).thenReturn(Optional.of(promotionEvent));
+        when(promotionEventRepository.findById(promotionEventId)).thenReturn(Optional.of(promotionEvent));
         PromotionEventUpdateResponseDto responseDto = promotionEventService.updatePromotionEvent(requestDto, promotionEventId);
         // then
-        assertEquals("수정 후 제목", responseDto.getTitle());
+        assertEquals(requestDto.getTitle(), responseDto.getTitle());
     }
 
     @Test
-    @DisplayName("존재하지 않거나 시작일이 지났거나 종료일이 지나지 않은 이벤트 삭제 요청 시 예외 처리")
+    @DisplayName("존재하지 않는 이벤트 삭제 요청 시 예외 처리")
     void deletePromotionEventTest1() {
         // given
         Long promotionEventId = 1L;
         // when
-        when(promotionEventRepository.findByIdAndStartDateTimeAfterOrEndDateTimeBefore(any(), any(), any())).thenReturn(Optional.empty());
+        when(promotionEventRepository.findById(promotionEventId)).thenReturn(Optional.empty());
         Throwable exception = assertThrows(CustomApiException.class, ()->
                 promotionEventService.deletePromotionEvent(promotionEventId)
         );
         // then
-        assertEquals("수정하거나 삭제할 수 없는 이벤트입니다.", exception.getMessage());
+        assertEquals(ErrorCode.PROMOTION_EVENT_NOT_FOUND.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("이미 진행중인 이벤트 삭제 요청 시 예외 처리")
+    void deletePromotionEventTest2() {
+        // given
+        Long promotionEventId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        PromotionEvent promotionEvent = PromotionEvent.builder()
+                .id(promotionEventId)
+                .startDateTime(now.minusDays(2))
+                .endDateTime(now.plusDays(2))
+                .build();
+        // when
+        when(promotionEventRepository.findById(promotionEventId)).thenReturn(Optional.of(promotionEvent));
+        Throwable exception = assertThrows(CustomApiException.class, ()->
+                promotionEventService.deletePromotionEvent(promotionEventId));
+        // then
+        assertEquals(ErrorCode.PROMOTION_EVENT_IN_PROGRESS.getMessage(), exception.getMessage());
     }
 
     @Test
     @DisplayName("이벤트 삭제 성공")
-    void deletePromotionEventTest2() {
+    void deletePromotionEventTest3() {
         // given
         Long promotionEventId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        PromotionEvent promotionEvent = spy(PromotionEvent.builder()
+                .id(promotionEventId)
+                .startDateTime(now.plusDays(2))
+                .endDateTime(now.plusDays(2))
+                .build());
         // when
-        when(promotionEventRepository.findByIdAndStartDateTimeAfterOrEndDateTimeBefore(any(), any(), any())).thenReturn(Optional.of(mockPromotionEvent));
+        when(promotionEventRepository.findById(promotionEventId)).thenReturn(Optional.of(promotionEvent));
         promotionEventService.deletePromotionEvent(promotionEventId);
         // then
-        verify(mockPromotionEvent, times(1)).delete(any());
+        verify(promotionEvent, times(1)).delete(any(LocalDateTime.class));
     }
 
     @Test
@@ -191,7 +239,7 @@ class PromotionEventServiceTest {
                 promotionEventService.findOnePromotionEvent(promotionEventId)
         );
         // then
-        assertEquals("해당 이벤트가 없습니다.", exception.getMessage());
+        assertEquals(ErrorCode.PROMOTION_EVENT_NOT_FOUND.getMessage(), exception.getMessage());
     }
 
     @Test

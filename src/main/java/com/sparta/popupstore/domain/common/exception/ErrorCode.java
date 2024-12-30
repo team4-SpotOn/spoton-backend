@@ -22,7 +22,7 @@ public enum ErrorCode {
     POPUP_STORE_NOT_SEARCH_TYPE(HttpStatus.BAD_REQUEST, "제대로 된 검색 타입을 입력해주세요."),
     // event error
     PROMOTION_EVENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이벤트가 없습니다."),
-    PROMOTION_EVENT_NOT_UPDATE_AND_DELETE(HttpStatus.BAD_REQUEST, "수정하거나 삭제할 수 없는 이벤트입니다."),
+    PROMOTION_EVENT_IN_PROGRESS(HttpStatus.BAD_REQUEST, "진행중인 이벤트는 수정 및 삭제 할 수 없습니다."),
     PROMOTION_EVENT_NOT_START_AND_END_TIME(HttpStatus.BAD_REQUEST, "startDateTime 과 endDateTime 이 존재하지 않습니다."),
     PROMOTION_EVENT_END(HttpStatus.BAD_REQUEST, "이미 끝난 이벤트 입니다."),
     PROMOTION_EVENT_NOT_AFTER_POPUP_STORE_END_DATE(HttpStatus.BAD_REQUEST, "이벤트 종료일은 팝업스토어 종료일 이후로 선택할 수 없습니다."),

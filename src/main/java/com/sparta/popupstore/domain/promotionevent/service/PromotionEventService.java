@@ -60,8 +60,7 @@ public class PromotionEventService {
 
     @Transactional(readOnly = true)
     public PromotionEventFindOneResponseDto findOnePromotionEvent(Long promotionEventId) {
-        PromotionEvent promotionEvent = promotionEventRepository.findById(promotionEventId)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
+        PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
         if(promotionEvent.getPopupStoreId() == null) {
             return new PromotionEventFindOneResponseDto(promotionEvent, null);
         }
@@ -74,7 +73,8 @@ public class PromotionEventService {
             PromotionEventUpdateRequestDto requestDto,
             Long promotionEventId
     ) {
-        PromotionEvent promotionEvent = this.getPromotionEventByAfterStartDateOrEndDateTimeBefore(promotionEventId);
+        PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
+        this.validDate(promotionEvent);
         promotionEvent.updatePromotionEvent(
                 requestDto.getTitle(),
                 requestDto.getDescription(),
@@ -90,13 +90,20 @@ public class PromotionEventService {
 
     @Transactional
     public void deletePromotionEvent(Long promotionEventId) {
-        PromotionEvent promotionEvent = this.getPromotionEventByAfterStartDateOrEndDateTimeBefore(promotionEventId);
+        PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
+        this.validDate(promotionEvent);
         promotionEvent.delete(LocalDateTime.now());
     }
 
-    private PromotionEvent getPromotionEventByAfterStartDateOrEndDateTimeBefore(Long promotionEventId) {
+    private PromotionEvent getPromotionEvent(Long promotionEventId) {
+        return promotionEventRepository.findById(promotionEventId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
+    }
+
+    private void validDate(PromotionEvent promotionEvent) {
         LocalDateTime now = LocalDateTime.now();
-        return promotionEventRepository.findByIdAndStartDateTimeAfterOrEndDateTimeBefore(promotionEventId, now, now)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_UPDATE_AND_DELETE));
+        if(promotionEvent.getStartDateTime().isBefore(now) && promotionEvent.getEndDateTime().isAfter(now)) {
+            throw new CustomApiException(ErrorCode.PROMOTION_EVENT_IN_PROGRESS);
+        }
     }
 }
