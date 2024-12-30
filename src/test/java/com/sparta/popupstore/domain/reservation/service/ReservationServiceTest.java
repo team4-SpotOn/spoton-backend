@@ -17,14 +17,14 @@ import com.sparta.popupstore.domain.reservation.entity.Reservation;
 import com.sparta.popupstore.domain.reservation.repository.ReservationRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -35,7 +35,6 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
 class ReservationServiceTest {
 
     @Autowired
@@ -69,39 +68,47 @@ class ReservationServiceTest {
         Long attributeId = 1L;
         Long operationId = 1L;
 
-        User user = userRepository.save(
-                User.builder()
-                        .id(userId)
-                        .point(10000)
-                        .build()
-        );
-        PopupStore popupStore = popupStoreRepository.save(
-                PopupStore.builder()
-                        .id(popupStoreId)
-                        .price(100)
-                        .reservationLimit(reservationLimit)
-                        .build()
-        );
-        PopupStoreAttribute attribute = popupStoreAttributeRepository.save(
-                PopupStoreAttribute.builder()
-                        .id(attributeId)
-                        .popupStore(popupStore)
-                        .attribute(PopupStoreAttributeEnum.RESERVATION)
-                        .isAllow(true)
-                        .build()
-        );
-        PopupStoreOperating operation = popupStoreOperatingRepository.save(
-                PopupStoreOperating.builder()
-                        .id(operationId)
-                        .popupStore(popupStore)
-                        .dayOfWeek(reservationDate.getDayOfWeek())
-                        .startTime(reservationTime.minusHours(1))
-                        .endTime(reservationTime.plusHours(1))
-                        .build()
-        );
+        User user;
+        PopupStore popupStore;
+        PopupStoreAttribute attribute;
+        PopupStoreOperating operation;
+
+        @BeforeEach
+        void setUp() {
+            user = userRepository.save(
+                    User.builder()
+                            .id(userId)
+                            .point(10000)
+                            .build()
+            );
+            popupStore = popupStoreRepository.save(
+                    PopupStore.builder()
+                            .id(popupStoreId)
+                            .price(100)
+                            .reservationLimit(reservationLimit)
+                            .build()
+            );
+            attribute = popupStoreAttributeRepository.save(
+                    PopupStoreAttribute.builder()
+                            .id(attributeId)
+                            .popupStore(popupStore)
+                            .attribute(PopupStoreAttributeEnum.RESERVATION)
+                            .isAllow(true)
+                            .build()
+            );
+            operation = popupStoreOperatingRepository.save(
+                    PopupStoreOperating.builder()
+                            .id(operationId)
+                            .popupStore(popupStore)
+                            .dayOfWeek(reservationDate.getDayOfWeek())
+                            .startTime(reservationTime.minusHours(1))
+                            .endTime(reservationTime.plusHours(1))
+                            .build()
+            );
+        }
 
         @Test
-        @Transactional
+        @Transactional(propagation = Propagation.NESTED)
         @DisplayName("5명 예약")
         void test1() {
             // given
@@ -125,9 +132,8 @@ class ReservationServiceTest {
             assertEquals(number, responseDto.getNumber());
         }
 
-
         @Test
-        @Transactional
+        @Transactional(propagation = Propagation.NESTED)
         @DisplayName("20명 예약")
         void test2() {
             // given
@@ -148,7 +154,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @Transactional
+        @Transactional(propagation = Propagation.NESTED)
         @DisplayName("5명 예약된 상태에서 8명 예약")
         void test3() {
             // given
