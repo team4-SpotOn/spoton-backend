@@ -57,13 +57,14 @@ class ReservationServiceTest {
     ReservationService reservationService;
 
     @Nested
+    @Transactional
     @DisplayName("10명 예약 가능한 팝업스토어 예약 인원수 별 테스트")
     class NumberTest {
 
         Long userId = 1L;
         Long popupStoreId = 1L;
         Integer reservationLimit = 10;
-        LocalDate reservationDate = LocalDate.of(2020, 1, 1);
+        LocalDate reservationDate = LocalDate.of(2024, 12, 24);
         LocalTime reservationTime = LocalTime.of(12, 0);
         Long attributeId = 1L;
         Long operationId = 1L;
@@ -160,7 +161,7 @@ class ReservationServiceTest {
                             .user(user)
                             .popupStore(popupStore)
                             .reservationDate(reservationDate)
-                            .reservationTime(reservationTime)
+                            .reservationTime(reservationTime.withMinute(30))
                             .number(number1)
                             .build()
             );
