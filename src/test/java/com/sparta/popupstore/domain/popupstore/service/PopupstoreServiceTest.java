@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class PopupstoreServiceTest {
 
     @Mock
@@ -43,7 +44,6 @@ class PopupstoreServiceTest {
     @InjectMocks
     private PopupStoreService popupStoreService;
 
-    @ExtendWith(MockitoExtension.class)
     @Test
     @DisplayName("팝업스토어 생성 - 성공")
     void test1() {
@@ -76,7 +76,6 @@ class PopupstoreServiceTest {
         assertNotNull(response);
     }
 
-    @ExtendWith(MockitoExtension.class)
     @Test
     @DisplayName("팝업스토어 생성 - 주소 조회 실패")
     void test2() {
