@@ -46,7 +46,7 @@ class PopupstoreServiceTest {
     }
 
     @Test
-    @DisplayName("팝업스토어 생성")
+    @DisplayName("팝업스토어 생성 - 성공")
     void createPopupStore_success() throws Exception {
         // Given
         Company company = Company.builder()
