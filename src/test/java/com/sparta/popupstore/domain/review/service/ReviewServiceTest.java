@@ -41,5 +41,6 @@ public class ReviewServiceTest {
         String exception = assertThrows(CustomApiException.class , () -> reviewService.createReview(user, popupStoreId, requestDto)).getMessage();
         // then
         assertEquals("해당 팝업스토어가 없습니다." , exception);
+        assertEquals("예약한 팝업스토어가 아닙니다." , exception);
     }
 }
