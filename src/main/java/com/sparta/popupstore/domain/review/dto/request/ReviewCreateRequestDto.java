@@ -4,10 +4,12 @@ import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.review.entity.Review;
 import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 
 @Getter
+@Builder
 public class ReviewCreateRequestDto {
 
     @Range(min = 1, max = 5, message = "1~5사이의 별점을 입력해주세요.")
@@ -18,7 +20,10 @@ public class ReviewCreateRequestDto {
 
     private String imageUrl;
 
-    public Review toEntity(User user, PopupStore popupStore) {
+    private User user;
+    private PopupStore popupStore;
+
+    public Review toEntity() {
         return Review.builder()
                 .user(user)
                 .popupStore(popupStore)
