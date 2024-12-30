@@ -4,6 +4,7 @@ import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreAttr
 import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreImageRequestDto;
 import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreOperatingRequestDto;
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
+@Builder
 public class PopupStoreUpdateRequestDto {
     @NotBlank(message = "팝업스토어 이름을 입력해주세요.")
     private String name;

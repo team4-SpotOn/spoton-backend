@@ -213,33 +213,26 @@ class PopupstoreServiceTest {
     }
 
     private PopupStoreUpdateRequestDto updateValidRequestDto() {
-        PopupStoreUpdateRequestDto requestDto = new PopupStoreUpdateRequestDto();
+        PopupStoreImageRequestDto imageDto = new PopupStoreImageRequestDto("http://image.com/updated_thumbnail.jpg", 0);
 
-        // 필드 설정 로직
-        setField(requestDto, "name", "Updated Test Store");
-        setField(requestDto, "contents", "Updated Test Contents");
-        setField(requestDto, "price", 15000);
-        setField(requestDto, "reservationLimit", 120);
-        setField(requestDto, "address", "Updated Seoul");
-        setField(requestDto, "startDate", LocalDate.now().plusDays(1));
-        setField(requestDto, "endDate", LocalDate.now().plusDays(31));
+        PopupStoreOperatingRequestDto operatingDto = new PopupStoreOperatingRequestDto(
+                DayOfWeek.MONDAY, LocalTime.of(9, 0), LocalTime.of(18, 0));
 
-        PopupStoreImageRequestDto imageDto = new PopupStoreImageRequestDto();
-        setField(imageDto, "imageUrl", "http://image.com/updated_thumbnail.jpg");
-        setField(imageDto, "sort", 0);
-        setField(requestDto, "imageList", List.of(imageDto));
+        PopupStoreAttributeRequestDto attributeDto = new PopupStoreAttributeRequestDto(
+                PopupStoreAttributeEnum.RESERVATION, true);
 
-        PopupStoreOperatingRequestDto operatingDto = new PopupStoreOperatingRequestDto();
-        setField(operatingDto, "dayOfWeek", DayOfWeek.MONDAY);
-        setField(operatingDto, "startTime", LocalTime.of(9, 0));
-        setField(operatingDto, "endTime", LocalTime.of(18, 0));
-        setField(requestDto, "operatingList", List.of(operatingDto));
-
-        PopupStoreAttributeRequestDto attributeDto = new PopupStoreAttributeRequestDto();
-        setField(attributeDto, "attribute", PopupStoreAttributeEnum.RESERVATION);  // 실제 Enum 값으로 변경
-        setField(requestDto, "attributeList", List.of(attributeDto));
-
-        return requestDto;
+        return PopupStoreUpdateRequestDto.builder()
+                .name("Updated Test Store")
+                .contents("Updated Test Contents")
+                .price(15000)
+                .reservationLimit(120)
+                .address("Updated Seoul")
+                .startDate(LocalDate.now().plusDays(1))
+                .endDate(LocalDate.now().plusDays(31))
+                .imageList(List.of(imageDto))
+                .operatingList(List.of(operatingDto))
+                .attributeList(List.of(attributeDto))
+                .build();
     }
 
     private void setField(Object target, String fieldName, Object value) {
