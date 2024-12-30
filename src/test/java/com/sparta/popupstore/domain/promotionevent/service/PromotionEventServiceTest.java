@@ -6,6 +6,7 @@ import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCreateResponseDto;
+import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
@@ -170,5 +171,35 @@ class PromotionEventServiceTest {
         promotionEventService.deletePromotionEvent(promotionEventId);
         // then
         verify(mockPromotionEvent, times(1)).delete(any());
+    }
+
+    @Test
+    @DisplayName("단건조회 시 존재하지 않는 이벤트 일 시 예외처리")
+    void findOnePromotionEventTest1() {
+        // given
+        Long promotionEventId = 1L;
+        // when
+        when(promotionEventRepository.findById(promotionEventId)).thenReturn(Optional.empty());
+        Throwable exception = assertThrows(CustomApiException.class, ()->
+                promotionEventService.findOnePromotionEvent(promotionEventId)
+        );
+        // then
+        assertEquals("해당 이벤트가 없습니다.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("단건조회 성공")
+    void findOnePromotionEventTest2() {
+        // given
+        Long promotionEventId = 1L;
+        PromotionEvent promotionEvent = PromotionEvent.builder()
+                .id(promotionEventId)
+                .title("제목")
+                .build();
+        // when
+        when(promotionEventRepository.findById(promotionEventId)).thenReturn(Optional.of(promotionEvent));
+        PromotionEventFindOneResponseDto responseDto = promotionEventService.findOnePromotionEvent(promotionEventId);
+        // then
+        assertEquals(promotionEvent.getTitle(), responseDto.getTitle());
     }
 }
