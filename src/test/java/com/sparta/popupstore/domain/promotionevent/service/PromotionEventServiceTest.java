@@ -4,6 +4,7 @@ import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
+import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCreateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
@@ -106,5 +107,21 @@ class PromotionEventServiceTest {
                 promotionEventService.createPromotionEvent(requestDto));
         // then
         assertEquals("이벤트 종료일은 팝업스토어 종료일 이후로 선택할 수 없습니다.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 이벤트 수정 요청 시 예외 처리")
+    void updatePromotionEventTest1() {
+        // given
+        Long promotionEventId = 1L;
+        PromotionEventUpdateRequestDto requestDto = PromotionEventUpdateRequestDto.builder()
+                .endDateTime(LocalDateTime.now().plusDays(2))
+                .build();
+        // when
+        when(promotionEventRepository.findById(any())).thenReturn(Optional.empty());
+        Throwable exception = assertThrows(CustomApiException.class, ()->
+                promotionEventService.updatePromotionEvent(requestDto, promotionEventId));
+        // then
+        assertEquals("해당 이벤트가 없습니다.", exception.getMessage());
     }
 }
