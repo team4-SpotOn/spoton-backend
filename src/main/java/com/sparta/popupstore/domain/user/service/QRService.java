@@ -9,6 +9,7 @@ import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.domain.reservation.entity.Reservation;
 import com.sparta.popupstore.domain.reservation.repository.ReservationRepository;
 import com.sparta.popupstore.domain.user.dto.request.UserValidReservationRequestDto;
 import com.sparta.popupstore.domain.user.entity.User;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Service
 @RequiredArgsConstructor
@@ -52,14 +55,20 @@ public class QRService {
         User user = userRepository.findByQrCode(requestDto.getQrCode())
                 .orElseThrow(() -> new CustomApiException(ErrorCode.QR_NOT_FOUND_ERROR));
 
-        LocalDateTime reservationAt = reservationRepository.findByPopupStoreAndUser(popupStore, user)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_RESERVATION))
-                .getReservationAt();
+        Reservation reservation = reservationRepository.findByPopupStoreAndUser(popupStore, user)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_RESERVATION));
+
+        LocalDate reservationDate = reservation.getReservationDate();
+        LocalTime reservationTime = reservation.getReservationTime();
 
         LocalDateTime now = LocalDateTime.now();
-        if(reservationAt.isAfter(now.plusMinutes(30))
-                || reservationAt.isBefore(now.minusMinutes(30))
-        ) {
+        LocalDate nowDate = now.toLocalDate();
+        LocalTime nowTime = now.toLocalTime();
+        if(!reservationDate.isEqual(nowDate)) {
+            throw new CustomApiException(ErrorCode.DOESNT_RESERVATION_AT);
+        }
+        if(nowTime.minusMinutes(30).isAfter(reservationTime)
+                || nowTime.plusMinutes(30).isBefore(reservationTime)) {
             throw new CustomApiException(ErrorCode.DOESNT_RESERVATION_AT);
         }
     }
