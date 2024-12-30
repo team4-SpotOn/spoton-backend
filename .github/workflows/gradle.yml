@@ -45,11 +45,11 @@ jobs:
       # 환경 변수를 설정합니다.
       - name: Set environment variables for database
         run: |
-          echo "DB_HOST=test-db" >> $GITHUB_ENV
-          echo "DB_PORT=3308" >> $GITHUB_ENV
-          echo "DB_NAME=spoton-backend" >> $GITHUB_ENV
-          echo "DB_USER=root" >> $GITHUB_ENV
-          echo "DB_PASSWORD=1234" >> $GITHUB_ENV
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Create application.properties with relative path
         run: |
@@ -84,7 +84,7 @@ jobs:
         run: |
           until docker exec test-db mysqladmin ping --silent; do
           echo "Waiting for database..."
-          sleep 40
+          sleep 10
           done
 
       - name: Run tests with Gradle
@@ -98,7 +98,6 @@ jobs:
         with:
           name: gradle-dependency-report
           path: dependencies.txt
-
 
       # ----------------------------------------------
       # CD 부분: EC2로 배포하기 위한 추가 단계 (임의로 코드는 주석 처리해둠)
