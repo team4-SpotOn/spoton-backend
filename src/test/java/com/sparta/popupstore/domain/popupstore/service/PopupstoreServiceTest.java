@@ -6,11 +6,16 @@ import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.kakaoaddress.dto.RoadAddress;
 import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreAttributeRequestDto;
 import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreImageRequestDto;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreOperatingRequestDto;
 import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreBundle;
+import com.sparta.popupstore.domain.popupstore.bundle.enums.PopupStoreAttributeEnum;
 import com.sparta.popupstore.domain.popupstore.bundle.service.PopupStoreBundleService;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
+import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +26,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -92,6 +100,72 @@ class PopupstoreServiceTest {
         });
     }
 
+    @Test
+    @DisplayName("팝업스토어 수정 - 성공")
+    void updatePopupStore_success() {
+        // Given
+        Long popupId = 1L;
+        Company company = createTestCompany();
+        PopupStore popupStore = createTestPopupStore(company, new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780)));
+        PopupStoreUpdateRequestDto requestDto = updateValidRequestDto();
+
+        when(popupStoreRepository.findById(popupId)).thenReturn(Optional.of(popupStore));
+        when(kakaoAddressService.getKakaoAddress(any(String.class))).thenReturn(new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780)));
+        PopupStoreBundle bundle = new PopupStoreBundle(
+                List.of(),
+                List.of(),
+                List.of()
+        );
+        when(popupStoreBundleService.updatePopupStoreBundle(any(), any(), any(), any())).thenReturn(bundle);
+
+        // When
+        PopupStoreUpdateResponseDto response = popupStoreService.updatePopupStore(popupId, company, requestDto);
+
+        // Then
+        verify(popupStoreRepository, times(1)).findById(popupId);
+        verify(kakaoAddressService, times(1)).getKakaoAddress(any(String.class));
+        verify(popupStoreBundleService, times(1)).updatePopupStoreBundle(any(), any(), any(), any());
+
+        assertNotNull(response);
+    }
+
+    @Test
+    @DisplayName("팝업스토어 수정 - 존재하지 않는 팝업스토어")
+    void updatePopupStore_notFound() {
+        // Given
+        Long popupId = 1L;
+        Company company = createTestCompany();
+        PopupStoreUpdateRequestDto requestDto = updateValidRequestDto();
+
+        when(popupStoreRepository.findById(popupId)).thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(CustomApiException.class, () -> {
+            popupStoreService.updatePopupStore(popupId, company, requestDto);
+        });
+    }
+
+    @Test
+    @DisplayName("팝업스토어 수정 - 다른 회사 소유")
+    void updatePopupStore_notOwner() {
+        // Given
+        Long popupId = 1L;
+        Company company = createTestCompany();
+        Company otherCompany = Company.builder()
+                .id(2L)
+                .name("Other Company")
+                .build();
+        PopupStore popupStore = createTestPopupStore(otherCompany, new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780)));
+        PopupStoreUpdateRequestDto requestDto = updateValidRequestDto();
+
+        when(popupStoreRepository.findById(popupId)).thenReturn(Optional.of(popupStore));
+
+        // When & Then
+        assertThrows(CustomApiException.class, () -> {
+            popupStoreService.updatePopupStore(popupId, company, requestDto);
+        });
+    }
+
     private Company createTestCompany() {
         return Company.builder()
                 .id(1L)
@@ -136,6 +210,36 @@ class PopupstoreServiceTest {
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusDays(30))
                 .build();
+    }
+
+    private PopupStoreUpdateRequestDto updateValidRequestDto() {
+        PopupStoreUpdateRequestDto requestDto = new PopupStoreUpdateRequestDto();
+
+        // 필드 설정 로직
+        setField(requestDto, "name", "Updated Test Store");
+        setField(requestDto, "contents", "Updated Test Contents");
+        setField(requestDto, "price", 15000);
+        setField(requestDto, "reservationLimit", 120);
+        setField(requestDto, "address", "Updated Seoul");
+        setField(requestDto, "startDate", LocalDate.now().plusDays(1));
+        setField(requestDto, "endDate", LocalDate.now().plusDays(31));
+
+        PopupStoreImageRequestDto imageDto = new PopupStoreImageRequestDto();
+        setField(imageDto, "imageUrl", "http://image.com/updated_thumbnail.jpg");
+        setField(imageDto, "sort", 0);
+        setField(requestDto, "imageList", List.of(imageDto));
+
+        PopupStoreOperatingRequestDto operatingDto = new PopupStoreOperatingRequestDto();
+        setField(operatingDto, "dayOfWeek", DayOfWeek.MONDAY);
+        setField(operatingDto, "startTime", LocalTime.of(9, 0));
+        setField(operatingDto, "endTime", LocalTime.of(18, 0));
+        setField(requestDto, "operatingList", List.of(operatingDto));
+
+        PopupStoreAttributeRequestDto attributeDto = new PopupStoreAttributeRequestDto();
+        setField(attributeDto, "attribute", PopupStoreAttributeEnum.RESERVATION);  // 실제 Enum 값으로 변경
+        setField(requestDto, "attributeList", List.of(attributeDto));
+
+        return requestDto;
     }
 
     private void setField(Object target, String fieldName, Object value) {
