@@ -50,7 +50,7 @@ class PopupstoreServiceTest {
 
     @Test
     @DisplayName("팝업스토어 생성 - 성공")
-    void createPopupStore_success() {
+    void test1() {
         // Given
         Company company = createTestCompany();
         PopupStoreCreateRequestDto requestDto = createValidRequestDto();
@@ -82,7 +82,7 @@ class PopupstoreServiceTest {
 
     @Test
     @DisplayName("팝업스토어 생성 - 주소 조회 실패")
-    void createPopupStore_addressLookupFail() {
+    void test2() {
         // Given
         Company company = createTestCompany();
         PopupStoreCreateRequestDto requestDto = createValidRequestDto();
@@ -110,24 +110,20 @@ class PopupstoreServiceTest {
     }
 
     private PopupStoreCreateRequestDto createValidRequestDto() {
-        PopupStoreCreateRequestDto requestDto = new PopupStoreCreateRequestDto();
-        setField(requestDto, "name", "Test Store");
-        setField(requestDto, "contents", "Test Contents");
-        setField(requestDto, "price", 10000);
-        setField(requestDto, "reservationLimit", 100);
-        setField(requestDto, "address", "Seoul");
-        setField(requestDto, "startDate", LocalDate.now());
-        setField(requestDto, "endDate", LocalDate.now().plusDays(30));
+        PopupStoreImageRequestDto imageDto = new PopupStoreImageRequestDto("http://image.com/thumbnail.jpg", 0);
 
-        PopupStoreImageRequestDto imageDto = new PopupStoreImageRequestDto();
-        setField(imageDto, "imageUrl", "http://image.com/thumbnail.jpg");
-        setField(imageDto, "sort", 0);
-        setField(requestDto, "imageList", List.of(imageDto));
-
-        setField(requestDto, "operatingList", List.of());
-        setField(requestDto, "attributeList", List.of());
-
-        return requestDto;
+        return PopupStoreCreateRequestDto.builder()
+                .name("Test Store")
+                .contents("Test Contents")
+                .price(10000)
+                .reservationLimit(100)
+                .address("Seoul")
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now().plusDays(30))
+                .imageList(List.of(imageDto))
+                .operatingList(List.of())  // Ensure the list is initialized
+                .attributeList(List.of())  // Ensure the list is initialized
+                .build();
     }
 
     private PopupStore createTestPopupStore(Company company, Address address) {
