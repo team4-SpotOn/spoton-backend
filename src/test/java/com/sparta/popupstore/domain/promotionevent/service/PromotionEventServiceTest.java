@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PromotionEventServiceTest {
@@ -30,6 +30,8 @@ class PromotionEventServiceTest {
     private PromotionEventRepository promotionEventRepository;
     @Mock
     private PopupStoreRepository popupStoreRepository;
+    @Mock
+    private PromotionEvent mockPromotionEvent;
     @InjectMocks
     private PromotionEventService promotionEventService;
 
@@ -156,5 +158,17 @@ class PromotionEventServiceTest {
         );
         // then
         assertEquals("수정하거나 삭제할 수 없는 이벤트입니다.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("삭제 성공")
+    void deletePromotionEventTest2() {
+        // given
+        Long promotionEventId = 1L;
+        // when
+        when(promotionEventRepository.findByIdAndStartDateTimeAfterOrEndDateTimeBefore(any(), any(), any())).thenReturn(Optional.of(mockPromotionEvent));
+        promotionEventService.deletePromotionEvent(promotionEventId);
+        // then
+        verify(mockPromotionEvent, times(1)).delete(any());
     }
 }
