@@ -2,10 +2,12 @@ package com.sparta.popupstore.domain.review.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
+import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
 import com.sparta.popupstore.domain.user.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class ReviewServiceTest {
 
-    @Mock
+    @InjectMocks
     private ReviewService reviewService;
 
     @Mock
@@ -24,6 +26,9 @@ public class ReviewServiceTest {
 
     @Mock
     private PopupStore popupStore;
+
+    @Mock
+    private PopupStoreRepository popupStoreRepository;
 
     @Test
     void createReviewTest() {
@@ -41,6 +46,5 @@ public class ReviewServiceTest {
         String exception = assertThrows(CustomApiException.class , () -> reviewService.createReview(user, popupStoreId, requestDto)).getMessage();
         // then
         assertEquals("해당 팝업스토어가 없습니다." , exception);
-        assertEquals("예약한 팝업스토어가 아닙니다." , exception);
     }
 }
