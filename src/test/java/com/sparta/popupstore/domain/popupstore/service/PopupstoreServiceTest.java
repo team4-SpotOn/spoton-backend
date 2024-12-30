@@ -31,8 +31,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -137,7 +136,11 @@ class PopupstoreServiceTest {
         when(popupStoreRepository.findById(popupId)).thenReturn(Optional.empty());
 
         // When & Then
-        assertThrows(CustomApiException.class, () -> popupStoreService.updatePopupStore(popupId, company, requestDto));
+        CustomApiException exception = assertThrows(
+                CustomApiException.class, () -> popupStoreService.updatePopupStore(popupId, company, requestDto)
+        );
+
+        assertEquals(ErrorCode.POPUP_STORE_NOT_FOUND, exception.getErrorCode());
     }
 
     @Test
@@ -156,7 +159,11 @@ class PopupstoreServiceTest {
         when(popupStoreRepository.findById(popupId)).thenReturn(Optional.of(popupStore));
 
         // When & Then
-        assertThrows(CustomApiException.class, () -> popupStoreService.updatePopupStore(popupId, company, requestDto));
+        CustomApiException exception = assertThrows(
+                CustomApiException.class, () -> popupStoreService.updatePopupStore(popupId, company, requestDto)
+        );
+
+        assertEquals(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY, exception.getErrorCode());
     }
 
     private Company createTestCompany() {
