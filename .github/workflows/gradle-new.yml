@@ -1,0 +1,135 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check commit message and PR title for "[#" trigger
+        id: check_trigger
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          echo "Commit message: $COMMIT_MESSAGE"
+          
+          PR_TITLE=""
+          if [[ -f "$GITHUB_EVENT_PATH" ]]; then
+            PR_TITLE=$(jq --raw-output .pull_request.title $GITHUB_EVENT_PATH)
+            echo "PR Title: $PR_TITLE"
+          fi
+          
+          # 커밋 메시지 또는 PR 제목이 '[#'로 시작하는지 확인
+          if [[ "$COMMIT_MESSAGE" == \[#* || "$PR_TITLE" == \[#* ]]; then
+            echo "CI triggered because commit message or PR title starts with '[#'"
+          else
+            echo "Skipping CI because commit message and PR title do not start with '[#'"
+            exit 0
+          fi
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Give execute permission to gradlew
+        run: chmod +x ./gradlew  # 실행 권한 부여
+
+      # 환경 변수를 설정합니다.
+      - name: Set environment variables for database
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Create application.properties with relative path
+        run: |
+          echo "spring.datasource.url=jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}" > src/main/resources/application.properties
+          echo "spring.datasource.username=${DB_USER}" >> src/main/resources/application.properties
+          echo "spring.datasource.password=${DB_PASSWORD}" >> src/main/resources/application.properties
+          echo "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver" >> src/main/resources/application.properties
+          echo "spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect" >> src/main/resources/application.properties
+
+      - name: Set permissions for application.properties
+        run: |
+          chmod 644 src/main/resources/application.properties
+          ls -l src/main/resources/
+
+      - name: Check if application.properties exists
+        run: |
+          ls -l src/main/resources/
+          cat src/main/resources/application.properties || echo "application.properties not found"
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
+      - name: Start Database with Docker Compose
+        run: docker-compose up -d
+
+      - name: Wait for Database to be Ready
+        run: |
+          until docker exec test-db mysqladmin ping --silent; do
+          echo "Waiting for database..."
+          sleep 10
+          done
+
+      - name: Build with Gradle
+        run: ./gradlew build  # Gradle을 사용하여 빌드 실행
+
+      - name: Run tests with Gradle
+        run: ./gradlew test  # Gradle을 사용하여 테스트 실행
+
+      - name: Generate Gradle dependency report
+        run: ./gradlew dependencies --configuration compileClasspath > dependencies.txt
+
+      - name: Upload dependency graph
+        uses: actions/upload-artifact@v3
+        with:
+          name: gradle-dependency-report
+          path: dependencies.txt
+
+      # ----------------------------------------------
+      # CD 부분: EC2로 배포하기 위한 추가 단계 (임의로 코드는 주석 처리해둠)
+      # ----------------------------------------------
+
+      # - name: Set up AWS CLI
+      #   run: |
+      #     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      #     unzip awscliv2.zip
+      #     sudo ./aws/install
+
+      # - name: Configure AWS CLI
+      #   run: |
+      #     aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws configure set default.region ap-northeast-2  # 서울 리전 (리전 변경 가능)
+
+      # - name: Deploy to EC2
+      #   run: |
+      #     # EC2에 배포할 JAR 파일 경로 (예: build/libs/your-app.jar)
+      #     JAR_FILE=build/libs/your-app.jar
+      #
+      #     # EC2로 JAR 파일 복사 (scp 사용)
+      #     scp -i ${{ secrets.EC2_SSH_PRIVATE_KEY }} $JAR_FILE ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/home/ec2-user/your-app.jar
+      #
+      #     # EC2에서 실행할 명령어 (EC2에서 이전 프로세스를 종료하고 새 JAR 파일 실행)
+      #     ssh -i ${{ secrets.EC2_SSH_PRIVATE_KEY }} ec2-user@${{ secrets.EC2_PUBLIC_IP }} << EOF
+      #       pkill -f 'java -jar /home/ec2-user/your-app.jar' || true  # 기존 애플리케이션 종료
+      #       nohup java -jar /home/ec2-user/your-app.jar > /dev/null 2>&1 &  # 백그라운드로 실행
+      #     EOF
+
+      # - name: Cleanup
+      #   run: |
+      #     # 필요에 따라 EC2 인스턴스를 종료하거나 청소하는 명령을 추가
+      #     echo "Deployment complete."
