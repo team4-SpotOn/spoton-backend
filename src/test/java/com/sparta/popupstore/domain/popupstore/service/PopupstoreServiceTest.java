@@ -25,7 +25,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -95,9 +94,7 @@ class PopupstoreServiceTest {
                 .thenThrow(new CustomApiException(ErrorCode.KAKAO_ADDRESS_API_ERROR));
 
         // When & Then
-        assertThrows(CustomApiException.class, () -> {
-            popupStoreService.createPopupStore(company, requestDto);
-        });
+        assertThrows(CustomApiException.class, () -> popupStoreService.createPopupStore(company, requestDto));
     }
 
     @Test
@@ -140,9 +137,7 @@ class PopupstoreServiceTest {
         when(popupStoreRepository.findById(popupId)).thenReturn(Optional.empty());
 
         // When & Then
-        assertThrows(CustomApiException.class, () -> {
-            popupStoreService.updatePopupStore(popupId, company, requestDto);
-        });
+        assertThrows(CustomApiException.class, () -> popupStoreService.updatePopupStore(popupId, company, requestDto));
     }
 
     @Test
@@ -161,9 +156,7 @@ class PopupstoreServiceTest {
         when(popupStoreRepository.findById(popupId)).thenReturn(Optional.of(popupStore));
 
         // When & Then
-        assertThrows(CustomApiException.class, () -> {
-            popupStoreService.updatePopupStore(popupId, company, requestDto);
-        });
+        assertThrows(CustomApiException.class, () -> popupStoreService.updatePopupStore(popupId, company, requestDto));
     }
 
     private Company createTestCompany() {
@@ -191,8 +184,8 @@ class PopupstoreServiceTest {
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusDays(30))
                 .imageList(List.of(imageDto))
-                .operatingList(List.of())  // Ensure the list is initialized
-                .attributeList(List.of())  // Ensure the list is initialized
+                .operatingList(List.of())
+                .attributeList(List.of())
                 .build();
     }
 
