@@ -60,7 +60,7 @@ public class PromotionEventService {
 
     @Transactional(readOnly = true)
     public PromotionEventFindOneResponseDto findOnePromotionEvent(Long promotionEventId) {
-        PromotionEvent promotionEvent = getPromotionEvent(promotionEventId);
+        PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
         if(promotionEvent.getPopupStoreId() == null) {
             return new PromotionEventFindOneResponseDto(promotionEvent, null);
         }
@@ -74,9 +74,7 @@ public class PromotionEventService {
             Long promotionEventId
     ) {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
-        if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())) {
-            throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
-        }
+        this.validDate(promotionEvent);
         promotionEvent.updatePromotionEvent(
                 requestDto.getTitle(),
                 requestDto.getDescription(),
@@ -93,14 +91,19 @@ public class PromotionEventService {
     @Transactional
     public void deletePromotionEvent(Long promotionEventId) {
         PromotionEvent promotionEvent = this.getPromotionEvent(promotionEventId);
-        if(promotionEvent.getStartDateTime().isBefore(LocalDateTime.now())) {
-            throw new CustomApiException(ErrorCode.PROMOTION_EVENT_ALREADY);
-        }
+        this.validDate(promotionEvent);
         promotionEvent.delete(LocalDateTime.now());
     }
 
     private PromotionEvent getPromotionEvent(Long promotionEventId) {
         return promotionEventRepository.findById(promotionEventId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_FOUND));
+    }
+
+    private void validDate(PromotionEvent promotionEvent) {
+        LocalDateTime now = LocalDateTime.now();
+        if(promotionEvent.getStartDateTime().isBefore(now) && promotionEvent.getEndDateTime().isAfter(now)) {
+            throw new CustomApiException(ErrorCode.PROMOTION_EVENT_IN_PROGRESS);
+        }
     }
 }

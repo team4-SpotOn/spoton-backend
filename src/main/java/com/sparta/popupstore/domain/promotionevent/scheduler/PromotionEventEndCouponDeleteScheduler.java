@@ -29,7 +29,7 @@ public class PromotionEventEndCouponDeleteScheduler {
         log.info("hardDeletePromotionEvent 스케줄러");
 
         LocalDateTime sixMonthBefore = LocalDateTime.now().minusMonths(6);
-        List<PromotionEvent> eventList = promotionEventRepository.findAllByEndDateTimeAfter(sixMonthBefore);
+        List<PromotionEvent> eventList = promotionEventRepository.findAllByEndDateTimeBefore(sixMonthBefore);
         for(PromotionEvent event : eventList) {
             try {
                 s3ImageService.deleteImage(event.getImageUrl());

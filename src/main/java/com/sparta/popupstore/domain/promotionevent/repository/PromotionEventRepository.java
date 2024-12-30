@@ -29,5 +29,5 @@ public interface PromotionEventRepository extends JpaRepository<PromotionEvent, 
     @Query("select p from PromotionEvent p where p.id = :promotionEventId")
     PromotionEvent findByIdWithPessimisticLock(Long promotionEventId);
 
-    List<PromotionEvent> findAllByEndDateTimeAfter(LocalDateTime sixMonthBefore);
+    List<PromotionEvent> findAllByEndDateTimeBefore(LocalDateTime sixMonthBefore);
 }
