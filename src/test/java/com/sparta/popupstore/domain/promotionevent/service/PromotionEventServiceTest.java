@@ -6,6 +6,7 @@ import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventCreateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.request.PromotionEventUpdateRequestDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventCreateResponseDto;
+import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindAllResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventFindOneResponseDto;
 import com.sparta.popupstore.domain.promotionevent.dto.response.PromotionEventUpdateResponseDto;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
@@ -16,9 +17,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -162,7 +169,7 @@ class PromotionEventServiceTest {
     }
 
     @Test
-    @DisplayName("삭제 성공")
+    @DisplayName("이벤트 삭제 성공")
     void deletePromotionEventTest2() {
         // given
         Long promotionEventId = 1L;
@@ -174,7 +181,7 @@ class PromotionEventServiceTest {
     }
 
     @Test
-    @DisplayName("단건조회 시 존재하지 않는 이벤트 일 시 예외처리")
+    @DisplayName("이벤트 단건조회 시 존재하지 않는 이벤트 일 시 예외처리")
     void findOnePromotionEventTest1() {
         // given
         Long promotionEventId = 1L;
@@ -188,7 +195,7 @@ class PromotionEventServiceTest {
     }
 
     @Test
-    @DisplayName("단건조회 성공")
+    @DisplayName("이벤트 단건조회 성공 - 팝업스토어에서 진행하는 이벤트가 아닐 경우")
     void findOnePromotionEventTest2() {
         // given
         Long promotionEventId = 1L;
@@ -201,5 +208,52 @@ class PromotionEventServiceTest {
         PromotionEventFindOneResponseDto responseDto = promotionEventService.findOnePromotionEvent(promotionEventId);
         // then
         assertEquals(promotionEvent.getTitle(), responseDto.getTitle());
+    }
+
+    @Test
+    @DisplayName("이벤트 단건조회 성공 - 팝업스토어에서 진행하는 이벤트일 경우")
+    void findOnePromotionEventTest3() {
+        // given
+        Long promotionEventId = 1L;
+        Long popupStoreId = 1L;
+        PromotionEvent promotionEvent = PromotionEvent.builder()
+                .id(promotionEventId)
+                .popupStoreId(popupStoreId)
+                .title("제목")
+                .build();
+        PopupStore popupStore = PopupStore.builder()
+                .id(popupStoreId)
+                .build();
+        // when
+        when(promotionEventRepository.findById(promotionEventId)).thenReturn(Optional.of(promotionEvent));
+        when(popupStoreRepository.findById(popupStoreId)).thenReturn(Optional.of(popupStore));
+        PromotionEventFindOneResponseDto responseDto = promotionEventService.findOnePromotionEvent(promotionEventId);
+        // then
+        assertEquals(promotionEvent.getTitle(), responseDto.getTitle());
+        assertEquals(popupStoreId, responseDto.getPromotionEventFindPopupStoreResponseDto().getId());
+    }
+
+    @Test
+    @DisplayName("이벤트 다건조회 성공")
+    void findAllPromotionEventTest1() {
+        // given
+        PromotionEvent promotionEvent1 = PromotionEvent.builder()
+                .id(1L)
+                .build();
+        PromotionEvent promotionEvent2 = PromotionEvent.builder()
+                .id(2L)
+                .build();
+        PromotionEvent promotionEvent3 = PromotionEvent.builder()
+                .id(3L)
+                .build();
+        Pageable pageable = PageRequest.of(0, 10);
+        List<PromotionEvent> promotionEvents = Arrays.asList(promotionEvent1, promotionEvent2, promotionEvent3);
+        Page<PromotionEvent> promotionEventsPage = new PageImpl<>(promotionEvents, pageable, promotionEvents.size());
+
+        // when
+        when(promotionEventRepository.findAll(pageable)).thenReturn(promotionEventsPage);
+        Page<PromotionEventFindAllResponseDto> responseDto = promotionEventService.findAllPromotionalEvents(1, 10);
+        // then
+        assertEquals(promotionEvents.size(), responseDto.getTotalElements());
     }
 }
