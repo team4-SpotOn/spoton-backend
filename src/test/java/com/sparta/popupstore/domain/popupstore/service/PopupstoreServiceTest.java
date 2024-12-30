@@ -13,12 +13,12 @@ import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateReque
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -43,11 +43,7 @@ class PopupstoreServiceTest {
     @InjectMocks
     private PopupStoreService popupStoreService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
+    @ExtendWith(MockitoExtension.class)
     @Test
     @DisplayName("팝업스토어 생성 - 성공")
     void test1() {
@@ -80,6 +76,7 @@ class PopupstoreServiceTest {
         assertNotNull(response);
     }
 
+    @ExtendWith(MockitoExtension.class)
     @Test
     @DisplayName("팝업스토어 생성 - 주소 조회 실패")
     void test2() {
