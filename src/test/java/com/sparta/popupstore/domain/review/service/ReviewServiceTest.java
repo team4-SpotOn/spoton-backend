@@ -1,6 +1,7 @@
 package com.sparta.popupstore.domain.review.service;
 
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
@@ -12,7 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -22,29 +24,34 @@ public class ReviewServiceTest {
     private ReviewService reviewService;
 
     @Mock
+    private PopupStoreRepository popupStoreRepository;
+
+    @Mock
     private User user;
 
     @Mock
     private PopupStore popupStore;
 
-    @Mock
-    private PopupStoreRepository popupStoreRepository;
-
     @Test
     void createReviewTest() {
         // given
-        Integer star = 6;
-        String contents = "Great popup!";
+        Integer star = 5;
+        String contents = "최고";
         Long popupStoreId = 1L;
+
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
-                .user(user)
                 .popupStore(popupStore)
                 .star(star)
                 .contents(contents)
                 .build();
+
         // when
-        String exception = assertThrows(CustomApiException.class , () -> reviewService.createReview(user, popupStoreId, requestDto)).getMessage();
+        CustomApiException exception = assertThrows(
+                CustomApiException.class,
+                () -> reviewService.createReview(user, popupStoreId, requestDto)
+        );
+
         // then
-        assertEquals("해당 팝업스토어가 없습니다." , exception);
+        assertEquals(ErrorCode.POPUP_STORE_NOT_FOUND.getMessage(), exception.getMessage());
     }
 }
