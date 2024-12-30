@@ -4,6 +4,7 @@ import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
+import com.sparta.popupstore.domain.reservation.repository.ReservationRepository;
 import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
 import com.sparta.popupstore.domain.user.entity.User;
 import org.junit.jupiter.api.Test;
@@ -37,10 +38,8 @@ public class ReviewServiceTest {
         // given
         Integer star = 5;
         String contents = "최고";
-        Long popupStoreId = 1L;
-
+        Long popupStoreId = popupStore.getId();
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
-                .popupStore(popupStore)
                 .star(star)
                 .contents(contents)
                 .build();

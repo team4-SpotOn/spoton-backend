@@ -20,10 +20,7 @@ public class ReviewCreateRequestDto {
 
     private String imageUrl;
 
-    private User user;
-    private PopupStore popupStore;
-
-    public Review toEntity() {
+    public Review toEntity(User user, PopupStore popupStore) {
         return Review.builder()
                 .user(user)
                 .popupStore(popupStore)

@@ -35,7 +35,7 @@ public class ReviewService {
         if(!reservationRepository.existsByUserAndPopupStore(user, popupStore)) {
             throw new CustomApiException(ErrorCode.POPUP_STORE_NOT_RESERVATION);
         }
-        Review review = requestDto.toEntity();
+        Review review = requestDto.toEntity(user, popupStore);
         return new ReviewCreateResponseDto(reviewRepository.save(review));
     }
 
