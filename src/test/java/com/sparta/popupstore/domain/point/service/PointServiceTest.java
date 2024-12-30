@@ -12,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.when;
 
 public class PointServiceTest {
-
     @Mock
     private PointChargedLogRepository pointChargedLogRepository;
 
@@ -26,7 +25,7 @@ public class PointServiceTest {
     private PointChargedLog pointChargedLog;
 
     @Test
-    void testPointChargeSuccess() {
+    void testPointCharge() {
         MockitoAnnotations.openMocks(this);
         // given
         when(pointChargedLog.getChargedPoint()).thenReturn(100); // 충전 포인트
@@ -37,7 +36,6 @@ public class PointServiceTest {
                 .chargedPoint(chargedPoint)
                 .prevPoint(user.getPoint())
                 .build();
-
         //when
         pointService.pointCharge(user, pointCharge);
         when(pointChargedLogRepository.save(pointChargedLog)).thenReturn(pointChargedLog);
