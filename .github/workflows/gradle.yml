@@ -85,6 +85,14 @@ jobs:
         run: |
           ./wait-for-it.sh db:5432 --timeout=60 -- ./gradlew test
 
+      - name: Wait for MySQL DB to be ready
+        run: |
+          until docker exec -it mysql-container mysqladmin ping --silent; do
+          echo "Waiting for MySQL..."
+          sleep 5
+          done
+          echo "MySQL is ready"
+
 #      - name: Wait for Database to be Ready
 #        run: |
 #          until docker exec test-db mysqladmin ping --silent; do
