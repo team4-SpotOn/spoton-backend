@@ -1,9 +1,14 @@
 package com.sparta.popupstore.domain.popupstore.bundle.service;
 
+import com.sparta.popupstore.domain.common.exception.CustomApiException;
+import com.sparta.popupstore.domain.common.exception.ErrorCode;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreAttribute;
 import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreBundle;
 import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreAttributeRequestDto;
 import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreImageRequestDto;
 import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreOperatingRequestDto;
+import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreOperating;
+import com.sparta.popupstore.domain.popupstore.bundle.enums.PopupStoreAttributeEnum;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.bundle.repository.PopupStoreAttributeRepository;
 import com.sparta.popupstore.domain.popupstore.bundle.repository.PopupStoreImageRepository;
@@ -11,6 +16,7 @@ import com.sparta.popupstore.domain.popupstore.bundle.repository.PopupStoreOpera
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -71,5 +77,22 @@ public class PopupStoreBundleService {
         popupStoreImageRepository.deleteAllByPopupStore(popupStore);
         popupStoreOperatingRepository.deleteAllByPopupStore(popupStore);
         popupStoreAttributeRepository.deleteAllByPopupStore(popupStore);
+    }
+
+    public void reservationValid(PopupStore popupStore, LocalDateTime reservationAt) {
+        PopupStoreAttribute popupStoreAttribute = popupStoreAttributeRepository
+                .findByPopupStoreAndAttribute(popupStore, PopupStoreAttributeEnum.RESERVATION)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_CAN_NOT_RESERVATION));
+        if(!popupStoreAttribute.getIsAllow()) {
+            throw new CustomApiException(ErrorCode.POPUP_STORE_CAN_NOT_RESERVATION);
+        }
+
+        PopupStoreOperating operating = popupStoreOperatingRepository
+                .findByPopupStoreAndDayOfWeek(popupStore, reservationAt.getDayOfWeek())
+                .orElseThrow(() -> new CustomApiException(ErrorCode.CAN_NOT_RESERVATION_AT));
+        if(reservationAt.toLocalTime().isBefore(operating.getStartTime())
+                || reservationAt.toLocalTime().isAfter(operating.getEndTime())) {
+            throw new CustomApiException(ErrorCode.CAN_NOT_RESERVATION_AT);
+        }
     }
 }

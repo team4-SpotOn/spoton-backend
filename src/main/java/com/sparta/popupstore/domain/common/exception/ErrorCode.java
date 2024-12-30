@@ -59,6 +59,7 @@ public enum ErrorCode {
 
     //reservation
     POPUP_STORE_CAN_NOT_RESERVATION(HttpStatus.BAD_REQUEST, "예약할 수 없는 팝업스토어 입니다."),
+    CAN_NOT_RESERVATION_AT(HttpStatus.BAD_REQUEST, "예약할 수 없는 시간 입니다."),
     POPUP_STORE_NOT_RESERVATION(HttpStatus.INTERNAL_SERVER_ERROR, "예약한 팝업스토어가 아닙니다."),
     DOESNT_RESERVATION_AT(HttpStatus.BAD_REQUEST, "예약한 시간대가 아닙니다."),
     RESERVATION_LATE(HttpStatus.BAD_REQUEST, "예약한 시간이 지났습니다."),
