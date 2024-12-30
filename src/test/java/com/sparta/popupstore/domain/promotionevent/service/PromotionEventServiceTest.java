@@ -116,7 +116,7 @@ class PromotionEventServiceTest {
         Throwable exception = assertThrows(CustomApiException.class, ()->
                 promotionEventService.createPromotionEvent(requestDto));
         // then
-        assertEquals("이벤트 종료일은 팝업스토어 종료일 이후로 선택할 수 없습니다.", exception.getMessage());
+        assertEquals(ErrorCode.PROMOTION_EVENT_NOT_AFTER_POPUP_STORE_END_DATE.getMessage(), exception.getMessage());
     }
 
     @Test
