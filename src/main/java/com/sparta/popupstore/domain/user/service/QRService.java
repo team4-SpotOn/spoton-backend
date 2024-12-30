@@ -67,8 +67,8 @@ public class QRService {
         if(!reservationDate.isEqual(nowDate)) {
             throw new CustomApiException(ErrorCode.DOESNT_RESERVATION_AT);
         }
-        if(nowTime.minusMinutes(30).isAfter(reservationTime)
-                || nowTime.plusMinutes(30).isBefore(reservationTime)) {
+        if(reservationTime.isAfter(nowTime.plusMinutes(30))
+                || reservationTime.isBefore(nowTime.minusMinutes(30))) {
             throw new CustomApiException(ErrorCode.DOESNT_RESERVATION_AT);
         }
     }
