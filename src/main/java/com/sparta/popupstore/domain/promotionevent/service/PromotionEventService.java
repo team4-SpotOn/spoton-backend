@@ -74,7 +74,7 @@ public class PromotionEventService {
             PromotionEventUpdateRequestDto requestDto,
             Long promotionEventId
     ) {
-        PromotionEvent promotionEvent = this.getPromotionEventByAfterStartDate(promotionEventId);
+        PromotionEvent promotionEvent = this.getPromotionEventByAfterStartDateOrEndDateTimeBefore(promotionEventId);
         promotionEvent.updatePromotionEvent(
                 requestDto.getTitle(),
                 requestDto.getDescription(),
@@ -90,12 +90,13 @@ public class PromotionEventService {
 
     @Transactional
     public void deletePromotionEvent(Long promotionEventId) {
-        PromotionEvent promotionEvent = this.getPromotionEventByAfterStartDate(promotionEventId);
+        PromotionEvent promotionEvent = this.getPromotionEventByAfterStartDateOrEndDateTimeBefore(promotionEventId);
         promotionEvent.delete(LocalDateTime.now());
     }
 
-    private PromotionEvent getPromotionEventByAfterStartDate(Long promotionEventId) {
-        return promotionEventRepository.findByIdAndStartDateTimeAfter(promotionEventId, LocalDateTime.now())
+    private PromotionEvent getPromotionEventByAfterStartDateOrEndDateTimeBefore(Long promotionEventId) {
+        LocalDateTime now = LocalDateTime.now();
+        return promotionEventRepository.findByIdAndStartDateTimeAfterOrEndDateTimeBefore(promotionEventId, now, now)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.PROMOTION_EVENT_NOT_UPDATE_AND_DELETE));
     }
 }

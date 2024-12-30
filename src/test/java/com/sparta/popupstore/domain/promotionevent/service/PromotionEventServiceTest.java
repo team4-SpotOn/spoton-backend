@@ -111,14 +111,14 @@ class PromotionEventServiceTest {
     }
 
     @Test
-    @DisplayName("존재하지 않거나 시작일이 지난 이벤트 수정 요청 시 예외 처리")
+    @DisplayName("존재하지 않거나 시작일이 지났거나 종료일이 지나지 않은 이벤트 수정 요청 시 예외 처리")
     void updatePromotionEventTest1() {
         // given
         Long promotionEventId = 1L;
         PromotionEventUpdateRequestDto requestDto = PromotionEventUpdateRequestDto.builder()
                 .build();
         // when
-        when(promotionEventRepository.findByIdAndStartDateTimeAfter(any(), any())).thenReturn(Optional.empty());
+        when(promotionEventRepository.findByIdAndStartDateTimeAfterOrEndDateTimeBefore(any(), any(), any())).thenReturn(Optional.empty());
         Throwable exception = assertThrows(CustomApiException.class, ()->
                 promotionEventService.updatePromotionEvent(requestDto, promotionEventId));
         // then
@@ -138,9 +138,23 @@ class PromotionEventServiceTest {
                 .title("수정 후 제목")
                 .build();
         // when
-        when(promotionEventRepository.findByIdAndStartDateTimeAfter(any(), any())).thenReturn(Optional.of(promotionEvent));
+        when(promotionEventRepository.findByIdAndStartDateTimeAfterOrEndDateTimeBefore(any(), any(), any())).thenReturn(Optional.of(promotionEvent));
         PromotionEventUpdateResponseDto responseDto = promotionEventService.updatePromotionEvent(requestDto, promotionEventId);
         // then
         assertEquals("수정 후 제목", responseDto.getTitle());
+    }
+
+    @Test
+    @DisplayName("존재하지 않거나 시작일이 지났거나 종료일이 지나지 않은 이벤트 삭제 요청 시 예외 처리")
+    void deletePromotionEventTest1() {
+        // given
+        Long promotionEventId = 1L;
+        // when
+        when(promotionEventRepository.findByIdAndStartDateTimeAfterOrEndDateTimeBefore(any(), any(), any())).thenReturn(Optional.empty());
+        Throwable exception = assertThrows(CustomApiException.class, ()->
+                promotionEventService.deletePromotionEvent(promotionEventId)
+        );
+        // then
+        assertEquals("수정하거나 삭제할 수 없는 이벤트입니다.", exception.getMessage());
     }
 }

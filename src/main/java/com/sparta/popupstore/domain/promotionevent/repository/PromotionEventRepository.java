@@ -32,5 +32,5 @@ public interface PromotionEventRepository extends JpaRepository<PromotionEvent, 
 
     List<PromotionEvent> findAllByEndDateTimeBefore(LocalDateTime sixMonthBefore);
 
-    Optional<PromotionEvent> findByIdAndStartDateTimeAfter(Long id, LocalDateTime now);
+    Optional<PromotionEvent> findByIdAndStartDateTimeAfterOrEndDateTimeBefore(Long id, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }
