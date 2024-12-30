@@ -42,6 +42,33 @@ services: # 아래에서 설정한 컨테이너들을 하나로 묶어줌
     networks:
       - app-network
 
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki:/etc/loki
+      - loki-data:/loki
+    command:
+      - '--config.file=/etc/loki/loki-config.yml'
+      - '--config.expand-env=true'
+    networks:
+      - app-network
+
+  promtail:
+    image: grafana/promtail
+    container_name: promtail
+    volumes:
+      - ./logs:/logs
+      - ./promtail:/etc/promtail
+      - promtail-data:/promtail
+    command: '--config.file=/etc/promtail/promtail-config.yml'
+    depends_on:
+      - loki
+    networks:
+      - app-network
+
   alert_manager:
     image: prom/alertmanager
     container_name: alert-manager
@@ -94,3 +121,5 @@ volumes:
   prometheus-data:
   grafana-data:
   alertmanager-data:
+  loki-data:
+  promtail-data:
