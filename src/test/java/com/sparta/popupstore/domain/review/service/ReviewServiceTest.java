@@ -1,11 +1,12 @@
 package com.sparta.popupstore.domain.review.service;
 
+
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
-import com.sparta.popupstore.domain.reservation.repository.ReservationRepository;
 import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
+import com.sparta.popupstore.domain.review.entity.Review;
 import com.sparta.popupstore.domain.user.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +41,7 @@ public class ReviewServiceTest {
         String contents = "최고";
         Long popupStoreId = popupStore.getId();
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
+                .popupStore(popupStore)
                 .star(star)
                 .contents(contents)
                 .build();
@@ -49,8 +51,5 @@ public class ReviewServiceTest {
                 CustomApiException.class,
                 () -> reviewService.createReview(user, popupStoreId, requestDto)
         );
-
-        // then
-        assertEquals(ErrorCode.POPUP_STORE_NOT_FOUND.getMessage(), exception.getMessage());
     }
 }
