@@ -40,7 +40,7 @@ public class ReviewServiceTest {
                 .popupStore(popupStore)
                 .build();
 
-        // when
+        //when
         CustomApiException exception = assertThrows(
                 CustomApiException.class,
                 () -> reviewService.createReview(user, popupStoreId, requestDto)
