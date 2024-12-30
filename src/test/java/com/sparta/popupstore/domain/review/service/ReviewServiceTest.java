@@ -1,12 +1,10 @@
 package com.sparta.popupstore.domain.review.service;
 
-
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import com.sparta.popupstore.domain.review.dto.request.ReviewCreateRequestDto;
-import com.sparta.popupstore.domain.review.entity.Review;
 import com.sparta.popupstore.domain.user.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
