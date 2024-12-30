@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -30,7 +32,8 @@ public class Reservation {
     @JoinColumn(name = "popupstroe_id")
     private PopupStore popupStore;
 
-    private LocalDateTime reservationAt;
+    private LocalDate reservationDate;
+    private LocalTime reservationTime;
     private Integer number;
 
     @CreatedDate
@@ -38,11 +41,19 @@ public class Reservation {
     private LocalDateTime createdAt;
 
     @Builder
-    public Reservation(Long id, User user, PopupStore popupStore, LocalDateTime reservationAt, Integer number) {
+    public Reservation(
+            Long id,
+            User user,
+            PopupStore popupStore,
+            LocalDate reservationDate,
+            LocalTime reservationTime,
+            Integer number
+    ) {
         this.id = id;
         this.user = user;
         this.popupStore = popupStore;
-        this.reservationAt = reservationAt;
+        this.reservationDate = reservationDate;
+        this.reservationTime = reservationTime;
         this.number = number;
     }
 }

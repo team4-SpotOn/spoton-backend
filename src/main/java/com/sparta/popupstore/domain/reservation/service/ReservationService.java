@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +32,12 @@ public class ReservationService {
         PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
 
-        reservationValid(popupStore, requestDto.getReservationAt(), requestDto.getNumber());
+        reservationValid(
+                popupStore,
+                requestDto.getReservationDate(),
+                requestDto.getReservationTime(),
+                requestDto.getNumber()
+        );
         pointService.pointUsed(user, popupStore, requestDto.getNumber(), requestDto.getCouponSerialNumber());
 
         Reservation reservation = reservationRepository.save(requestDto.toEntity(user, popupStore));
@@ -46,25 +51,25 @@ public class ReservationService {
         if(!reservation.getUser().equals(user)) {
             throw new CustomApiException(ErrorCode.RESERVATION_FORBIDDEN);
         }
-        if(reservation.getReservationAt().toLocalDate().isBefore(LocalDate.now().plusDays(1))) {
+        if(reservation.getReservationDate().isBefore(LocalDate.now().plusDays(1))) {
             throw new CustomApiException(ErrorCode.RESERVATION_CANCELLATION_NOT_ALLOWED);
         }
 
         reservationRepository.delete(reservation);
     }
 
-    private void reservationValid(PopupStore popupStore, LocalDateTime reservationAt, Integer number) {
-        popupStoreBundleService.reservationValid(popupStore, reservationAt);
+    private void reservationValid(PopupStore popupStore, LocalDate reservationDate, LocalTime reservationTime, Integer number) {
+        popupStoreBundleService.reservationValid(popupStore, reservationDate, reservationTime);
 
-        int sumReservationNumber = reservationRepository.findAllByPopupStoreAndReservationAtBetween(
+        int sumNumber = reservationRepository.findAllByPopupStoreAndReservationDate(
                         popupStore,
-                        reservationAt.withMinute(0),
-                        reservationAt.withMinute(59)
+                        reservationDate
                 ).stream()
+                .filter(reservation -> reservation.getReservationTime().getHour() == reservationTime.getHour())
                 .map(Reservation::getNumber)
-                .reduce(0, Integer::sum);
+                .reduce(number, Integer::sum);
 
-        if(sumReservationNumber + number > popupStore.getReservationLimit()) {
+        if(sumNumber > popupStore.getReservationLimit()) {
             throw new CustomApiException(ErrorCode.RESERVATION_LIMIT_OVER);
         }
     }
