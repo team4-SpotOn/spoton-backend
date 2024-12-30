@@ -80,12 +80,17 @@ jobs:
       - name: Start Database with Docker Compose
         run: docker-compose up -d
 
-      - name: Wait for Database to be Ready
+      # DB가 준비될 때까지 대기
+      - name: Wait for DB service to be ready
         run: |
-          until docker exec test-db mysqladmin ping --silent; do
-          echo "Waiting for database..."
-          sleep 10
-          done
+          ./wait-for-it.sh db:5432 --timeout=60 -- ./gradlew test
+
+#      - name: Wait for Database to be Ready
+#        run: |
+#          until docker exec test-db mysqladmin ping --silent; do
+#          echo "Waiting for database..."
+#          sleep 10
+#          done
 
       - name: Run tests with Gradle
         run: ./gradlew test  # Gradle을 사용하여 테스트 실행
