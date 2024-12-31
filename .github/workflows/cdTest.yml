@@ -45,7 +45,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker rm $(docker ps -a -q)
             docker rmi ${{ secrets.DOCKER_USER_NAME }}/spot-on:latest
             docker pull ${{ secrets.DOCKER_USER_NAME }}/spot-on:latest
             docker-compose up -d
