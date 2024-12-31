@@ -38,7 +38,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USER_NAME }}/spot-on-docker-product
       ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
       - name: Deploy
-        uses: appleboy/ssh-action@v0.1.8
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
@@ -46,6 +46,6 @@ jobs:
           script: |
             docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker rm $(docker ps -a -q)
-            docker rmi ${{ secrets.DOCKER_USER_NAME }}/spot-on-docker-product
-            docker pull ${{ secrets.DOCKER_USER_NAME }}/spot-on-docker-product
+            docker rmi ${{ secrets.DOCKER_USER_NAME }}/spot-on-docker-product:latest
+            docker pull ${{ secrets.DOCKER_USER_NAME }}/spot-on-docker-product:latest
             docker-compose up -d
