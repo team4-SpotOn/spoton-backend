@@ -1,6 +1,5 @@
 package com.sparta.popupstore.s3.service;
 
-
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.amazonaws.services.s3.model.MultiObjectDeleteException.DeleteError;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,8 +83,8 @@ public class S3ImageService {
         try {
             amazonS3.deleteObjects(deleteObjectsRequest);
         } catch (MultiObjectDeleteException e) {
-            List<DeleteError> errors = e.getErrors();
-            List<String> errImages = errors.stream()
+            List<String> errImages = e.getErrors()
+                    .stream()
                     .map(error ->
                     {
                         log.error("스케줄러 S3 이미지 삭제 MultiObjectDeleteException : {} {}", error.getKey(), error.getMessage());
