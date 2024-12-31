@@ -33,7 +33,7 @@ jobs:
 
       - name: EC2 Pull
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/${{ secrets.EC2_KEY }} ubuntu@${{ secrets.EC2_IP }} "cd ~/spoton-backend && git pull origin dev"
+          ssh -o StrictHostKeyChecking=no -i /home/ubuntu/.ssh/${{ secrets.EC2_KEY }} ubuntu@${{ secrets.EC2_IP }} "cd ~/spoton-backend && git pull origin dev"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
 
