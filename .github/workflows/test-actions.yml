@@ -65,12 +65,8 @@ jobs:
           sleep 10
           done
 
-      - name: Debug MySQL Logs
-        run: docker logs spot-on-mysql
-
       - name: Build with Gradle
         run: ./gradlew build  # Gradle을 사용하여 빌드 실행
-
 
       - name: Run tests with Gradle
         run: ./gradlew test  # Gradle을 사용하여 테스트 실행
