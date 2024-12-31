@@ -29,6 +29,7 @@ services: # 아래에서 설정한 컨테이너들을 하나로 묶어줌
       - 8080
     ports:
       - "8080:8080"
+      - "3306:3307"
     depends_on:
       - mysql
       - test-db
