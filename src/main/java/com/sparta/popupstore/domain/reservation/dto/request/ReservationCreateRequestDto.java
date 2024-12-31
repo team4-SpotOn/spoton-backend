@@ -5,12 +5,14 @@ import com.sparta.popupstore.domain.reservation.entity.Reservation;
 import com.sparta.popupstore.domain.user.entity.User;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter
+@AllArgsConstructor
 public class ReservationCreateRequestDto {
     @NotNull(message = "예약 날짜를 입력해주세요.")
     private LocalDate reservationDate;
