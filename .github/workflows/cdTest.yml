@@ -36,7 +36,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.EC2_HOST }} "cd ~/spoton-backend && git pull origin dev"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
-
       ## 3) Docker Hub에 이미지 push 하기
       - name: Docker build
         run: |
