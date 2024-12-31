@@ -65,4 +65,4 @@ jobs:
             mkdir -p ~/app
             cd ~/app
             docker-compose down  # 기존 설정이 있으면 중지
-            docker-compose up -d
+            docker-compose up -d 
