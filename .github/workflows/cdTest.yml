@@ -33,7 +33,7 @@ jobs:
 
       - name: EC2 Pull
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/ed25519 ubuntu@${{ secrets.EC2_IP }} "cd ~/spoton-backend && git pull origin dev"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/${{ EC2_KEY }} ubuntu@${{ secrets.EC2_IP }} "cd ~/spoton-backend && git pull origin dev"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
       ## 3) Docker Hub에 이미지 push 하기
