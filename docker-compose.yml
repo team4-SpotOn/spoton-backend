@@ -14,11 +14,8 @@ services: # 아래에서 설정한 컨테이너들을 하나로 묶어줌
       - app-network
     restart: always # 종료되어도 자동으로 재실행
 
-  spring:
+  app:
     container_name: spot-on-application
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: dlgktmd0/spot-on
     environment:
       MYSQL_DATABASE: spoton-backend
