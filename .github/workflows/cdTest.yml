@@ -31,17 +31,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build --no-daemon
 
-      - name: Sync Bucket
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_EC2_METADATA_DISABLED: true
-        run: |
-          aws s3 sync \
-            --region ap-northeast-2 \
-            build s3://popup-store \
-            --delete
-
       ## 3) Docker Hub에 이미지 push 하기
       - name: Docker build
         run: |
