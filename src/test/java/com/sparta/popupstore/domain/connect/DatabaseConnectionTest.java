@@ -16,12 +16,15 @@ public class DatabaseConnectionTest {
     private DataSource dataSource;
 
     @Test
-    public void testDatabaseConnection() throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            assertNotNull(connection);
-            assertFalse(connection.isClosed());
-            System.out.println("Database connection is valid!");
+    public void testDatabaseConnection() {
+        assertNotNull(dataSource, "DataSource should not be null");
 
+        try (Connection connection = dataSource.getConnection()) {
+            assertNotNull(connection, "Connection should not be null");
+            assertFalse(connection.isClosed(), "Connection should be open");
+            System.out.println("Database connection is valid!");
+        } catch (SQLException e) {
+            fail("Failed to connect to the database: " + e.getMessage());
         }
     }
 }
