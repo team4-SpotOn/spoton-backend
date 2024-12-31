@@ -42,6 +42,7 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USER_NAME}}/spot-on . 
           docker push ${{ secrets.DOCKER_USER_NAME}}/spot-on
+
       ## 4) Docker Hub에 Push한 이미지를 리눅스 서버에 받아와서 run
       - name: Deploy
         uses: appleboy/ssh-action@master
