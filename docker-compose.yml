@@ -24,13 +24,13 @@ services: # 아래에서 설정한 컨테이너들을 하나로 묶어줌
       MYSQL_DATABASE: spoton-backend
       MYSQL_USER_NAME: root
       MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE_URL: jdbc:mysql://localhost:3307/spoton-backend
+      MYSQL_DATABASE_URL: jdbc:mysql://spot-on-mysql:3307/spoton-backend?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
     expose:
       - 8080
     ports:
       - "8080:8080"
     depends_on:
-      - mysql
+      - spot-on-mysql
     networks:
       - app-network
 
