@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.amazonaws.services.s3.model.MultiObjectDeleteException.DeleteError;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +40,6 @@ public class S3ImageService {
         if (!fileName.endsWith(".jpg") && !fileName.endsWith(".png") && !fileName.endsWith(".jpeg")) {
             throw new CustomApiException(ErrorCode.NOT_CORRECT_FORMAT);
         }
-
         String uuid = UUID.randomUUID().toString();
         String createFileName = prefix.getPrefix() + "/" + uuid + fileName;
         String preSignedUrl = generatePreSignedUrl(createFileName);
@@ -65,7 +65,6 @@ public class S3ImageService {
                     .withContinuationToken(continuationToken);
             ListObjectsV2Result result = amazonS3.listObjectsV2(request);
             result.getObjectSummaries().forEach(s3Object -> images.add(s3Object.getKey()));
-
             // 다음 페이지를 위한 ContinuationToken 설정
             continuationToken = result.getNextContinuationToken();
         } while (continuationToken != null); // 다음 페이지가 없으면 종료
@@ -78,7 +77,6 @@ public class S3ImageService {
             log.info("null or empty file name");
             return;
         }
-
         if (!fileName.contains(baseUrl)) {
             throw new CustomApiException(ErrorCode.NOT_CORRECT_URL_FORMAT);
         }
@@ -96,21 +94,24 @@ public class S3ImageService {
         try {
             amazonS3.deleteObjects(deleteObjectsRequest);
         } catch (MultiObjectDeleteException e) {
-            List<MultiObjectDeleteException.DeleteError> errors = e.getErrors();
-            errors.forEach(error -> log.warn("스케줄러 S3 이미지 삭제 error : {} {}",error.getKey(), error.getMessage()));
+            List<DeleteError> errors = e.getErrors();
+            errors.forEach(error -> log.warn("스케줄러 S3 이미지 삭제 MultiObjectDeleteException : {} {}",error.getKey(), error.getMessage()));
             this.retryImagesDelete(errors);
         }
         catch (AmazonS3Exception e) {
-            log.error("스케줄러 s3 이미지 삭제 Exception : {}", e.getMessage());
+            log.error("스케줄러 s3 이미지 삭제 AmazonS3Exception : {}", e.getMessage());
         }
     }
 
-    private void retryImagesDelete(List<MultiObjectDeleteException.DeleteError> errorImageList){
-        errorImageList.stream().map(MultiObjectDeleteException.DeleteError::getKey).forEach(key -> {
+    private void retryImagesDelete(List<DeleteError> errorImageList){
+        errorImageList.stream().map(DeleteError::getKey).forEach(key -> {
            try {
                amazonS3.deleteObject(bucket, key);
-           }catch (AmazonS3Exception e) {
-               log.error("스케줄러 s3 error 이미지 삭제 재시도 실패 : {}. 에러 메세지 : {}", key, e.getMessage());
+           }catch (MultiObjectDeleteException e){
+               log.error("스케줄러 s3 error 이미지 삭제 재시도 MultiObjectDeleteException : {}. 에러 메세지 : {}", key, e.getMessage());
+           }
+           catch (AmazonS3Exception e) {
+               log.error("스케줄러 s3 이미지 삭제 재시도 AmazonS3Exception : {}. 에러 메세지 : {}",key, e.getMessage());
            }
         });
     }
@@ -118,7 +119,6 @@ public class S3ImageService {
     private String generatePreSignedUrl(String createFileName) {
         Date expiration = new Date();
         expiration.setTime(expiration.getTime() + SIGN_LIFE_TIME);
-
         GeneratePresignedUrlRequest generatePresignedUrlRequest =
                 new GeneratePresignedUrlRequest(bucket, createFileName)
                         .withMethod(HttpMethod.PUT)
