@@ -24,7 +24,11 @@ public class DatabaseConnectionTest {
             assertFalse(connection.isClosed(), "Connection should be open");
             System.out.println("Database connection is valid!");
         } catch (SQLException e) {
+            e.printStackTrace();
             fail("Failed to connect to the database: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unexpected error: " + e.getMessage());
         }
     }
 }
