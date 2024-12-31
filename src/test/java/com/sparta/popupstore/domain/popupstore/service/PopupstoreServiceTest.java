@@ -123,6 +123,14 @@ class PopupstoreServiceTest {
         verify(popupStoreBundleService, times(1)).updatePopupStoreBundle(any(), any(), any(), any());
 
         assertNotNull(response);
+
+        assertEquals(requestDto.getName(), popupStore.getName());
+        assertEquals(requestDto.getContents(), popupStore.getContents());
+        assertEquals(requestDto.getPrice(), popupStore.getPrice());
+        assertEquals(requestDto.getReservationLimit(), popupStore.getReservationLimit());
+        assertEquals(requestDto.getAddress(), popupStore.getAddress().getAddress());
+        assertEquals(requestDto.getStartDate(), popupStore.getStartDate());
+        assertEquals(requestDto.getEndDate(), popupStore.getEndDate());
     }
 
     @Test
