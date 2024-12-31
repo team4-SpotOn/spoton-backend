@@ -1,13 +1,9 @@
 package com.sparta.popupstore.s3.service;
 
-
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.amazonaws.util.StringUtils;
+import com.amazonaws.services.s3.model.*;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.s3.dto.request.S3ImageListRequestDto;
@@ -19,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -34,13 +31,11 @@ public class S3ImageService {
     @Value("${cloud.aws.url}")
     private String baseUrl;
 
-
     public S3ImageResponseDto getPreSignedUrl(Directory prefix, S3ImageRequestDto requestDto) {
         String fileName = requestDto.getFileName();
-        if(!fileName.endsWith(".jpg") && !fileName.endsWith(".png") && !fileName.endsWith(".jpeg")) {
+        if (!fileName.endsWith(".jpg") && !fileName.endsWith(".png") && !fileName.endsWith(".jpeg")) {
             throw new CustomApiException(ErrorCode.NOT_CORRECT_FORMAT);
         }
-
         String uuid = UUID.randomUUID().toString();
         String createFileName = prefix.getPrefix() + "/" + uuid + fileName;
         String preSignedUrl = generatePreSignedUrl(createFileName);
@@ -56,27 +51,58 @@ public class S3ImageService {
                 .toList();
     }
 
-    public void deleteImage(String fileName) {
-        if(StringUtils.isNullOrEmpty(fileName)) {
-            log.info("null or empty file name");
-            return;
-        }
+    public List<String> getImages(Directory prefix) {
+        List<String> images = new ArrayList<>();
+        String continuationToken = null;
+        do {
+            ListObjectsV2Request request = new ListObjectsV2Request()
+                    .withBucketName(bucket)
+                    .withPrefix(prefix.getPrefix())
+                    .withContinuationToken(continuationToken);
+            ListObjectsV2Result result = amazonS3.listObjectsV2(request);
+            result.getObjectSummaries().forEach(s3Object -> images.add(s3Object.getKey()));
+            // 다음 페이지를 위한 ContinuationToken 설정
+            continuationToken = result.getNextContinuationToken();
+        } while (continuationToken != null); // 다음 페이지가 없으면 종료
+        return images;
+    }
 
-        if(!fileName.contains(baseUrl)) {
-            throw new CustomApiException(ErrorCode.NOT_CORRECT_URL_FORMAT);
+    public void s3ImageDeleteByPrefix(List<String> images, Directory prefix, boolean recursive) {
+        List<String> deleteImages = this.getImages(prefix)
+                .stream()
+                .filter(imageUrl -> !images.contains(baseUrl+imageUrl))
+                .toList();
+        if(!deleteImages.isEmpty()){
+            this.deleteImages(deleteImages, recursive);
         }
-        String key = fileName.substring(baseUrl.length());
+    }
+
+    public void deleteImages(List<String> images,  boolean recursive) {
+        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket)
+                .withKeys(images.toArray(new String[0]));
         try {
-            amazonS3.deleteObject(bucket, key);
-        } catch(AmazonS3Exception e) {
-            throw new CustomApiException(ErrorCode.FAIL_DELETE_IMAGE_FILE);
+            amazonS3.deleteObjects(deleteObjectsRequest);
+        } catch (MultiObjectDeleteException e) {
+            List<String> errImages = e.getErrors()
+                    .stream()
+                    .map(error ->
+                    {
+                        log.error("스케줄러 S3 이미지 삭제 MultiObjectDeleteException : {} {}", error.getKey(), error.getMessage());
+                        return error.getKey();
+                    })
+                    .toList();
+            if(recursive) {
+                this.deleteImages(errImages, false);
+            }
+        }
+        catch (AmazonS3Exception e) {
+            log.error("스케줄러 s3 이미지 삭제 AmazonS3Exception : {}", e.getMessage());
         }
     }
 
     private String generatePreSignedUrl(String createFileName) {
         Date expiration = new Date();
         expiration.setTime(expiration.getTime() + SIGN_LIFE_TIME);
-
         GeneratePresignedUrlRequest generatePresignedUrlRequest =
                 new GeneratePresignedUrlRequest(bucket, createFileName)
                         .withMethod(HttpMethod.PUT)
