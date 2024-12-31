@@ -21,6 +21,7 @@ public class DatabaseConnectionTest {
             assertNotNull(connection);
             assertFalse(connection.isClosed());
             System.out.println("Database connection is valid!");
+
         }
     }
 }
