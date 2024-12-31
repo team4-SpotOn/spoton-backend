@@ -42,15 +42,6 @@ jobs:
       - name: Give execute permission to gradlew
         run: chmod +x ./gradlew  # 실행 권한 부여
 
-      # 환경 변수를 설정합니다.
-      - name: Set environment variables for database
-        run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
-          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-
       - name: Make application.yml
         run: |
           cd ./src/main/resources
@@ -58,7 +49,7 @@ jobs:
           echo "${{ secrets.PROPERTIES }}" > ./application.yml
           cat ./application.yml  # Debugging: 파일 내용 출력
         shell: bash
-        
+
       - name: Set up Docker Compose
         run: |
           sudo apt-get update
@@ -73,7 +64,7 @@ jobs:
           echo "Waiting for database..."
           sleep 10
           done
-          
+
       - name: Debug MySQL Logs
         run: docker logs spot-on-mysql
 
