@@ -62,6 +62,7 @@ jobs:
             # 필요한 구성 파일 추가 (필요 시 EC2 서버의 위치에 맞게 조정)
             
             # Docker Compose 실행 (컨테이너 이름, 볼륨 설정, 환경 변수 확인)
+            mkdir -p ~/app
             cd ~/app
             docker-compose down  # 기존 설정이 있으면 중지
             docker-compose up -d
