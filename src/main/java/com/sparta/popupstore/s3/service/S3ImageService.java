@@ -5,7 +5,6 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.*;
-import com.amazonaws.util.StringUtils;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.s3.dto.request.S3ImageListRequestDto;
@@ -33,7 +32,6 @@ public class S3ImageService {
     private String bucket;
     @Value("${cloud.aws.url}")
     private String baseUrl;
-
 
     public S3ImageResponseDto getPreSignedUrl(Directory prefix, S3ImageRequestDto requestDto) {
         String fileName = requestDto.getFileName();
@@ -71,49 +69,37 @@ public class S3ImageService {
         return images;
     }
 
-    // 여기 이 메스드 어떻게 할까요 ??
-    public void deleteImage(String fileName) {
-        if (StringUtils.isNullOrEmpty(fileName)) {
-            log.info("null or empty file name");
-            return;
-        }
-        if (!fileName.contains(baseUrl)) {
-            throw new CustomApiException(ErrorCode.NOT_CORRECT_URL_FORMAT);
-        }
-        String key = fileName.substring(baseUrl.length());
-        try {
-            amazonS3.deleteObject(bucket, key);
-        } catch (AmazonS3Exception e) {
-            throw new CustomApiException(ErrorCode.FAIL_DELETE_IMAGE_FILE);
+    public void s3ImageDeleteByPrefix(List<String> images, Directory prefix, boolean recursive) {
+        List<String> deleteImages = this.getImages(prefix)
+                .stream()
+                .filter(imageUrl -> !images.contains(baseUrl+imageUrl))
+                .toList();
+        if(!deleteImages.isEmpty()){
+            this.deleteImages(deleteImages, recursive);
         }
     }
 
-    public void deleteImages(List<String> images) {
+    public void deleteImages(List<String> images,  boolean recursive) {
         DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket)
                 .withKeys(images.toArray(new String[0]));
         try {
             amazonS3.deleteObjects(deleteObjectsRequest);
         } catch (MultiObjectDeleteException e) {
             List<DeleteError> errors = e.getErrors();
-            errors.forEach(error -> log.warn("스케줄러 S3 이미지 삭제 MultiObjectDeleteException : {} {}",error.getKey(), error.getMessage()));
-            this.retryImagesDelete(errors);
+            List<String> errImages = errors.stream()
+                    .map(error ->
+                    {
+                        log.error("스케줄러 S3 이미지 삭제 MultiObjectDeleteException : {} {}", error.getKey(), error.getMessage());
+                        return error.getKey();
+                    })
+                    .toList();
+            if(recursive) {
+                this.deleteImages(errImages, false);
+            }
         }
         catch (AmazonS3Exception e) {
             log.error("스케줄러 s3 이미지 삭제 AmazonS3Exception : {}", e.getMessage());
         }
-    }
-
-    private void retryImagesDelete(List<DeleteError> errorImageList){
-        errorImageList.stream().map(DeleteError::getKey).forEach(key -> {
-           try {
-               amazonS3.deleteObject(bucket, key);
-           }catch (MultiObjectDeleteException e){
-               log.error("스케줄러 s3 error 이미지 삭제 재시도 MultiObjectDeleteException : {}. 에러 메세지 : {}", key, e.getMessage());
-           }
-           catch (AmazonS3Exception e) {
-               log.error("스케줄러 s3 이미지 삭제 재시도 AmazonS3Exception : {}. 에러 메세지 : {}",key, e.getMessage());
-           }
-        });
     }
 
     private String generatePreSignedUrl(String createFileName) {
