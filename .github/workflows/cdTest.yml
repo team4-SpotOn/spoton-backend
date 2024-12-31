@@ -44,7 +44,24 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            # Docker 로그인
             docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker rmi ${{ secrets.DOCKER_USER_NAME }}/spot-on:latest
-            docker pull ${{ secrets.DOCKER_USER_NAME }}/spot-on:latest
+            # 실행 중인 컨테이너를 안전하게 중지 및 삭제
+            if [ "$(docker ps -q)" ]; then
+              docker stop $(docker ps -q)
+            fi
+            if [ "$(docker ps -aq)" ]; then
+              docker rm $(docker ps -aq)
+            fi
+            # 이전 이미지를 안전하게 삭제
+            if [ "$(docker images -q spot-on-app:latest)" ]; then
+              docker rmi -f spot-on-app:latest
+            fi
+            # 최신 이미지 Pull
+            docker pull spot-on-app:latest
+            # 필요한 구성 파일 추가 (필요 시 EC2 서버의 위치에 맞게 조정)
+            
+            # Docker Compose 실행 (컨테이너 이름, 볼륨 설정, 환경 변수 확인)
+            cd ~/app
+            docker-compose down  # 기존 설정이 있으면 중지
             docker-compose up -d
