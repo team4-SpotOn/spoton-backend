@@ -68,9 +68,9 @@ jobs:
 
       - name: Wait for Database to be Ready
         run: |
-          until docker exec test-db mysqladmin ping --silent; do
-          echo "Waiting for database..."
-          sleep 10
+          until docker exec spot-on-mysql mysqladmin ping -h"localhost" --silent; do
+            echo "Waiting for database..."
+            sleep 10
           done
 
       - name: Build with Gradle
