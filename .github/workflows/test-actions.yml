@@ -55,7 +55,7 @@ jobs:
         run: |
           cd ./src/main/resources
           touch ./application.yml
-          echo "${{ secrets.PROPERTIES }}" > ./application.yml
+          echo "${{ secrets.PROPERTIES }}" > ./src/main/resources/application.properties.yml
         shell: bash
         
       - name: Set up Docker Compose
