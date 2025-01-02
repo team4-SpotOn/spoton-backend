@@ -14,21 +14,19 @@ services:
     networks: # docker 컨테이너를 연결하고 호스트와 통신할 수 있도록 해줌
       - app-network
     restart: always # 종료되어도 자동으로 재실행
+
   app:
-    container_name: spot-on-application
-    image: dlgktmd0/spot-on
+    image: repo/spot-on:latest
     environment:
-      MYSQL_DATABASE: spoton-backend
-      MYSQL_USER_NAME: root
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE_URL: jdbc:mysql://mysql:3307/spoton-backend?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
-    expose:
-      - 8080
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spoton-backend?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
     ports:
       - "8080:8080"
     depends_on:
       - mysql
       - test-db
+    restart: unless-stopped
     networks:
       - app-network
 
