@@ -14,6 +14,9 @@ public class WebUtil {
         String cookieName = "viewedPopup_" + popupStoreId;
 
         Cookie[] cookies = request.getCookies();
+        if(cookies == null) {
+            return false;
+        }
         for(Cookie cookie : cookies) {
             if(cookie.getName().equals(cookieName)) {
                 return false;
