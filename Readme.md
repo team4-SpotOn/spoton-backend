@@ -1,11 +1,10 @@
-<center>
+# <center> 프로젝트명 </center>
 
-# 프로젝트명
+## <center> spotOn </center>
 
-<img src="https://cdn.discordapp.com/attachments/1321530954057252905/1324173460456472630/img_2.png?ex=67773022&is=6775dea2&hm=acd89d1cb43ea7b42c34247e3da3a90f30e67d6f24190231723c360024cc753a&" width="250" height="250"/>
 
-## spotOn
-</center>
+<div style="text-align: center;"><img src="https://cdn.discordapp.com/attachments/1321530954057252905/1324173460456472630/img_2.png?ex=67773022&is=6775dea2&hm=acd89d1cb43ea7b42c34247e3da3a90f30e67d6f24190231723c360024cc753a&" width="250" height="250"/></div> 
+
 
 -------
 ## 프로젝트 진행 기간
