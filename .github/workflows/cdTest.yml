@@ -2,12 +2,14 @@ name : Spring Boot Ec2 CI/CD Test
 
 on:
   pull_request:
-    types:
-      - closed
+    branches:
+      - "dev"
+#    types:
+#      - closed
 
 jobs:
   on-merge:
-    if: github.event.pull_request.merged == true  # 병합된 경우에만 실행
+    #if: github.event.pull_request.merged == true  # 병합된 경우에만 실행
     runs-on: ubuntu-latest
 
     steps:
