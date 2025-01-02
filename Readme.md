@@ -20,13 +20,13 @@ __2024.12.2-2025.1.7__
 -------
 ## 팀원소개
 
-| 팀원  | 역할                                                                          |         
-|-----|-----------------------------------------------------------------------------|
-| 문정원 | 위치구하기, 프론트엔드, 지도 불러오기, 동시성제어, 유저와 회사마이페이지, 회사 자사팝업스토어 조회, 소셜로그인 전화번호 저장, CI |                         
-| 권익현 | 소셜로그인, QR, 회원가입 및 로그인, 회원정보 수정, 회원탈퇴, 전체적 코드리팩토링, 예약시 인원수 추가                | 
-| 장용환 | 테이블 구조 조정, 팝업스토어 예약, 팝업스토어CRUD, 조회수기능                                       | 
-| 이하승 | 실시간 로깅 및 모니터링, AWS s3, 이미지 업로드, 이벤트CRUD, 쿠폰생성, 쿠폰 추가, 스케줄러, CD              |
-| 김도현 | 포인트 관리, 리뷰CRUD, 날짜별 팝업스토어 조회                                                |
+| 팀원  | 역할                                                           |         
+|-----|--------------------------------------------------------------|
+| 문정원 | 위도경도 구하기, 카카오맵지도 호출, 동시성제어, CI                               |                         
+| 권익현 | 소셜로그인, QR, 회원가입 및 로그인, 회원정보 수정, 회원탈퇴, 전체적 코드리팩토링, 예약시 인원수 추가 | 
+| 장용환 | 팝업스토어 운영시간, 팝업스토어 예약, 팝업스토어CRUD, 조회수기능                       | 
+| 이하승 | 실시간 로깅 및 모니터링, AWS s3, 이미지 업로드, 이벤트CRUD, 쿠폰생성, 스케줄러, CD      |
+| 김도현 | 포인트 관리, 리뷰CRUD, 날짜별 팝업스토어 조회                                 |
 
 -------
 ### 와이어프레임
@@ -67,28 +67,28 @@ __2024.12.2-2025.1.7__
 ---
 
 ### Admin API
-| Method | Endpoint                                    | Description                        |
-|--------|--------------------------------------------|------------------------------------|
-| POST   | /admins/signup                             | 관리자 회원 가입                  |
-| POST   | /admins/signin                             | 관리자 로그인                     |
-| POST   | /admins/promotionEvents                    | 프로모션 이벤트 추가              |
-| PATCH  | /admins/promotionEvents/{promotionEventId} | 프로모션 이벤트 수정              |
-| PATCH  | /admins/popupstores/{popupStoreId}         | 관리자 - 팝업 스토어 수정         |
-| DELETE | /admins/promotionEvents/{promotionEventId} | 프로모션 이벤트 삭제              |
-| DELETE | /admins/popupstores/{popupStoreId}         | 관리자 - 팝업스토어 삭제          |
+| Method | Endpoint                                    | Description                       |
+|--------|--------------------------------------------|-----------------------------------|
+| POST   | /admins/signup                             | 관리자 회원 가입                 |
+| POST   | /admins/signin                             | 관리자 로그인                    |
+| POST   | /admins/promotionEvents                    | 프로모션 이벤트 추가             |
+| PATCH  | /admins/promotionEvents/{promotionEventId} | 프로모션 이벤트 수정             |
+| PATCH  | /admins/popupstores/{popupStoreId}         | 관리자 - 팝업스토어 수정         |
+| DELETE | /admins/promotionEvents/{promotionEventId} | 프로모션 이벤트 삭제             |
+| DELETE | /admins/popupstores/{popupStoreId}         | 관리자 - 팝업스토어 삭제         |
 
 
 ---
 
 ### User API
-| Method | Endpoint                                    | Description                        |
-|--------|--------------------------------------------|------------------------------------|
-| POST   | /users/signup                              | 유저 회원 가입                    |
-| POST   | /users/signin                              | 유저 로그인                       |
-| GET    | /users/mypage                              | 유저 마이페이지                   |
-| GET    | /users/coupons                             | 유저 내 쿠폰보기                  |
-| PATCH  | /users                                     | 유저 정보 수정                    |
-| DELETE | /users                                     | 유저 회원 탈퇴                    |
+| Method | Endpoint                                    | Description |
+|--------|--------------------------------------------|-------------|
+| POST   | /users/signup                              | 유저 회원 가입    |
+| POST   | /users/signin                              | 유저 로그인      |
+| GET    | /users/mypage                              | 유저 마이페이지    |
+| GET    | /users/coupons                             | 유저 내 쿠폰 보기  |
+| PATCH  | /users                                     | 유저 정보 수정    |
+| DELETE | /users                                     | 유저 회원 탈퇴    |
 
 
 
@@ -150,16 +150,16 @@ __2024.12.2-2025.1.7__
 ---
 
 ### Popup Store API
-| Method | Endpoint                                    | Description                        |
-|--------|--------------------------------------------|------------------------------------|
-| POST   | /popupstores                               | 팝업스토어 생성                   |
-| GET    | /popupstores/search/{popupStoreStatus}    | 특정 상태 팝업스토어 조회         |
-| GET    | /popupstores/period                       | 팝업스토어 날짜별 조회            |
-| GET    | /popupstores/month                        | 이번달 팝업스토어 조회            |
-| GET    | /popupstores                               | 임시 팝업 전체 조회               |
-| GET    | /popupstores/{popupStoreId}               | 팝업스토어 단건 조회              |
-| PATCH  | /popupstores/{popupStoreId}               | 팝업스토어 수정                   |
-| DELETE | /popupstores/{popupStoreId}               | 팝업스토어 삭제                   |
+| Method | Endpoint                                    | Description    |
+|--------|--------------------------------------------|----------------|
+| POST   | /popupstores                               | 팝업스토어 생성       |
+| GET    | /popupstores/search/{popupStoreStatus}    | 특정 상태 팝업스토어 조회 |
+| GET    | /popupstores/period                       | 팝업스토어 날짜별 조회   |
+| GET    | /popupstores/month                        | 이번달 팝업스토어 조회   |
+| GET    | /popupstores                               | 팝업스토어 전체 조회    |
+| GET    | /popupstores/{popupStoreId}               | 팝업스토어 단건 조회    |
+| PATCH  | /popupstores/{popupStoreId}               | 팝업스토어 수정       |
+| DELETE | /popupstores/{popupStoreId}               | 팝업스토어 삭제       |
 
 
 
