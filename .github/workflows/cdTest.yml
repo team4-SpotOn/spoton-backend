@@ -45,7 +45,7 @@ jobs:
           script: |
             git clone https://github.com/team4-SpotOn/spoton-backend.git
             # 최신 코드 pull
-            cd ~/spoton-backend/
+            cd spoton-backend/
 #            git pull origin dev
 
             # Docker Compose 실행
