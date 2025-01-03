@@ -16,7 +16,7 @@ services:
     restart: always # 종료되어도 자동으로 재실행
 
   app:
-    image: repo/spot-on:latest
+    image: dlgktmd0/spot-on:latest
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spoton-backend?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
       SPRING_DATASOURCE_USERNAME: root
