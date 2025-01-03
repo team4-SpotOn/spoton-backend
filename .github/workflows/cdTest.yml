@@ -44,7 +44,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             # 최신 코드 pull
-            cd spoton-backent/
+            cd spoton-backend/
             git pull origin dev
 
             # Docker Compose 실행
