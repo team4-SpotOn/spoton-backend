@@ -40,8 +40,8 @@ jobs:
       - name: Docker build
         run: |
           docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USER_NAME }}/spot-on-docker-product . 
-          docker push ${{ secrets.DOCKER_USER_NAME }}/spot-on-docker-product
+          docker build -t ${{ secrets.DOCKER_USER_NAME }}/spot-on . 
+          docker push ${{ secrets.DOCKER_USER_NAME }}/spot-on
 
       - name: SSH into EC2 and pull latest code
         uses: appleboy/ssh-action@master
