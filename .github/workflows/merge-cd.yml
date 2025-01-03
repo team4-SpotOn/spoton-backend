@@ -41,19 +41,19 @@ jobs:
       - name: SSH into EC2 and pull latest code
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{secrets.EC2_HOST}}
           username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          key: ${{secrets.EC2_PRIVATE_KEY}}
           script: |
-            echo "export EC2_HOST=${{ secrets.EC2_HOST }}" >> ~/.bashrc
-            source ~/.bashrc
             # 디렉토리로 이동
             cd spoton-backend/
+            export EC2_HOST=${{secrets.EC2_HOST}}
+            source ~/.bashrc
             # 최신 코드 pull
             git pull origin dev
             # Docker Compose 실행
             docker-compose down
-            if [ "$(docker images -q ${{ secrets.DOCKER_USER_NAME}}/spot-on:latest)" ]; then
-              docker rmi -f ${{ secrets.DOCKER_USER_NAME}}/spot-on:latest
+            if [ "$(docker images -q ${{secrets.DOCKER_USER_NAME}}/spot-on:latest)" ]; then
+              docker rmi -f ${{secrets.DOCKER_USER_NAME}}/spot-on:latest
             fi
             docker-compose up -d

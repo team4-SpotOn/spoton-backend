@@ -47,6 +47,8 @@ services:
     container_name: prometheus
     ports:
       - "9090:9090"
+    environment:
+      - EC2_HOST=${EC2_HOST}
     volumes:
       - ./prometheus:/etc/prometheus
       - prometheus-data:/prometheus
