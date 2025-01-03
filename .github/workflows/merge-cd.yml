@@ -36,13 +36,6 @@ jobs:
       - name: Build with gradle
         run: ./gradlew clean build -x test
 
-      ## 3) Docker Hub에 이미지 push 하기
-      - name: Docker build
-        run: |
-          docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USER_NAME }}/spot-on . 
-          docker push ${{ secrets.DOCKER_USER_NAME }}/spot-on
-
       - name: SSH into EC2 and pull latest code
         uses: appleboy/ssh-action@master
         with:
