@@ -9,7 +9,7 @@ on:
 
 jobs:
   on-merge:
-    #if: github.event.pull_request.merged == true  # 병합된 경우에만 실행
+#    if: github.event.pull_request.merged == true  # 병합된 경우에만 실행
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +34,7 @@ jobs:
 
       # Spring boot application 빌드
       - name: Build with gradle
-        run: ./gradlew clean build -x test
+        run: ./gradlew clean build
 
       - name: SSH into EC2 and pull latest code
         uses: appleboy/ssh-action@master
@@ -43,10 +43,10 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            # 클론한 디렉토리로 이동
+            # 디렉토리로 이동
             cd spoton-backend/
 
-            # 최신 코드 pull (필요한 경우)
+            # 최신 코드 pull
             git pull origin dev
 
             # Docker Compose 실행
