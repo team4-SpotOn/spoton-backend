@@ -43,7 +43,6 @@ jobs:
           script: |
             # 디렉토리로 이동
             cd spoton-backend/
-
             # 최신 코드 pull
             git pull origin dev
 
