@@ -43,10 +43,14 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            # 리포지토리 클론
             git clone https://github.com/team4-SpotOn/spoton-backend.git
-            # 최신 코드 pull
+
+            # 클론한 디렉토리로 이동
             cd spoton-backend/
-#            git pull origin dev
+
+            # 최신 코드 pull (필요한 경우)
+            git pull origin dev
 
             # Docker Compose 실행
             docker-compose down
