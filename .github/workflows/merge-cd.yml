@@ -36,6 +36,8 @@ jobs:
       - name: Build with gradle
         run: ./gradlew clean build -x test
 
+
+
       - name: SSH into EC2 and pull latest code
         uses: appleboy/ssh-action@master
         with:
@@ -43,6 +45,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            echo "export EC2_HOST=${EC2_HOST}" >> ~/.bashrc
+            source ~/.bashrc
             # 디렉토리로 이동
             cd spoton-backend/
             # 최신 코드 pull

@@ -20,7 +20,7 @@ scrape_configs:
     static_configs:
         # host.docker.internal - Spring Boot 애플리케이션이 Docker 컨테이너 외부의 호스트 머신에서 실행 중이라면,
         #                        Prometheus 가 이 이름을 통해 호스트 머신의 8080 포트에 접근할 수 있다
-        - targets: ['host.docker.internal:8080'] # 메트릭을 수집할 호스트 정보
+        - targets: ['${EC2_HOST}:8080'] # 메트릭을 수집할 호스트 정보
 
   - job_name: 'server'
     static_configs:
