@@ -18,6 +18,8 @@ services:
   app:
     image: dlgktmd0/spot-on:latest
     container_name: app
+    expose:
+      - 8080
     ports:
       - "8080:8080"
     depends_on:
