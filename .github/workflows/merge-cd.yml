@@ -2,6 +2,8 @@ name : Spring Boot Ec2 CI/CD Test
 
 on:
   pull_request:
+    branches:
+      - "dev"
     types:
       - closed
 
@@ -32,7 +34,7 @@ jobs:
 
       # Spring boot application 빌드
       - name: Build with gradle
-        run: ./gradlew clean build -x test
+        run: ./gradlew clean build
 
       - name: SSH into EC2 and pull latest code
         uses: appleboy/ssh-action@master
@@ -45,7 +47,6 @@ jobs:
             cd spoton-backend/
             # 최신 코드 pull
             git pull origin dev
-
             # Docker Compose 실행
             docker-compose down
             docker-compose up -d
