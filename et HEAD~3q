@@ -1,0 +1,548 @@
+[33m6a90ba7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32missue/253[m[33m, [m[1;31morigin/issue/253[m[33m)[m HEAD@{0}: rebase: checkout issue/253
+[33m5a0603b[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m HEAD@{1}: checkout: moving from issue/253 to dev
+[33m6a90ba7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32missue/253[m[33m, [m[1;31morigin/issue/253[m[33m)[m HEAD@{2}: commit: [#265] test : cd 테스트
+[33ma20870c[m HEAD@{3}: reset: moving to a20870c
+[33m5a0603b[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m HEAD@{4}: reset: moving to 5a0603b
+[33ma20870c[m HEAD@{5}: reset: moving to a20870c
+[33m6ba179c[m HEAD@{6}: rebase (finish): returning to refs/heads/issue/253
+[33m6ba179c[m HEAD@{7}: rebase (pick): Update applicatoin.properties
+[33m37232d8[m HEAD@{8}: rebase (pick): Update applicatoin.properties
+[33mf878ced[m HEAD@{9}: rebase (pick): [#253] test: connect test
+[33m9db8b31[m HEAD@{10}: rebase (pick): Create applicatoin.properties
+[33mb2f03e1[m HEAD@{11}: rebase (pick): [#253] test: ignore
+[33m9061e89[m[33m ([m[1;31morigin/issue/270[m[33m, [m[1;32missue/270[m[33m)[m HEAD@{12}: rebase (start): checkout HEAD
+[33m9061e89[m[33m ([m[1;31morigin/issue/270[m[33m, [m[1;32missue/270[m[33m)[m HEAD@{13}: commit: [#265] test : cd 테스트
+[33m2f93cf6[m HEAD@{14}: commit: [#265] test : cd 테스트
+[33m5c277d9[m HEAD@{15}: commit: [#265] test : cd 테스트
+[33m24585cb[m HEAD@{16}: commit: [#265] test : cd 테스트
+[33m7041b26[m HEAD@{17}: commit: [#265] test : cd 테스트
+[33maa8da3e[m HEAD@{18}: commit: [#265] test : cd 테스트
+[33m05a00f3[m HEAD@{19}: commit: [#265] test : cd 테스트
+[33m5e210f9[m HEAD@{20}: commit: [#265] test : cd 테스트
+[33maa8ca3e[m HEAD@{21}: commit: [#265] test : cd 테스트
+[33ma20870c[m HEAD@{22}: commit: [#265] test : cd 테스트
+[33m5a0603b[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m HEAD@{23}: checkout: moving from dev to issue/270
+[33m5a0603b[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m HEAD@{24}: merge origin/dev: Fast-forward
+[33m64dc9de[m[33m ([m[1;31morigin/issue/256[m[33m, [m[1;32missue/256[m[33m)[m HEAD@{25}: checkout: moving from issue/265 to dev
+[33m247df70[m[33m ([m[1;31morigin/issue/265[m[33m, [m[1;32missue/265[m[33m)[m HEAD@{26}: commit: [#265] test : cd 테스트
+[33m8b68792[m HEAD@{27}: commit: [#265] test : cd 테스트
+[33me25a542[m HEAD@{28}: commit: [#265] test : cd 테스트
+[33m7eb5a65[m HEAD@{29}: commit: [#265] test : cd 테스트
+[33m1551e25[m HEAD@{30}: commit: [#256] test : cd 테스트
+[33m64dc9de[m[33m ([m[1;31morigin/issue/256[m[33m, [m[1;32missue/256[m[33m)[m HEAD@{31}: checkout: moving from dev to issue/265
+[33m64dc9de[m[33m ([m[1;31morigin/issue/256[m[33m, [m[1;32missue/256[m[33m)[m HEAD@{32}: checkout: moving from issue/256 to dev
+[33m64dc9de[m[33m ([m[1;31morigin/issue/256[m[33m, [m[1;32missue/256[m[33m)[m HEAD@{33}: rebase (finish): returning to refs/heads/issue/256
+[33m64dc9de[m[33m ([m[1;31morigin/issue/256[m[33m, [m[1;32missue/256[m[33m)[m HEAD@{34}: rebase (start): checkout HEAD
+[33m64dc9de[m[33m ([m[1;31morigin/issue/256[m[33m, [m[1;32missue/256[m[33m)[m HEAD@{35}: merge origin/dev: Fast-forward
+[33mf65be3d[m HEAD@{36}: checkout: moving from issue/256 to dev
+[33m589e345[m HEAD@{37}: commit: [#256] test : cd 테스트
+[33m4c8c6cd[m HEAD@{38}: commit: [#256] test : cd 테스트
+[33m4fb5fe8[m HEAD@{39}: commit: [#256] test : cd 테스트
+[33m5b911df[m HEAD@{40}: commit: [#256] test : cd 테스트
+[33mff0836e[m HEAD@{41}: commit: [#256] test : cd 테스트
+[33mb145b2f[m HEAD@{42}: commit: [#256] test : cd 테스트
+[33m66199bd[m HEAD@{43}: commit: [#256] test : cd 테스트
+[33m2251c4e[m HEAD@{44}: commit: [#256] test : cd 테스트
+[33md9343b8[m HEAD@{45}: commit: [#256] test : cd 테스트
+[33m9648474[m HEAD@{46}: commit: [#256] test : cd 테스트
+[33ma64544d[m HEAD@{47}: commit: [#256] test : cd 테스트
+[33m7ce04ad[m HEAD@{48}: commit: [#256] test : cd 테스트
+[33m59806f4[m HEAD@{49}: rebase (finish): returning to refs/heads/issue/256
+[33m59806f4[m HEAD@{50}: rebase (pick): [#256] test : cd 테스트 1월2일 첫트
+[33m9ea0592[m HEAD@{51}: rebase (pick): [#256] test : cd 테스트 1월2일 첫트
+[33m21c1ee7[m HEAD@{52}: rebase (pick): [#256] test : cd 테스트 dasdsad찐dasdas막
+[33mfe4055d[m HEAD@{53}: rebase (pick): [#256] test : cd 테스트 dasdsad찐막
+[33m88bd928[m HEAD@{54}: rebase (pick): [#256] test : cd 테스트 찐막
+[33m799e4f8[m HEAD@{55}: rebase (pick): [#256] test : cd 테스트 찐막
+[33m15b6f43[m HEAD@{56}: rebase (pick): [#256] test : cd 테스트 찐막
+[33m6ce8657[m HEAD@{57}: rebase (pick): [#256] test : cd 테스트 찐막
+[33m3f2c259[m HEAD@{58}: rebase (pick): Update cdTest.yml
+[33m1e5b7c6[m HEAD@{59}: rebase (pick): [#256] test : cd 테스트 찐막
+[33m4401f7e[m HEAD@{60}: rebase (pick): [#256] test : cd 테스트 찐막
+[33mdeb27bd[m HEAD@{61}: rebase (pick): [#256] test : cd 테스트 찐막
+[33m67a32d4[m HEAD@{62}: rebase (pick): [#256] test : cd 테스트 찐막
+[33mf98afa5[m HEAD@{63}: rebase (pick): [#256] test : cd 테스트 찐막
+[33m66c723e[m HEAD@{64}: rebase (pick): [#256] test : cd 테스트 찐막
+[33m9640719[m HEAD@{65}: rebase (pick): [#256] test : cd 테스트 찐막
+[33md1ff63c[m HEAD@{66}: rebase (pick): [#256] test : cd 테스트 찐막
+[33m5df872b[m HEAD@{67}: rebase (pick): [#256] test : cd 테스트 찐막
+[33m281130b[m HEAD@{68}: rebase (pick): [#256] test : cd 테스트 찐막
+[33md78bef6[m HEAD@{69}: rebase (pick): [#256] test : cd 테스트 찐막
+[33me5ed862[m HEAD@{70}: rebase (pick): [#256] test : cd 테스트
+[33m4eafcfe[m HEAD@{71}: rebase (pick): [#256] test : cd 테스트
+[33mf9f64ec[m HEAD@{72}: rebase (pick): [#256] test : cd 테스트
+[33mdf3fed1[m HEAD@{73}: rebase (pick): [#256] test : cd 테스트
+[33ma317f1e[m HEAD@{74}: rebase (pick): [#256] test : cd 테스트
+[33mfb90c23[m HEAD@{75}: rebase (pick): [#256] test : cd 테스트
+[33mecd3bbf[m HEAD@{76}: rebase (pick): [#256] test : cd 테스트
+[33m19de1f1[m HEAD@{77}: rebase (pick): [#256] test : cd 테스트
+[33m3b02692[m HEAD@{78}: rebase (continue): [#256] test : cd 테스트
+[33m5b0b2db[m HEAD@{79}: rebase (pick): [#256] test : cd 테스트
+[33m82141a7[m HEAD@{80}: rebase (continue): [#256] test : cd 테스트
+[33m84dfb9d[m HEAD@{81}: rebase (pick): Update cdTest.yml
+[33ma089933[m HEAD@{82}: rebase (pick): Update cdTest.yml
+[33ma4cb4b7[m HEAD@{83}: rebase (pick): Update cdTest.yml
+[33m65fb330[m HEAD@{84}: rebase (pick): Update cdTest.yml
+[33me386b9e[m HEAD@{85}: rebase (pick): Update cdTest.yml
+[33m4580f65[m HEAD@{86}: rebase (pick): Update cdTest.yml
+[33mec3aba6[m HEAD@{87}: rebase (pick): Update cdTest.yml
+[33m0bbb22c[m HEAD@{88}: rebase (continue): [#256] test : cd 테스트
+[33mf65be3d[m HEAD@{89}: rebase (start): checkout HEAD
+[33mf65be3d[m HEAD@{90}: merge origin/dev: Fast-forward
+[33m1ba986d[m HEAD@{91}: checkout: moving from issue/256 to dev
+[33ma63854f[m HEAD@{92}: commit: [#256] test : cd 테스트 1월2일 첫트
+[33m72514a2[m HEAD@{93}: commit: [#256] test : cd 테스트 1월2일 첫트
+[33m700df71[m HEAD@{94}: checkout: moving from dev to issue/256
+[33m1ba986d[m HEAD@{95}: checkout: moving from issue/256 to dev
+[33m700df71[m HEAD@{96}: commit: [#256] test : cd 테스트 dasdsad찐dasdas막
+[33m246019e[m HEAD@{97}: commit: [#256] test : cd 테스트 dasdsad찐막
+[33mc0ad946[m HEAD@{98}: commit: [#256] test : cd 테스트 찐막
+[33m3070c7a[m HEAD@{99}: commit: [#256] test : cd 테스트 찐막
+[33mbb18c04[m HEAD@{100}: commit: [#256] test : cd 테스트 찐막
+[33mcfcbe91[m HEAD@{101}: commit: [#256] test : cd 테스트 찐막
+[33m81747de[m HEAD@{102}: merge origin/issue/256: Fast-forward
+[33mf4fbfef[m HEAD@{103}: commit: [#256] test : cd 테스트 찐막
+[33m9eb99a1[m HEAD@{104}: checkout: moving from dev to issue/256
+[33m1ba986d[m HEAD@{105}: merge origin/dev: Fast-forward
+[33md07aa1d[m HEAD@{106}: checkout: moving from issue/256 to dev
+[33m9eb99a1[m HEAD@{107}: commit: [#256] test : cd 테스트 찐막
+[33m9c472df[m HEAD@{108}: commit: [#256] test : cd 테스트 찐막
+[33mb9f9235[m HEAD@{109}: commit: [#256] test : cd 테스트 찐막
+[33me79184c[m HEAD@{110}: commit: [#256] test : cd 테스트 찐막
+[33m7245425[m HEAD@{111}: commit: [#256] test : cd 테스트 찐막
+[33mab84043[m HEAD@{112}: commit: [#256] test : cd 테스트 찐막
+[33m278bb5e[m HEAD@{113}: commit: [#256] test : cd 테스트 찐막
+[33m21b84d6[m HEAD@{114}: commit: [#256] test : cd 테스트 찐막
+[33m78c6370[m HEAD@{115}: commit: [#256] test : cd 테스트 찐막
+[33mf53420f[m HEAD@{116}: commit: [#256] test : cd 테스트 찐막
+[33maa4822b[m HEAD@{117}: commit: [#256] test : cd 테스트
+[33me8c184d[m HEAD@{118}: commit: [#256] test : cd 테스트
+[33mb69c6d8[m HEAD@{119}: commit: [#256] test : cd 테스트
+[33mda8fa3b[m HEAD@{120}: commit: [#256] test : cd 테스트
+[33md6eb910[m HEAD@{121}: commit: [#256] test : cd 테스트
+[33m6100651[m HEAD@{122}: commit: [#256] test : cd 테스트
+[33m43c0f8a[m HEAD@{123}: commit: [#256] test : cd 테스트
+[33m4279001[m HEAD@{124}: commit: [#256] test : cd 테스트
+[33mb21f925[m HEAD@{125}: commit: [#256] test : cd 테스트
+[33m11b7bca[m HEAD@{126}: commit: [#256] test : cd 테스트
+[33mc3f5324[m HEAD@{127}: commit: [#256] test : cd 테스트
+[33m5053fe8[m HEAD@{128}: merge origin/issue/256: Merge made by the 'ort' strategy.
+[33m6a64164[m HEAD@{129}: commit: [#256] test : cd 테스트
+[33mb355221[m HEAD@{130}: commit: [#256] test : cd 테스트
+[33md07aa1d[m HEAD@{131}: checkout: moving from dev to issue/256
+[33md07aa1d[m HEAD@{132}: merge origin/dev: Fast-forward
+[33m8c67fbd[m HEAD@{133}: merge origin/dev: Fast-forward
+[33m6e610d0[m HEAD@{134}: merge origin/dev: Fast-forward
+[33m81b7f84[m[33m ([m[1;31morigin/issue/252[m[33m)[m HEAD@{135}: checkout: moving from issue/249 to dev
+[33m2b48bda[m[33m ([m[1;32missue/249[m[33m)[m HEAD@{136}: rebase (finish): returning to refs/heads/issue/249
+[33m2b48bda[m[33m ([m[1;32missue/249[m[33m)[m HEAD@{137}: rebase (pick): [#249] fix : 코드 수정
+[33me43634d[m HEAD@{138}: rebase (pick): [#249] fix : 코멘트 반영
+[33mcd703f3[m HEAD@{139}: rebase (pick): [#249] fix : service import 추가
+[33m095d14c[m HEAD@{140}: rebase (pick): [#249] feat : 쓰이지 않는 이미지 s3에서 삭제하는 스케줄러
+[33m81b7f84[m[33m ([m[1;31morigin/issue/252[m[33m)[m HEAD@{141}: rebase (start): checkout HEAD
+[33m81b7f84[m[33m ([m[1;31morigin/issue/252[m[33m)[m HEAD@{142}: merge origin/dev: Fast-forward
+[33m3ad0f34[m HEAD@{143}: checkout: moving from issue/249 to dev
+[33m169c34f[m HEAD@{144}: commit: [#249] fix : 코드 수정
+[33m86ebeab[m HEAD@{145}: commit: [#249] fix : 코멘트 반영
+[33mc85023f[m HEAD@{146}: commit: [#249] fix : service import 추가
+[33md69b514[m HEAD@{147}: commit: [#249] feat : 쓰이지 않는 이미지 s3에서 삭제하는 스케줄러
+[33m3ad0f34[m HEAD@{148}: checkout: moving from dev to issue/249
+[33m3ad0f34[m HEAD@{149}: reset: moving to HEAD~
+[33mbbdbaa6[m HEAD@{150}: commit: [#249] feat : 쓰이지 않는 이미지 s3에서 삭제하는 스케줄러
+[33m3ad0f34[m HEAD@{151}: merge origin/dev: Fast-forward
+[33mdad3bd0[m HEAD@{152}: merge origin/dev: Fast-forward
+[33mf968275[m HEAD@{153}: merge origin/dev: Fast-forward
+[33m95c37c9[m HEAD@{154}: checkout: moving from issue/235 to dev
+[33m67bd221[m[33m ([m[1;32missue/235[m[33m)[m HEAD@{155}: commit: [#235] fix : 코멘트 의견 반영
+[33maf71e61[m HEAD@{156}: commit: [#235] fix : 코멘트 의견 반영
+[33m22d6c63[m HEAD@{157}: checkout: moving from dev to issue/235
+[33m95c37c9[m HEAD@{158}: checkout: moving from issue/235 to dev
+[33m22d6c63[m HEAD@{159}: rebase (finish): returning to refs/heads/issue/235
+[33m22d6c63[m HEAD@{160}: rebase (pick): [#235] feat : 이벤트 다건조회 테스트 코드
+[33m8eb6b0c[m HEAD@{161}: rebase (pick): [#235] feat : 이벤트 단건조회 테스트 코드
+[33m983438e[m HEAD@{162}: rebase (pick): [#235] feat : 이벤트 삭제 성공 테스트 코드
+[33m13f2760[m HEAD@{163}: rebase (pick): [#235] feat : 이벤트 삭제 예외처리 테스트 코드
+[33mf8c2bfa[m HEAD@{164}: rebase (pick): [#235] fix : 이벤트 수정 성공 테스트코드
+[33ma551853[m HEAD@{165}: rebase (pick): [#235] fix : 이벤트 서비스 코드 수정
+[33m7068ba7[m HEAD@{166}: rebase (pick): [#235] fix : 이벤트 스케줄러 메서드 수정
+[33m1f19119[m HEAD@{167}: rebase (pick): [#235] feat : 이벤트 수정 테스트코드
+[33m95c37c9[m HEAD@{168}: rebase (start): checkout HEAD
+[33m95c37c9[m HEAD@{169}: merge origin/dev: Fast-forward
+[33m7e1ac16[m HEAD@{170}: checkout: moving from issue/235 to dev
+[33m826cc11[m HEAD@{171}: commit: [#235] feat : 이벤트 다건조회 테스트 코드
+[33md0b678a[m HEAD@{172}: commit: [#235] feat : 이벤트 단건조회 테스트 코드
+[33m1585136[m HEAD@{173}: commit: [#235] feat : 이벤트 삭제 성공 테스트 코드
+[33mb5a7a12[m HEAD@{174}: commit: [#235] feat : 이벤트 삭제 예외처리 테스트 코드
+[33mb171744[m HEAD@{175}: commit: [#235] fix : 이벤트 수정 성공 테스트코드
+[33m385f2b1[m HEAD@{176}: commit: [#235] fix : 이벤트 서비스 코드 수정
+[33m936c1f5[m HEAD@{177}: commit: [#235] fix : 이벤트 스케줄러 메서드 수정
+[33md2242c8[m HEAD@{178}: commit: [#235] feat : 이벤트 수정 테스트코드
+[33m7e1ac16[m HEAD@{179}: checkout: moving from dev to issue/235
+[33m7e1ac16[m HEAD@{180}: merge origin/dev: Fast-forward
+[33m44a1c9a[m HEAD@{181}: checkout: moving from issue/231 to dev
+[33m55cde73[m[33m ([m[1;32missue/231[m[33m)[m HEAD@{182}: rebase (finish): returning to refs/heads/issue/231
+[33m55cde73[m[33m ([m[1;32missue/231[m[33m)[m HEAD@{183}: rebase (pick): [#231] feat : log 모니
+[33m44a1c9a[m HEAD@{184}: rebase (start): checkout HEAD
+[33m44a1c9a[m HEAD@{185}: merge origin/dev: Fast-forward
+[33m5df7f7f[m HEAD@{186}: checkout: moving from issue/231 to dev
+[33m6cd3d5f[m HEAD@{187}: commit: [#231] feat : log 모니
+[33m5df7f7f[m HEAD@{188}: checkout: moving from dev to issue/231
+[33m5df7f7f[m HEAD@{189}: merge origin/dev: Fast-forward
+[33m519051f[m HEAD@{190}: merge origin/dev: Fast-forward
+[33m140fdd5[m HEAD@{191}: checkout: moving from issue/195 to dev
+[33m243ade1[m[33m ([m[1;31morigin/issue/195[m[33m, [m[1;32missue/195[m[33m)[m HEAD@{192}: commit: [#195] feat : 수정
+[33mfefd742[m HEAD@{193}: commit: [#195] feat : 수정
+[33mf52dc66[m HEAD@{194}: commit: [#195] feat : 로깅 및 실시간 모니터링
+[33m140fdd5[m HEAD@{195}: checkout: moving from dev to issue/195
+[33m140fdd5[m HEAD@{196}: merge origin/dev: Fast-forward
+[33m25a09bc[m HEAD@{197}: merge origin/dev: Fast-forward
+[33mf9ce60f[m HEAD@{198}: merge origin/dev: Fast-forward
+[33m7cdafd4[m HEAD@{199}: checkout: moving from issue/194 to dev
+[33mf33eb9e[m[33m ([m[1;31morigin/issue/194[m[33m, [m[1;32missue/194[m[33m)[m HEAD@{200}: commit: [#194] feat : 팝업 썸네일 이미지 추가
+[33m7cdafd4[m HEAD@{201}: checkout: moving from dev to issue/194
+[33m7cdafd4[m HEAD@{202}: merge origin/dev: Fast-forward
+[33m69b528d[m[33m ([m[1;31morigin/PHASE_2[m[33m)[m HEAD@{203}: checkout: moving from issue/197 to dev
+[33m28c7445[m[33m ([m[1;32missue/197[m[33m)[m HEAD@{204}: commit: [#197] fix : 수정 사항 반영
+[33m3c5208b[m HEAD@{205}: commit: [#197] refactor : 이벤트 로직 변경
+[33m69b528d[m[33m ([m[1;31morigin/PHASE_2[m[33m)[m HEAD@{206}: checkout: moving from dev to issue/197
+[33m69b528d[m[33m ([m[1;31morigin/PHASE_2[m[33m)[m HEAD@{207}: merge origin/dev: Fast-forward
+[33m35f7e72[m HEAD@{208}: merge origin/dev: Fast-forward
+[33m084a733[m HEAD@{209}: merge origin/dev: Fast-forward
+[33m7a365a0[m HEAD@{210}: merge origin/dev: Fast-forward
+[33mb04139a[m HEAD@{211}: checkout: moving from issue/188 to dev
+[33mebdc2f5[m[33m ([m[1;32missue/188[m[33m)[m HEAD@{212}: commit: [#188] fix : 변수명 domain -> prefix로 변경
+[33meddc0da[m HEAD@{213}: commit: [#188] fix : Conveter 반환 타입 Directory로 변경
+[33m33e3271[m HEAD@{214}: checkout: moving from dev to issue/188
+[33mb04139a[m HEAD@{215}: checkout: moving from issue/188 to dev
+[33m33e3271[m HEAD@{216}: commit: [#188] fix : 컨트롤러 반환 타입 수정
+[33mdfa767a[m HEAD@{217}: commit: [#188] fix : webConfig 수정
+[33m07dfbf0[m HEAD@{218}: commit: [#188] refactor : s3 컨트롤러 엔드포인트 변경
+[33mb04139a[m HEAD@{219}: checkout: moving from dev to issue/188
+[33mb04139a[m HEAD@{220}: merge origin/dev: Fast-forward
+[33mde0fd2f[m HEAD@{221}: checkout: moving from issue/186 to dev
+[33mde10b42[m[33m ([m[1;32missue/186[m[33m)[m HEAD@{222}: commit: [#186] fix : 이벤트 삭제 스케줄러 메서드 변경
+[33mde0fd2f[m HEAD@{223}: checkout: moving from dev to issue/186
+[33mde0fd2f[m HEAD@{224}: merge origin/dev: Fast-forward
+[33m9f87fd7[m HEAD@{225}: checkout: moving from issue/182 to dev
+[33mdf26365[m[33m ([m[1;31morigin/issue/182[m[33m, [m[1;32missue/182[m[33m)[m HEAD@{226}: commit: [#182] fix : 현재 날짜기준 팝업 조회 시 문제 수정
+[33m9f87fd7[m HEAD@{227}: checkout: moving from dev to issue/182
+[33m9f87fd7[m HEAD@{228}: merge origin/dev: Fast-forward
+[33ma874841[m HEAD@{229}: merge origin/dev: Fast-forward
+[33m52e4586[m HEAD@{230}: checkout: moving from issue/138 to dev
+[33me487800[m[33m ([m[1;31morigin/issue/138[m[33m, [m[1;32missue/138[m[33m)[m HEAD@{231}: commit: [#138] fix : responseDto Page 타입으로 변경
+[33m3727882[m HEAD@{232}: commit: [#138] fix : responseDto Page 타입으로 변경
+[33mbd85f20[m HEAD@{233}: commit: [#138] fix : 서비스 로직 수정
+[33m8150b97[m HEAD@{234}: rebase: checkout issue/138
+[33m52e4586[m HEAD@{235}: checkout: moving from issue/138 to dev
+[33m8150b97[m HEAD@{236}: commit: [#138] fix : 서비스 로직 수정
+[33m53ecbfc[m HEAD@{237}: commit: [#138] fix : 서비스 로직 수정
+[33m5352f25[m HEAD@{238}: rebase (finish): returning to refs/heads/issue/138
+[33m5352f25[m HEAD@{239}: rebase (pick): [#138] fix : queryDsl 로직 수정
+[33m41137c8[m HEAD@{240}: rebase (pick): [#138] feat : 현재 날짜 기준 진행중, 시작예정, 종료된 팝업스토어 조회 기능 추가
+[33m52e4586[m HEAD@{241}: rebase (start): checkout HEAD
+[33m52e4586[m HEAD@{242}: merge origin/dev: Fast-forward
+[33meaa1e09[m HEAD@{243}: checkout: moving from issue/138 to dev
+[33m9d1b060[m HEAD@{244}: commit: [#138] fix : queryDsl 로직 수정
+[33mdb05a59[m HEAD@{245}: commit: [#138] feat : 현재 날짜 기준 진행중, 시작예정, 종료된 팝업스토어 조회 기능 추가
+[33meaa1e09[m HEAD@{246}: rebase (finish): returning to refs/heads/issue/138
+[33meaa1e09[m HEAD@{247}: rebase (start): checkout HEAD
+[33meaa1e09[m HEAD@{248}: checkout: moving from issue/140 to dev
+[33meaa1e09[m HEAD@{249}: rebase (finish): returning to refs/heads/issue/140
+[33meaa1e09[m HEAD@{250}: rebase (start): checkout HEAD
+[33meaa1e09[m HEAD@{251}: merge origin/dev: Fast-forward
+[33m711d141[m HEAD@{252}: checkout: moving from issue/138 to dev
+[33m711d141[m HEAD@{253}: checkout: moving from dev to issue/138
+[33m711d141[m HEAD@{254}: merge origin/dev: Fast-forward
+[33m1502a82[m HEAD@{255}: checkout: moving from issue/165 to dev
+[33m674d5bd[m[33m ([m[1;31morigin/issue/165[m[33m, [m[1;32missue/165[m[33m)[m HEAD@{256}: commit: [#165] fix : 프로모션 이벤트 업데이트 로직 수정
+[33m1502a82[m HEAD@{257}: checkout: moving from dev to issue/165
+[33m1502a82[m HEAD@{258}: merge origin/dev: Fast-forward
+[33m55013ba[m HEAD@{259}: checkout: moving from issue/164 to dev
+[33mab50caa[m[33m ([m[1;32missue/164[m[33m)[m HEAD@{260}: commit: [#164] fix : 리뷰 업데이트 로직 수정
+[33m55013ba[m HEAD@{261}: checkout: moving from dev to issue/164
+[33m55013ba[m HEAD@{262}: merge origin/dev: Fast-forward
+[33mdec3d1c[m HEAD@{263}: checkout: moving from issue/140 to dev
+[33md2420f5[m[33m ([m[1;31morigin/issue/140[m[33m)[m HEAD@{264}: commit: [#140] fix : queryDsl fetchJoin 추가
+[33mdec3d1c[m HEAD@{265}: rebase (finish): returning to refs/heads/issue/140
+[33mdec3d1c[m HEAD@{266}: rebase (start): checkout HEAD
+[33mdec3d1c[m HEAD@{267}: merge origin/dev: Fast-forward
+[33ma4ece92[m HEAD@{268}: merge origin/dev: Fast-forward
+[33m9a0ff06[m HEAD@{269}: checkout: moving from issue/140 to dev
+[33md65e361[m HEAD@{270}: rebase (finish): returning to refs/heads/issue/140
+[33md65e361[m HEAD@{271}: rebase (pick): [#140] feat : 시작일, 종료일 기준 조회
+[33m9a0ff06[m HEAD@{272}: rebase (start): checkout HEAD
+[33m9a0ff06[m HEAD@{273}: merge origin/dev: Fast-forward
+[33mcaa13de[m HEAD@{274}: checkout: moving from issue/140 to dev
+[33m4203247[m HEAD@{275}: commit: [#140] feat : 시작일, 종료일 기준 조회
+[33mcaa13de[m HEAD@{276}: checkout: moving from dev to issue/140
+[33mcaa13de[m HEAD@{277}: merge origin/dev: Fast-forward
+[33ma5c5aa7[m HEAD@{278}: merge origin/dev: Fast-forward
+[33mad72db1[m HEAD@{279}: checkout: moving from issue/147 to dev
+[33m9f44359[m[33m ([m[1;32missue/147[m[33m)[m HEAD@{280}: commit: [#147] fix : localTime.now() -> localTime.MAX 로 변경
+[33m377966e[m HEAD@{281}: rebase (finish): returning to refs/heads/issue/147
+[33m377966e[m HEAD@{282}: rebase (continue): [#147] fix : localTime.now() -> localTime.MAX 로 변경
+[33mcf71ee3[m HEAD@{283}: rebase (pick): [#147] fix : 주석 해제
+[33m7cc2ff9[m HEAD@{284}: rebase (continue): [#147] feat : 프로모션 이벤트 생성 테스트코드 작성
+[33m0cc5fc7[m HEAD@{285}: rebase (start): checkout HEAD
+[33mad72db1[m HEAD@{286}: checkout: moving from issue/147 to dev
+[33m3eb9ee5[m HEAD@{287}: merge origin/issue/147: Merge made by the 'ort' strategy.
+[33m0cc5fc7[m HEAD@{288}: rebase (finish): returning to refs/heads/issue/147
+[33m0cc5fc7[m HEAD@{289}: rebase (pick): [#147] fix : localTime.now() -> localTime.MAX 로 변경
+[33mad2c11d[m HEAD@{290}: rebase (pick): [#147] fix : 주석 해제
+[33m7412156[m HEAD@{291}: rebase (pick): [#147] feat : 프로모션 이벤트 생성 테스트코드 작성
+[33mad72db1[m HEAD@{292}: rebase (start): checkout HEAD
+[33mad72db1[m HEAD@{293}: merge origin/dev: Fast-forward
+[33mee43569[m HEAD@{294}: checkout: moving from issue/147 to dev
+[33mb0d8619[m HEAD@{295}: commit: [#147] fix : localTime.now() -> localTime.MAX 로 변경
+[33m51e357b[m HEAD@{296}: commit: [#147] fix : 주석 해제
+[33m56f75ec[m HEAD@{297}: checkout: moving from dev to issue/147
+[33mee43569[m HEAD@{298}: checkout: moving from issue/147 to dev
+[33m56f75ec[m HEAD@{299}: commit: [#147] feat : 프로모션 이벤트 생성 테스트코드 작성
+[33mee43569[m HEAD@{300}: rebase (finish): returning to refs/heads/issue/147
+[33mee43569[m HEAD@{301}: rebase (start): checkout HEAD
+[33mee43569[m HEAD@{302}: merge origin/dev: Fast-forward
+[33mff710ee[m HEAD@{303}: checkout: moving from issue/147 to dev
+[33mff710ee[m HEAD@{304}: checkout: moving from dev to issue/147
+[33mff710ee[m HEAD@{305}: merge origin/dev: Fast-forward
+[33md776d11[m HEAD@{306}: merge origin/dev: Fast-forward
+[33ma626ef6[m HEAD@{307}: merge origin/dev: Fast-forward
+[33m7895264[m HEAD@{308}: merge origin/dev: Fast-forward
+[33m1d3d61b[m HEAD@{309}: checkout: moving from issue/126 to dev
+[33ma5fae93[m[33m ([m[1;32missue/126[m[33m)[m HEAD@{310}: checkout: moving from dev to issue/126
+[33m1d3d61b[m HEAD@{311}: merge origin/dev: Fast-forward
+[33m467710f[m HEAD@{312}: checkout: moving from issue/126 to dev
+[33ma5fae93[m[33m ([m[1;32missue/126[m[33m)[m HEAD@{313}: checkout: moving from dev to issue/126
+[33m467710f[m HEAD@{314}: checkout: moving from issue/126 to dev
+[33ma5fae93[m[33m ([m[1;32missue/126[m[33m)[m HEAD@{315}: commit: [#126] fix : 회사 - 팝업스토어 삭제 시 s3에 저장된 이미지도 삭제되도록 수정
+[33m467710f[m HEAD@{316}: rebase (finish): returning to refs/heads/issue/126
+[33m467710f[m HEAD@{317}: rebase (start): checkout HEAD
+[33m467710f[m HEAD@{318}: merge origin/dev: Fast-forward
+[33mffae51c[m HEAD@{319}: checkout: moving from issue/126 to dev
+[33mffae51c[m HEAD@{320}: checkout: moving from dev to issue/126
+[33mffae51c[m HEAD@{321}: checkout: moving from issue/125 to dev
+[33m5b207ce[m[33m ([m[1;32missue/125[m[33m)[m HEAD@{322}: commit: [#125] fix : 관리자 - 팝업스토어 삭제 시 s3에 저장된 이미지도 삭제되도록 수정
+[33mffae51c[m HEAD@{323}: checkout: moving from dev to issue/125
+[33mffae51c[m HEAD@{324}: merge origin/dev: Fast-forward
+[33m2d7dddf[m HEAD@{325}: checkout: moving from issue/124 to dev
+[33m138ccbd[m[33m ([m[1;32missue/124[m[33m)[m HEAD@{326}: commit: [#124] fix : stream.filter 생략
+[33m681cf76[m HEAD@{327}: commit: [#124] refactor :회사 - 팝업스토어 수정 시 이미지도 수정 할수 있도록 수정
+[33m2d7dddf[m HEAD@{328}: checkout: moving from dev to issue/124
+[33m2d7dddf[m HEAD@{329}: merge origin/dev: Fast-forward
+[33mf73fd0a[m HEAD@{330}: checkout: moving from issue/116 to dev
+[33m5354b76[m[33m ([m[1;32missue/116[m[33m)[m HEAD@{331}: rebase (finish): returning to refs/heads/issue/116
+[33m5354b76[m[33m ([m[1;32missue/116[m[33m)[m HEAD@{332}: rebase (pick): [#116] refactor : 팝업스토어 수정 시 이미지도 수정 할수 있도록 수정
+[33mabadf01[m HEAD@{333}: rebase (pick): [#116] refactor : 팝업스토어 수정 시 이미지도 수정 할수 있도록 수정
+[33mf73fd0a[m HEAD@{334}: rebase (start): checkout HEAD
+[33mf73fd0a[m HEAD@{335}: merge origin/dev: Fast-forward
+[33m2d50043[m HEAD@{336}: checkout: moving from issue/116 to dev
+[33m0be9127[m HEAD@{337}: commit: [#116] refactor : 팝업스토어 수정 시 이미지도 수정 할수 있도록 수정
+[33me1eaf36[m HEAD@{338}: rebase (finish): returning to refs/heads/issue/116
+[33me1eaf36[m HEAD@{339}: rebase (continue): [#116] refactor : 팝업스토어 수정 시 이미지도 수정 할수 있도록 수정
+[33m2d50043[m HEAD@{340}: rebase (start): checkout HEAD
+[33m2d50043[m HEAD@{341}: merge origin/dev: Fast-forward
+[33m38f93cc[m HEAD@{342}: checkout: moving from issue/116 to dev
+[33mbc28646[m HEAD@{343}: commit: [#116] refactor : 팝업스토어 수정 시 이미지도 수정 할수 있도록 수정
+[33m38f93cc[m HEAD@{344}: checkout: moving from dev to issue/116
+[33m38f93cc[m HEAD@{345}: merge origin/dev: Fast-forward
+[33m8ac1024[m HEAD@{346}: checkout: moving from issue/114 to dev
+[33m9040c36[m[33m ([m[1;32missue/114[m[33m)[m HEAD@{347}: commit: [#114] fix : b
+[33m8dea228[m HEAD@{348}: commit: [#114] fix : 이벤트 다건 조회시에 deleted_at 이 null 인것만 조회하던것을 where 조건절 생략
+[33mf7316dd[m HEAD@{349}: commit: [#114] fix : 스케줄러로 이미지를 삭제처리하지않도록 변경
+[33m85c2f01[m HEAD@{350}: commit: [#114] fix : 쓰지않는 import문 제거
+[33m4005788[m HEAD@{351}: commit: [#114] fix : 이벤트 하드딜리트 시 처음에 받아온 eventList를 재활용하도록 로직 수정
+[33ma7b29c9[m HEAD@{352}: commit: [#114] fix : 레퍼지토리 jpql문 jpa로 변경
+[33m48ec2e8[m HEAD@{353}: rebase (finish): returning to refs/heads/issue/114
+[33m48ec2e8[m HEAD@{354}: rebase (pick): [#114] fix : 이벤트 삭제 요청 시 이미지가 있다면 s3에서도 삭제되도록 수정
+[33m8ac1024[m HEAD@{355}: rebase (start): checkout HEAD
+[33m8ac1024[m HEAD@{356}: merge origin/dev: Fast-forward
+[33m5675581[m HEAD@{357}: checkout: moving from issue/114 to dev
+[33mc8d346e[m HEAD@{358}: commit: [#114] fix : 이벤트 삭제 요청 시 이미지가 있다면 s3에서도 삭제되도록 수정
+[33m5675581[m HEAD@{359}: checkout: moving from dev to issue/114
+[33m5675581[m HEAD@{360}: merge origin/dev: Fast-forward
+[33m42283fb[m HEAD@{361}: checkout: moving from issue/110 to dev
+[33mcf61801[m[33m ([m[1;32missue/110[m[33m)[m HEAD@{362}: commit: [#110] fix : dto 변수명 및 util 클래스 명 수정
+[33m99e3ac8[m HEAD@{363}: commit: [#110] refactor : 이벤트 수정 시 이미지도 수정 가능하도록 변경
+[33m42283fb[m HEAD@{364}: checkout: moving from dev to issue/110
+[33m42283fb[m HEAD@{365}: merge origin/dev: Fast-forward
+[33mbaa7959[m HEAD@{366}: checkout: moving from issue/109 to dev
+[33m6d28a98[m[33m ([m[1;32missue/109[m[33m)[m HEAD@{367}: commit: [#109] fix : 리뷰 삭제 시 저장된 이미지가 있다면 s3에 저장된 이미지도 같이 삭제하도록 수정
+[33mbaa7959[m HEAD@{368}: checkout: moving from dev to issue/109
+[33mbaa7959[m HEAD@{369}: merge origin/dev: Fast-forward
+[33mc89b14f[m HEAD@{370}: merge origin/dev: Fast-forward
+[33me234979[m HEAD@{371}: checkout: moving from issue/106 to dev
+[33m5ca621f[m[33m ([m[1;32missue/106[m[33m)[m HEAD@{372}: commit: [#106] refactor : 리뷰 수정 시 이미지도 수정 가능하도록 변경
+[33me234979[m HEAD@{373}: checkout: moving from dev to issue/106
+[33me234979[m HEAD@{374}: merge origin/dev: Fast-forward
+[33m6c94609[m HEAD@{375}: checkout: moving from issue/104 to dev
+[33me75bb1c[m[33m ([m[1;32missue/104[m[33m)[m HEAD@{376}: checkout: moving from dev to issue/104
+[33m6c94609[m HEAD@{377}: checkout: moving from issue/104 to dev
+[33me75bb1c[m[33m ([m[1;32missue/104[m[33m)[m HEAD@{378}: commit: [#104] feat : s3 이미지 삭제 기능 구현
+[33m6c94609[m HEAD@{379}: checkout: moving from dev to issue/104
+[33m6c94609[m HEAD@{380}: checkout: moving from issue/104 to dev
+[33m6c94609[m HEAD@{381}: checkout: moving from dev to issue/104
+[33m6c94609[m HEAD@{382}: merge origin/dev: Fast-forward
+[33m5c47786[m HEAD@{383}: checkout: moving from issue/83 to dev
+[33m4aed7de[m[33m ([m[1;32missue/83[m[33m)[m HEAD@{384}: commit: [#83] fix : 로직 수정
+[33m9919c6f[m HEAD@{385}: rebase (finish): returning to refs/heads/issue/83
+[33m9919c6f[m HEAD@{386}: rebase (pick): [#83] refactor : 팝업스토어 생성 시 이미지 업로드 구현 가능
+[33m5c47786[m HEAD@{387}: rebase (start): checkout HEAD
+[33m5c47786[m HEAD@{388}: merge origin/dev: Fast-forward
+[33m6cdfa05[m HEAD@{389}: checkout: moving from issue/83 to dev
+[33m0c5eaed[m HEAD@{390}: commit: [#83] refactor : 팝업스토어 생성 시 이미지 업로드 구현 가능
+[33m6cdfa05[m HEAD@{391}: checkout: moving from dev to issue/83
+[33m6cdfa05[m HEAD@{392}: checkout: moving from issue/82 to dev
+[33m31ca6b9[m[33m ([m[1;32missue/82[m[33m)[m HEAD@{393}: checkout: moving from dev to issue/82
+[33m6cdfa05[m HEAD@{394}: merge origin/dev: Fast-forward
+[33m9fefa77[m HEAD@{395}: checkout: moving from issue/82 to dev
+[33m31ca6b9[m[33m ([m[1;32missue/82[m[33m)[m HEAD@{396}: commit: [#82] fix : requestDto 이름 변경
+[33m2a91ecb[m HEAD@{397}: commit: [#82] refactor : 프로모션 이벤트 추가 할 때 이미지 업로드 기능 추가
+[33m9fefa77[m HEAD@{398}: checkout: moving from dev to issue/82
+[33m9fefa77[m HEAD@{399}: merge origin/dev: Fast-forward
+[33m6eb8dc5[m HEAD@{400}: checkout: moving from issue/81 to dev
+[33m41c98ec[m[33m ([m[1;32missue/81[m[33m)[m HEAD@{401}: commit: [#81] fix : errorCode enum 세미클론 위치 수정
+[33mc3f8550[m HEAD@{402}: commit: [#81] fix : 코드 로직 수정
+[33m4050d46[m HEAD@{403}: commit: [#81] fix : reviewController name < 삭제
+[33m8a1cdc9[m HEAD@{404}: commit: [#81] refactor : 리뷰 등록 시 이미지 업로드 기능 추가
+[33m6eb8dc5[m HEAD@{405}: checkout: moving from dev to issue/81
+[33m6eb8dc5[m HEAD@{406}: merge origin/dev: Fast-forward
+[33mc95312d[m HEAD@{407}: merge origin/dev: Fast-forward
+[33mcfb4ae5[m HEAD@{408}: merge origin/dev: Fast-forward
+[33m1b8701d[m HEAD@{409}: checkout: moving from issue/77 to dev
+[33m1732d1f[m[33m ([m[1;32missue/77[m[33m)[m HEAD@{410}: commit: [#77] fix : 밀리초 수정
+[33m0f2adf9[m HEAD@{411}: rebase (finish): returning to refs/heads/issue/77
+[33m0f2adf9[m HEAD@{412}: rebase (pick): [#77] feat : 쿠폰과 이벤트 삭제 스케줄러 구현
+[33m1b8701d[m HEAD@{413}: rebase (start): checkout HEAD
+[33m1b8701d[m HEAD@{414}: merge origin/dev: Fast-forward
+[33mae5123e[m HEAD@{415}: checkout: moving from issue/77 to dev
+[33m7f29262[m HEAD@{416}: commit: [#77] feat : 쿠폰과 이벤트 삭제 스케줄러 구현
+[33mae5123e[m HEAD@{417}: rebase (finish): returning to refs/heads/issue/77
+[33mae5123e[m HEAD@{418}: rebase (start): checkout HEAD
+[33mae5123e[m HEAD@{419}: merge origin/dev: Fast-forward
+[33m2a4fd00[m HEAD@{420}: checkout: moving from issue/85 to dev
+[33ma82194c[m[33m ([m[1;32missue/85[m[33m)[m HEAD@{421}: commit: [#85] fix :코드 정상화
+[33m2a4fd00[m HEAD@{422}: checkout: moving from issue/77 to issue/85
+[33m2a4fd00[m HEAD@{423}: checkout: moving from dev to issue/77
+[33m2a4fd00[m HEAD@{424}: merge origin/dev: Fast-forward
+[33m472b328[m HEAD@{425}: merge origin/dev: Fast-forward
+[33m15b2cd3[m HEAD@{426}: checkout: moving from issue/46 to dev
+[33mc725f6f[m[33m ([m[1;32missue/46[m[33m)[m HEAD@{427}: commit: [#46] fix : 쿠폰 만료일자 날짜 형식 수정
+[33m15b2cd3[m HEAD@{428}: rebase (finish): returning to refs/heads/issue/46
+[33m15b2cd3[m HEAD@{429}: rebase (start): checkout HEAD
+[33m15b2cd3[m HEAD@{430}: merge origin/dev: Fast-forward
+[33m7778090[m HEAD@{431}: merge origin/dev: Fast-forward
+[33m1035a1a[m HEAD@{432}: merge origin/dev: Fast-forward
+[33maede67a[m HEAD@{433}: merge origin/dev: Fast-forward
+[33m964d2b2[m HEAD@{434}: merge origin/dev: Fast-forward
+[33m72f41b5[m HEAD@{435}: merge origin/dev: Fast-forward
+[33m0e7f8c7[m HEAD@{436}: checkout: moving from issue/46 to dev
+[33m90117e3[m HEAD@{437}: commit: [#46] fix : 쿠폰 발급 시 만료기간도 같이 넣어주도록 수정
+[33m9fe2767[m HEAD@{438}: checkout: moving from dev to issue/46
+[33m0e7f8c7[m HEAD@{439}: checkout: moving from issue/46 to dev
+[33m9fe2767[m HEAD@{440}: commit: [#46] fix : 쿠폰 발급 시 만료기간도 같이 넣어주도록 수정
+[33m0e7f8c7[m HEAD@{441}: rebase (finish): returning to refs/heads/issue/46
+[33m0e7f8c7[m HEAD@{442}: rebase (start): checkout HEAD
+[33m0e7f8c7[m HEAD@{443}: merge origin/dev: Fast-forward
+[33me6f5f9c[m HEAD@{444}: checkout: moving from issue/14 to dev
+[33m8332e9d[m[33m ([m[1;32missue/14[m[33m)[m HEAD@{445}: commit: [#14] fix : 이벤트 삭제 요청 시 이미 시작된 이벤트면 예외던지도록 수정
+[33me6f5f9c[m HEAD@{446}: rebase (finish): returning to refs/heads/issue/14
+[33me6f5f9c[m HEAD@{447}: rebase (start): checkout HEAD
+[33me6f5f9c[m HEAD@{448}: checkout: moving from issue/14 to dev
+[33m7d89ab3[m HEAD@{449}: checkout: moving from dev to issue/14
+[33me6f5f9c[m HEAD@{450}: merge origin/dev: Fast-forward
+[33mbafb466[m HEAD@{451}: checkout: moving from issue/13 to dev
+[33m5bd1f36[m[33m ([m[1;32missue/13[m[33m)[m HEAD@{452}: checkout: moving from dev to issue/13
+[33mbafb466[m HEAD@{453}: checkout: moving from issue/13 to dev
+[33m5bd1f36[m[33m ([m[1;32missue/13[m[33m)[m HEAD@{454}: commit: [#13] fix : 이미 시작된 이벤트는 수정이 불가능 하도록 수정
+[33mbafb466[m HEAD@{455}: rebase (finish): returning to refs/heads/issue/13
+[33mbafb466[m HEAD@{456}: rebase (start): checkout HEAD
+[33mbafb466[m HEAD@{457}: merge origin/dev: Fast-forward
+[33m76e8862[m HEAD@{458}: checkout: moving from issue/11 to dev
+[33md890874[m[33m ([m[1;32missue/11[m[33m)[m HEAD@{459}: rebase (finish): returning to refs/heads/issue/11
+[33md890874[m[33m ([m[1;32missue/11[m[33m)[m HEAD@{460}: rebase (pick): [#11] fix : 이벤트 생성 시에 쿠폰의 만료기간도 입력받도록 수정
+[33m76e8862[m HEAD@{461}: rebase (start): checkout HEAD
+[33m76e8862[m HEAD@{462}: merge origin/dev: Fast-forward
+[33m8753a12[m HEAD@{463}: checkout: moving from issue/11 to dev
+[33m7ce46ec[m HEAD@{464}: commit: [#11] fix : 이벤트 생성 시에 쿠폰의 만료기간도 입력받도록 수정
+[33m8753a12[m HEAD@{465}: rebase (finish): returning to refs/heads/issue/11
+[33m8753a12[m HEAD@{466}: rebase (start): checkout HEAD
+[33m8753a12[m HEAD@{467}: merge origin/dev: Fast-forward
+[33m9682243[m HEAD@{468}: merge origin/dev: Fast-forward
+[33mf9964da[m HEAD@{469}: checkout: moving from issue/46 to dev
+[33m1823f34[m HEAD@{470}: rebase (finish): returning to refs/heads/issue/46
+[33m1823f34[m HEAD@{471}: rebase (pick): [#46] fix : 코드 로직 수정
+[33m82e908c[m HEAD@{472}: rebase (continue): [#46] feat : 이벤트 쿠폰 신청 및 발급 기능 구현
+[33mf9964da[m HEAD@{473}: rebase (start): checkout HEAD
+[33mf9964da[m HEAD@{474}: merge origin/dev: Fast-forward
+[33m16fff5b[m HEAD@{475}: checkout: moving from issue/46 to dev
+[33m3f57c9f[m HEAD@{476}: commit: [#46] fix : 코드 로직 수정
+[33ma84821f[m HEAD@{477}: commit: [#46] feat : 이벤트 쿠폰 신청 및 발급 기능 구현
+[33m16fff5b[m HEAD@{478}: checkout: moving from dev to issue/46
+[33m16fff5b[m HEAD@{479}: merge origin/dev: Fast-forward
+[33m5302895[m HEAD@{480}: checkout: moving from issue/15 to dev
+[33m7581925[m[33m ([m[1;32missue/15[m[33m)[m HEAD@{481}: commit: [#15] feat : 이벤트 단건조회 기능 구현
+[33m5302895[m HEAD@{482}: checkout: moving from dev to issue/15
+[33m5302895[m HEAD@{483}: merge origin/dev: Fast-forward
+[33m3b9b7c7[m HEAD@{484}: checkout: moving from issue/14 to dev
+[33m7d89ab3[m HEAD@{485}: commit: [#14] fix : 코드 수정
+[33m3aeaf0c[m HEAD@{486}: rebase (finish): returning to refs/heads/issue/14
+[33m3aeaf0c[m HEAD@{487}: rebase (pick): [#14] feat : 이벤트 삭제기능 구현
+[33m3b9b7c7[m HEAD@{488}: rebase (start): checkout HEAD
+[33m3b9b7c7[m HEAD@{489}: merge origin/dev: Fast-forward
+[33mf6f34f3[m HEAD@{490}: checkout: moving from issue/14 to dev
+[33m787bb7d[m HEAD@{491}: commit: [#14] feat : 이벤트 삭제기능 구현
+[33mf6f34f3[m HEAD@{492}: checkout: moving from dev to issue/14
+[33mf6f34f3[m HEAD@{493}: merge origin/dev: Fast-forward
+[33m3814e21[m HEAD@{494}: checkout: moving from issue/13 to dev
+[33m04261ca[m HEAD@{495}: commit: [#13] fix : 기존에 코드 수정
+[33mc16ff2c[m HEAD@{496}: commit: [#13] fix : 변수명 수정
+[33m65ea7e5[m HEAD@{497}: rebase (finish): returning to refs/heads/issue/13
+[33m65ea7e5[m HEAD@{498}: rebase (pick): [#13] feat : 반환해줄 때 팝업스토어 고유번호만 반환하도록 변경
+[33m11676cb[m HEAD@{499}: rebase (pick): [#13] feat : 프로모션 이벤트 수정 기능 구현
+[33m3814e21[m HEAD@{500}: rebase (start): checkout HEAD
+[33m3814e21[m HEAD@{501}: merge origin/dev: Fast-forward
+[33m4fffc32[m HEAD@{502}: checkout: moving from issue/13 to dev
+[33m9c9d382[m HEAD@{503}: commit: [#13] feat : 반환해줄 때 팝업스토어 고유번호만 반환하도록 변경
+[33mb4bb21a[m HEAD@{504}: rebase (finish): returning to refs/heads/issue/13
+[33mb4bb21a[m HEAD@{505}: rebase (continue): [#13] feat : 프로모션 이벤트 수정 기능 구현
+[33m4fffc32[m HEAD@{506}: rebase (start): checkout HEAD
+[33m4fffc32[m HEAD@{507}: merge origin/dev: Fast-forward
+[33mdecd5fe[m HEAD@{508}: checkout: moving from issue/13 to dev
+[33m2cdd40a[m HEAD@{509}: commit: [#13] feat : 프로모션 이벤트 수정 기능 구현
+[33mdecd5fe[m HEAD@{510}: checkout: moving from dev to issue/13
+[33mdecd5fe[m HEAD@{511}: merge origin/dev: Fast-forward
+[33mcd422a0[m HEAD@{512}: checkout: moving from issue/12 to dev
+[33m8e7edd8[m[33m ([m[1;32missue/12[m[33m)[m HEAD@{513}: commit: [#12] fix : 코드 수정 및 DTO 생성
+[33m58c64b4[m HEAD@{514}: commit: [#12] fix : 코드 수정
+[33m35333ec[m HEAD@{515}: commit: [#12] fix : @Parameters 로 감싸지 않도록 수정
+[33m644d049[m HEAD@{516}: checkout: moving from dev to issue/12
+[33mcd422a0[m HEAD@{517}: checkout: moving from issue/12 to dev
+[33m644d049[m HEAD@{518}: merge origin/issue/12: Merge made by the 'ort' strategy.
+[33m01f44df[m HEAD@{519}: rebase (finish): returning to refs/heads/issue/12
+[33m01f44df[m HEAD@{520}: rebase (pick): [#12] feat : 이벤트 다건 조회 생성
+[33mcd422a0[m HEAD@{521}: rebase (start): checkout HEAD
+[33mcd422a0[m HEAD@{522}: merge origin/dev: Fast-forward
+[33mc25916c[m HEAD@{523}: checkout: moving from issue/12 to dev
+[33mb532387[m HEAD@{524}: commit: [#12] feat : 이벤트 다건 조회 생성
+[33mc25916c[m HEAD@{525}: checkout: moving from dev to issue/12
+[33mc25916c[m HEAD@{526}: merge origin/dev: Fast-forward
+[33mb4efeaf[m HEAD@{527}: checkout: moving from issue/11 to dev
+[33mb4147b3[m HEAD@{528}: commit: [#11] fix : 생성 성공시에 해당 객체 반환하도록 수정
+[33m9dc7a9e[m HEAD@{529}: checkout: moving from dev to issue/11
+[33mb4efeaf[m HEAD@{530}: checkout: moving from issue/11 to dev
+[33m9dc7a9e[m HEAD@{531}: commit: [#11] feat : 이벤트 생성 기능 구현
+[33mb4efeaf[m HEAD@{532}: rebase (finish): returning to refs/heads/issue/11
+[33mb4efeaf[m HEAD@{533}: rebase (start): checkout HEAD
+[33mb4efeaf[m HEAD@{534}: merge origin/dev: Fast-forward
+[33m4da5d6e[m HEAD@{535}: checkout: moving from issue/11 to dev
+[33m4da5d6e[m HEAD@{536}: checkout: moving from dev to issue/11
+[33m4da5d6e[m HEAD@{537}: merge origin/dev: Fast-forward
+[33m4b9eb1d[m HEAD@{538}: checkout: moving from main to dev
+[33m3866bb0[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{539}: checkout: moving from issue/1 to main
+[33m6a59803[m HEAD@{540}: checkout: moving from issue/1 to issue/1
+[33m6a59803[m HEAD@{541}: commit: ｆｅａｔ　：　ｄｏｃｋｅｒ－ｃｏｍｐｏｓｅ로　ｍｙｓｑｌ　띄웠습니다．
+[33m482b7f2[m HEAD@{542}: Branch: renamed refs/heads/ｉｓｓｕｅ＃１ to refs/heads/issue/1
+[33m482b7f2[m HEAD@{544}: checkout: moving from main to ｉｓｓｕｅ＃１
+[33m3866bb0[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{545}: checkout: moving from ｉｓｓｕｅ＃１ to main
+[33m482b7f2[m HEAD@{546}: commit: ｆｅａｔ　：　ｄｏｃｋｅｒ－ｃｏｍｐｏｓｅ로　ｍｙｓｑｌ　띄웠습니다．
+[33m3866bb0[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{547}: checkout: moving from main to ｉｓｓｕｅ＃１
+[33m3866bb0[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{548}: clone: from https://github.com/team4-SpotOn/spoton-backend.git
