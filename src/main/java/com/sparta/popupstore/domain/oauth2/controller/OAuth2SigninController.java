@@ -77,15 +77,4 @@ public class OAuth2SigninController {
                 .status(HttpStatus.OK)
                 .build();
     }
-
-    @Operation(summary = "토큰 테스트용 API")
-    @GetMapping("/callback/{platform}/token")
-    public ResponseEntity<String> getAccessToken(
-            @PathVariable OAuth2Platform platform,
-            @RequestParam(name = "code") String authorizationCode
-    ) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(oAuth2SigninService.getAccessToken(platform, authorizationCode));
-    }
 }

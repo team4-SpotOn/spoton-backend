@@ -1,8 +1,6 @@
 package com.sparta.popupstore.domain.admin.controller;
 
 import com.sparta.popupstore.domain.admin.dto.request.AdminSigninRequestDto;
-import com.sparta.popupstore.domain.admin.dto.request.AdminSignupRequestDto;
-import com.sparta.popupstore.domain.admin.dto.response.AdminSignupResponseDto;
 import com.sparta.popupstore.domain.admin.entity.Admin;
 import com.sparta.popupstore.domain.admin.service.AdminService;
 import com.sparta.popupstore.domain.admin.type.AdminRole;
@@ -36,22 +34,6 @@ public class AdminController {
     private final PopupStoreService popupStoreService;
     private final PromotionEventService promotionEventService;
     private final JwtUtil jwtUtil;
-
-    @Operation(summary = "관리자 회원 가입", description = "관리자 계정 회원 가입")
-    @Parameter(name = "signinId", description = "회원 가입 아이디")
-    @Parameter(name = "password", description = "회원 가입 비밀번호")
-    @PostMapping("/signup")
-    public ResponseEntity<AdminSignupResponseDto> signup(
-            @RequestBody AdminSignupRequestDto requestDto,
-            HttpServletResponse response
-    ) {
-        AdminSignupResponseDto responseDto = adminService.signup(requestDto);
-        jwtUtil.addJwtToCookie(responseDto.getSigninId(), AdminRole.ADMIN, response);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(responseDto);
-    }
 
     @Operation(summary = "관리자 로그인", description = "관리자 계정 로그인")
     @Parameter(name = "signinId", description = "로그인 아이디")
