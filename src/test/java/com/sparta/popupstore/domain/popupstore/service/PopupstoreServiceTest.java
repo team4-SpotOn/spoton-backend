@@ -103,10 +103,10 @@ class PopupstoreServiceTest {
         Long popupId = 1L;
         Company company = createTestCompany();
         PopupStore popupStore = createTestPopupStore(company, new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780)));
-        PopupStoreUpdateRequestDto requestDto = updateValidRequestDto();
+        PopupStoreUpdateRequestDto requestDto = updateRequestDto();
 
         when(popupStoreRepository.findById(popupId)).thenReturn(Optional.of(popupStore));
-        when(kakaoAddressService.getKakaoAddress(any(String.class))).thenReturn(new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780)));
+        when(kakaoAddressService.getKakaoAddress(any(String.class))).thenReturn(new Address(new RoadAddress("Incheon", "Incheon", 37.4562, 126.7052)));
         PopupStoreBundle bundle = new PopupStoreBundle(
                 List.of(),
                 List.of(),
@@ -139,7 +139,7 @@ class PopupstoreServiceTest {
         // Given
         Long popupId = 1L;
         Company company = createTestCompany();
-        PopupStoreUpdateRequestDto requestDto = updateValidRequestDto();
+        PopupStoreUpdateRequestDto requestDto = updateRequestDto();
 
         when(popupStoreRepository.findById(popupId)).thenReturn(Optional.empty());
 
@@ -162,7 +162,7 @@ class PopupstoreServiceTest {
                 .name("Other Company")
                 .build();
         PopupStore popupStore = createTestPopupStore(otherCompany, new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780)));
-        PopupStoreUpdateRequestDto requestDto = updateValidRequestDto();
+        PopupStoreUpdateRequestDto requestDto = updateRequestDto();
 
         when(popupStoreRepository.findById(popupId)).thenReturn(Optional.of(popupStore));
 
@@ -220,7 +220,7 @@ class PopupstoreServiceTest {
                 .build();
     }
 
-    private PopupStoreUpdateRequestDto updateValidRequestDto() {
+    private PopupStoreUpdateRequestDto updateRequestDto() {
         PopupStoreImageRequestDto imageDto = new PopupStoreImageRequestDto("http://image.com/updated_thumbnail.jpg", 0);
 
         PopupStoreOperatingRequestDto operatingDto = new PopupStoreOperatingRequestDto(
@@ -234,7 +234,7 @@ class PopupstoreServiceTest {
                 .contents("Updated Test Contents")
                 .price(15000)
                 .reservationLimit(120)
-                .address("Updated Seoul")
+                .address("Incheon")
                 .startDate(LocalDate.now().plusDays(1))
                 .endDate(LocalDate.now().plusDays(31))
                 .imageList(List.of(imageDto))
