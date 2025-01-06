@@ -6,11 +6,16 @@ import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.company.entity.Company;
 import com.sparta.popupstore.domain.kakaoaddress.dto.RoadAddress;
 import com.sparta.popupstore.domain.kakaoaddress.service.KakaoAddressService;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreAttributeRequestDto;
 import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreImageRequestDto;
+import com.sparta.popupstore.domain.popupstore.bundle.dto.request.PopupStoreOperatingRequestDto;
 import com.sparta.popupstore.domain.popupstore.bundle.entity.PopupStoreBundle;
+import com.sparta.popupstore.domain.popupstore.bundle.enums.PopupStoreAttributeEnum;
 import com.sparta.popupstore.domain.popupstore.bundle.service.PopupStoreBundleService;
 import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreCreateRequestDto;
+import com.sparta.popupstore.domain.popupstore.dto.request.PopupStoreUpdateRequestDto;
 import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreCreateResponseDto;
+import com.sparta.popupstore.domain.popupstore.dto.response.PopupStoreUpdateResponseDto;
 import com.sparta.popupstore.domain.popupstore.entity.PopupStore;
 import com.sparta.popupstore.domain.popupstore.repository.PopupStoreRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -20,12 +25,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -49,7 +55,7 @@ class PopupstoreServiceTest {
     void test1() {
         // Given
         Company company = createTestCompany();
-        PopupStoreCreateRequestDto requestDto = createValidRequestDto();
+        PopupStoreCreateRequestDto requestDto = getCreateRequestDto();
 
         Address address = new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780));
         when(kakaoAddressService.getKakaoAddress(any(String.class))).thenReturn(address);
@@ -81,15 +87,91 @@ class PopupstoreServiceTest {
     void test2() {
         // Given
         Company company = createTestCompany();
-        PopupStoreCreateRequestDto requestDto = createValidRequestDto();
+        PopupStoreCreateRequestDto requestDto = getCreateRequestDto();
 
         when(kakaoAddressService.getKakaoAddress(any(String.class)))
                 .thenThrow(new CustomApiException(ErrorCode.KAKAO_ADDRESS_API_ERROR));
 
         // When & Then
-        assertThrows(CustomApiException.class, () -> {
-            popupStoreService.createPopupStore(company, requestDto);
-        });
+        assertThrows(CustomApiException.class, () -> popupStoreService.createPopupStore(company, requestDto));
+    }
+
+    @Test
+    @DisplayName("팝업스토어 수정 - 성공")
+    void updatePopupStore_success() {
+        // Given
+        Long popupId = 1L;
+        Company company = createTestCompany();
+        PopupStore popupStore = createTestPopupStore(company, new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780)));
+        PopupStoreUpdateRequestDto requestDto = getUpdateRequestDto();
+
+        when(popupStoreRepository.findById(popupId)).thenReturn(Optional.of(popupStore));
+        when(kakaoAddressService.getKakaoAddress(any(String.class))).thenReturn(new Address(new RoadAddress("Incheon", "Incheon", 37.4562, 126.7052)));
+        PopupStoreBundle bundle = new PopupStoreBundle(
+                List.of(),
+                List.of(),
+                List.of()
+        );
+        when(popupStoreBundleService.updatePopupStoreBundle(any(), any(), any(), any())).thenReturn(bundle);
+
+        // When
+        PopupStoreUpdateResponseDto response = popupStoreService.updatePopupStore(popupId, company, requestDto);
+
+        // Then
+        verify(popupStoreRepository, times(1)).findById(popupId);
+        verify(kakaoAddressService, times(1)).getKakaoAddress(any(String.class));
+        verify(popupStoreBundleService, times(1)).updatePopupStoreBundle(any(), any(), any(), any());
+
+        assertNotNull(response);
+
+        assertEquals(requestDto.getName(), popupStore.getName());
+        assertEquals(requestDto.getContents(), popupStore.getContents());
+        assertEquals(requestDto.getPrice(), popupStore.getPrice());
+        assertEquals(requestDto.getReservationLimit(), popupStore.getReservationLimit());
+        assertEquals(requestDto.getAddress(), popupStore.getAddress().getAddress());
+        assertEquals(requestDto.getStartDate(), popupStore.getStartDate());
+        assertEquals(requestDto.getEndDate(), popupStore.getEndDate());
+    }
+
+    @Test
+    @DisplayName("팝업스토어 수정 - 존재하지 않는 팝업스토어")
+    void updatePopupStore_notFound() {
+        // Given
+        Long popupId = 1L;
+        Company company = createTestCompany();
+        PopupStoreUpdateRequestDto requestDto = getUpdateRequestDto();
+
+        when(popupStoreRepository.findById(popupId)).thenReturn(Optional.empty());
+
+        // When & Then
+        CustomApiException exception = assertThrows(
+                CustomApiException.class, () -> popupStoreService.updatePopupStore(popupId, company, requestDto)
+        );
+
+        assertEquals(ErrorCode.POPUP_STORE_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("팝업스토어 수정 - 다른 회사 소유")
+    void updatePopupStore_notOwner() {
+        // Given
+        Long popupId = 1L;
+        Company company = createTestCompany();
+        Company otherCompany = Company.builder()
+                .id(2L)
+                .name("Other Company")
+                .build();
+        PopupStore popupStore = createTestPopupStore(otherCompany, new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780)));
+        PopupStoreUpdateRequestDto requestDto = getUpdateRequestDto();
+
+        when(popupStoreRepository.findById(popupId)).thenReturn(Optional.of(popupStore));
+
+        // When & Then
+        CustomApiException exception = assertThrows(
+                CustomApiException.class, () -> popupStoreService.updatePopupStore(popupId, company, requestDto)
+        );
+
+        assertEquals(ErrorCode.POPUP_STORE_NOT_BY_THIS_COMPANY, exception.getErrorCode());
     }
 
     private Company createTestCompany() {
@@ -105,7 +187,7 @@ class PopupstoreServiceTest {
                 .build();
     }
 
-    private PopupStoreCreateRequestDto createValidRequestDto() {
+    private PopupStoreCreateRequestDto getCreateRequestDto() {
         PopupStoreImageRequestDto imageDto = new PopupStoreImageRequestDto("http://image.com/thumbnail.jpg", 0);
 
         return PopupStoreCreateRequestDto.builder()
@@ -117,8 +199,8 @@ class PopupstoreServiceTest {
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusDays(30))
                 .imageList(List.of(imageDto))
-                .operatingList(List.of())  // Ensure the list is initialized
-                .attributeList(List.of())  // Ensure the list is initialized
+                .operatingList(List.of())
+                .attributeList(List.of())
                 .build();
     }
 
@@ -138,13 +220,26 @@ class PopupstoreServiceTest {
                 .build();
     }
 
-    private void setField(Object target, String fieldName, Object value) {
-        try {
-            Field field = target.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-            field.set(target, value);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+    private PopupStoreUpdateRequestDto getUpdateRequestDto() {
+        PopupStoreImageRequestDto imageDto = new PopupStoreImageRequestDto("http://image.com/updated_thumbnail.jpg", 0);
+
+        PopupStoreOperatingRequestDto operatingDto = new PopupStoreOperatingRequestDto(
+                DayOfWeek.MONDAY, LocalTime.of(9, 0), LocalTime.of(18, 0));
+
+        PopupStoreAttributeRequestDto attributeDto = new PopupStoreAttributeRequestDto(
+                PopupStoreAttributeEnum.RESERVATION, true);
+
+        return PopupStoreUpdateRequestDto.builder()
+                .name("Updated Test Store")
+                .contents("Updated Test Contents")
+                .price(15000)
+                .reservationLimit(120)
+                .address("Incheon")
+                .startDate(LocalDate.now().plusDays(1))
+                .endDate(LocalDate.now().plusDays(31))
+                .imageList(List.of(imageDto))
+                .operatingList(List.of(operatingDto))
+                .attributeList(List.of(attributeDto))
+                .build();
     }
 }
