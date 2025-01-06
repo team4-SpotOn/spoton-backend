@@ -34,8 +34,16 @@ jobs:
 
       # Spring boot application 빌드
       - name: Build with gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
 
+      # Docker Hub에 이미지 push 하기
+      - name: Docker build
+        run: |
+         docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+         docker build -t ${{ secrets.DOCKER_USER_NAME }}/spot-on . 
+         docker push ${{ secrets.DOCKER_USER_NAME }}/spot-on
+
+      # 기존 애플리케이션 이미지 삭제 후 최신 이미지 pull 과 docker-compose.yml 최신화를 위한 git pull orgin dev
       - name: SSH into EC2 and pull latest code
         uses: appleboy/ssh-action@master
         with:
@@ -49,4 +57,7 @@ jobs:
             git pull origin dev
             # Docker Compose 실행
             docker-compose down
+            if [ "$(docker images -q ${{ secrets.DOCKER_USER_NAME}}/spot-on:latest)" ]; then
+              docker rmi -f ${{ secrets.DOCKER_USER_NAME}}/spot-on:latest
+            fi
             docker-compose up -d

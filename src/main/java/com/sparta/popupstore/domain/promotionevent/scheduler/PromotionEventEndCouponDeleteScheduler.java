@@ -20,7 +20,6 @@ public class PromotionEventEndCouponDeleteScheduler {
     private final CouponRepository couponRepository;
 
     @Transactional
-    @Scheduled(fixedRate = 300000) // 테스트 용
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 매일 00시 00분
     public void hardDeletePromotionEvent() {
         log.info("hardDeletePromotionEvent 스케줄러 시작");
@@ -31,7 +30,6 @@ public class PromotionEventEndCouponDeleteScheduler {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 300000, zone = "Asia/Seoul") // 테스트 용
     @Scheduled(cron = "0 0 0 * * *") // 매일 00시 00분
     public void softDeleteCoupon() {
         log.info("softDeleteCoupon 스케줄러 시작");
