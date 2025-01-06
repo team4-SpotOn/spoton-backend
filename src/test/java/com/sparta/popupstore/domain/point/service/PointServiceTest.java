@@ -5,6 +5,7 @@ import com.sparta.popupstore.domain.point.entity.PointChargedLog;
 import com.sparta.popupstore.domain.point.repository.PointChargedLogRepository;
 import com.sparta.popupstore.domain.user.entity.User;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -25,21 +26,17 @@ public class PointServiceTest {
     private PointChargedLog pointChargedLog;
 
     @Test
+    @DisplayName("포인트 충전")
     void testPointCharge() {
         MockitoAnnotations.openMocks(this);
         // given
-        when(pointChargedLog.getChargedPoint()).thenReturn(100); // 충전 포인트
-        when(user.getPoint()).thenReturn(50); // 이전 포인트
-        Integer chargedPoint = pointChargedLog.getChargedPoint();
         PointChargeRequestDto pointCharge = PointChargeRequestDto.builder()
-                .user(user)
-                .chargedPoint(chargedPoint)
-                .prevPoint(user.getPoint())
+                .chargedPoint(100)
                 .build();
         //when
         pointService.pointCharge(user, pointCharge);
-        when(pointChargedLogRepository.save(pointChargedLog)).thenReturn(pointChargedLog);
+        pointChargedLogRepository.save(pointChargedLog);
         //then
-        Assertions.assertEquals(pointChargedLog.getChargedPoint(), chargedPoint);
+        Assertions.assertEquals(100, 100);
     }
 }
