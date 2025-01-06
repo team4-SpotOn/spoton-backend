@@ -13,7 +13,6 @@ public class PointChargeRequestDto {
     @NotNull(message = "충전할 포인트를 입력해주세요.")
     @Positive(message = "0 이상의 값을 입력해주세요.")
     private Integer chargedPoint;
-    private Integer prevPoint;
 
     public PointChargedLog toEntity(User user) {
         return PointChargedLog.builder()
