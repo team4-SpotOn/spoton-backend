@@ -55,7 +55,7 @@ class PopupstoreServiceTest {
     void test1() {
         // Given
         Company company = createTestCompany();
-        PopupStoreCreateRequestDto requestDto = createValidRequestDto();
+        PopupStoreCreateRequestDto requestDto = getCreateRequestDto();
 
         Address address = new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780));
         when(kakaoAddressService.getKakaoAddress(any(String.class))).thenReturn(address);
@@ -87,7 +87,7 @@ class PopupstoreServiceTest {
     void test2() {
         // Given
         Company company = createTestCompany();
-        PopupStoreCreateRequestDto requestDto = createValidRequestDto();
+        PopupStoreCreateRequestDto requestDto = getCreateRequestDto();
 
         when(kakaoAddressService.getKakaoAddress(any(String.class)))
                 .thenThrow(new CustomApiException(ErrorCode.KAKAO_ADDRESS_API_ERROR));
@@ -103,7 +103,7 @@ class PopupstoreServiceTest {
         Long popupId = 1L;
         Company company = createTestCompany();
         PopupStore popupStore = createTestPopupStore(company, new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780)));
-        PopupStoreUpdateRequestDto requestDto = updateRequestDto();
+        PopupStoreUpdateRequestDto requestDto = getUpdateRequestDto();
 
         when(popupStoreRepository.findById(popupId)).thenReturn(Optional.of(popupStore));
         when(kakaoAddressService.getKakaoAddress(any(String.class))).thenReturn(new Address(new RoadAddress("Incheon", "Incheon", 37.4562, 126.7052)));
@@ -139,7 +139,7 @@ class PopupstoreServiceTest {
         // Given
         Long popupId = 1L;
         Company company = createTestCompany();
-        PopupStoreUpdateRequestDto requestDto = updateRequestDto();
+        PopupStoreUpdateRequestDto requestDto = getUpdateRequestDto();
 
         when(popupStoreRepository.findById(popupId)).thenReturn(Optional.empty());
 
@@ -162,7 +162,7 @@ class PopupstoreServiceTest {
                 .name("Other Company")
                 .build();
         PopupStore popupStore = createTestPopupStore(otherCompany, new Address(new RoadAddress("Seoul", "Seoul", 37.5665, 126.9780)));
-        PopupStoreUpdateRequestDto requestDto = updateRequestDto();
+        PopupStoreUpdateRequestDto requestDto = getUpdateRequestDto();
 
         when(popupStoreRepository.findById(popupId)).thenReturn(Optional.of(popupStore));
 
@@ -187,7 +187,7 @@ class PopupstoreServiceTest {
                 .build();
     }
 
-    private PopupStoreCreateRequestDto createValidRequestDto() {
+    private PopupStoreCreateRequestDto getCreateRequestDto() {
         PopupStoreImageRequestDto imageDto = new PopupStoreImageRequestDto("http://image.com/thumbnail.jpg", 0);
 
         return PopupStoreCreateRequestDto.builder()
@@ -220,7 +220,7 @@ class PopupstoreServiceTest {
                 .build();
     }
 
-    private PopupStoreUpdateRequestDto updateRequestDto() {
+    private PopupStoreUpdateRequestDto getUpdateRequestDto() {
         PopupStoreImageRequestDto imageDto = new PopupStoreImageRequestDto("http://image.com/updated_thumbnail.jpg", 0);
 
         PopupStoreOperatingRequestDto operatingDto = new PopupStoreOperatingRequestDto(
