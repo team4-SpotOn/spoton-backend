@@ -71,8 +71,7 @@ public class PopupStoreController {
                 .body(popupStoreService.getPopupStoreOne(popupStoreId, view));
     }
 
-    // 팝업스토어 전체목록 지도용
-    @Operation(summary = "임시 팝업 전체조회(지도용)", description = "지도 팝업스토어 전체목록")
+    @Operation(summary = "팝업 스토어 전체 조회", description = "팝업 스토어 전체목록")
     @GetMapping
     public ResponseEntity<List<PopupStoreSearchResponseDto>> getPopupStoreAll() {
         return ResponseEntity
