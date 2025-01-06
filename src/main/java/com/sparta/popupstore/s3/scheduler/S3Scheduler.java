@@ -25,7 +25,6 @@ public class S3Scheduler {
     private final S3ImageService s3ImageService;
     private static final boolean RECURSIVE = true;
 
-    @Scheduled(fixedRate = 500000000)
     @Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
     public void s3ReviewImageDelete(){
         log.info("s3 Review 쓰이지 않는 이미지 삭제 스케줄러 실행");
@@ -37,7 +36,6 @@ public class S3Scheduler {
         log.info("s3 Review 쓰이지 않는 이미지 삭제 스케줄러 종료");
     }
 
-    @Scheduled(fixedRate = 500000000)
     @Scheduled(cron = "0 30 2 * * *", zone = "Asia/Seoul")
     public void s3PromotionEventImageDelete(){
         log.info("s3 PromotionEvent 쓰이지 않는 이미지 삭제 스케줄러 실행");
@@ -49,7 +47,6 @@ public class S3Scheduler {
         log.info("s3 PromotionEvent 쓰이지 않는 이미지 삭제 스케줄러 종료");
     }
 
-    @Scheduled(fixedRate = 500000000)
     @Scheduled(cron = "0 0 4 * * *", zone = "Asia/Seoul")
     public void s3PopupStoreImageDelete(){
         log.info("s3 PopupStore 쓰이지 않는 이미지 삭제 스케줄러 실행");
