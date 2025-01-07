@@ -42,8 +42,8 @@ jobs:
           SLACK_API_URL: ${{ secrets.SLACK_API_URL }}
         run: |
           docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          sed -i "s|slack_api_url:.*|slack_api_url: \"$SLACK_API_URL\"|" alertmanager.yml
-          cat alertmanager.yml
+          sed -i "s|slack_api_url:.*|slack_api_url: \"$SLACK_API_URL\"|" alertmanager/alertmanager.yml
+          cat alertmanager/alertmanager.yml
           docker build -t ${{ secrets.DOCKER_USER_NAME }}/spot-on . 
           docker push ${{ secrets.DOCKER_USER_NAME }}/spot-on
 
