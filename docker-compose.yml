@@ -18,10 +18,14 @@ services:
   app:
     image: dlgktmd0/spot-on:latest
     container_name: spoton-app
+    environment:
+      TZ: Asia/Seoul
     expose:
       - 8080
     ports:
       - "8080:8080"
+    volumes:
+      - /var/log/app:/var/log/app
     depends_on:
       - mysql
       - test-db
@@ -49,7 +53,6 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus:/etc/prometheus
-      - prometheus-data:/prometheus
     command:
       - '--storage.tsdb.path=/prometheus' # 메트릭 저장 경로
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -63,8 +66,7 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - ./loki:/etc/loki
-      - loki-data:/loki
+      - ./loki/loki-config.yml:/etc/loki/loki-config.yml
     command:
       - '--config.file=/etc/loki/loki-config.yml'
       - '--config.expand-env=true'
@@ -75,9 +77,8 @@ services:
     image: grafana/promtail
     container_name: promtail
     volumes:
-      - ./logs:/logs
-      - ./promtail:/etc/promtail
-      - promtail-data:/promtail
+      - /var/log/app:/var/log/app
+      - ./promtail/promtail-config.yml:/etc/promtail/promtail-config.yml
     command: '--config.file=/etc/promtail/promtail-config.yml'
     depends_on:
       - loki
@@ -90,8 +91,7 @@ services:
     ports:
       - "9093:9093"
     volumes:
-      - ./alertmanager:/etc/alertmanager
-      - alertmanager-data:/alertmanager
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
     networks:
@@ -133,8 +133,4 @@ networks:
     driver: bridge
 volumes:
   db-data:
-  prometheus-data:
   grafana-data:
-  alertmanager-data:
-  loki-data:
-  promtail-data:

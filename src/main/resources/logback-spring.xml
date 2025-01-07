@@ -3,11 +3,6 @@
 <configuration debug="true" scan="true" scanPeriod="60 seconds">
     <!-- 로그 패턴에 색상 적용 -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
-    <!--
-        springProfile 태그를 사용하면 logback 설정 파일에서 복수개의 프로파일(properties)을 설정할 수 있다.
-        dev 개발환경
-        prod 운영환경
-    -->
 
     <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
     <springProperty scope="context" name="LOG_PATH" source="logging.file.path"/>
@@ -25,7 +20,7 @@
     </appender>
 
     <!-- File Appender -->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 파일명 설정 -->
         <file>${LOG_PATH}/${INFO_LOG_FILE_NAME}.log</file>
         <!-- 출력패턴 설정-->
@@ -99,7 +94,7 @@
     <!-- 설정한 level 로그를 appender-ref(참조할 appender)로 출력/파일 저장  -->
     <root level="${LOG_LEVEL}">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
+        <appender-ref ref="INFO"/>
         <appender-ref ref="WARN"/>
         <appender-ref ref="ERROR"/>
     </root>
