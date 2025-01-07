@@ -45,20 +45,6 @@ public class PointController {
                 .body(pointService.pointChargeLogs(user));
     }
 
-//    @Operation(summary = "포인트 사용")
-//    @Parameter(name = "usedPoint", description = "포인트사용량")
-//    @Parameter(name = "serialNumber", description = "쿠폰 일련 번호")
-//    @PostMapping("/used/popupStore/{popupStoreId}")
-//    public ResponseEntity<PointUseResponseDto> pointUsed(
-//            @AuthUser User user,
-//            @PathVariable Long popupStoreId,
-//            @RequestBody PointUseRequestDto usedRequest
-//    ) {
-//        return ResponseEntity
-//                .status(HttpStatus.CREATED)
-//                .body(pointService.pointUsed(user, popupStoreId, usedRequest));
-//    }
-
     @Operation(summary = "포인트 사용내역 조회")
     @GetMapping("/used")
     public ResponseEntity<List<PointUsedLogResponseDto>> pointUsedLogs(@AuthUser User user) {

@@ -41,17 +41,6 @@ public class PointService {
                 .toList();
     }
 
-//    public PointUseResponseDto pointUsed(User user, Long popupStoreId, PointUseRequestDto requestDto) {
-//        PopupStore popupStore = popupStoreRepository.findById(popupStoreId)
-//                .orElseThrow(() -> new CustomApiException(ErrorCode.POPUP_STORE_NOT_FOUND));
-//        if(user.getPoint() < popupStore.getPrice()) {
-//            throw new CustomApiException(ErrorCode.NOT_ENOUGH_POINT);
-//        }
-//
-//        var pointUsedLog = pointUsed(user, popupStore, requestDto.getUsedPoint(), requestDto.getCouponSerialNumber());
-//        return new PointUseResponseDto(pointUsedLog);
-//    }
-
     public void pointUsed(User user, PopupStore popupStore, Integer number, String couponSerialNumber) {
         int discountPercentage = couponRepository.findBySerialNumber(couponSerialNumber)
                 .orElseGet(() -> Coupon.builder().discountPercentage(0).build())
