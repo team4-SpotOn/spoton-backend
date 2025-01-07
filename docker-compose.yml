@@ -92,6 +92,8 @@ services:
     volumes:
       - ./alertmanager:/etc/alertmanager
       - alertmanager-data:/alertmanager
+    depends_on:
+      - app
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
     networks:
