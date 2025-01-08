@@ -30,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes=CouponService.class)
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes=CouponServiceTest.class)
 public class CouponServiceTest {
 
     @Autowired
