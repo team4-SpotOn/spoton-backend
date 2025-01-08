@@ -53,6 +53,7 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
     command:
       - '--storage.tsdb.path=/prometheus' # 메트릭 저장 경로
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -92,6 +93,7 @@ services:
       - "9093:9093"
     volumes:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager-data:/alertmanager
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
     networks:
@@ -134,3 +136,5 @@ networks:
 volumes:
   db-data:
   grafana-data:
+  prometheus-data:
+  alertmanager-data:
