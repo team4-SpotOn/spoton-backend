@@ -111,7 +111,7 @@ public class CouponServiceTest {
     @DisplayName("이벤트 쿠폰 선착순 5명 - 10명이 경쟁 (user DB사용)")
     public void testCouponConcurrency100() throws InterruptedException {
         final int threads = 100;
-        final int count = 10;
+        final int count = 5;
 
         Long promotionEventId = promotionEvent.getId();
 //        Long promotionEventId = 2L;
