@@ -59,6 +59,9 @@ jobs:
           echo "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver" >> src/main/resources/application.properties
           echo "spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect" >> src/main/resources/application.properties
 
+      - name: Check application.properties content
+        run: cat src/main/resources/application.properties
+
       - name: Set permissions for application.properties
         run: |
           chmod 644 src/main/resources/application.properties
