@@ -3,7 +3,7 @@ name : Spring Boot Ec2 CI/CD Test
 on:
   pull_request:
     branches:
-      - "dev"
+      - "main"
     types:
       - closed
 
