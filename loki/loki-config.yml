@@ -1,4 +1,4 @@
-auth_enabled: false
+auth_enabled: false # 사용자 인증 활성화 여부
 
 server:
   http_listen_port: 3100
@@ -37,6 +37,3 @@ pattern_ingester:
 
 ruler:
   alertmanager_url: http://localhost:9093
-
-frontend:
-  encoding: protobuf
