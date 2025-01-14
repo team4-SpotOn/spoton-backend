@@ -17,14 +17,6 @@ scrape_configs:
           job: all_logs
           __path__: /var/log/app/all.*
 
-  - job_name: info
-    static_configs:
-      - targets:
-          - localhost
-        labels:
-          job: info_logs
-          __path__: /var/log/app/info.*
-
   - job_name: warn
     static_configs:
       - targets:
