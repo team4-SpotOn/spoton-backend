@@ -54,12 +54,12 @@ jobs:
       # MySQL을 Docker에서 실행 (docker run)
       - name: Start MySQL container using Docker
         run: |
-          docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -e MYSQL_DATABASE=${{ secrets.DB_NAME }} -e MYSQL_USER=${{ secrets.DB_USER }} -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} -p 3306:3306 -d mysql:8.0
+          docker run --name test-db -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -e MYSQL_DATABASE=${{ secrets.DB_NAME }} -e MYSQL_USER=${{ secrets.DB_USER }} -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} -p 3306:3306 -d mysql:8.0
 
       # MySQL 준비 완료 대기
       - name: Wait for MySQL to be ready
         run: |
-          until docker exec mysql-container mysqladmin --user=${{ secrets.DB_USER }} --password=${{ secrets.DB_PASSWORD }} --host=127.0.0.1 --silent ping; do
+          until docker exec test-db mysqladmin --user=${{ secrets.DB_USER }} --password=${{ secrets.DB_PASSWORD }} --host=127.0.0.1 --silent ping; do
             echo "Waiting for MySQL to be ready..."
             sleep 5
           done
