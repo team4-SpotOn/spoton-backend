@@ -53,7 +53,6 @@ jobs:
       - name: Give execute permission to gradlew
         run: chmod +x ./gradlew  # 실행 권한 부여
 
-
       # 환경 변수 설정
       - name: Set environment variables for database
         run: |
@@ -71,35 +70,6 @@ jobs:
           echo "Waiting for MySQL to be ready..."
           sleep 5
           done    
-
-      # 환경 변수를 설정합니다.
-#      - name: Set environment variables for database
-#        run: |
-#          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-#          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
-#          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
-#          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-#          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-#          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> $GITHUB_ENV
-
-#      # 2. Set up Docker
-#      - name: Set up Docker
-#        run: |
-#          sudo apt-get update
-#          sudo apt-get install docker.io
-#
-#      # 3. Start MySQL container using Docker
-#      - name: Start MySQL container
-#        run: |
-#          docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -e MYSQL_DATABASE=${{ secrets.DB_NAME }} -e MYSQL_USER=${{ secrets.DB_USER }} -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} -p 3306:3306 -d mysql:8.0
-#
-#      # 4. Wait for MySQL to be ready
-#      - name: Wait for MySQL to be ready
-#        run: |
-#          until docker exec mysql-container mysqladmin --user=${{ secrets.DB_USER }} --password=${{ secrets.DB_PASSWORD }} --host=127.0.0.1 --port=3306 ping --silent; do
-#            echo "Waiting for MySQL to be ready..."
-#            sleep 5
-#          done
 
       - name: Create application.properties with relative path
         run: |
@@ -121,32 +91,9 @@ jobs:
         run: |
           ls -l src/main/resources/
           cat src/main/resources/application.properties || echo "application.properties not found"
-#
-#      - name: Test DB connection
-#        run: |
-#          mysql -h ${{ secrets.DB_HOST }} -u ${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} -e 'SELECT 1'
 
       - name: Build with Gradle
         run: ./gradlew build  # Gradle을 사용하여 빌드 실행
-
-#      - name: Set up Docker Compose
-#        run: |
-#          sudo apt-get update
-#          sudo apt-get install docker-compose -y
-#
-#      - name: Start Database with Docker Compose
-#        run: docker-compose up -d
-#
-#      - name: Wait for Database to be Ready
-#        run: |
-#          until docker exec test-db mysqladmin ping --silent; do
-#          echo "Waiting for database..."
-#          sleep 10
-#          done
-#
-#      - name: Wait for MySQL to be ready
-#        run: |
-#          docker exec -it mysql mysqladmin --user=${{ secrets.DB_USER }} --password=${{ secrets.MYSQL_ROOT_PASSWORD }} --host=127.0.0.1 --port=3306 ping
 
       - name: Run tests with Gradle
         run: ./gradlew test  # Gradle을 사용하여 테스트 실행
@@ -159,38 +106,3 @@ jobs:
         with:
           name: gradle-dependency-report
           path: dependencies.txt
-
-      # ----------------------------------------------
-      # CD 부분: EC2로 배포하기 위한 추가 단계 (임의로 코드는 주석 처리해둠)
-      # ----------------------------------------------
-
-      # - name: Set up AWS CLI
-      #   run: |
-      #     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      #     unzip awscliv2.zip
-      #     sudo ./aws/install
-
-      # - name: Configure AWS CLI
-      #   run: |
-      #     aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws configure set default.region ap-northeast-2  # 서울 리전 (리전 변경 가능)
-
-      # - name: Deploy to EC2
-      #   run: |
-      #     # EC2에 배포할 JAR 파일 경로 (예: build/libs/your-app.jar)
-      #     JAR_FILE=build/libs/your-app.jar
-      #
-      #     # EC2로 JAR 파일 복사 (scp 사용)
-      #     scp -i ${{ secrets.EC2_SSH_PRIVATE_KEY }} $JAR_FILE ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/home/ec2-user/your-app.jar
-      #
-      #     # EC2에서 실행할 명령어 (EC2에서 이전 프로세스를 종료하고 새 JAR 파일 실행)
-      #     ssh -i ${{ secrets.EC2_SSH_PRIVATE_KEY }} ec2-user@${{ secrets.EC2_PUBLIC_IP }} << EOF
-      #       pkill -f 'java -jar /home/ec2-user/your-app.jar' || true  # 기존 애플리케이션 종료
-      #       nohup java -jar /home/ec2-user/your-app.jar > /dev/null 2>&1 &  # 백그라운드로 실행
-      #     EOF
-
-      # - name: Cleanup
-      #   run: |
-      #     # 필요에 따라 EC2 인스턴스를 종료하거나 청소하는 명령을 추가
-      #     echo "Deployment complete."
