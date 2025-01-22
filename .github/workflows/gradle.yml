@@ -9,18 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}  # Root 비밀번호
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}  # 데이터베이스 이름
-          MYSQL_USER: ${{ secrets.DB_USER }}  # 사용자 이름
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}  # 사용자 비밀번호
-        options: --health-cmd="mysqladmin ping --host 127.0.0.1 --password=${{ secrets.DB_PASSWORD }} --user=${{ secrets.DB_USER }} --silent" --health-interval=5s --health-timeout=5s --health-retries=3
-
     steps:
       - uses: actions/checkout@v4
 
@@ -63,13 +51,23 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
           echo "MYSQL_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> $GITHUB_ENV
 
+      # MySQL을 Docker에서 실행 (docker run)
+      - name: Start MySQL container using Docker
+        run: |
+          docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -e MYSQL_DATABASE=${{ secrets.DB_NAME }} -e MYSQL_USER=${{ secrets.DB_USER }} -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} -p 3306:3306 -d mysql:8.0
+
       # MySQL 준비 완료 대기
       - name: Wait for MySQL to be ready
         run: |
-          until mysql -h localhost -u ${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} -e 'SELECT 1'; do
-          echo "Waiting for MySQL to be ready..."
-          sleep 5
-          done    
+          until docker exec mysql-container mysqladmin --user=${{ secrets.DB_USER }} --password=${{ secrets.DB_PASSWORD }} --host=127.0.0.1 --silent ping; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 5
+          done
+
+      # DB 연결 테스트
+      - name: Test DB connection
+        run: |
+          mysql -h localhost -u ${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} -e 'SELECT 1'
 
       - name: Create application.properties with relative path
         run: |
