@@ -8,6 +8,7 @@ import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepo
 import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,7 +41,8 @@ public class CouponServiceTest {
     private static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0")
         .withDatabaseName(System.getenv("DB_NAME"))  // GitHub Secrets에서 가져온 DB 이름
         .withUsername(System.getenv("DB_USER"))  // GitHub Secrets에서 가져온 사용자명
-        .withPassword(System.getenv("DB_PASSWORD"));  // GitHub Secrets에서 가져온 비밀번호
+        .withPassword(System.getenv("DB_PASSWORD"))  // GitHub Secrets에서 가져온 비밀번호
+        .waitingFor(Wait.forListeningPort());  // MySQL의 포트가 열릴 때까지 기다리기
 //        .withDatabaseName("spoton-backend")  // 데이터베이스 이름
 //        .withUsername("test-db")  // 사용자 이름
 //        .withPassword("1234");  // 비밀번호를 빈 값이 아닌 실제 값으로 설정
@@ -59,8 +62,11 @@ public class CouponServiceTest {
     PromotionEvent promotionEvent;
 
     @BeforeEach
-    public void setup() {
-
+    public void setup() throws IOException, InterruptedException {
+        if (!mysqlContainer.isRunning()) {
+            mysqlContainer.start();
+        }
+        mysqlContainer.execInContainer("mysql", "-uroot", "-p" + mysqlContainer.getPassword(), "-e", "SELECT 1");
         // Testcontainers 디버깅 로그를 활성화
         System.setProperty("org.testcontainers.logger.Level", "DEBUG");
 
@@ -98,7 +104,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    void testContainerConnection() {
+    void testContainerConnection() throws InterruptedException {
         String jdbcUrl = mysqlContainer.getJdbcUrl();
         String username = mysqlContainer.getUsername();
         String password = mysqlContainer.getPassword();
@@ -113,6 +119,23 @@ public class CouponServiceTest {
         System.out.println("JDBC URL: " + jdbcUrl);
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
+
+        int retries = 5;
+        boolean connected = false;
+
+        // MySQL 컨테이너와의 연결을 시도하며 재시도 로직을 추가
+        for (int i = 0; i < retries; i++) {
+            try {
+                mysqlContainer.execInContainer("mysql", "-uroot", "-p" + mysqlContainer.getPassword(), "-e", "SELECT 1");
+                connected = true;
+                break;
+            } catch (Exception e) {
+                Thread.sleep(2000);  // 2초 대기 후 재시도
+            }
+        }
+
+        // 연결 성공 여부 체크
+        assertTrue(connected, "Database connection failed after retries.");
 
         // JDBC 연결 테스트 또는 기타 DB 관련 로직을 추가할 수 있습니다.
     }
