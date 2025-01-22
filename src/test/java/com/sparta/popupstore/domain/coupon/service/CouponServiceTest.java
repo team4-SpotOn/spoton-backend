@@ -1,5 +1,6 @@
 package com.sparta.popupstore.domain.coupon.service;
 
+import com.sparta.popupstore.TestContainerSupport;
 import com.sparta.popupstore.domain.common.exception.CustomApiException;
 import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
@@ -33,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:application.properties")
 @SpringBootTest
-public class CouponServiceTest {
+public class CouponServiceTest extends TestContainerSupport {
 
 
 
