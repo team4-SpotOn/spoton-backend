@@ -9,7 +9,6 @@ import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
-import net.bytebuddy.utility.dispatcher.JavaDispatcher.Container;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +21,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public class CouponServiceTest {
 
+    @Container
     private static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0")
         .withDatabaseName(System.getenv("DB_NAME"))  // GitHub Secrets에서 가져온 DB 이름
         .withUsername(System.getenv("DB_USER"))  // GitHub Secrets에서 가져온 사용자명
