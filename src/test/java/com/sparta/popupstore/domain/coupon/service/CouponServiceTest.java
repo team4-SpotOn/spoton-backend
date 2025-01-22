@@ -31,11 +31,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public class CouponServiceTest {
 
+
     @Container
     private static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0")
         .withDatabaseName(System.getenv("DB_NAME"))  // GitHub Secrets에서 가져온 DB 이름
         .withUsername(System.getenv("DB_USER"))  // GitHub Secrets에서 가져온 사용자명
         .withPassword(System.getenv("DB_PASSWORD"));  // GitHub Secrets에서 가져온 비밀번호
+
 
     @Autowired
     private PromotionEventService promotionEventService;
@@ -53,6 +55,11 @@ public class CouponServiceTest {
 
     @BeforeEach
     public void setup() {
+
+        // Testcontainers 디버깅 로그를 활성화
+        System.setProperty("org.testcontainers.logger.Level", "DEBUG");
+
+
         // 데이터베이스 연결 및 초기화 작업
         System.setProperty("DB_HOST", mysqlContainer.getHost());
         System.setProperty("DB_PORT", String.valueOf(mysqlContainer.getMappedPort(3306)));
@@ -61,7 +68,6 @@ public class CouponServiceTest {
         System.setProperty("DB_PASSWORD", mysqlContainer.getPassword());
 
         // 이벤트 초기화 (couponGetCount 초기값을 0으로 설정)
-
         promotionEvent = PromotionEvent.builder()
             .couponGetCount(0)
             .totalCount(5)

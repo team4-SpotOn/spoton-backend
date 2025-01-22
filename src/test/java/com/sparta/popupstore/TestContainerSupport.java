@@ -26,9 +26,16 @@ public abstract class TestContainerSupport  {
         String dbName = System.getenv("DB_NAME");
         String dbUser = System.getenv("DB_USER");
         String dbPassword = System.getenv("DB_PASSWORD");
+        String mysqlRootPassword = System.getenv("MYSQL_ROOT_PASSWORD");
+
+        System.out.println(dbName);
+        System.out.println(dbUser);
+        System.out.println(dbPassword);
+        System.out.println(mysqlRootPassword);
 
         // MySQL 컨테이너 설정
         MYSQL = new MySQLContainer<>(DockerImageName.parse(MYSQL_IMAGE))
+            .withEnv("MYSQL_ROOT_PASSWORD", mysqlRootPassword)
             .withExposedPorts(MYSQL_PORT)  // MySQL 포트 노출
             .withDatabaseName(dbName)  // DB 이름 (GitHub Secrets에서 가져옴)
             .withUsername(dbUser)  // MySQL 사용자명 (GitHub Secrets에서 가져옴)
