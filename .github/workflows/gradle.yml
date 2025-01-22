@@ -51,6 +51,25 @@ jobs:
           echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
           echo "MYSQL_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> $GITHUB_ENV
+          
+                # 2. Set up Docker
+      - name: Set up Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker.io
+
+      # 3. Start MySQL container using Docker
+      - name: Start MySQL container
+        run: |
+          docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -e MYSQL_DATABASE=${{ secrets.DB_NAME }} -e MYSQL_USER=${{ secrets.DB_USER }} -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} -p 3306:3306 -d mysql:8.0
+
+      # 4. Wait for MySQL to be ready
+      - name: Wait for MySQL to be ready
+        run: |
+          until docker exec mysql-container mysqladmin --user=${{ secrets.DB_USER }} --password=${{ secrets.DB_PASSWORD }} --host=127.0.0.1 --port=3306 ping --silent; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 5
+          done
 
       - name: Create application.properties with relative path
         run: |
@@ -94,10 +113,10 @@ jobs:
 #          echo "Waiting for database..."
 #          sleep 10
 #          done
-
-      - name: Wait for MySQL to be ready
-        run: |
-          docker exec -it mysql mysqladmin --user=${{ secrets.DB_USER }} --password=${{ secrets.MYSQL_ROOT_PASSWORD }} --host=127.0.0.1 --port=3306 ping
+#
+#      - name: Wait for MySQL to be ready
+#        run: |
+#          docker exec -it mysql mysqladmin --user=${{ secrets.DB_USER }} --password=${{ secrets.MYSQL_ROOT_PASSWORD }} --host=127.0.0.1 --port=3306 ping
 
       - name: Run tests with Gradle
         run: ./gradlew test  # Gradle을 사용하여 테스트 실행
