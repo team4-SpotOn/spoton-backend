@@ -53,15 +53,34 @@ jobs:
       - name: Give execute permission to gradlew
         run: chmod +x ./gradlew  # 실행 권한 부여
 
-      # 환경 변수를 설정합니다.
+
+      # 환경 변수 설정
       - name: Set environment variables for database
         run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
+          echo "DB_HOST=localhost" >> $GITHUB_ENV  # MySQL 서비스의 기본 호스트는 localhost
+          echo "DB_PORT=3306" >> $GITHUB_ENV
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
           echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
           echo "MYSQL_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> $GITHUB_ENV
+
+      # MySQL 준비 완료 대기
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysql -h localhost -u ${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} -e 'SELECT 1'; do
+          echo "Waiting for MySQL to be ready..."
+          sleep 5
+          done    
+
+      # 환경 변수를 설정합니다.
+#      - name: Set environment variables for database
+#        run: |
+#          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+#          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
+#          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+#          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+#          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+#          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> $GITHUB_ENV
 
 #      # 2. Set up Docker
 #      - name: Set up Docker
@@ -102,10 +121,10 @@ jobs:
         run: |
           ls -l src/main/resources/
           cat src/main/resources/application.properties || echo "application.properties not found"
-          
-      - name: Test DB connection
-        run: |
-          mysql -h ${{ secrets.DB_HOST }} -u ${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} -e 'SELECT 1'
+#
+#      - name: Test DB connection
+#        run: |
+#          mysql -h ${{ secrets.DB_HOST }} -u ${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} -e 'SELECT 1'
 
       - name: Build with Gradle
         run: ./gradlew build  # Gradle을 사용하여 빌드 실행
