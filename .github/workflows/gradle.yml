@@ -52,7 +52,7 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
           echo "MYSQL_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> $GITHUB_ENV
           
-                # 2. Set up Docker
+      # 2. Set up Docker
       - name: Set up Docker
         run: |
           sudo apt-get update
