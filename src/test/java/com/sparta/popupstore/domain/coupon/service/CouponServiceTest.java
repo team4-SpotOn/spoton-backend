@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -28,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers // Testcontainers 활성화
 @ExtendWith(SpringExtension.class)
+@TestPropertySource(locations = "classpath:application.properties")
 @SpringBootTest
 public class CouponServiceTest {
 
@@ -37,7 +39,9 @@ public class CouponServiceTest {
         .withDatabaseName(System.getenv("DB_NAME"))  // GitHub Secrets에서 가져온 DB 이름
         .withUsername(System.getenv("DB_USER"))  // GitHub Secrets에서 가져온 사용자명
         .withPassword(System.getenv("DB_PASSWORD"));  // GitHub Secrets에서 가져온 비밀번호
-
+//        .withDatabaseName("spoton-backend")  // 데이터베이스 이름
+//        .withUsername("test-db")  // 사용자 이름
+//        .withPassword("1234");  // 비밀번호를 빈 값이 아닌 실제 값으로 설정
 
     @Autowired
     private PromotionEventService promotionEventService;
@@ -91,6 +95,27 @@ public class CouponServiceTest {
             userRepository.save(user);
         }
     }
+
+    @Test
+    void testContainerConnection() {
+        String jdbcUrl = mysqlContainer.getJdbcUrl();
+        String username = mysqlContainer.getUsername();
+        String password = mysqlContainer.getPassword();
+
+        System.out.println("github secrets key DB Name: " + System.getenv("DB_NAME"));
+        System.out.println("github secrets key DB User: " + System.getenv("DB_USER"));
+        System.out.println("github secrets key DB HOST: " + System.getenv("DB_HOST"));
+        System.out.println("github secrets key DB Password: " + System.getenv("DB_PASSWORD"));
+        System.out.println("github secrets key MYSQL_ROOT_PASSWORD: " + System.getenv("MYSQL_ROOT_PASSWORD"));
+
+
+        System.out.println("JDBC URL: " + jdbcUrl);
+        System.out.println("Username: " + username);
+        System.out.println("Password: " + password);
+
+        // JDBC 연결 테스트 또는 기타 DB 관련 로직을 추가할 수 있습니다.
+    }
+
 
 //    @Test
 //    @Transactional
