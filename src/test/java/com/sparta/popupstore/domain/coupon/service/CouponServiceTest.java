@@ -57,15 +57,15 @@ public class CouponServiceTest {
         promotionEventRepository.save(promotionEvent);
 
 
-//        // 사용자 10명 생성
-//        for (int i = 1; i <= 10; i++) {
-//            User user = User.builder()
-//                .name("user" + i)
-//                .point(0)
-//                .email("user" + i + "@example.com")
-//                .build();
-//            userRepository.save(user);
-//        }
+        // 사용자 10명 생성
+        for (int i = 1; i <= 10; i++) {
+            User user = User.builder()
+                .name("user" + i)
+                .point(0)
+                .email("user" + i + "@example.com")
+                .build();
+            userRepository.save(user);
+        }
     }
 
 //    @Test

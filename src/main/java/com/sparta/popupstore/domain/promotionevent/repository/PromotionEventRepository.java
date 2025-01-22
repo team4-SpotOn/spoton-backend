@@ -10,7 +10,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PromotionEventRepository extends JpaRepository<PromotionEvent, Long> {
 //    @Modifying
 //    @Query("update PromotionEvent p set p.deletedAt = now() where p.id = :promotionEventId")
