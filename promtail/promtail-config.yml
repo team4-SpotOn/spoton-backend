@@ -1,3 +1,4 @@
+
 #server:
 #  http_listen_port: 9080
 #  grpc_listen_port: 0
@@ -32,3 +33,4 @@
 #        labels:
 #          job: error_logs
 #          __path__: /logs/err.*
+

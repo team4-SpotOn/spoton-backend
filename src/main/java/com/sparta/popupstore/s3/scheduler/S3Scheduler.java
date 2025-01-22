@@ -19,6 +19,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class S3Scheduler {
+
 //    private final ReviewRepository reviewRepository;
 //    private final PromotionEventRepository promotionEventRepository;
 //    private final PopupStoreImageRepository popupStoreImageRepository;
@@ -59,5 +60,5 @@ public class S3Scheduler {
 //                .toList();
 //        s3ImageService.s3ImageDeleteByPrefix(popupStoreImages, Directory.POPUP_STORES, RECURSIVE);
 //        log.info("s3 PopupStore 쓰이지 않는 이미지 삭제 스케줄러 종료");
-//    }
+//    
 }
