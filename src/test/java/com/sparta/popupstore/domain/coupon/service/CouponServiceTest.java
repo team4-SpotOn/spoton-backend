@@ -9,6 +9,7 @@ import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
+import net.bytebuddy.utility.dispatcher.JavaDispatcher.Container;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,17 +17,25 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Testcontainers // Testcontainers 활성화
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class CouponServiceTest {
+    
+    @Container
+    private static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0")
+        .withDatabaseName(System.getenv("DB_NAME"))  // GitHub Secrets에서 가져온 DB 이름
+        .withUsername(System.getenv("DB_USER"))  // GitHub Secrets에서 가져온 사용자명
+        .withPassword(System.getenv("DB_PASSWORD"));  // GitHub Secrets에서 가져온 비밀번호
 
     @Autowired
     private PromotionEventService promotionEventService;
@@ -44,6 +53,12 @@ public class CouponServiceTest {
 
     @BeforeEach
     public void setup() {
+        // 데이터베이스 연결 및 초기화 작업
+        System.setProperty("DB_HOST", mysqlContainer.getHost());
+        System.setProperty("DB_PORT", String.valueOf(mysqlContainer.getMappedPort(3306)));
+        System.setProperty("DB_NAME", mysqlContainer.getDatabaseName());
+        System.setProperty("DB_USER", mysqlContainer.getUsername());
+        System.setProperty("DB_PASSWORD", mysqlContainer.getPassword());
 
         // 이벤트 초기화 (couponGetCount 초기값을 0으로 설정)
 
