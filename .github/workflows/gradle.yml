@@ -67,7 +67,7 @@ jobs:
       # DB 연결 테스트
       - name: Test DB connection
         run: |
-          mysql -h localhost -u ${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} -e 'SELECT 1'
+          docker exec test-db mysql -h 127.0.0.1 -u ${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} -e 'SELECT 1'
 
       - name: Create application.properties with relative path
         run: |
