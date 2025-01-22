@@ -30,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class CouponServiceTest {
-    
-    @Container
+
     private static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0")
         .withDatabaseName(System.getenv("DB_NAME"))  // GitHub Secrets에서 가져온 DB 이름
         .withUsername(System.getenv("DB_USER"))  // GitHub Secrets에서 가져온 사용자명
