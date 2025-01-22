@@ -25,8 +25,8 @@ repositories {
 
 dependencies {
 
-    testImplementation 'org.testcontainers:testcontainers:1.17.3'
-    testImplementation 'org.testcontainers:mysql:1.17.3'  // MySQL을 위한 추가 의존성
+    testImplementation 'org.testcontainers:testcontainers:1.17.6'
+    testImplementation 'org.testcontainers:mysql:1.17.6'  // MySQL을 위한 추가 의존성
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'  // JUnit5 사용시
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.2'  // JUnit5 엔진
 
