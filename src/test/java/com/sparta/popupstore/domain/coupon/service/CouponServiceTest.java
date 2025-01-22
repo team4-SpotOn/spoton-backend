@@ -5,36 +5,28 @@ import com.sparta.popupstore.domain.common.exception.ErrorCode;
 import com.sparta.popupstore.domain.coupon.repository.CouponRepository;
 import com.sparta.popupstore.domain.promotionevent.entity.PromotionEvent;
 import com.sparta.popupstore.domain.promotionevent.repository.PromotionEventRepository;
+import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.domain.user.entity.User;
 import com.sparta.popupstore.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes=CouponServiceTest.class)
+@SpringBootTest
 public class CouponServiceTest {
 
     @Autowired
-    private CouponService couponService;
+    private PromotionEventService promotionEventService;
 
     @Autowired
     private PromotionEventRepository promotionEventRepository;
@@ -49,6 +41,7 @@ public class CouponServiceTest {
 
     @BeforeEach
     public void setup() {
+
         // 이벤트 초기화 (couponGetCount 초기값을 0으로 설정)
 
         promotionEvent = PromotionEvent.builder()
@@ -58,9 +51,21 @@ public class CouponServiceTest {
             .couponExpirationPeriod(30)
             .title("선착순테스트")
             .description("설명설명")
+            .startDateTime(LocalDateTime.now())
             .endDateTime(LocalDateTime.now().plusDays(30))
             .build();
         promotionEventRepository.save(promotionEvent);
+
+
+//        // 사용자 10명 생성
+//        for (int i = 1; i <= 10; i++) {
+//            User user = User.builder()
+//                .name("user" + i)
+//                .point(0)
+//                .email("user" + i + "@example.com")
+//                .build();
+//            userRepository.save(user);
+//        }
     }
 
 //    @Test
@@ -106,21 +111,23 @@ public class CouponServiceTest {
 //    }
 
     @Test
-    @Transactional
     @DisplayName("이벤트 쿠폰 선착순 5명 - 10명이 경쟁 (user DB사용)")
     public void testCouponConcurrency100() throws InterruptedException {
         final int threads = 100;
         final int count = 5;
 
         Long promotionEventId = promotionEvent.getId();
-//        Long promotionEventId = 2L;
+//        System.out.println("프로모션 이벤트 : "+ promotionEventId);
+//        Long promotionEventId = 13L;
         ExecutorService executorService = Executors.newFixedThreadPool(threads);
 
         List<User> users = userRepository.findAll();
         for (User user : users) {
             executorService.submit(() -> {
                 try {
-                    couponService.couponApplyAndIssuance(user, promotionEventId);
+                    System.out.println("선착순 쿠폰 실행 전");
+                    promotionEventService.couponApplyAndIssuance(user, promotionEventId);
+                    System.out.println("선착순 쿠폰 실행 후");
                 } catch (CustomApiException e) {
                     System.out.println("쿠폰 지급 한도 초과");
                 }

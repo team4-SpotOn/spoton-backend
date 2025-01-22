@@ -12,6 +12,7 @@ import com.sparta.popupstore.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -25,30 +26,8 @@ import java.util.UUID;
 public class CouponService {
 
     private final CouponRepository couponRepository;
-    private final PromotionEventRepository promotionEventRepository;
 
-    @Transactional
-    public CouponCreateResponseDto couponApplyAndIssuance(User user, Long promotionEventId) {
-        PromotionEvent promotionEvent = promotionEventRepository.findByIdWithPessimisticLock(promotionEventId);
-        if(promotionEvent.getEndDateTime().isBefore(LocalDateTime.now())) {
-            throw new CustomApiException(ErrorCode.PROMOTION_EVENT_END);
-        }
-        if(Objects.equals(promotionEvent.getCouponGetCount(), promotionEvent.getTotalCount())) {
-            throw new CustomApiException(ErrorCode.COUPON_SOLD_OUT);
-        }
-        Coupon coupon = createCoupon(promotionEvent, user);
-
-        // 선착순 개수 +
-        promotionEvent.couponGetCountUp();
-        log.info("선착순 개수 확인 :{}", promotionEvent.getCouponGetCount());
-
-//        // couponGetCount 업데이트
-//        promotionEventRepository.couponGetCountUp(promotionEventId);
-
-        return new CouponCreateResponseDto(coupon);
-    }
-
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Coupon createCoupon(PromotionEvent promotionEvent, User user) {
         Coupon existingCoupon = couponRepository.findByIdWithPessimisticLock(promotionEvent.getId(), user.getId());
         if(existingCoupon != null) {

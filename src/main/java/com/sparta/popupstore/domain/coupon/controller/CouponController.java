@@ -3,6 +3,7 @@ package com.sparta.popupstore.domain.coupon.controller;
 import com.sparta.popupstore.domain.common.annotation.AuthUser;
 import com.sparta.popupstore.domain.coupon.dto.response.CouponCreateResponseDto;
 import com.sparta.popupstore.domain.coupon.service.CouponService;
+import com.sparta.popupstore.domain.promotionevent.service.PromotionEventService;
 import com.sparta.popupstore.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CouponController {
 
     private final CouponService couponService;
+    private final PromotionEventService promotionEventService;
 
     @Operation(summary = "프로모션 이벤트 쿠폰 신청 및 발급")
     @Parameter(name = "promotionEventId", description = "쿠폰을 발급할 프로모션 이벤트의 기본키")
@@ -33,7 +35,7 @@ public class CouponController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(couponService.couponApplyAndIssuance(user, promotionEventId));
+                .body(promotionEventService.couponApplyAndIssuance(user, promotionEventId));
     }
 
 }
