@@ -30,6 +30,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+
 @Testcontainers // Testcontainers 활성화
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:application.properties")
