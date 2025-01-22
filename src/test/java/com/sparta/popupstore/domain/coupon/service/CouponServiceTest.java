@@ -48,6 +48,7 @@ public class CouponServiceTest extends TestContainerSupport {
 //        .withUsername("test-db")  // 사용자 이름
 //        .withPassword("1234");  // 비밀번호를 빈 값이 아닌 실제 값으로 설정
 
+
     @Autowired
     private PromotionEventService promotionEventService;
 
