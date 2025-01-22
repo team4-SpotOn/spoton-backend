@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 public abstract class TestContainerSupport  {
 
     private static final String MYSQL_IMAGE = "mysql:8.0";  // MySQL 버전 설정
-    private static final int MYSQL_PORT = 3306;  // MySQL 컨테이너 내부 포트 설정
+    private static final int MYSQL_PORT = 3308;  // MySQL 컨테이너 내부 포트 설정
     private static JdbcDatabaseContainer<?> MYSQL;
 
     static {
