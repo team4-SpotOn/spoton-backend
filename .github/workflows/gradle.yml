@@ -50,6 +50,7 @@ jobs:
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
           echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Create application.properties with relative path
         run: |
@@ -89,6 +90,10 @@ jobs:
           echo "Waiting for database..."
           sleep 10
           done
+
+      - name: Wait for MySQL to be ready
+        run: |
+          docker exec -it mysql mysqladmin --user=${{ secrets.DB_USER }} --password=${{ secrets.MYSQL_PASSWORD }} --host=127.0.0.1 --port=3306 ping
 
       - name: Run tests with Gradle
         run: ./gradlew test  # Gradle을 사용하여 테스트 실행
