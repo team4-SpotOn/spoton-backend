@@ -3,7 +3,7 @@
 ## <center> spotOn </center>
 
 
-<div style="text-align: center;"><img src="https://cdn.discordapp.com/attachments/1321530954057252905/1324173460456472630/img_2.png?ex=67773022&is=6775dea2&hm=acd89d1cb43ea7b42c34247e3da3a90f30e67d6f24190231723c360024cc753a&" width="250" height="250"/></div> 
+<div style="text-align: center;"><img src="https://github.com/user-attachments/assets/f651518f-a4fd-4ccf-9d51-d3c99ff4b66e" width="250" height="250"/></div> 
 
 
 -------
@@ -41,12 +41,12 @@ __2024.12.2-2025.1.7__
 -------
 ### 와이어프레임
 
-<img src="https://cdn.discordapp.com/attachments/1321530954057252905/1323560447332585513/2024-12-31_4.56.36.png?ex=6776ef79&is=67759df9&hm=7b51a85388dea65ada28adaefbb70f6c607f58960edebb1ef229ad58630f24e9&" width="700" height="800"/>
+<img src="https://github.com/user-attachments/assets/aff710f1-727d-4207-b8f4-68d4d7fa22d1" width="700" height="800"/>
 
 -------
 ### erd
 
-<img src="https://cdn.discordapp.com/attachments/1321530954057252905/1324174611411238963/img.png?ex=67773135&is=6775dfb5&hm=37734ee22bf55ef3eb94f4f9d312aac3e7e7ae6bcde7607d603f7dfbc9b12caa&" width="1000" height="500"/>
+<img src="https://github.com/user-attachments/assets/46e1579f-c5dc-4b7f-aff0-78b763748ec0" width="1000" height="500"/>
 
 -------
 ### 아키텍쳐
